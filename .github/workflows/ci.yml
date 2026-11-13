@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: PHP ${{ matrix.php }} ${{ matrix.ts }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+        php: ['8.4', '8.5']
+        ts: [nts, zts]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+        env:
+          phpts: ${{ matrix.ts == 'zts' && 'ts' || 'nts' }}
+
+      - name: X11 headers
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libx11-dev pkg-config
+
+      - name: Build
+        # Raven 0.2.3 is vendored under lib/raven/ and compiled into the module; Vulkan is loaded at run time.
+        run: |
+          phpize
+          ./configure --enable-raven
+          make -j"$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+
+      - name: Load
+        run: |
+          php -n -d extension="$PWD/modules/raven.so" -r 'exit(extension_loaded("raven") ? 0 : 1);'
+          php -n -d extension="$PWD/modules/raven.so" --ri raven
+
+      - name: Test
+        # The lifecycle tests spawn child PHP processes, so the module is enabled through an extra
+        # ini scan directory that every process inherits rather than a -d flag only the parent sees.
+        run: |
+          composer install --no-interaction --no-progress
+          mkdir -p "$RUNNER_TEMP/php-ini"
+          echo "extension=$PWD/modules/raven.so" > "$RUNNER_TEMP/php-ini/raven.ini"
+          PHP_INI_SCAN_DIR=":$RUNNER_TEMP/php-ini" php -d memory_limit=128M vendor/bin/pest --ci

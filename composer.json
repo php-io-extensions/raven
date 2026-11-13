@@ -1,0 +1,51 @@
+{
+    "name": "php-io-extensions/raven",
+    "type": "php-ext",
+    "description": "1:1 PHP bindings of Raven 0.2.3, a retained-mode GUI toolkit in C, compiled into the extension",
+    "keywords": [
+        "raven",
+        "gui",
+        "toolkit",
+        "php-ext"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Project Saturn Studios, LLC",
+            "email": "info@projectsaturnstudios.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.4"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.11.x-dev"
+        }
+    },
+    "php-ext": {
+        "extension-name": "raven",
+        "priority": 30,
+        "support-zts": true,
+        "support-nts": true,
+        "os-families": [
+            "linux",
+            "darwin"
+        ],
+        "configure-options": [
+            {
+                "name": "enable-raven",
+                "description": "Enable the Raven 0.2.3 bindings",
+                "needs-value": false
+            }
+        ]
+    }
+}
