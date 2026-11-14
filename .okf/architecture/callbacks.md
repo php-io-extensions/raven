@@ -5,7 +5,7 @@ description: How PHP callables are held, called on the PHP thread only, released
 resource: src/runtime.c
 tags: [raven, callbacks, threads]
 status: draft
-generated: { by: claude-opus/5.5, at: 2026-11-12T00:00:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-14T00:00:00Z }
 sources:
   - id: runtime
     resource: src/runtime.c
@@ -20,7 +20,7 @@ sources:
 
 # Callbacks and threads
 
-* **Slots.** A registration's callables and user data live in a `raven_slot` whose address is the `user_data` Raven gets. The table `RAVEN_G(slots)` holds it under its key; setting the same key again replaces it, `null` removes it. A slot is registered before the Raven call, since Raven may call the new callback while setting it.
+* **Slots.** A registration's callables and user data live in a `raven_slot` whose address is the `user_data` Raven gets. The table `RAVEN_G(slots)` holds it under its key; setting the same key again replaces it, `null` removes it. A slot is registered before the Raven call, since Raven may call the new callback while setting it. `Rpopup_open` shares `Rdialog_open`'s key: the content widget.
 * **Sweep.** When the table has doubled since the last sweep (64 at least), `raven_leave()` at depth 0 drops slots and user handles whose owner `Rid` no public `*_is_valid` recognises (widget, window, timer, tray, tree item).
 * **Owner thread.** The first PHP thread to register a callable, or the one `Rinit` succeeded on, owns Raven; another thread passing a callable gets an `Error`. Generated trampolines run no PHP off the owner thread.
 * **UI thread.** All generated callbacks are UI-thread callbacks in Raven (read in its source: XML reloads repost through `Rtask_post`, notifications are synchronous). A callable's exception stays pending; no other callable runs until the Raven call returns and PHP raises it.

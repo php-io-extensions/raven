@@ -312,6 +312,12 @@ const R_WIDGET_PLOT = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_WIDGET_PDF_VIEW
+ */
+const R_WIDGET_PDF_VIEW = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_WIDGET_LAST_
  */
 const R_WIDGET_LAST_ = UNKNOWN;

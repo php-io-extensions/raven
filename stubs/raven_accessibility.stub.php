@@ -334,6 +334,10 @@ function Rwidget_set_accessible_hidden(int $widget, int $hidden): void {}
 
 function Rwidget_set_accessible_labelled_by(int $widget, int $label): void {}
 
+function Rwidget_set_accessible_action(int $widget, ?callable $press, mixed $user_data): void {}
+
+function Rwidget_set_accessible_checked(int $widget, int $checked): void {}
+
 function Raccessibility_announce(?string $text, int $assertive): void {}
 
 function Raccessibility_is_screen_reader_active(): int {}

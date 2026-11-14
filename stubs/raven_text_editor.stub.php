@@ -288,6 +288,10 @@ function Rtext_editor_set_completion_callback(int $editor, ?callable $callback, 
 
 function Rtext_editor_add_completion(int $editor, ?string $text, ?string $detail): void {}
 
+function Rtext_editor_add_completion_insert(int $editor, ?string $text, ?string $detail, ?string $insert): void {}
+
+function Rtext_editor_set_completion_words(int $editor, int $enabled): void {}
+
 function Rtext_editor_set_auto_pairs(int $editor, int $enabled): void {}
 
 function Rtext_editor_add_marker(int $editor, int $line, int $from_column, int $to_column, int $kind, ?string $message): void {}
@@ -295,6 +299,8 @@ function Rtext_editor_add_marker(int $editor, int $line, int $from_column, int $
 function Rtext_editor_clear_markers(int $editor): void {}
 
 function Rtext_editor_get_marker_count(int $editor): int {}
+
+function Rtext_editor_set_hover_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
 function Rtheme_set_token_color(int $token, float $r, float $g, float $b, float $a): void {}
 

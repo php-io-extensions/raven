@@ -150,6 +150,102 @@ const R_PLOT_Y2 = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_PDF_FIT_WIDTH
+ */
+const R_PDF_FIT_WIDTH = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_FIT_PAGE
+ */
+const R_PDF_FIT_PAGE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_FIT_NONE
+ */
+const R_PDF_FIT_NONE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_EMPTY
+ */
+const R_PDF_EMPTY = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_LOADED
+ */
+const R_PDF_LOADED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_NEEDS_PASSWORD
+ */
+const R_PDF_NEEDS_PASSWORD = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_ERROR
+ */
+const R_PDF_ERROR = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_UNAVAILABLE
+ */
+const R_PDF_UNAVAILABLE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_FONT_SANS
+ */
+const R_PDF_FONT_SANS = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_FONT_MONO
+ */
+const R_PDF_FONT_MONO = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_FILL
+ */
+const R_PDF_FILL = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_STROKE
+ */
+const R_PDF_STROKE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_TEXT_BOLD
+ */
+const R_PDF_TEXT_BOLD = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_TEXT_ITALIC
+ */
+const R_PDF_TEXT_ITALIC = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_TEXT_UNDERLINE
+ */
+const R_PDF_TEXT_UNDERLINE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_PDF_PRINT_NO_DIALOG
+ */
+const R_PDF_PRINT_NO_DIALOG = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_PLOT_SCALE_LINEAR
  */
 const R_PLOT_SCALE_LINEAR = UNKNOWN;
@@ -310,6 +406,19 @@ const R_PLOT_LEGEND_LEFT = UNKNOWN;
  */
 const R_PLOT_LEGEND_OUTSIDE = UNKNOWN;
 
+final class RPdfPrintDesc
+{
+    public int $window = 0;
+    public ?string $title = null;
+    public ?string $printer = null;
+    public int $copies = 0;
+    public int $flags = 0;
+    public ?string $output = null;
+    public ?string $password = null;
+
+    public function __construct(int $window = 0, ?string $title = null, ?string $printer = null, int $copies = 0, int $flags = 0, ?string $output = null, ?string $password = null) {}
+}
+
 final class RTileItem
 {
     public ?string $text = null;
@@ -428,6 +537,14 @@ function Rtext_input_set_max_length(int $text_input, int $max_length): void {}
 
 function Rtext_input_select_all(int $text_input): void {}
 
+function Rtext_input_set_input_type(int $text_input, int $type): void {}
+
+function Rtext_input_get_input_type(int $text_input): int {}
+
+function Rtext_input_set_return_key(int $text_input, int $key): void {}
+
+function Rtext_input_get_return_key(int $text_input): int {}
+
 function Rtext_input_set_changed_callback(int $text_input, ?callable $callback, mixed $user_data): void {}
 
 function Rtext_input_set_committed_callback(int $text_input, ?callable $callback, mixed $user_data): void {}
@@ -443,6 +560,10 @@ function Rspin_box_get_range(int $spin_box, ?float &$minimum, ?float &$maximum, 
 function Rspin_box_set_step(int $spin_box, float $step): void {}
 
 function Rspin_box_set_decimals(int $spin_box, int $decimals): void {}
+
+function Rspin_box_set_buttons(int $spin_box, int $buttons): void {}
+
+function Rspin_box_get_buttons(int $spin_box): int {}
 
 function Rspin_box_set_changed_callback(int $spin_box, ?callable $callback, mixed $user_data): void {}
 
@@ -475,6 +596,8 @@ function Rlist_view_clear_items(int $list_view): void {}
 function Rlist_view_get_item_count(int $list_view): int {}
 
 function Rlist_view_set_virtual_items(int $list_view, int $count, ?callable $callback, mixed $user_data): void {}
+
+function Rlist_view_set_item_color_callback(int $list_view, ?callable $callback, mixed $user_data): void {}
 
 function Rlist_view_set_selected(int $list_view, int $index): void {}
 
@@ -562,11 +685,19 @@ function Rmenu_add_item(int $menu, ?string $text): int {}
 
 function Rmenu_add_separator(int $menu): int {}
 
+function Rmenu_add_header(int $menu, ?string $text): int {}
+
+function Rmenu_bar_add_divider(int $menu_bar): int {}
+
+function Rmenu_set_title_color(int $menu, float $r, float $g, float $b, float $a): void {}
+
 function Rmenu_item_set_text(int $item, ?string $text): void {}
 
 function Rmenu_item_get_text(int $item): ?string {}
 
 function Rmenu_item_set_shortcut(int $item, int $key, int $modifiers): void {}
+
+function Rmenu_item_set_shortcut_text(int $item, ?string $text): void {}
 
 function Rmenu_item_set_checkable(int $item, int $checkable): void {}
 
@@ -655,6 +786,8 @@ function Rtable_clear_rows(int $table): void {}
 function Rtable_get_row_count(int $table): int {}
 
 function Rtable_set_virtual_rows(int $table, int $count, ?callable $callback, mixed $user_data): void {}
+
+function Rtable_set_cell_color_callback(int $table, ?callable $callback, mixed $user_data): void {}
 
 function Rtable_set_selected(int $table, int $row): void {}
 
@@ -883,3 +1016,89 @@ function Rplot_set_view_changed_callback(int $plot, ?callable $callback, mixed $
 function Rplot_set_drag_line_callback(int $plot, ?callable $callback, mixed $user_data): void {}
 
 function Rplot_set_series_toggled_callback(int $plot, ?callable $callback, mixed $user_data): void {}
+
+function Rpdf_is_available(): int {}
+
+function Rpdf_view_load_file(int $view, ?string $path, ?string $password): int {}
+
+function Rpdf_view_load_memory(int $view, ?string $data, int $data_size, ?string $password): int {}
+
+function Rpdf_view_close(int $view): void {}
+
+function Rpdf_view_get_status(int $view): int {}
+
+function Rpdf_view_get_page_count(int $view): int {}
+
+function Rpdf_view_get_page_size(int $view, int $page, ?float &$width, ?float &$height): void {}
+
+function Rpdf_view_set_page(int $view, int $page): void {}
+
+function Rpdf_view_get_page(int $view): int {}
+
+function Rpdf_view_set_zoom(int $view, float $zoom): void {}
+
+function Rpdf_view_get_zoom(int $view): float {}
+
+function Rpdf_view_set_fit(int $view, int $fit): void {}
+
+function Rpdf_view_get_fit(int $view): int {}
+
+function Rpdf_view_get_title(int $view): ?string {}
+
+function Rpdf_view_get_page_text(int $view, int $page): ?string {}
+
+function Rpdf_view_set_page_changed_callback(int $view, ?callable $callback, mixed $user_data): void {}
+
+function Rpdf_view_print(int $view, ?RPdfPrintDesc $desc): int {}
+
+function Rpdf_document_create(): int {}
+
+function Rpdf_document_delete(int $document): void {}
+
+function Rpdf_document_set_title(int $document, ?string $title): void {}
+
+function Rpdf_document_set_author(int $document, ?string $author): void {}
+
+function Rpdf_document_set_subject(int $document, ?string $subject): void {}
+
+function Rpdf_document_add_page(int $document, float $width, float $height): int {}
+
+function Rpdf_document_get_page_count(int $document): int {}
+
+function Rpdf_document_set_fill_color(int $document, float $r, float $g, float $b, float $a): void {}
+
+function Rpdf_document_set_stroke_color(int $document, float $r, float $g, float $b, float $a): void {}
+
+function Rpdf_document_set_line_width(int $document, float $width): void {}
+
+function Rpdf_document_draw_rect(int $document, float $x, float $y, float $width, float $height, float $radius, int $paint): void {}
+
+function Rpdf_document_draw_ellipse(int $document, float $x, float $y, float $width, float $height, int $paint): void {}
+
+function Rpdf_document_draw_line(int $document, float $x1, float $y1, float $x2, float $y2): void {}
+
+function Rpdf_document_add_font(int $document, ?string $data, int $data_size): int {}
+
+function Rpdf_document_add_font_from_file(int $document, ?string $path): int {}
+
+function Rpdf_document_set_font(int $document, int $font, float $size, int $style): void {}
+
+function Rpdf_document_get_line_height(int $document): float {}
+
+function Rpdf_document_measure_text(int $document, ?string $text): float {}
+
+function Rpdf_document_draw_text(int $document, float $x, float $y, ?string $text): float {}
+
+function Rpdf_document_draw_paragraph(int $document, float $x, float $y, float $width, ?string $text, int $align): float {}
+
+function Rpdf_document_draw_image(int $document, float $x, float $y, float $width, float $height, string $rgba, int $pixels_width, int $pixels_height): void {}
+
+function Rpdf_document_draw_window(int $document, int $window, float $x, float $y, float $width, float $height): int {}
+
+function Rpdf_document_save(int $document, ?string $path): int {}
+
+function Rpdf_print(?RPdfPrintDesc $desc, ?string $data, int $data_size): int {}
+
+function Rpdf_print_file(?RPdfPrintDesc $desc, ?string $path): int {}
+
+function Rpdf_document_print(int $document, ?RPdfPrintDesc $desc): int {}

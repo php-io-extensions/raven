@@ -381,6 +381,35 @@ ZEND_FUNCTION(Rfile_read)
 	Rmemory_free(r);
 }
 
+ZEND_FUNCTION(Rpdf_document_save_memory)
+{
+	zend_long document;
+	uint32_t c_document;
+	zval *size;
+	size_t c_size = 0;
+	char *r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_ZVAL(size)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_save_memory(c_document, &c_size);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(size, (zend_long)c_size);
+	if (!r) {
+		RETURN_NULL();
+	}
+	RETVAL_STRINGL(r, c_size);
+	Rmemory_free(r);
+}
+
 /* Pixels Raven allocated: width × height × 4 bytes, released with Rpixels_free. */
 static void raven_return_pixels(uint8_t *r, int width, int height, zval *return_value)
 {

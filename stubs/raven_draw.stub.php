@@ -43,6 +43,8 @@ function Rcustom_set_measure_callback(int $widget, ?callable $callback, mixed $u
 
 function Rdraw_rect(RPainter $painter, float $x, float $y, float $width, float $height, float $radius, float $r, float $g, float $b, float $a): void {}
 
+function Rdraw_shadow(RPainter $painter, float $x, float $y, float $width, float $height, float $radius, float $blur, float $r, float $g, float $b, float $a): void {}
+
 function Rdraw_rect_outline(RPainter $painter, float $x, float $y, float $width, float $height, float $radius, float $thickness, float $r, float $g, float $b, float $a): void {}
 
 function Rdraw_circle(RPainter $painter, float $center_x, float $center_y, float $radius, float $r, float $g, float $b, float $a): void {}

@@ -282,6 +282,40 @@ ZEND_FUNCTION(Rtheme_set_dark)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rtheme_get_system_dark)
+{
+	int r;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rtheme_get_system_dark();
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rtheme_follow_system)
+{
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(enabled, 1, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtheme_follow_system(c_enabled);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rtheme_is_dark)
 {
 	int r;

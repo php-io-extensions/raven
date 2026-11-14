@@ -10,7 +10,7 @@ it('binds every function of Raven.h but raw memory, and nothing else', function 
     sort($expected);
     $bound = get_extension_funcs('raven');
     sort($bound);
-    expect($bound)->toBe(array_values($expected))->and($bound)->toHaveCount(1123);
+    expect($bound)->toBe(array_values($expected))->and($bound)->toHaveCount(1223);
 });
 
 it('declares a class per struct of Raven.h', function (): void {

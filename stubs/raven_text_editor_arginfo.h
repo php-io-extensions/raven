@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: b9eeb26be6214a90272b23bad5dd478fface11d9 */
+ * Stub hash: afd1b5ebee79e92d7e55184d8eab99e487c206aa */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
@@ -177,6 +177,15 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_add_completion, 0, 
 	ZEND_ARG_TYPE_INFO(0, detail, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_add_completion_insert, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, detail, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, insert, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_editor_set_completion_words arginfo_Rtext_editor_set_word_wrap
+
 #define arginfo_Rtext_editor_set_auto_pairs arginfo_Rtext_editor_set_word_wrap
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_add_marker, 0, 6, IS_VOID, 0)
@@ -191,6 +200,8 @@ ZEND_END_ARG_INFO()
 #define arginfo_Rtext_editor_clear_markers arginfo_Rtext_editor_select_all
 
 #define arginfo_Rtext_editor_get_marker_count arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_set_hover_callback arginfo_Rtext_editor_set_zoom_callback
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtheme_set_token_color, 0, 5, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, token, IS_LONG, 0)
@@ -275,10 +286,13 @@ ZEND_FUNCTION(Rtext_editor_show_completions);
 ZEND_FUNCTION(Rtext_editor_is_completing);
 ZEND_FUNCTION(Rtext_editor_set_completion_callback);
 ZEND_FUNCTION(Rtext_editor_add_completion);
+ZEND_FUNCTION(Rtext_editor_add_completion_insert);
+ZEND_FUNCTION(Rtext_editor_set_completion_words);
 ZEND_FUNCTION(Rtext_editor_set_auto_pairs);
 ZEND_FUNCTION(Rtext_editor_add_marker);
 ZEND_FUNCTION(Rtext_editor_clear_markers);
 ZEND_FUNCTION(Rtext_editor_get_marker_count);
+ZEND_FUNCTION(Rtext_editor_set_hover_callback);
 ZEND_FUNCTION(Rtheme_set_token_color);
 ZEND_FUNCTION(Rtheme_get_token_color);
 ZEND_FUNCTION(Rtheme_clear_token_colors);
@@ -331,10 +345,13 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtext_editor_is_completing, arginfo_Rtext_editor_is_completing)
 	ZEND_FE(Rtext_editor_set_completion_callback, arginfo_Rtext_editor_set_completion_callback)
 	ZEND_FE(Rtext_editor_add_completion, arginfo_Rtext_editor_add_completion)
+	ZEND_FE(Rtext_editor_add_completion_insert, arginfo_Rtext_editor_add_completion_insert)
+	ZEND_FE(Rtext_editor_set_completion_words, arginfo_Rtext_editor_set_completion_words)
 	ZEND_FE(Rtext_editor_set_auto_pairs, arginfo_Rtext_editor_set_auto_pairs)
 	ZEND_FE(Rtext_editor_add_marker, arginfo_Rtext_editor_add_marker)
 	ZEND_FE(Rtext_editor_clear_markers, arginfo_Rtext_editor_clear_markers)
 	ZEND_FE(Rtext_editor_get_marker_count, arginfo_Rtext_editor_get_marker_count)
+	ZEND_FE(Rtext_editor_set_hover_callback, arginfo_Rtext_editor_set_hover_callback)
 	ZEND_FE(Rtheme_set_token_color, arginfo_Rtheme_set_token_color)
 	ZEND_FE(Rtheme_get_token_color, arginfo_Rtheme_get_token_color)
 	ZEND_FE(Rtheme_clear_token_colors, arginfo_Rtheme_clear_token_colors)

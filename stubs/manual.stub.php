@@ -25,6 +25,8 @@ function Rtask_run_async(?callable $task, mixed $user_data): void {}
 
 function Rfile_read(?string $path, ?int &$size): ?string {}
 
+function Rpdf_document_save_memory(int $document, ?int &$size): ?string {}
+
 function Rwindow_capture(int $window, ?int &$width, ?int &$height): ?string {}
 
 function Rimage_decode(string $data, int $data_size, ?int &$width, ?int &$height): ?string {}

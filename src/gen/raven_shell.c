@@ -730,6 +730,32 @@ ZEND_FUNCTION(Rdock_area_is_tearable)
 	RETURN_LONG((zend_long)r);
 }
 
+ZEND_FUNCTION(Rdock_area_set_float_mode)
+{
+	zend_long area;
+	uint32_t c_area;
+	zend_long mode;
+	int c_mode;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(area)
+		Z_PARAM_LONG(mode)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(area, 1, &c_area)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(mode, 2, &c_mode)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdock_area_set_float_mode(c_area, (RDockFloatMode)c_mode);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rdock_area_float_panel)
 {
 	zend_long area;
@@ -1484,6 +1510,66 @@ ZEND_FUNCTION(Rtray_set_clicked_callback)
 	}
 	Rtray_set_clicked_callback(c_tray, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTrayClickedCallback_0 : NULL, slot);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Rtray_set_title)
+{
+	zend_long tray;
+	uint32_t c_tray;
+	zend_string *text = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(tray)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(tray, 1, &c_tray)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtray_set_title(c_tray, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtray_get_rect)
+{
+	zend_long tray;
+	uint32_t c_tray;
+	zval *x;
+	int c_x = 0;
+	zval *y;
+	int c_y = 0;
+	zval *width;
+	int c_width = 0;
+	zval *height;
+	int c_height = 0;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(tray)
+		Z_PARAM_ZVAL(x)
+		Z_PARAM_ZVAL(y)
+		Z_PARAM_ZVAL(width)
+		Z_PARAM_ZVAL(height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(tray, 1, &c_tray)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rtray_get_rect(c_tray, &c_x, &c_y, &c_width, &c_height);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(x, (zend_long)c_x);
+	ZEND_TRY_ASSIGN_REF_LONG(y, (zend_long)c_y);
+	ZEND_TRY_ASSIGN_REF_LONG(width, (zend_long)c_width);
+	ZEND_TRY_ASSIGN_REF_LONG(height, (zend_long)c_height);
+	RETURN_LONG((zend_long)r);
 }
 
 void raven_gen_raven_shell_minit(int module_number)

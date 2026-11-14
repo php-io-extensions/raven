@@ -1,7 +1,7 @@
 {
     "name": "php-io-extensions/raven",
     "type": "php-ext",
-    "description": "1:1 PHP bindings of Raven 0.2.3, a retained-mode GUI toolkit in C, compiled into the extension",
+    "description": "1:1 PHP bindings of Raven (upstream main b0a4aa7), a retained-mode GUI toolkit in C, compiled into the extension",
     "keywords": [
         "raven",
         "gui",
@@ -43,7 +43,7 @@
         "configure-options": [
             {
                 "name": "enable-raven",
-                "description": "Enable the Raven 0.2.3 bindings",
+                "description": "Enable the Raven bindings",
                 "needs-value": false
             }
         ]

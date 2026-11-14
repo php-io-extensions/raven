@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: df7899123c5702788c9f452fc7a58a4818742645 */
+ * Stub hash: b08fa646b89cbfe2763bbf244ebf205bffe626d4 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raccessibility_set_text_scale, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, scale, IS_DOUBLE, 0)
@@ -69,6 +69,17 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwidget_set_accessible_labelled_
 	ZEND_ARG_TYPE_INFO(0, label, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwidget_set_accessible_action, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, widget, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, press, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwidget_set_accessible_checked, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, widget, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, checked, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raccessibility_announce, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
 	ZEND_ARG_TYPE_INFO(0, assertive, IS_LONG, 0)
@@ -102,6 +113,8 @@ ZEND_FUNCTION(Rwidget_set_accessible_role);
 ZEND_FUNCTION(Rwidget_get_accessible_role);
 ZEND_FUNCTION(Rwidget_set_accessible_hidden);
 ZEND_FUNCTION(Rwidget_set_accessible_labelled_by);
+ZEND_FUNCTION(Rwidget_set_accessible_action);
+ZEND_FUNCTION(Rwidget_set_accessible_checked);
 ZEND_FUNCTION(Raccessibility_announce);
 ZEND_FUNCTION(Raccessibility_is_screen_reader_active);
 ZEND_METHOD(RAccessibilitySettings, __construct);
@@ -126,6 +139,8 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwidget_get_accessible_role, arginfo_Rwidget_get_accessible_role)
 	ZEND_FE(Rwidget_set_accessible_hidden, arginfo_Rwidget_set_accessible_hidden)
 	ZEND_FE(Rwidget_set_accessible_labelled_by, arginfo_Rwidget_set_accessible_labelled_by)
+	ZEND_FE(Rwidget_set_accessible_action, arginfo_Rwidget_set_accessible_action)
+	ZEND_FE(Rwidget_set_accessible_checked, arginfo_Rwidget_set_accessible_checked)
 	ZEND_FE(Raccessibility_announce, arginfo_Raccessibility_announce)
 	ZEND_FE(Raccessibility_is_screen_reader_active, arginfo_Raccessibility_is_screen_reader_active)
 	ZEND_FE_END

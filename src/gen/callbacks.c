@@ -11,6 +11,23 @@
 #include "structs.h"
 #include "callbacks.h"
 
+void raven_cb_RAccessiblePressCallback_0(Rid widget, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[2], rv;
+	ZVAL_LONG(&args[0], (zend_long)widget);
+	ZVAL_COPY(&args[1], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 2, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+}
+
 void raven_cb_RActionCallback_0(Rid sender, const char * action, void * user_data)
 {
 	raven_slot *slot = user_data;
@@ -430,6 +447,27 @@ void raven_cb_RIslandChangedCallback_0(Rid island, int expanded, void * user_dat
 	zval_ptr_dtor(&args[2]);
 }
 
+void raven_cb_RKeyboardCallback_0(Rid window, int visible, float height, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[4], rv;
+	ZVAL_LONG(&args[0], (zend_long)window);
+	ZVAL_LONG(&args[1], (zend_long)visible);
+	ZVAL_DOUBLE(&args[2], (double)height);
+	ZVAL_COPY(&args[3], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 4, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+}
+
 void raven_cb_RLabelLinkCallback_0(Rid label, const char * url, void * user_data)
 {
 	raven_slot *slot = user_data;
@@ -470,6 +508,54 @@ void raven_cb_RListEventCallback_0(Rid list_view, int index, void * user_data)
 	zval_ptr_dtor(&args[0]);
 	zval_ptr_dtor(&args[1]);
 	zval_ptr_dtor(&args[2]);
+}
+
+int raven_cb_RListItemColorCallback_0(Rid list_view, int index, float * r, float * g, float * b, float * a, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return 0;
+	}
+	int result = 0;
+	zval args[7], rv;
+	ZVAL_LONG(&args[0], (zend_long)list_view);
+	ZVAL_LONG(&args[1], (zend_long)index);
+	ZVAL_NEW_REF(&args[2], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[2]), r ? (double)*r : 0.0);
+	ZVAL_NEW_REF(&args[3], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[3]), g ? (double)*g : 0.0);
+	ZVAL_NEW_REF(&args[4], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[4]), b ? (double)*b : 0.0);
+	ZVAL_NEW_REF(&args[5], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[5]), a ? (double)*a : 0.0);
+	ZVAL_COPY(&args[6], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 7, args);
+	if (invoked) {
+		result = (int)raven_return_long(&rv, "RListItemColorCallback");
+	}
+	if (invoked && r) {
+		*r = (float)zval_get_double(Z_REFVAL(args[2]));
+	}
+	if (invoked && g) {
+		*g = (float)zval_get_double(Z_REFVAL(args[3]));
+	}
+	if (invoked && b) {
+		*b = (float)zval_get_double(Z_REFVAL(args[4]));
+	}
+	if (invoked && a) {
+		*a = (float)zval_get_double(Z_REFVAL(args[5]));
+	}
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
+	zval_ptr_dtor(&args[5]);
+	zval_ptr_dtor(&args[6]);
+	return result;
 }
 
 const char * raven_cb_RListItemTextCallback_0(Rid list_view, int index, void * user_data)
@@ -631,6 +717,29 @@ void raven_cb_RNodeGraphItemCallback_0(Rid graph, int item, void * user_data)
 	zval_ptr_dtor(&args[2]);
 }
 
+void raven_cb_RNodeGraphPointCallback_0(Rid graph, int item, float x, float y, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[5], rv;
+	ZVAL_LONG(&args[0], (zend_long)graph);
+	ZVAL_LONG(&args[1], (zend_long)item);
+	ZVAL_DOUBLE(&args[2], (double)x);
+	ZVAL_DOUBLE(&args[3], (double)y);
+	ZVAL_COPY(&args[4], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 5, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
+}
+
 void raven_cb_RNotificationClickedCallback_0(void * user_data)
 {
 	raven_slot *slot = user_data;
@@ -716,6 +825,25 @@ void raven_cb_RPaintCallback_0(Rid widget, RPainter * painter, float width, floa
 	zval_ptr_dtor(&args[2]);
 	zval_ptr_dtor(&args[3]);
 	zval_ptr_dtor(&args[4]);
+}
+
+void raven_cb_RPdfPageChangedCallback_0(Rid view, int page, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[3], rv;
+	ZVAL_LONG(&args[0], (zend_long)view);
+	ZVAL_LONG(&args[1], (zend_long)page);
+	ZVAL_COPY(&args[2], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 3, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
 }
 
 int raven_cb_RPenCallback_0(Rid widget, const RPenEvent * event, void * user_data)
@@ -907,6 +1035,56 @@ int raven_cb_RTabCloseCallback_0(Rid tab_view, int index, Rid content, void * us
 	return result;
 }
 
+int raven_cb_RTableCellColorCallback_0(Rid table, int row, int column, float * r, float * g, float * b, float * a, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return 0;
+	}
+	int result = 0;
+	zval args[8], rv;
+	ZVAL_LONG(&args[0], (zend_long)table);
+	ZVAL_LONG(&args[1], (zend_long)row);
+	ZVAL_LONG(&args[2], (zend_long)column);
+	ZVAL_NEW_REF(&args[3], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[3]), r ? (double)*r : 0.0);
+	ZVAL_NEW_REF(&args[4], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[4]), g ? (double)*g : 0.0);
+	ZVAL_NEW_REF(&args[5], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[5]), b ? (double)*b : 0.0);
+	ZVAL_NEW_REF(&args[6], &(zval){0});
+	ZVAL_DOUBLE(Z_REFVAL(args[6]), a ? (double)*a : 0.0);
+	ZVAL_COPY(&args[7], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 8, args);
+	if (invoked) {
+		result = (int)raven_return_long(&rv, "RTableCellColorCallback");
+	}
+	if (invoked && r) {
+		*r = (float)zval_get_double(Z_REFVAL(args[3]));
+	}
+	if (invoked && g) {
+		*g = (float)zval_get_double(Z_REFVAL(args[4]));
+	}
+	if (invoked && b) {
+		*b = (float)zval_get_double(Z_REFVAL(args[5]));
+	}
+	if (invoked && a) {
+		*a = (float)zval_get_double(Z_REFVAL(args[6]));
+	}
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
+	zval_ptr_dtor(&args[5]);
+	zval_ptr_dtor(&args[6]);
+	zval_ptr_dtor(&args[7]);
+	return result;
+}
+
 const char * raven_cb_RTableCellTextCallback_0(Rid table, int row, int column, void * user_data)
 {
 	raven_slot *slot = user_data;
@@ -1026,6 +1204,32 @@ void raven_cb_RTextEditorChangedCallback_0(Rid editor, void * user_data)
 	}
 	zval_ptr_dtor(&args[0]);
 	zval_ptr_dtor(&args[1]);
+}
+
+const char * raven_cb_RTextEditorHoverCallback_0(Rid editor, int line, int column, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return NULL;
+	}
+	const char * result = 0;
+	zval args[4], rv;
+	ZVAL_LONG(&args[0], (zend_long)editor);
+	ZVAL_LONG(&args[1], (zend_long)line);
+	ZVAL_LONG(&args[2], (zend_long)column);
+	ZVAL_COPY(&args[3], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 4, args);
+	if (invoked) {
+		result = raven_slot_return_string(slot, &rv, "RTextEditorHoverCallback");
+	}
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	return result;
 }
 
 void raven_cb_RTextEditorZoomCallback_0(Rid editor, float zoom, void * user_data)

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 018cafcf7eea61f17f6c942860ddebe9060a1318 */
+ * Stub hash: eec999a1d3067adc80c910a0e307c3d2841e5a22 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rheader_bar_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)
@@ -130,6 +130,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdock_area_is_tearable, 0, 1, IS
 	ZEND_ARG_TYPE_INFO(0, area, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdock_area_set_float_mode, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, area, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, mode, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdock_area_float_panel, 0, 4, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, area, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, panel, IS_LONG, 0)
@@ -251,6 +256,16 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtray_set_clicked_callback, 0, 3
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
+#define arginfo_Rtray_set_title arginfo_Rtray_set_tooltip
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtray_get_rect, 0, 5, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, tray, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, x, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, y, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, width, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, height, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RJumpTask___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, title, IS_STRING, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, arguments, IS_STRING, 1, "null")
@@ -283,6 +298,7 @@ ZEND_FUNCTION(Rdock_area_load_layout);
 ZEND_FUNCTION(Rdock_area_set_close_callback);
 ZEND_FUNCTION(Rdock_area_set_tearable);
 ZEND_FUNCTION(Rdock_area_is_tearable);
+ZEND_FUNCTION(Rdock_area_set_float_mode);
 ZEND_FUNCTION(Rdock_area_float_panel);
 ZEND_FUNCTION(Rdock_area_dock_panel);
 ZEND_FUNCTION(Rdock_area_get_panel_window);
@@ -313,6 +329,8 @@ ZEND_FUNCTION(Rtray_set_icon);
 ZEND_FUNCTION(Rtray_set_tooltip);
 ZEND_FUNCTION(Rtray_set_menu);
 ZEND_FUNCTION(Rtray_set_clicked_callback);
+ZEND_FUNCTION(Rtray_set_title);
+ZEND_FUNCTION(Rtray_get_rect);
 ZEND_METHOD(RJumpTask, __construct);
 
 static const zend_function_entry ext_functions[] = {
@@ -342,6 +360,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rdock_area_set_close_callback, arginfo_Rdock_area_set_close_callback)
 	ZEND_FE(Rdock_area_set_tearable, arginfo_Rdock_area_set_tearable)
 	ZEND_FE(Rdock_area_is_tearable, arginfo_Rdock_area_is_tearable)
+	ZEND_FE(Rdock_area_set_float_mode, arginfo_Rdock_area_set_float_mode)
 	ZEND_FE(Rdock_area_float_panel, arginfo_Rdock_area_float_panel)
 	ZEND_FE(Rdock_area_dock_panel, arginfo_Rdock_area_dock_panel)
 	ZEND_FE(Rdock_area_get_panel_window, arginfo_Rdock_area_get_panel_window)
@@ -372,6 +391,8 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtray_set_tooltip, arginfo_Rtray_set_tooltip)
 	ZEND_FE(Rtray_set_menu, arginfo_Rtray_set_menu)
 	ZEND_FE(Rtray_set_clicked_callback, arginfo_Rtray_set_clicked_callback)
+	ZEND_FE(Rtray_set_title, arginfo_Rtray_set_title)
+	ZEND_FE(Rtray_get_rect, arginfo_Rtray_get_rect)
 	ZEND_FE_END
 };
 
@@ -397,6 +418,8 @@ static void register_raven_shell_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_DOCK_TOP", R_DOCK_TOP, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_DOCK_BOTTOM", R_DOCK_BOTTOM, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_DOCK_TAB", R_DOCK_TAB, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DOCK_FLOAT_WINDOW", R_DOCK_FLOAT_WINDOW, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DOCK_FLOAT_IN_WINDOW", R_DOCK_FLOAT_IN_WINDOW, CONST_PERSISTENT);
 }
 
 static zend_class_entry *register_class_RJumpTask(void)

@@ -1161,6 +1161,58 @@ ZEND_FUNCTION(Rtext_editor_add_completion)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rtext_editor_add_completion_insert)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_string *text = NULL;
+	zend_string *detail = NULL;
+	zend_string *insert = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_STR_OR_NULL(text)
+		Z_PARAM_STR_OR_NULL(detail)
+		Z_PARAM_STR_OR_NULL(insert)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_add_completion_insert(c_editor, text ? ZSTR_VAL(text) : NULL, detail ? ZSTR_VAL(detail) : NULL, insert ? ZSTR_VAL(insert) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_set_completion_words)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(enabled, 2, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_set_completion_words(c_editor, c_enabled);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rtext_editor_set_auto_pairs)
 {
 	zend_long editor;
@@ -1273,6 +1325,38 @@ ZEND_FUNCTION(Rtext_editor_get_marker_count)
 	r = Rtext_editor_get_marker_count(c_editor);
 	raven_leave();
 	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rtext_editor_set_hover_callback)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_editor);
+	zend_string *key = raven_slot_key("Rtext_editor_set_hover_callback", 1, (unsigned long)c_editor);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_set_hover_callback(c_editor, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTextEditorHoverCallback_0 : NULL, slot);
+	raven_leave();
 }
 
 ZEND_FUNCTION(Rtheme_set_token_color)

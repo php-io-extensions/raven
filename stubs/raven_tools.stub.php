@@ -394,6 +394,18 @@ function Rnode_graph_set_activated_callback(int $graph, ?callable $callback, mix
 
 function Rnode_graph_set_context_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+function Rnode_graph_set_canvas_activated_callback(int $graph, ?callable $callback, mixed $user_data): void {}
+
+function Rnode_graph_set_wire_dropped_callback(int $graph, ?callable $callback, mixed $user_data): void {}
+
+function Rnode_graph_set_pin_clicked_callback(int $graph, ?callable $callback, mixed $user_data): void {}
+
+function Rnode_graph_get_node_at(int $graph, float $x, float $y): int {}
+
+function Rnode_graph_get_pin_at(int $graph, float $x, float $y): int {}
+
+function Rnode_graph_get_link_at(int $graph, float $x, float $y): int {}
+
 function Rnode_graph_set_pin_multiple(int $graph, int $pin, int $multiple): void {}
 
 function Rnode_graph_set_node_active(int $graph, int $node, int $active): void {}
@@ -402,7 +414,29 @@ function Rnode_graph_set_node_active_color(int $graph, int $node, float $r, floa
 
 function Rnode_graph_set_node_deletable(int $graph, int $node, int $deletable): void {}
 
+function Rnode_graph_set_node_shown(int $graph, int $node): void {}
+
+function Rnode_graph_set_link_shown(int $graph, int $link): void {}
+
+function Rnode_graph_set_node_icon(int $graph, int $node, int $texture): void {}
+
 function Rnode_graph_set_node_badge(int $graph, int $node, ?string $text): void {}
+
+function Rnode_graph_set_pin_tag(int $graph, int $pin, ?string $text): void {}
+
+function Rnode_graph_set_link_hidden(int $graph, int $link, int $hidden): void {}
+
+function Rnode_graph_set_pin_emphasis(int $graph, int $pin, int $emphasis): void {}
+
+function Rnode_graph_get_tag_at(int $graph, float $x, float $y): int {}
+
+function Rnode_graph_set_pin_tag_lit(int $graph, int $pin, int $lit): void {}
+
+function Rnode_graph_set_pin_label_width(int $graph, float $width): void {}
+
+function Rnode_graph_get_pin_label_width(int $graph): float {}
+
+function Rnode_graph_set_node_badge_color(int $graph, int $node, float $r, float $g, float $b): void {}
 
 function Rblock_editor_create(): int {}
 

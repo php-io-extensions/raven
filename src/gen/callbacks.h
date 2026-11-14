@@ -5,6 +5,7 @@
 
 #include "Raven.h"
 
+void raven_cb_RAccessiblePressCallback_0(Rid widget, void * user_data);
 void raven_cb_RActionCallback_0(Rid sender, const char * action, void * user_data);
 void raven_cb_RBlockEditorCallback_0(Rid editor, int block, void * user_data);
 void raven_cb_RBlockEditorContextCallback_0(Rid editor, int block, float x, float y, void * user_data);
@@ -25,8 +26,10 @@ void raven_cb_RFileBrowserCallback_0(Rid browser, const char * path, void * user
 void raven_cb_RFrameCallback_0(double delta_seconds, void * user_data);
 int raven_cb_RGestureCallback_0(Rid widget, const RGestureEvent * event, void * user_data);
 void raven_cb_RIslandChangedCallback_0(Rid island, int expanded, void * user_data);
+void raven_cb_RKeyboardCallback_0(Rid window, int visible, float height, void * user_data);
 void raven_cb_RLabelLinkCallback_0(Rid label, const char * url, void * user_data);
 void raven_cb_RListEventCallback_0(Rid list_view, int index, void * user_data);
+int raven_cb_RListItemColorCallback_0(Rid list_view, int index, float * r, float * g, float * b, float * a, void * user_data);
 const char * raven_cb_RListItemTextCallback_0(Rid list_view, int index, void * user_data);
 void raven_cb_RLocaleChangedCallback_0(const char * language, void * user_data);
 void raven_cb_RMeasureCallback_0(Rid widget, float * width, float * height, void * user_data);
@@ -34,10 +37,12 @@ void raven_cb_RMenuItemClickedCallback_0(Rid item, void * user_data);
 int raven_cb_RNodeGraphConnectCallback_0(Rid graph, int output_pin, int input_pin, void * user_data);
 void raven_cb_RNodeGraphContextCallback_0(Rid graph, int node, float x, float y, void * user_data);
 void raven_cb_RNodeGraphItemCallback_0(Rid graph, int item, void * user_data);
+void raven_cb_RNodeGraphPointCallback_0(Rid graph, int item, float x, float y, void * user_data);
 void raven_cb_RNotificationClickedCallback_0(void * user_data);
 void raven_cb_RNotificationFallback_0(const char * title, const char * body, RNotificationUrgency urgency, void * user_data);
 void raven_cb_RPageChangedCallback_0(Rid pagination, int page, void * user_data);
 void raven_cb_RPaintCallback_0(Rid widget, RPainter * painter, float width, float height, void * user_data);
+void raven_cb_RPdfPageChangedCallback_0(Rid view, int page, void * user_data);
 int raven_cb_RPenCallback_0(Rid widget, const RPenEvent * event, void * user_data);
 void raven_cb_RPlotDragLineCallback_0(Rid plot, int line, double value, void * user_data);
 void raven_cb_RPlotSeriesCallback_0(Rid plot, int series, int visible, void * user_data);
@@ -47,12 +52,14 @@ void raven_cb_RSliderChangedCallback_0(Rid slider, float value, void * user_data
 void raven_cb_RSpinBoxChangedCallback_0(Rid spin_box, double value, void * user_data);
 void raven_cb_RTabChangedCallback_0(Rid tab_view, int index, void * user_data);
 int raven_cb_RTabCloseCallback_0(Rid tab_view, int index, Rid content, void * user_data);
+int raven_cb_RTableCellColorCallback_0(Rid table, int row, int column, float * r, float * g, float * b, float * a, void * user_data);
 const char * raven_cb_RTableCellTextCallback_0(Rid table, int row, int column, void * user_data);
 void raven_cb_RTableEventCallback_0(Rid table, int row, void * user_data);
 void raven_cb_RTableSortCallback_0(Rid table, int column, int descending, void * user_data);
 void raven_cb_RTaskCallback_0(void * user_data);
 void raven_cb_RTextChangedCallback_0(Rid text_input, const char * text, void * user_data);
 void raven_cb_RTextEditorChangedCallback_0(Rid editor, void * user_data);
+const char * raven_cb_RTextEditorHoverCallback_0(Rid editor, int line, int column, void * user_data);
 void raven_cb_RTextEditorZoomCallback_0(Rid editor, float zoom, void * user_data);
 void raven_cb_RTileContextCallback_0(Rid tile_view, int index, float x, float y, void * user_data);
 const char * raven_cb_RTileDragDataCallback_0(Rid tile_view, void * user_data);

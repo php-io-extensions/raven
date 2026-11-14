@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 194bd9ed120dff77c7e75e96ae6d0a3ecfaa6dd9 */
+ * Stub hash: 27ce98e1ec128bd0856472d55594472e3b83778b */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlabel_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
@@ -242,6 +242,20 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_select_all, 0, 1, IS
 	ZEND_ARG_TYPE_INFO(0, text_input, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_set_input_type, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, text_input, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, type, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_input_get_input_type arginfo_Rtext_input_is_password
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_set_return_key, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, text_input, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_input_get_return_key arginfo_Rtext_input_is_password
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_set_changed_callback, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, text_input, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
@@ -280,6 +294,15 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspin_box_set_decimals, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, spin_box, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, decimals, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspin_box_set_buttons, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, spin_box, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, buttons, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspin_box_get_buttons, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, spin_box, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspin_box_set_changed_callback, 0, 3, IS_VOID, 0)
@@ -360,19 +383,21 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlist_view_set_virtual_items, 0,
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlist_view_set_item_color_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, list_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
 #define arginfo_Rlist_view_set_selected arginfo_Rlist_view_remove_item
 
 #define arginfo_Rlist_view_get_selected arginfo_Rlist_view_get_item_count
 
 #define arginfo_Rlist_view_scroll_to_item arginfo_Rlist_view_remove_item
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlist_view_set_selection_changed_callback, 0, 3, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, list_view, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
-	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rlist_view_set_selection_changed_callback arginfo_Rlist_view_set_item_color_callback
 
-#define arginfo_Rlist_view_set_activated_callback arginfo_Rlist_view_set_selection_changed_callback
+#define arginfo_Rlist_view_set_activated_callback arginfo_Rlist_view_set_item_color_callback
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtree_view_add_item, 0, 3, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, tree_view, IS_LONG, 0)
@@ -534,6 +559,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmenu_add_separator, 0, 1, IS_LO
 	ZEND_ARG_TYPE_INFO(0, menu, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+#define arginfo_Rmenu_add_header arginfo_Rmenu_add_item
+
+#define arginfo_Rmenu_bar_add_divider arginfo_Rmenu_bar_is_native
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmenu_set_title_color, 0, 5, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, menu, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
 #define arginfo_Rmenu_item_set_text arginfo_Rtree_item_set_text
 
 #define arginfo_Rmenu_item_get_text arginfo_Rtree_item_get_text
@@ -543,6 +580,8 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmenu_item_set_shortcut, 0, 3, I
 	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, modifiers, IS_LONG, 0)
 ZEND_END_ARG_INFO()
+
+#define arginfo_Rmenu_item_set_shortcut_text arginfo_Rtree_item_set_text
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmenu_item_set_checkable, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, item, IS_LONG, 0)
@@ -752,6 +791,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_virtual_rows, 0, 4, I
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_cell_color_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
 #define arginfo_Rtable_set_selected arginfo_Rtable_remove_row
 
 #define arginfo_Rtable_get_selected arginfo_Rtable_get_column_count
@@ -780,15 +825,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_striped, 0, 2, IS_VOI
 	ZEND_ARG_TYPE_INFO(0, striped, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_selection_changed_callback, 0, 3, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
-	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rtable_set_selection_changed_callback arginfo_Rtable_set_cell_color_callback
 
-#define arginfo_Rtable_set_activated_callback arginfo_Rtable_set_selection_changed_callback
+#define arginfo_Rtable_set_activated_callback arginfo_Rtable_set_cell_color_callback
 
-#define arginfo_Rtable_set_sort_callback arginfo_Rtable_set_selection_changed_callback
+#define arginfo_Rtable_set_sort_callback arginfo_Rtable_set_cell_color_callback
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdate_picker_set_date, 0, 4, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, date_picker, IS_LONG, 0)
@@ -1323,6 +1364,246 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rplot_set_series_toggled_callback arginfo_Rplot_set_view_changed_callback
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_is_available, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_load_file, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, password, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_load_memory, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, data_size, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, password, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_close, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_get_status, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rpdf_view_get_page_count arginfo_Rpdf_view_get_status
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_get_page_size, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, page, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, width, IS_DOUBLE, 1)
+	ZEND_ARG_TYPE_INFO(1, height, IS_DOUBLE, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_set_page, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, page, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rpdf_view_get_page arginfo_Rpdf_view_get_status
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_set_zoom, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, zoom, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_get_zoom, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_set_fit, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, fit, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rpdf_view_get_fit arginfo_Rpdf_view_get_status
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_get_title, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_get_page_text, 0, 2, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, page, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_set_page_changed_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_print, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, desc, RPdfPrintDesc, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rpdf_document_create arginfo_Rpdf_is_available
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_delete, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_set_title, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_set_author, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, author, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_set_subject, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, subject, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_add_page, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_get_page_count, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_set_fill_color, 0, 5, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rpdf_document_set_stroke_color arginfo_Rpdf_document_set_fill_color
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_set_line_width, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_draw_rect, 0, 7, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, paint, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_draw_ellipse, 0, 6, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, paint, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_draw_line, 0, 5, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, x2, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y2, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_add_font, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, data_size, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_add_font_from_file, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_set_font, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, font, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, size, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, style, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_get_line_height, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_measure_text, 0, 2, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_draw_text, 0, 4, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_draw_paragraph, 0, 6, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, align, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_draw_image, 0, 8, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, rgba, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, pixels_width, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, pixels_height, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_draw_window, 0, 6, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rpdf_document_save arginfo_Rpdf_document_add_font_from_file
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_print, 0, 3, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, desc, RPdfPrintDesc, 1)
+	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, data_size, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_print_file, 0, 2, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, desc, RPdfPrintDesc, 1)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_print, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, desc, RPdfPrintDesc, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RPdfPrintDesc___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, window, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, title, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, printer, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, copies, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, output, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, password, IS_STRING, 1, "null")
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RTileItem___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, text, IS_STRING, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, detail, IS_STRING, 1, "null")
@@ -1386,6 +1667,10 @@ ZEND_FUNCTION(Rtext_input_is_read_only);
 ZEND_FUNCTION(Rtext_input_set_read_only);
 ZEND_FUNCTION(Rtext_input_set_max_length);
 ZEND_FUNCTION(Rtext_input_select_all);
+ZEND_FUNCTION(Rtext_input_set_input_type);
+ZEND_FUNCTION(Rtext_input_get_input_type);
+ZEND_FUNCTION(Rtext_input_set_return_key);
+ZEND_FUNCTION(Rtext_input_get_return_key);
 ZEND_FUNCTION(Rtext_input_set_changed_callback);
 ZEND_FUNCTION(Rtext_input_set_committed_callback);
 ZEND_FUNCTION(Rspin_box_set_range);
@@ -1394,6 +1679,8 @@ ZEND_FUNCTION(Rspin_box_get_value);
 ZEND_FUNCTION(Rspin_box_get_range);
 ZEND_FUNCTION(Rspin_box_set_step);
 ZEND_FUNCTION(Rspin_box_set_decimals);
+ZEND_FUNCTION(Rspin_box_set_buttons);
+ZEND_FUNCTION(Rspin_box_get_buttons);
 ZEND_FUNCTION(Rspin_box_set_changed_callback);
 ZEND_FUNCTION(Rcombo_box_add_item);
 ZEND_FUNCTION(Rcombo_box_clear_items);
@@ -1410,6 +1697,7 @@ ZEND_FUNCTION(Rlist_view_remove_item);
 ZEND_FUNCTION(Rlist_view_clear_items);
 ZEND_FUNCTION(Rlist_view_get_item_count);
 ZEND_FUNCTION(Rlist_view_set_virtual_items);
+ZEND_FUNCTION(Rlist_view_set_item_color_callback);
 ZEND_FUNCTION(Rlist_view_set_selected);
 ZEND_FUNCTION(Rlist_view_get_selected);
 ZEND_FUNCTION(Rlist_view_scroll_to_item);
@@ -1453,9 +1741,13 @@ ZEND_FUNCTION(Rmenu_add_menu);
 ZEND_FUNCTION(Rmenu_set_title);
 ZEND_FUNCTION(Rmenu_add_item);
 ZEND_FUNCTION(Rmenu_add_separator);
+ZEND_FUNCTION(Rmenu_add_header);
+ZEND_FUNCTION(Rmenu_bar_add_divider);
+ZEND_FUNCTION(Rmenu_set_title_color);
 ZEND_FUNCTION(Rmenu_item_set_text);
 ZEND_FUNCTION(Rmenu_item_get_text);
 ZEND_FUNCTION(Rmenu_item_set_shortcut);
+ZEND_FUNCTION(Rmenu_item_set_shortcut_text);
 ZEND_FUNCTION(Rmenu_item_set_checkable);
 ZEND_FUNCTION(Rmenu_item_set_checked);
 ZEND_FUNCTION(Rmenu_item_set_icon);
@@ -1500,6 +1792,7 @@ ZEND_FUNCTION(Rtable_remove_row);
 ZEND_FUNCTION(Rtable_clear_rows);
 ZEND_FUNCTION(Rtable_get_row_count);
 ZEND_FUNCTION(Rtable_set_virtual_rows);
+ZEND_FUNCTION(Rtable_set_cell_color_callback);
 ZEND_FUNCTION(Rtable_set_selected);
 ZEND_FUNCTION(Rtable_get_selected);
 ZEND_FUNCTION(Rtable_scroll_to_row);
@@ -1614,6 +1907,50 @@ ZEND_FUNCTION(Rplot_set_drag_line_color);
 ZEND_FUNCTION(Rplot_set_view_changed_callback);
 ZEND_FUNCTION(Rplot_set_drag_line_callback);
 ZEND_FUNCTION(Rplot_set_series_toggled_callback);
+ZEND_FUNCTION(Rpdf_is_available);
+ZEND_FUNCTION(Rpdf_view_load_file);
+ZEND_FUNCTION(Rpdf_view_load_memory);
+ZEND_FUNCTION(Rpdf_view_close);
+ZEND_FUNCTION(Rpdf_view_get_status);
+ZEND_FUNCTION(Rpdf_view_get_page_count);
+ZEND_FUNCTION(Rpdf_view_get_page_size);
+ZEND_FUNCTION(Rpdf_view_set_page);
+ZEND_FUNCTION(Rpdf_view_get_page);
+ZEND_FUNCTION(Rpdf_view_set_zoom);
+ZEND_FUNCTION(Rpdf_view_get_zoom);
+ZEND_FUNCTION(Rpdf_view_set_fit);
+ZEND_FUNCTION(Rpdf_view_get_fit);
+ZEND_FUNCTION(Rpdf_view_get_title);
+ZEND_FUNCTION(Rpdf_view_get_page_text);
+ZEND_FUNCTION(Rpdf_view_set_page_changed_callback);
+ZEND_FUNCTION(Rpdf_view_print);
+ZEND_FUNCTION(Rpdf_document_create);
+ZEND_FUNCTION(Rpdf_document_delete);
+ZEND_FUNCTION(Rpdf_document_set_title);
+ZEND_FUNCTION(Rpdf_document_set_author);
+ZEND_FUNCTION(Rpdf_document_set_subject);
+ZEND_FUNCTION(Rpdf_document_add_page);
+ZEND_FUNCTION(Rpdf_document_get_page_count);
+ZEND_FUNCTION(Rpdf_document_set_fill_color);
+ZEND_FUNCTION(Rpdf_document_set_stroke_color);
+ZEND_FUNCTION(Rpdf_document_set_line_width);
+ZEND_FUNCTION(Rpdf_document_draw_rect);
+ZEND_FUNCTION(Rpdf_document_draw_ellipse);
+ZEND_FUNCTION(Rpdf_document_draw_line);
+ZEND_FUNCTION(Rpdf_document_add_font);
+ZEND_FUNCTION(Rpdf_document_add_font_from_file);
+ZEND_FUNCTION(Rpdf_document_set_font);
+ZEND_FUNCTION(Rpdf_document_get_line_height);
+ZEND_FUNCTION(Rpdf_document_measure_text);
+ZEND_FUNCTION(Rpdf_document_draw_text);
+ZEND_FUNCTION(Rpdf_document_draw_paragraph);
+ZEND_FUNCTION(Rpdf_document_draw_image);
+ZEND_FUNCTION(Rpdf_document_draw_window);
+ZEND_FUNCTION(Rpdf_document_save);
+ZEND_FUNCTION(Rpdf_print);
+ZEND_FUNCTION(Rpdf_print_file);
+ZEND_FUNCTION(Rpdf_document_print);
+ZEND_METHOD(RPdfPrintDesc, __construct);
 ZEND_METHOD(RTileItem, __construct);
 
 static const zend_function_entry ext_functions[] = {
@@ -1669,6 +2006,10 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtext_input_set_read_only, arginfo_Rtext_input_set_read_only)
 	ZEND_FE(Rtext_input_set_max_length, arginfo_Rtext_input_set_max_length)
 	ZEND_FE(Rtext_input_select_all, arginfo_Rtext_input_select_all)
+	ZEND_FE(Rtext_input_set_input_type, arginfo_Rtext_input_set_input_type)
+	ZEND_FE(Rtext_input_get_input_type, arginfo_Rtext_input_get_input_type)
+	ZEND_FE(Rtext_input_set_return_key, arginfo_Rtext_input_set_return_key)
+	ZEND_FE(Rtext_input_get_return_key, arginfo_Rtext_input_get_return_key)
 	ZEND_FE(Rtext_input_set_changed_callback, arginfo_Rtext_input_set_changed_callback)
 	ZEND_FE(Rtext_input_set_committed_callback, arginfo_Rtext_input_set_committed_callback)
 	ZEND_FE(Rspin_box_set_range, arginfo_Rspin_box_set_range)
@@ -1677,6 +2018,8 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rspin_box_get_range, arginfo_Rspin_box_get_range)
 	ZEND_FE(Rspin_box_set_step, arginfo_Rspin_box_set_step)
 	ZEND_FE(Rspin_box_set_decimals, arginfo_Rspin_box_set_decimals)
+	ZEND_FE(Rspin_box_set_buttons, arginfo_Rspin_box_set_buttons)
+	ZEND_FE(Rspin_box_get_buttons, arginfo_Rspin_box_get_buttons)
 	ZEND_FE(Rspin_box_set_changed_callback, arginfo_Rspin_box_set_changed_callback)
 	ZEND_FE(Rcombo_box_add_item, arginfo_Rcombo_box_add_item)
 	ZEND_FE(Rcombo_box_clear_items, arginfo_Rcombo_box_clear_items)
@@ -1693,6 +2036,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rlist_view_clear_items, arginfo_Rlist_view_clear_items)
 	ZEND_FE(Rlist_view_get_item_count, arginfo_Rlist_view_get_item_count)
 	ZEND_FE(Rlist_view_set_virtual_items, arginfo_Rlist_view_set_virtual_items)
+	ZEND_FE(Rlist_view_set_item_color_callback, arginfo_Rlist_view_set_item_color_callback)
 	ZEND_FE(Rlist_view_set_selected, arginfo_Rlist_view_set_selected)
 	ZEND_FE(Rlist_view_get_selected, arginfo_Rlist_view_get_selected)
 	ZEND_FE(Rlist_view_scroll_to_item, arginfo_Rlist_view_scroll_to_item)
@@ -1736,9 +2080,13 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rmenu_set_title, arginfo_Rmenu_set_title)
 	ZEND_FE(Rmenu_add_item, arginfo_Rmenu_add_item)
 	ZEND_FE(Rmenu_add_separator, arginfo_Rmenu_add_separator)
+	ZEND_FE(Rmenu_add_header, arginfo_Rmenu_add_header)
+	ZEND_FE(Rmenu_bar_add_divider, arginfo_Rmenu_bar_add_divider)
+	ZEND_FE(Rmenu_set_title_color, arginfo_Rmenu_set_title_color)
 	ZEND_FE(Rmenu_item_set_text, arginfo_Rmenu_item_set_text)
 	ZEND_FE(Rmenu_item_get_text, arginfo_Rmenu_item_get_text)
 	ZEND_FE(Rmenu_item_set_shortcut, arginfo_Rmenu_item_set_shortcut)
+	ZEND_FE(Rmenu_item_set_shortcut_text, arginfo_Rmenu_item_set_shortcut_text)
 	ZEND_FE(Rmenu_item_set_checkable, arginfo_Rmenu_item_set_checkable)
 	ZEND_FE(Rmenu_item_set_checked, arginfo_Rmenu_item_set_checked)
 	ZEND_FE(Rmenu_item_set_icon, arginfo_Rmenu_item_set_icon)
@@ -1783,6 +2131,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtable_clear_rows, arginfo_Rtable_clear_rows)
 	ZEND_FE(Rtable_get_row_count, arginfo_Rtable_get_row_count)
 	ZEND_FE(Rtable_set_virtual_rows, arginfo_Rtable_set_virtual_rows)
+	ZEND_FE(Rtable_set_cell_color_callback, arginfo_Rtable_set_cell_color_callback)
 	ZEND_FE(Rtable_set_selected, arginfo_Rtable_set_selected)
 	ZEND_FE(Rtable_get_selected, arginfo_Rtable_get_selected)
 	ZEND_FE(Rtable_scroll_to_row, arginfo_Rtable_scroll_to_row)
@@ -1897,6 +2246,54 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rplot_set_view_changed_callback, arginfo_Rplot_set_view_changed_callback)
 	ZEND_FE(Rplot_set_drag_line_callback, arginfo_Rplot_set_drag_line_callback)
 	ZEND_FE(Rplot_set_series_toggled_callback, arginfo_Rplot_set_series_toggled_callback)
+	ZEND_FE(Rpdf_is_available, arginfo_Rpdf_is_available)
+	ZEND_FE(Rpdf_view_load_file, arginfo_Rpdf_view_load_file)
+	ZEND_FE(Rpdf_view_load_memory, arginfo_Rpdf_view_load_memory)
+	ZEND_FE(Rpdf_view_close, arginfo_Rpdf_view_close)
+	ZEND_FE(Rpdf_view_get_status, arginfo_Rpdf_view_get_status)
+	ZEND_FE(Rpdf_view_get_page_count, arginfo_Rpdf_view_get_page_count)
+	ZEND_FE(Rpdf_view_get_page_size, arginfo_Rpdf_view_get_page_size)
+	ZEND_FE(Rpdf_view_set_page, arginfo_Rpdf_view_set_page)
+	ZEND_FE(Rpdf_view_get_page, arginfo_Rpdf_view_get_page)
+	ZEND_FE(Rpdf_view_set_zoom, arginfo_Rpdf_view_set_zoom)
+	ZEND_FE(Rpdf_view_get_zoom, arginfo_Rpdf_view_get_zoom)
+	ZEND_FE(Rpdf_view_set_fit, arginfo_Rpdf_view_set_fit)
+	ZEND_FE(Rpdf_view_get_fit, arginfo_Rpdf_view_get_fit)
+	ZEND_FE(Rpdf_view_get_title, arginfo_Rpdf_view_get_title)
+	ZEND_FE(Rpdf_view_get_page_text, arginfo_Rpdf_view_get_page_text)
+	ZEND_FE(Rpdf_view_set_page_changed_callback, arginfo_Rpdf_view_set_page_changed_callback)
+	ZEND_FE(Rpdf_view_print, arginfo_Rpdf_view_print)
+	ZEND_FE(Rpdf_document_create, arginfo_Rpdf_document_create)
+	ZEND_FE(Rpdf_document_delete, arginfo_Rpdf_document_delete)
+	ZEND_FE(Rpdf_document_set_title, arginfo_Rpdf_document_set_title)
+	ZEND_FE(Rpdf_document_set_author, arginfo_Rpdf_document_set_author)
+	ZEND_FE(Rpdf_document_set_subject, arginfo_Rpdf_document_set_subject)
+	ZEND_FE(Rpdf_document_add_page, arginfo_Rpdf_document_add_page)
+	ZEND_FE(Rpdf_document_get_page_count, arginfo_Rpdf_document_get_page_count)
+	ZEND_FE(Rpdf_document_set_fill_color, arginfo_Rpdf_document_set_fill_color)
+	ZEND_FE(Rpdf_document_set_stroke_color, arginfo_Rpdf_document_set_stroke_color)
+	ZEND_FE(Rpdf_document_set_line_width, arginfo_Rpdf_document_set_line_width)
+	ZEND_FE(Rpdf_document_draw_rect, arginfo_Rpdf_document_draw_rect)
+	ZEND_FE(Rpdf_document_draw_ellipse, arginfo_Rpdf_document_draw_ellipse)
+	ZEND_FE(Rpdf_document_draw_line, arginfo_Rpdf_document_draw_line)
+	ZEND_FE(Rpdf_document_add_font, arginfo_Rpdf_document_add_font)
+	ZEND_FE(Rpdf_document_add_font_from_file, arginfo_Rpdf_document_add_font_from_file)
+	ZEND_FE(Rpdf_document_set_font, arginfo_Rpdf_document_set_font)
+	ZEND_FE(Rpdf_document_get_line_height, arginfo_Rpdf_document_get_line_height)
+	ZEND_FE(Rpdf_document_measure_text, arginfo_Rpdf_document_measure_text)
+	ZEND_FE(Rpdf_document_draw_text, arginfo_Rpdf_document_draw_text)
+	ZEND_FE(Rpdf_document_draw_paragraph, arginfo_Rpdf_document_draw_paragraph)
+	ZEND_FE(Rpdf_document_draw_image, arginfo_Rpdf_document_draw_image)
+	ZEND_FE(Rpdf_document_draw_window, arginfo_Rpdf_document_draw_window)
+	ZEND_FE(Rpdf_document_save, arginfo_Rpdf_document_save)
+	ZEND_FE(Rpdf_print, arginfo_Rpdf_print)
+	ZEND_FE(Rpdf_print_file, arginfo_Rpdf_print_file)
+	ZEND_FE(Rpdf_document_print, arginfo_Rpdf_document_print)
+	ZEND_FE_END
+};
+
+static const zend_function_entry class_RPdfPrintDesc_methods[] = {
+	ZEND_ME(RPdfPrintDesc, __construct, arginfo_class_RPdfPrintDesc___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -1931,6 +2328,22 @@ static void register_raven_controls_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_PLOT_Y", R_PLOT_Y, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_X2", R_PLOT_X2, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_Y2", R_PLOT_Y2, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_FIT_WIDTH", R_PDF_FIT_WIDTH, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_FIT_PAGE", R_PDF_FIT_PAGE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_FIT_NONE", R_PDF_FIT_NONE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_EMPTY", R_PDF_EMPTY, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_LOADED", R_PDF_LOADED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_NEEDS_PASSWORD", R_PDF_NEEDS_PASSWORD, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_ERROR", R_PDF_ERROR, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_UNAVAILABLE", R_PDF_UNAVAILABLE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_FONT_SANS", R_PDF_FONT_SANS, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_FONT_MONO", R_PDF_FONT_MONO, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_FILL", R_PDF_FILL, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_STROKE", R_PDF_STROKE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_TEXT_BOLD", R_PDF_TEXT_BOLD, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_TEXT_ITALIC", R_PDF_TEXT_ITALIC, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_TEXT_UNDERLINE", R_PDF_TEXT_UNDERLINE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_PDF_PRINT_NO_DIALOG", R_PDF_PRINT_NO_DIALOG, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_SCALE_LINEAR", R_PLOT_SCALE_LINEAR, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_SCALE_LOG", R_PLOT_SCALE_LOG, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_SCALE_SYMLOG", R_PLOT_SCALE_SYMLOG, CONST_PERSISTENT);
@@ -1958,6 +2371,58 @@ static void register_raven_controls_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_PLOT_LEGEND_BOTTOM_LEFT", R_PLOT_LEGEND_BOTTOM_LEFT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_LEGEND_LEFT", R_PLOT_LEGEND_LEFT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_LEGEND_OUTSIDE", R_PLOT_LEGEND_OUTSIDE, CONST_PERSISTENT);
+}
+
+static zend_class_entry *register_class_RPdfPrintDesc(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RPdfPrintDesc", class_RPdfPrintDesc_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+
+	zval property_window_default_value;
+	ZVAL_LONG(&property_window_default_value, 0);
+	zend_string *property_window_name = zend_string_init("window", sizeof("window") - 1, 1);
+	zend_declare_typed_property(class_entry, property_window_name, &property_window_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_window_name);
+
+	zval property_title_default_value;
+	ZVAL_NULL(&property_title_default_value);
+	zend_string *property_title_name = zend_string_init("title", sizeof("title") - 1, 1);
+	zend_declare_typed_property(class_entry, property_title_name, &property_title_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_title_name);
+
+	zval property_printer_default_value;
+	ZVAL_NULL(&property_printer_default_value);
+	zend_string *property_printer_name = zend_string_init("printer", sizeof("printer") - 1, 1);
+	zend_declare_typed_property(class_entry, property_printer_name, &property_printer_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_printer_name);
+
+	zval property_copies_default_value;
+	ZVAL_LONG(&property_copies_default_value, 0);
+	zend_string *property_copies_name = zend_string_init("copies", sizeof("copies") - 1, 1);
+	zend_declare_typed_property(class_entry, property_copies_name, &property_copies_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_copies_name);
+
+	zval property_flags_default_value;
+	ZVAL_LONG(&property_flags_default_value, 0);
+	zend_string *property_flags_name = zend_string_init("flags", sizeof("flags") - 1, 1);
+	zend_declare_typed_property(class_entry, property_flags_name, &property_flags_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_flags_name);
+
+	zval property_output_default_value;
+	ZVAL_NULL(&property_output_default_value);
+	zend_string *property_output_name = zend_string_init("output", sizeof("output") - 1, 1);
+	zend_declare_typed_property(class_entry, property_output_name, &property_output_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_output_name);
+
+	zval property_password_default_value;
+	ZVAL_NULL(&property_password_default_value);
+	zend_string *property_password_name = zend_string_init("password", sizeof("password") - 1, 1);
+	zend_declare_typed_property(class_entry, property_password_name, &property_password_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_password_name);
+
+	return class_entry;
 }
 
 static zend_class_entry *register_class_RTileItem(void)

@@ -12,6 +12,8 @@
 zend_class_entry *raven_ce_RInitDesc;
 zend_class_entry *raven_ce_RMemoryStats;
 zend_class_entry *raven_ce_RFrameStats;
+zend_class_entry *raven_ce_RInsets;
+zend_class_entry *raven_ce_RTextInputInfo;
 zend_class_entry *raven_ce_RNativeWindow;
 zend_class_entry *raven_ce_REvent;
 zend_class_entry *raven_ce_RDropEvent;
@@ -19,6 +21,7 @@ zend_class_entry *raven_ce_RTouchSettings;
 zend_class_entry *raven_ce_RTouchEvent;
 zend_class_entry *raven_ce_RPenEvent;
 zend_class_entry *raven_ce_RGestureEvent;
+zend_class_entry *raven_ce_RPdfPrintDesc;
 zend_class_entry *raven_ce_RTileItem;
 zend_class_entry *raven_ce_RLanguageDesc;
 zend_class_entry *raven_ce_RJumpTask;
@@ -73,6 +76,25 @@ static const raven_field raven_fields_RFrameStats[] = {
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RFrameStats = {"RFrameStats", sizeof(RFrameStats), &raven_ce_RFrameStats, raven_fields_RFrameStats};
+
+static const raven_field raven_fields_RInsets[] = {
+	{"top", offsetof(RInsets, top), RAVEN_F_FLOAT, 0, NULL},
+	{"right", offsetof(RInsets, right), RAVEN_F_FLOAT, 0, NULL},
+	{"bottom", offsetof(RInsets, bottom), RAVEN_F_FLOAT, 0, NULL},
+	{"left", offsetof(RInsets, left), RAVEN_F_FLOAT, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RInsets = {"RInsets", sizeof(RInsets), &raven_ce_RInsets, raven_fields_RInsets};
+
+static const raven_field raven_fields_RTextInputInfo[] = {
+	{"type", offsetof(RTextInputInfo, type), RAVEN_F_INT, 0, NULL},
+	{"return_key", offsetof(RTextInputInfo, return_key), RAVEN_F_INT, 0, NULL},
+	{"password", offsetof(RTextInputInfo, password), RAVEN_F_INT, 0, NULL},
+	{"read_only", offsetof(RTextInputInfo, read_only), RAVEN_F_INT, 0, NULL},
+	{"max_length", offsetof(RTextInputInfo, max_length), RAVEN_F_INT, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RTextInputInfo = {"RTextInputInfo", sizeof(RTextInputInfo), &raven_ce_RTextInputInfo, raven_fields_RTextInputInfo};
 
 static const raven_field raven_fields_RNativeWindow[] = {
 	{"system", offsetof(RNativeWindow, system), RAVEN_F_INT, 0, NULL},
@@ -202,6 +224,18 @@ static const raven_field raven_fields_RGestureEvent[] = {
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RGestureEvent = {"RGestureEvent", sizeof(RGestureEvent), &raven_ce_RGestureEvent, raven_fields_RGestureEvent};
+
+static const raven_field raven_fields_RPdfPrintDesc[] = {
+	{"window", offsetof(RPdfPrintDesc, window), RAVEN_F_U32, 0, NULL},
+	{"title", offsetof(RPdfPrintDesc, title), RAVEN_F_CSTR, 0, NULL},
+	{"printer", offsetof(RPdfPrintDesc, printer), RAVEN_F_CSTR, 0, NULL},
+	{"copies", offsetof(RPdfPrintDesc, copies), RAVEN_F_INT, 0, NULL},
+	{"flags", offsetof(RPdfPrintDesc, flags), RAVEN_F_U32, 0, NULL},
+	{"output", offsetof(RPdfPrintDesc, output), RAVEN_F_CSTR, 0, NULL},
+	{"password", offsetof(RPdfPrintDesc, password), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RPdfPrintDesc = {"RPdfPrintDesc", sizeof(RPdfPrintDesc), &raven_ce_RPdfPrintDesc, raven_fields_RPdfPrintDesc};
 
 static const raven_field raven_fields_RTileItem[] = {
 	{"text", offsetof(RTileItem, text), RAVEN_F_CSTR, 0, NULL},

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 03d75166f38f9a3cab281d450052eb9daf6a4609 */
+ * Stub hash: 093e92a72a52b9f88a3cf084e67106d568f4f197 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcustom_set_paint_callback, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, widget, IS_LONG, 0)
@@ -16,6 +16,20 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdraw_rect, 0, 10, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
 	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
 	ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdraw_shadow, 0, 11, IS_VOID, 0)
+	ZEND_ARG_OBJ_INFO(0, painter, RPainter, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, blur, IS_DOUBLE, 0)
 	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
 	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
 	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
@@ -157,6 +171,7 @@ ZEND_END_ARG_INFO()
 ZEND_FUNCTION(Rcustom_set_paint_callback);
 ZEND_FUNCTION(Rcustom_set_measure_callback);
 ZEND_FUNCTION(Rdraw_rect);
+ZEND_FUNCTION(Rdraw_shadow);
 ZEND_FUNCTION(Rdraw_rect_outline);
 ZEND_FUNCTION(Rdraw_circle);
 ZEND_FUNCTION(Rdraw_line);
@@ -176,6 +191,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rcustom_set_paint_callback, arginfo_Rcustom_set_paint_callback)
 	ZEND_FE(Rcustom_set_measure_callback, arginfo_Rcustom_set_measure_callback)
 	ZEND_FE(Rdraw_rect, arginfo_Rdraw_rect)
+	ZEND_FE(Rdraw_shadow, arginfo_Rdraw_shadow)
 	ZEND_FE(Rdraw_rect_outline, arginfo_Rdraw_rect_outline)
 	ZEND_FE(Rdraw_circle, arginfo_Rdraw_circle)
 	ZEND_FE(Rdraw_line, arginfo_Rdraw_line)

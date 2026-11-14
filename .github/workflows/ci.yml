@@ -32,7 +32,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libx11-dev pkg-config
 
       - name: Build
-        # Raven 0.2.3 is vendored under lib/raven/ and compiled into the module; Vulkan is loaded at run time.
+        # Raven is vendored under lib/raven/ and compiled into the module; Vulkan is loaded at run time.
         run: |
           phpize
           ./configure --enable-raven

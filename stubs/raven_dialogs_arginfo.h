@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 31c4e83b9d8511055050e55bc5a3b1725bd4ed07 */
+ * Stub hash: d091f4e73d7697d52c3fc9428b37169d3e83f3fe */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdialog_open, 0, 4, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
@@ -15,6 +15,21 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdialog_run, 0, 2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, content, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpopup_open, 0, 6, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, content, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, closed, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rpopup_close arginfo_Rdialog_close
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpopup_is_open, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, content, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
@@ -173,6 +188,9 @@ ZEND_END_ARG_INFO()
 ZEND_FUNCTION(Rdialog_open);
 ZEND_FUNCTION(Rdialog_close);
 ZEND_FUNCTION(Rdialog_run);
+ZEND_FUNCTION(Rpopup_open);
+ZEND_FUNCTION(Rpopup_close);
+ZEND_FUNCTION(Rpopup_is_open);
 ZEND_FUNCTION(Rwindow_has_dialog);
 ZEND_FUNCTION(Rmessage_box);
 ZEND_FUNCTION(Rfile_dialog_open);
@@ -213,6 +231,9 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rdialog_open, arginfo_Rdialog_open)
 	ZEND_FE(Rdialog_close, arginfo_Rdialog_close)
 	ZEND_FE(Rdialog_run, arginfo_Rdialog_run)
+	ZEND_FE(Rpopup_open, arginfo_Rpopup_open)
+	ZEND_FE(Rpopup_close, arginfo_Rpopup_close)
+	ZEND_FE(Rpopup_is_open, arginfo_Rpopup_is_open)
 	ZEND_FE(Rwindow_has_dialog, arginfo_Rwindow_has_dialog)
 	ZEND_FE(Rmessage_box, arginfo_Rmessage_box)
 	ZEND_FE(Rfile_dialog_open, arginfo_Rfile_dialog_open)

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 32611ff139e5489ea04e328c5f4a740a868f2b97 */
+ * Stub hash: ed990660bc4abc60e719a119ac71aef949de76e1 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rinit, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, backend, IS_LONG, 0)
@@ -37,6 +37,11 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rfile_read, 0, 2, IS_STRING, 1)
 	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(1, size, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_save_memory, 0, 2, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(1, size, IS_LONG, 1)
 ZEND_END_ARG_INFO()
 
@@ -117,6 +122,7 @@ ZEND_FUNCTION(Rerror_set_callback);
 ZEND_FUNCTION(Rparallel_for);
 ZEND_FUNCTION(Rtask_run_async);
 ZEND_FUNCTION(Rfile_read);
+ZEND_FUNCTION(Rpdf_document_save_memory);
 ZEND_FUNCTION(Rwindow_capture);
 ZEND_FUNCTION(Rimage_decode);
 ZEND_FUNCTION(Rvulkan_set_queue_lock_callbacks);
@@ -139,6 +145,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rparallel_for, arginfo_Rparallel_for)
 	ZEND_FE(Rtask_run_async, arginfo_Rtask_run_async)
 	ZEND_FE(Rfile_read, arginfo_Rfile_read)
+	ZEND_FE(Rpdf_document_save_memory, arginfo_Rpdf_document_save_memory)
 	ZEND_FE(Rwindow_capture, arginfo_Rwindow_capture)
 	ZEND_FE(Rimage_decode, arginfo_Rimage_decode)
 	ZEND_FE(Rvulkan_set_queue_lock_callbacks, arginfo_Rvulkan_set_queue_lock_callbacks)

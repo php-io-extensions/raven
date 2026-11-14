@@ -6,6 +6,8 @@
  *   platform/wayland/ Wayland            (Linux, BSD; compiled beside X11)
  *   platform/win32/   Win32              (Windows)
  *   platform/cocoa/   Cocoa + Metal      (macOS)
+ *   platform/uikit/   UIKit + Metal      (iOS; experimental)
+ *   platform/android/ NativeActivity     (Android, android_native_app_glue; experimental)
  *   platform/null/    no window at all   (headless runs, tests)
  *
  * To port Raven to another window system, implement this table and return
@@ -92,7 +94,11 @@ typedef enum rvn_pevent_type_t {
 	/** The system asks the application to quit (Quit in the application menu of macOS, in the Dock). `user` may be NULL. */
 	RVN_PEVENT_QUIT,
 	/** A tray icon was clicked: `user` is the one given to tray_create (not a window), `button` an RMouseButton. */
-	RVN_PEVENT_TRAY
+	RVN_PEVENT_TRAY,
+	/** The safe area of the window changed (rotation, status bar): the core asks window_get_safe_area again. */
+	RVN_PEVENT_INSETS,
+	/** The system switched between dark and light: the core asks system_dark again. `user` may be NULL. */
+	RVN_PEVENT_APPEARANCE
 } rvn_pevent_type_t;
 
 /**
@@ -108,12 +114,15 @@ typedef struct rvn_pmenu_t {
 	const struct rvn_pmenu_t* items;
 	uint32_t count;
 	int separator;
+	int header;
 	int enabled;
 	int checkable;
 	int checked;
 	/** The shortcut (R_KEY_UNKNOWN: none) and its RModifier, shown by the system and handled by it. */
 	RKey key;
 	uint32_t modifiers;
+	/** Display-only override; NULL: use the native shortcut label. Never binds a key. */
+	const char* shortcut_hint;
 } rvn_pmenu_t;
 
 /** Parts of a window whose title bar is drawn by the application (R_WINDOW_CUSTOM_HEADER). */
@@ -224,6 +233,8 @@ typedef struct rvn_platform_t {
 	/** Pixels per logical unit on the monitor showing the window. */
 	float (*window_get_scale)(rvn_pwindow_t* window);
 	void  (*window_show)(rvn_pwindow_t* window, int visible);
+	/** Optional (may be NULL): in front, with the keyboard, the application activated. */
+	void  (*window_focus)(rvn_pwindow_t* window);
 	void  (*window_set_state)(rvn_pwindow_t* window, rvn_pwindow_state_t state);
 	rvn_pwindow_state_t (*window_get_state)(rvn_pwindow_t* window);
 	/**
@@ -249,6 +260,12 @@ typedef struct rvn_platform_t {
 	/** Optional (may be NULL). Opacity of the whole window, 0..1. Returns R_FALSE when it cannot. */
 	int   (*window_set_opacity)(rvn_pwindow_t* window, float opacity);
 	int   (*window_set_topmost)(rvn_pwindow_t* window, int topmost);
+	/**
+	 * Optional (may be NULL). `owner` (NULL: none) owns the window: the window
+	 * stays above it, out of the taskbar, and is minimized and restored with it
+	 * (Rwindow_set_owner). Returns R_FALSE when the window system cannot.
+	 */
+	int   (*window_set_owner)(rvn_pwindow_t* window, rvn_pwindow_t* owner);
 	/**
 	 * Optional (may be NULL). Picture in picture (Rwindow_set_picture_in_picture).
 	 * Entering: the platform keeps what it needs to come back (frame, style,
@@ -302,6 +319,10 @@ typedef struct rvn_platform_t {
 	void  (*tray_set_tooltip)(rvn_ptray_t* tray, const char* text);
 	/** The menu the system shows for it (copied); its entries come back as RVN_PEVENT_COMMAND. count 0: none. */
 	void  (*tray_set_menu)(rvn_ptray_t* tray, const rvn_pmenu_t* items, uint32_t count);
+	/** Text beside the icon ("" none). May be NULL: the system shows none. */
+	void  (*tray_set_title)(rvn_ptray_t* tray, const char* text);
+	/** Where the icon is, as window positions are given; R_FALSE (or NULL) when unknown. */
+	int   (*tray_get_rect)(rvn_ptray_t* tray, int* x, int* y, int* width, int* height);
 	void  (*window_center)(rvn_pwindow_t* window);
 	/** Optional (may be NULL). Icon from RGBA8 pixels; NULL rgba restores the default. */
 	void  (*window_set_icon)(rvn_pwindow_t* window, const uint8_t* rgba, int width, int height);
@@ -389,6 +410,26 @@ typedef struct rvn_platform_t {
 	 * R_FALSE when it could not be shown.
 	 */
 	int   (*notify)(const char* app, const char* title, const char* body, int urgency);
+
+	/*
+	 * ---- mobile (optional, NULL on desktop) ----
+	 */
+	/**
+	 * The part of the window that the system covers (status bar, notch,
+	 * home indicator, navigation bar), in pixels: top, right, bottom, left.
+	 * The core lays the content out inside it. Sends RVN_PEVENT_INSETS when it changes.
+	 */
+	void  (*window_get_safe_area)(rvn_pwindow_t* window, float insets[4]);
+	/** R_TRUE when the system is in dark mode, R_FALSE in light mode, -1 when it does not tell. Sends RVN_PEVENT_APPEARANCE when it changes. */
+	int   (*system_dark)(void);
+	/**
+	 * Height of the on-screen keyboard over the bottom of the window, in
+	 * pixels; 0 when it is hidden. The core lays the content out above it.
+	 * Sends RVN_PEVENT_INSETS when it changes. The platform shows the
+	 * keyboard while Rwindow_wants_text_input says so, and delivers what is
+	 * typed as RVN_PEVENT_TEXT and RVN_PEVENT_KEY (Backspace, Enter).
+	 */
+	float (*window_get_keyboard_height)(rvn_pwindow_t* window);
 } rvn_platform_t;
 
 #if defined(RAVEN_PLATFORM_EMSCRIPTEN)
@@ -447,6 +488,12 @@ const rvn_platform_t* rvn_platform_win32(void);
 #endif
 #if defined(RAVEN_PLATFORM_COCOA)
 const rvn_platform_t* rvn_platform_cocoa(void);
+#endif
+#if defined(RAVEN_PLATFORM_UIKIT)
+const rvn_platform_t* rvn_platform_uikit(void);
+#endif
+#if defined(RAVEN_PLATFORM_ANDROID)
+const rvn_platform_t* rvn_platform_android(void);
 #endif
 
 #endif /* RVN_PLATFORM_H */

@@ -691,6 +691,62 @@
                 }
             ]
         },
+        "Rwindow_get_safe_area": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "insets",
+                    "type": "RInsets *"
+                }
+            ]
+        },
+        "Rwindow_get_keyboard_area": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "insets",
+                    "type": "RInsets *"
+                }
+            ]
+        },
+        "Rwindow_set_keyboard_callback": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RKeyboardCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rwindow_clear_focus": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                }
+            ]
+        },
         "Rwindow_set_min_size": {
             "header": "raven_window.h",
             "ret": "void",
@@ -784,6 +840,16 @@
             ]
         },
         "Rwindow_hide": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rwindow_focus": {
             "header": "raven_window.h",
             "ret": "void",
             "params": [
@@ -1045,6 +1111,30 @@
                 }
             ]
         },
+        "Rwindow_set_owner": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "owner",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rwindow_get_owner": {
+            "header": "raven_window.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                }
+            ]
+        },
         "Rwindow_set_picture_in_picture": {
             "header": "raven_window.h",
             "ret": "int",
@@ -1220,6 +1310,28 @@
                 {
                     "name": "user_data",
                     "type": "void *"
+                }
+            ]
+        },
+        "Rdrop_set_highlight_rect": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
                 }
             ]
         },
@@ -1514,6 +1626,88 @@
                 {
                     "name": "window",
                     "type": "Rid"
+                }
+            ]
+        },
+        "Rwindow_get_text_input_info": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "info",
+                    "type": "RTextInputInfo *"
+                }
+            ]
+        },
+        "Rwindow_get_text_input_text": {
+            "header": "raven_window.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rwindow_get_text_input_selection": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "start",
+                    "type": "int *"
+                },
+                {
+                    "name": "end",
+                    "type": "int *"
+                }
+            ]
+        },
+        "Rwindow_set_text_input_selection": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "start",
+                    "type": "int"
+                },
+                {
+                    "name": "end",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rwindow_replace_text_input": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "start",
+                    "type": "int"
+                },
+                {
+                    "name": "end",
+                    "type": "int"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
                 }
             ]
         },
@@ -2236,6 +2430,21 @@
             "params": [
                 {
                     "name": "dark",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rtheme_get_system_dark": {
+            "header": "raven_style.h",
+            "ret": "int",
+            "params": []
+        },
+        "Rtheme_follow_system": {
+            "header": "raven_style.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "enabled",
                     "type": "int"
                 }
             ]
@@ -5523,6 +5732,54 @@
                 }
             ]
         },
+        "Rtext_input_set_input_type": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "text_input",
+                    "type": "Rid"
+                },
+                {
+                    "name": "type",
+                    "type": "RTextInputType"
+                }
+            ]
+        },
+        "Rtext_input_get_input_type": {
+            "header": "raven_controls.h",
+            "ret": "RTextInputType",
+            "params": [
+                {
+                    "name": "text_input",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtext_input_set_return_key": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "text_input",
+                    "type": "Rid"
+                },
+                {
+                    "name": "key",
+                    "type": "RReturnKey"
+                }
+            ]
+        },
+        "Rtext_input_get_return_key": {
+            "header": "raven_controls.h",
+            "ret": "RReturnKey",
+            "params": [
+                {
+                    "name": "text_input",
+                    "type": "Rid"
+                }
+            ]
+        },
         "Rtext_input_set_changed_callback": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -5648,6 +5905,30 @@
                 {
                     "name": "decimals",
                     "type": "int"
+                }
+            ]
+        },
+        "Rspin_box_set_buttons": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "spin_box",
+                    "type": "Rid"
+                },
+                {
+                    "name": "buttons",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rspin_box_get_buttons": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "spin_box",
+                    "type": "Rid"
                 }
             ]
         },
@@ -5868,6 +6149,24 @@
                 {
                     "name": "callback",
                     "type": "RListItemTextCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rlist_view_set_item_color_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "list_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RListItemColorCallback"
                 },
                 {
                     "name": "user_data",
@@ -6473,6 +6772,56 @@
                 }
             ]
         },
+        "Rmenu_add_header": {
+            "header": "raven_controls.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "menu",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rmenu_bar_add_divider": {
+            "header": "raven_controls.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "menu_bar",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rmenu_set_title_color": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "menu",
+                    "type": "Rid"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
         "Rmenu_item_set_text": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -6512,6 +6861,20 @@
                 {
                     "name": "modifiers",
                     "type": "Ruint"
+                }
+            ]
+        },
+        "Rmenu_item_set_shortcut_text": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "item",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
                 }
             ]
         },
@@ -7196,6 +7559,24 @@
                 {
                     "name": "callback",
                     "type": "RTableCellTextCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rtable_set_cell_color_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RTableCellColorCallback"
                 },
                 {
                     "name": "user_data",
@@ -9047,6 +9428,744 @@
                 }
             ]
         },
+        "Rpdf_is_available": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": []
+        },
+        "Rpdf_view_load_file": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "password",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_view_load_memory": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "data",
+                    "type": "const char *"
+                },
+                {
+                    "name": "data_size",
+                    "type": "size_t"
+                },
+                {
+                    "name": "password",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_view_close": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_view_get_status": {
+            "header": "raven_controls.h",
+            "ret": "RPdfStatus",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_view_get_page_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_view_get_page_size": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "page",
+                    "type": "int"
+                },
+                {
+                    "name": "width",
+                    "type": "float *"
+                },
+                {
+                    "name": "height",
+                    "type": "float *"
+                }
+            ]
+        },
+        "Rpdf_view_set_page": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "page",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rpdf_view_get_page": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_view_set_zoom": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "zoom",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rpdf_view_get_zoom": {
+            "header": "raven_controls.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_view_set_fit": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "fit",
+                    "type": "RPdfFit"
+                }
+            ]
+        },
+        "Rpdf_view_get_fit": {
+            "header": "raven_controls.h",
+            "ret": "RPdfFit",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_view_get_title": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_view_get_page_text": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "page",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rpdf_view_set_page_changed_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RPdfPageChangedCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rpdf_view_print": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "desc",
+                    "type": "const RPdfPrintDesc *"
+                }
+            ]
+        },
+        "Rpdf_document_create": {
+            "header": "raven_controls.h",
+            "ret": "Rid",
+            "params": []
+        },
+        "Rpdf_document_delete": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_document_set_title": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "title",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_set_author": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "author",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_set_subject": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "subject",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_add_page": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rpdf_document_get_page_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_document_set_fill_color": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rpdf_document_set_stroke_color": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rpdf_document_set_line_width": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rpdf_document_draw_rect": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
+                },
+                {
+                    "name": "radius",
+                    "type": "float"
+                },
+                {
+                    "name": "paint",
+                    "type": "Ruint"
+                }
+            ]
+        },
+        "Rpdf_document_draw_ellipse": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
+                },
+                {
+                    "name": "paint",
+                    "type": "Ruint"
+                }
+            ]
+        },
+        "Rpdf_document_draw_line": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x1",
+                    "type": "float"
+                },
+                {
+                    "name": "y1",
+                    "type": "float"
+                },
+                {
+                    "name": "x2",
+                    "type": "float"
+                },
+                {
+                    "name": "y2",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rpdf_document_add_font": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "data",
+                    "type": "const char *"
+                },
+                {
+                    "name": "data_size",
+                    "type": "size_t"
+                }
+            ]
+        },
+        "Rpdf_document_add_font_from_file": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_set_font": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "font",
+                    "type": "int"
+                },
+                {
+                    "name": "size",
+                    "type": "float"
+                },
+                {
+                    "name": "style",
+                    "type": "Ruint"
+                }
+            ]
+        },
+        "Rpdf_document_get_line_height": {
+            "header": "raven_controls.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rpdf_document_measure_text": {
+            "header": "raven_controls.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_draw_text": {
+            "header": "raven_controls.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_draw_paragraph": {
+            "header": "raven_controls.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "align",
+                    "type": "RHAlign"
+                }
+            ]
+        },
+        "Rpdf_document_draw_image": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
+                },
+                {
+                    "name": "rgba",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "pixels_width",
+                    "type": "int"
+                },
+                {
+                    "name": "pixels_height",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rpdf_document_draw_window": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rpdf_document_save": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_save_memory": {
+            "header": "raven_controls.h",
+            "ret": "char *",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t *"
+                }
+            ]
+        },
+        "Rpdf_print": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RPdfPrintDesc *"
+                },
+                {
+                    "name": "data",
+                    "type": "const char *"
+                },
+                {
+                    "name": "data_size",
+                    "type": "size_t"
+                }
+            ]
+        },
+        "Rpdf_print_file": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RPdfPrintDesc *"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rpdf_document_print": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "document",
+                    "type": "Rid"
+                },
+                {
+                    "name": "desc",
+                    "type": "const RPdfPrintDesc *"
+                }
+            ]
+        },
         "Rtext_editor_create": {
             "header": "raven_text_editor.h",
             "ret": "Rid",
@@ -9648,6 +10767,42 @@
                 }
             ]
         },
+        "Rtext_editor_add_completion_insert": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "detail",
+                    "type": "const char *"
+                },
+                {
+                    "name": "insert",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rtext_editor_set_completion_words": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ]
+        },
         "Rtext_editor_set_auto_pairs": {
             "header": "raven_text_editor.h",
             "ret": "void",
@@ -9709,6 +10864,24 @@
                 {
                     "name": "editor",
                     "type": "Rid"
+                }
+            ]
+        },
+        "Rtext_editor_set_hover_callback": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RTextEditorHoverCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
                 }
             ]
         },
@@ -10194,6 +11367,20 @@
                 }
             ]
         },
+        "Rdock_area_set_float_mode": {
+            "header": "raven_shell.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "area",
+                    "type": "Rid"
+                },
+                {
+                    "name": "mode",
+                    "type": "RDockFloatMode"
+                }
+            ]
+        },
         "Rdock_area_float_panel": {
             "header": "raven_shell.h",
             "ret": "Rid",
@@ -10584,6 +11771,46 @@
                 {
                     "name": "user_data",
                     "type": "void *"
+                }
+            ]
+        },
+        "Rtray_set_title": {
+            "header": "raven_shell.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "tray",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rtray_get_rect": {
+            "header": "raven_shell.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "tray",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "int *"
+                },
+                {
+                    "name": "y",
+                    "type": "int *"
+                },
+                {
+                    "name": "width",
+                    "type": "int *"
+                },
+                {
+                    "name": "height",
+                    "type": "int *"
                 }
             ]
         },
@@ -12882,6 +14109,114 @@
                 }
             ]
         },
+        "Rnode_graph_set_canvas_activated_callback": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RNodeGraphPointCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rnode_graph_set_wire_dropped_callback": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RNodeGraphPointCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rnode_graph_set_pin_clicked_callback": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RNodeGraphPointCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rnode_graph_get_node_at": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rnode_graph_get_pin_at": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rnode_graph_get_link_at": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ]
+        },
         "Rnode_graph_set_pin_multiple": {
             "header": "raven_tools.h",
             "ret": "void",
@@ -12962,6 +14297,52 @@
                 }
             ]
         },
+        "Rnode_graph_set_node_shown": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "node",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rnode_graph_set_link_shown": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "link",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rnode_graph_set_node_icon": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "node",
+                    "type": "int"
+                },
+                {
+                    "name": "texture",
+                    "type": "Rid"
+                }
+            ]
+        },
         "Rnode_graph_set_node_badge": {
             "header": "raven_tools.h",
             "ret": "void",
@@ -12977,6 +14358,146 @@
                 {
                     "name": "text",
                     "type": "const char *"
+                }
+            ]
+        },
+        "Rnode_graph_set_pin_tag": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "pin",
+                    "type": "int"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rnode_graph_set_link_hidden": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "link",
+                    "type": "int"
+                },
+                {
+                    "name": "hidden",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rnode_graph_set_pin_emphasis": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "pin",
+                    "type": "int"
+                },
+                {
+                    "name": "emphasis",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rnode_graph_get_tag_at": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rnode_graph_set_pin_tag_lit": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "pin",
+                    "type": "int"
+                },
+                {
+                    "name": "lit",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rnode_graph_set_pin_label_width": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rnode_graph_get_pin_label_width": {
+            "header": "raven_tools.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rnode_graph_set_node_badge_color": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "node",
+                    "type": "int"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
                 }
             ]
         },
@@ -13653,6 +15174,60 @@
                 }
             ]
         },
+        "Rpopup_open": {
+            "header": "raven_dialogs.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "content",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "closed",
+                    "type": "RDialogClosedCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rpopup_close": {
+            "header": "raven_dialogs.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "result",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rpopup_is_open": {
+            "header": "raven_dialogs.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "content",
+                    "type": "Rid"
+                }
+            ]
+        },
         "Rwindow_has_dialog": {
             "header": "raven_dialogs.h",
             "ret": "int",
@@ -14302,6 +15877,56 @@
                 },
                 {
                     "name": "radius",
+                    "type": "float"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rdraw_shadow": {
+            "header": "raven_draw.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "painter",
+                    "type": "RPainter *"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "width",
+                    "type": "float"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
+                },
+                {
+                    "name": "radius",
+                    "type": "float"
+                },
+                {
+                    "name": "blur",
                     "type": "float"
                 },
                 {
@@ -16098,6 +17723,38 @@
                 }
             ]
         },
+        "Rwidget_set_accessible_action": {
+            "header": "raven_accessibility.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "press",
+                    "type": "RAccessiblePressCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rwidget_set_accessible_checked": {
+            "header": "raven_accessibility.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "checked",
+                    "type": "int"
+                }
+            ]
+        },
         "Raccessibility_announce": {
             "header": "raven_accessibility.h",
             "ret": "void",
@@ -16623,6 +18280,52 @@
                 }
             ]
         },
+        "RInsets": {
+            "header": "raven_window.h",
+            "fields": [
+                {
+                    "name": "top",
+                    "type": "float"
+                },
+                {
+                    "name": "right",
+                    "type": "float"
+                },
+                {
+                    "name": "bottom",
+                    "type": "float"
+                },
+                {
+                    "name": "left",
+                    "type": "float"
+                }
+            ]
+        },
+        "RTextInputInfo": {
+            "header": "raven_window.h",
+            "fields": [
+                {
+                    "name": "type",
+                    "type": "RTextInputType"
+                },
+                {
+                    "name": "return_key",
+                    "type": "RReturnKey"
+                },
+                {
+                    "name": "password",
+                    "type": "int"
+                },
+                {
+                    "name": "read_only",
+                    "type": "int"
+                },
+                {
+                    "name": "max_length",
+                    "type": "int"
+                }
+            ]
+        },
         "RNativeWindow": {
             "header": "raven_window.h",
             "fields": [
@@ -17031,6 +18734,39 @@
                 {
                     "name": "cancelled",
                     "type": "int"
+                }
+            ]
+        },
+        "RPdfPrintDesc": {
+            "header": "raven_controls.h",
+            "fields": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "title",
+                    "type": "const char *"
+                },
+                {
+                    "name": "printer",
+                    "type": "const char *"
+                },
+                {
+                    "name": "copies",
+                    "type": "int"
+                },
+                {
+                    "name": "flags",
+                    "type": "Ruint"
+                },
+                {
+                    "name": "output",
+                    "type": "const char *"
+                },
+                {
+                    "name": "password",
+                    "type": "const char *"
                 }
             ]
         },
@@ -17771,7 +19507,32 @@
                 "R_WINDOW_SYSTEM_X11",
                 "R_WINDOW_SYSTEM_WAYLAND",
                 "R_WINDOW_SYSTEM_COCOA",
-                "R_WINDOW_SYSTEM_EMSCRIPTEN"
+                "R_WINDOW_SYSTEM_EMSCRIPTEN",
+                "R_WINDOW_SYSTEM_ANDROID",
+                "R_WINDOW_SYSTEM_UIKIT"
+            ]
+        },
+        "RTextInputType": {
+            "header": "raven_window.h",
+            "constants": [
+                "R_TEXT_INPUT_TYPE_TEXT",
+                "R_TEXT_INPUT_TYPE_EMAIL",
+                "R_TEXT_INPUT_TYPE_NUMBER",
+                "R_TEXT_INPUT_TYPE_DECIMAL",
+                "R_TEXT_INPUT_TYPE_PHONE",
+                "R_TEXT_INPUT_TYPE_URL",
+                "R_TEXT_INPUT_TYPE_SEARCH"
+            ]
+        },
+        "RReturnKey": {
+            "header": "raven_window.h",
+            "constants": [
+                "R_RETURN_KEY_DEFAULT",
+                "R_RETURN_KEY_DONE",
+                "R_RETURN_KEY_GO",
+                "R_RETURN_KEY_NEXT",
+                "R_RETURN_KEY_SEARCH",
+                "R_RETURN_KEY_SEND"
             ]
         },
         "RWindowEdge": {
@@ -18195,6 +19956,7 @@
                 "R_WIDGET_RATING",
                 "R_WIDGET_PAGINATION",
                 "R_WIDGET_PLOT",
+                "R_WIDGET_PDF_VIEW",
                 "R_WIDGET_LAST_"
             ]
         },
@@ -18324,6 +20086,52 @@
                 "R_PLOT_Y2"
             ]
         },
+        "RPdfFit": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_PDF_FIT_WIDTH",
+                "R_PDF_FIT_PAGE",
+                "R_PDF_FIT_NONE"
+            ]
+        },
+        "RPdfStatus": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_PDF_EMPTY",
+                "R_PDF_LOADED",
+                "R_PDF_NEEDS_PASSWORD",
+                "R_PDF_ERROR",
+                "R_PDF_UNAVAILABLE"
+            ]
+        },
+        "RPdfFont": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_PDF_FONT_SANS",
+                "R_PDF_FONT_MONO"
+            ]
+        },
+        "RPdfPaint": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_PDF_FILL",
+                "R_PDF_STROKE"
+            ]
+        },
+        "RPdfTextStyle": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_PDF_TEXT_BOLD",
+                "R_PDF_TEXT_ITALIC",
+                "R_PDF_TEXT_UNDERLINE"
+            ]
+        },
+        "RPdfPrintFlags": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_PDF_PRINT_NO_DIALOG"
+            ]
+        },
         "RPlotScale": {
             "header": "raven_controls.h",
             "constants": [
@@ -18448,6 +20256,13 @@
                 "R_DOCK_TOP",
                 "R_DOCK_BOTTOM",
                 "R_DOCK_TAB"
+            ]
+        },
+        "RDockFloatMode": {
+            "header": "raven_shell.h",
+            "constants": [
+                "R_DOCK_FLOAT_WINDOW",
+                "R_DOCK_FLOAT_IN_WINDOW"
             ]
         },
         "RVisualPreset": {
@@ -18746,6 +20561,28 @@
             "header": "raven_core.h",
             "ret": "void",
             "params": [
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RKeyboardCallback": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "visible",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "float"
+                },
                 {
                     "name": "user_data",
                     "type": "void *"
@@ -19108,6 +20945,40 @@
                 }
             ]
         },
+        "RListItemColorCallback": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "list_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                },
+                {
+                    "name": "r",
+                    "type": "float *"
+                },
+                {
+                    "name": "g",
+                    "type": "float *"
+                },
+                {
+                    "name": "b",
+                    "type": "float *"
+                },
+                {
+                    "name": "a",
+                    "type": "float *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
         "RListEventCallback": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -19279,6 +21150,44 @@
                 {
                     "name": "column",
                     "type": "int"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RTableCellColorCallback": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "r",
+                    "type": "float *"
+                },
+                {
+                    "name": "g",
+                    "type": "float *"
+                },
+                {
+                    "name": "b",
+                    "type": "float *"
+                },
+                {
+                    "name": "a",
+                    "type": "float *"
                 },
                 {
                     "name": "user_data",
@@ -19504,6 +21413,24 @@
                 }
             ]
         },
+        "RPdfPageChangedCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "page",
+                    "type": "int"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
         "RTextEditorZoomCallback": {
             "header": "raven_text_editor.h",
             "ret": "void",
@@ -19533,6 +21460,28 @@
                 {
                     "name": "prefix",
                     "type": "const char *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RTextEditorHoverCallback": {
+            "header": "raven_text_editor.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
                 },
                 {
                     "name": "user_data",
@@ -19738,6 +21687,32 @@
                 },
                 {
                     "name": "node",
+                    "type": "int"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RNodeGraphPointCallback": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "graph",
+                    "type": "Rid"
+                },
+                {
+                    "name": "item",
                     "type": "int"
                 },
                 {
@@ -20011,6 +21986,20 @@
                 {
                     "name": "language",
                     "type": "const char *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RAccessiblePressCallback": {
+            "header": "raven_accessibility.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
                 },
                 {
                     "name": "user_data",

@@ -94,6 +94,18 @@ const R_DOCK_BOTTOM = UNKNOWN;
  */
 const R_DOCK_TAB = UNKNOWN;
 
+/**
+ * @var int
+ * @cvalue R_DOCK_FLOAT_WINDOW
+ */
+const R_DOCK_FLOAT_WINDOW = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DOCK_FLOAT_IN_WINDOW
+ */
+const R_DOCK_FLOAT_IN_WINDOW = UNKNOWN;
+
 final class RJumpTask
 {
     public ?string $title = null;
@@ -155,6 +167,8 @@ function Rdock_area_set_tearable(int $area, int $tearable): void {}
 
 function Rdock_area_is_tearable(int $area): int {}
 
+function Rdock_area_set_float_mode(int $area, int $mode): void {}
+
 function Rdock_area_float_panel(int $area, int $panel, int $x, int $y): int {}
 
 function Rdock_area_dock_panel(int $area, int $panel): void {}
@@ -214,3 +228,7 @@ function Rtray_set_tooltip(int $tray, ?string $text): void {}
 function Rtray_set_menu(int $tray, int $menu): void {}
 
 function Rtray_set_clicked_callback(int $tray, ?callable $callback, mixed $user_data): void {}
+
+function Rtray_set_title(int $tray, ?string $text): void {}
+
+function Rtray_get_rect(int $tray, ?int &$x, ?int &$y, ?int &$width, ?int &$height): int {}

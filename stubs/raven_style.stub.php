@@ -552,6 +552,10 @@ function Rtheme_set_accent(float $r, float $g, float $b): void {}
 
 function Rtheme_set_dark(int $dark): void {}
 
+function Rtheme_get_system_dark(): int {}
+
+function Rtheme_follow_system(int $enabled): void {}
+
 function Rtheme_is_dark(): int {}
 
 function Rtheme_set_wallpaper(int $texture): void {}

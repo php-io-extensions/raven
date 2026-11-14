@@ -1,6 +1,6 @@
 /*
- * raven: 1:1 bindings of Raven 0.2.3. The library is compiled into this
- * extension. Function, struct and constant names stay the C names.
+ * raven: 1:1 bindings of Raven (vendored from upstream main). The library is
+ * compiled into this extension. Function, struct and constant names stay the C names.
  */
 
 #ifdef HAVE_CONFIG_H

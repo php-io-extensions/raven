@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 404d2afb93e44b34bb6f7c1a802f687dc0c149c4 */
+ * Stub hash: c24402294b983ae102cbff3ca7c203d88f424188 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_create, 0, 4, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)
@@ -44,6 +44,21 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_get_size, 0, 3, IS_VOID,
 	ZEND_ARG_TYPE_INFO(1, height, IS_LONG, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_get_safe_area, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, insets, RInsets, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rwindow_get_keyboard_area arginfo_Rwindow_get_safe_area
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_keyboard_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rwindow_clear_focus arginfo_Rwindow_destroy
+
 #define arginfo_Rwindow_set_min_size arginfo_Rwindow_set_size
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_position, 0, 3, IS_VOID, 0)
@@ -67,6 +82,8 @@ ZEND_END_ARG_INFO()
 #define arginfo_Rwindow_show arginfo_Rwindow_destroy
 
 #define arginfo_Rwindow_hide arginfo_Rwindow_destroy
+
+#define arginfo_Rwindow_focus arginfo_Rwindow_destroy
 
 #define arginfo_Rwindow_maximize arginfo_Rwindow_destroy
 
@@ -137,6 +154,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_topmost, 0, 2, IS_LO
 	ZEND_ARG_TYPE_INFO(0, topmost, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_owner, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, owner, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rwindow_get_owner arginfo_Rwindow_is_valid
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_picture_in_picture, 0, 2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
@@ -171,15 +195,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_continuous_redraw, 0
 	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_close_callback, 0, 3, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
-	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+#define arginfo_Rwindow_set_close_callback arginfo_Rwindow_set_keyboard_callback
+
+#define arginfo_Rwindow_set_resize_callback arginfo_Rwindow_set_keyboard_callback
+
+#define arginfo_Rwindow_set_drop_callback arginfo_Rwindow_set_keyboard_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdrop_set_highlight_rect, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_DOUBLE, 0)
 ZEND_END_ARG_INFO()
-
-#define arginfo_Rwindow_set_resize_callback arginfo_Rwindow_set_close_callback
-
-#define arginfo_Rwindow_set_drop_callback arginfo_Rwindow_set_close_callback
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_user_handle, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
@@ -267,6 +294,32 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rwindow_wants_text_input arginfo_Rwindow_is_valid
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_get_text_input_info, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, info, RTextInputInfo, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rwindow_get_text_input_text arginfo_Rwindow_get_title
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_get_text_input_selection, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, start, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, end, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_text_input_selection, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, start, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, end, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_replace_text_input, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, start, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, end, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
 #define arginfo_Rwindow_has_popup arginfo_Rwindow_is_valid
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_get_text_input_rect, 0, 5, IS_LONG, 0)
@@ -318,6 +371,21 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_unregister_shortcut, 0, 
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, modifiers, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RInsets___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, top, IS_DOUBLE, 0, "0.0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, right, IS_DOUBLE, 0, "0.0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bottom, IS_DOUBLE, 0, "0.0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, left, IS_DOUBLE, 0, "0.0")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RTextInputInfo___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, type, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, return_key, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, password, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, read_only, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, max_length, IS_LONG, 0, "0")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RNativeWindow___construct, 0, 0, 0)
@@ -372,6 +440,10 @@ ZEND_FUNCTION(Rwindow_set_title);
 ZEND_FUNCTION(Rwindow_get_title);
 ZEND_FUNCTION(Rwindow_set_size);
 ZEND_FUNCTION(Rwindow_get_size);
+ZEND_FUNCTION(Rwindow_get_safe_area);
+ZEND_FUNCTION(Rwindow_get_keyboard_area);
+ZEND_FUNCTION(Rwindow_set_keyboard_callback);
+ZEND_FUNCTION(Rwindow_clear_focus);
 ZEND_FUNCTION(Rwindow_set_min_size);
 ZEND_FUNCTION(Rwindow_set_position);
 ZEND_FUNCTION(Rwindow_get_position);
@@ -379,6 +451,7 @@ ZEND_FUNCTION(Rwindow_get_framebuffer_size);
 ZEND_FUNCTION(Rwindow_get_scale);
 ZEND_FUNCTION(Rwindow_show);
 ZEND_FUNCTION(Rwindow_hide);
+ZEND_FUNCTION(Rwindow_focus);
 ZEND_FUNCTION(Rwindow_maximize);
 ZEND_FUNCTION(Rwindow_minimize);
 ZEND_FUNCTION(Rwindow_restore);
@@ -399,6 +472,8 @@ ZEND_FUNCTION(Rwindow_has_own_theme);
 ZEND_FUNCTION(Rwindow_set_opacity);
 ZEND_FUNCTION(Rwindow_get_opacity);
 ZEND_FUNCTION(Rwindow_set_topmost);
+ZEND_FUNCTION(Rwindow_set_owner);
+ZEND_FUNCTION(Rwindow_get_owner);
 ZEND_FUNCTION(Rwindow_set_picture_in_picture);
 ZEND_FUNCTION(Rwindow_is_picture_in_picture);
 ZEND_FUNCTION(Rwindow_set_picture_in_picture_layout);
@@ -412,6 +487,7 @@ ZEND_FUNCTION(Rwindow_set_continuous_redraw);
 ZEND_FUNCTION(Rwindow_set_close_callback);
 ZEND_FUNCTION(Rwindow_set_resize_callback);
 ZEND_FUNCTION(Rwindow_set_drop_callback);
+ZEND_FUNCTION(Rdrop_set_highlight_rect);
 ZEND_FUNCTION(Rwindow_set_user_handle);
 ZEND_FUNCTION(Rwindow_get_user_handle);
 ZEND_FUNCTION(Rwindow_get_native_handle);
@@ -430,6 +506,11 @@ ZEND_FUNCTION(Rwindow_is_mouse_button_down);
 ZEND_FUNCTION(Rwindow_get_modifiers);
 ZEND_FUNCTION(Rwindow_is_mouse_inside);
 ZEND_FUNCTION(Rwindow_wants_text_input);
+ZEND_FUNCTION(Rwindow_get_text_input_info);
+ZEND_FUNCTION(Rwindow_get_text_input_text);
+ZEND_FUNCTION(Rwindow_get_text_input_selection);
+ZEND_FUNCTION(Rwindow_set_text_input_selection);
+ZEND_FUNCTION(Rwindow_replace_text_input);
 ZEND_FUNCTION(Rwindow_has_popup);
 ZEND_FUNCTION(Rwindow_get_text_input_rect);
 ZEND_FUNCTION(Rwindow_get_popup_count);
@@ -443,6 +524,8 @@ ZEND_FUNCTION(Rdrag_get_data);
 ZEND_FUNCTION(Rdrag_cancel);
 ZEND_FUNCTION(Rwindow_register_shortcut);
 ZEND_FUNCTION(Rwindow_unregister_shortcut);
+ZEND_METHOD(RInsets, __construct);
+ZEND_METHOD(RTextInputInfo, __construct);
 ZEND_METHOD(RNativeWindow, __construct);
 ZEND_METHOD(REvent, __construct);
 ZEND_METHOD(RDropEvent, __construct);
@@ -457,6 +540,10 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_get_title, arginfo_Rwindow_get_title)
 	ZEND_FE(Rwindow_set_size, arginfo_Rwindow_set_size)
 	ZEND_FE(Rwindow_get_size, arginfo_Rwindow_get_size)
+	ZEND_FE(Rwindow_get_safe_area, arginfo_Rwindow_get_safe_area)
+	ZEND_FE(Rwindow_get_keyboard_area, arginfo_Rwindow_get_keyboard_area)
+	ZEND_FE(Rwindow_set_keyboard_callback, arginfo_Rwindow_set_keyboard_callback)
+	ZEND_FE(Rwindow_clear_focus, arginfo_Rwindow_clear_focus)
 	ZEND_FE(Rwindow_set_min_size, arginfo_Rwindow_set_min_size)
 	ZEND_FE(Rwindow_set_position, arginfo_Rwindow_set_position)
 	ZEND_FE(Rwindow_get_position, arginfo_Rwindow_get_position)
@@ -464,6 +551,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_get_scale, arginfo_Rwindow_get_scale)
 	ZEND_FE(Rwindow_show, arginfo_Rwindow_show)
 	ZEND_FE(Rwindow_hide, arginfo_Rwindow_hide)
+	ZEND_FE(Rwindow_focus, arginfo_Rwindow_focus)
 	ZEND_FE(Rwindow_maximize, arginfo_Rwindow_maximize)
 	ZEND_FE(Rwindow_minimize, arginfo_Rwindow_minimize)
 	ZEND_FE(Rwindow_restore, arginfo_Rwindow_restore)
@@ -484,6 +572,8 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_set_opacity, arginfo_Rwindow_set_opacity)
 	ZEND_FE(Rwindow_get_opacity, arginfo_Rwindow_get_opacity)
 	ZEND_FE(Rwindow_set_topmost, arginfo_Rwindow_set_topmost)
+	ZEND_FE(Rwindow_set_owner, arginfo_Rwindow_set_owner)
+	ZEND_FE(Rwindow_get_owner, arginfo_Rwindow_get_owner)
 	ZEND_FE(Rwindow_set_picture_in_picture, arginfo_Rwindow_set_picture_in_picture)
 	ZEND_FE(Rwindow_is_picture_in_picture, arginfo_Rwindow_is_picture_in_picture)
 	ZEND_FE(Rwindow_set_picture_in_picture_layout, arginfo_Rwindow_set_picture_in_picture_layout)
@@ -497,6 +587,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_set_close_callback, arginfo_Rwindow_set_close_callback)
 	ZEND_FE(Rwindow_set_resize_callback, arginfo_Rwindow_set_resize_callback)
 	ZEND_FE(Rwindow_set_drop_callback, arginfo_Rwindow_set_drop_callback)
+	ZEND_FE(Rdrop_set_highlight_rect, arginfo_Rdrop_set_highlight_rect)
 	ZEND_FE(Rwindow_set_user_handle, arginfo_Rwindow_set_user_handle)
 	ZEND_FE(Rwindow_get_user_handle, arginfo_Rwindow_get_user_handle)
 	ZEND_FE(Rwindow_get_native_handle, arginfo_Rwindow_get_native_handle)
@@ -515,6 +606,11 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_get_modifiers, arginfo_Rwindow_get_modifiers)
 	ZEND_FE(Rwindow_is_mouse_inside, arginfo_Rwindow_is_mouse_inside)
 	ZEND_FE(Rwindow_wants_text_input, arginfo_Rwindow_wants_text_input)
+	ZEND_FE(Rwindow_get_text_input_info, arginfo_Rwindow_get_text_input_info)
+	ZEND_FE(Rwindow_get_text_input_text, arginfo_Rwindow_get_text_input_text)
+	ZEND_FE(Rwindow_get_text_input_selection, arginfo_Rwindow_get_text_input_selection)
+	ZEND_FE(Rwindow_set_text_input_selection, arginfo_Rwindow_set_text_input_selection)
+	ZEND_FE(Rwindow_replace_text_input, arginfo_Rwindow_replace_text_input)
 	ZEND_FE(Rwindow_has_popup, arginfo_Rwindow_has_popup)
 	ZEND_FE(Rwindow_get_text_input_rect, arginfo_Rwindow_get_text_input_rect)
 	ZEND_FE(Rwindow_get_popup_count, arginfo_Rwindow_get_popup_count)
@@ -528,6 +624,16 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rdrag_cancel, arginfo_Rdrag_cancel)
 	ZEND_FE(Rwindow_register_shortcut, arginfo_Rwindow_register_shortcut)
 	ZEND_FE(Rwindow_unregister_shortcut, arginfo_Rwindow_unregister_shortcut)
+	ZEND_FE_END
+};
+
+static const zend_function_entry class_RInsets_methods[] = {
+	ZEND_ME(RInsets, __construct, arginfo_class_RInsets___construct, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+static const zend_function_entry class_RTextInputInfo_methods[] = {
+	ZEND_ME(RTextInputInfo, __construct, arginfo_class_RTextInputInfo___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -571,6 +677,21 @@ static void register_raven_window_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_WINDOW_SYSTEM_WAYLAND", R_WINDOW_SYSTEM_WAYLAND, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_WINDOW_SYSTEM_COCOA", R_WINDOW_SYSTEM_COCOA, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_WINDOW_SYSTEM_EMSCRIPTEN", R_WINDOW_SYSTEM_EMSCRIPTEN, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_WINDOW_SYSTEM_ANDROID", R_WINDOW_SYSTEM_ANDROID, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_WINDOW_SYSTEM_UIKIT", R_WINDOW_SYSTEM_UIKIT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TEXT_INPUT_TYPE_TEXT", R_TEXT_INPUT_TYPE_TEXT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TEXT_INPUT_TYPE_EMAIL", R_TEXT_INPUT_TYPE_EMAIL, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TEXT_INPUT_TYPE_NUMBER", R_TEXT_INPUT_TYPE_NUMBER, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TEXT_INPUT_TYPE_DECIMAL", R_TEXT_INPUT_TYPE_DECIMAL, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TEXT_INPUT_TYPE_PHONE", R_TEXT_INPUT_TYPE_PHONE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TEXT_INPUT_TYPE_URL", R_TEXT_INPUT_TYPE_URL, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TEXT_INPUT_TYPE_SEARCH", R_TEXT_INPUT_TYPE_SEARCH, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_RETURN_KEY_DEFAULT", R_RETURN_KEY_DEFAULT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_RETURN_KEY_DONE", R_RETURN_KEY_DONE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_RETURN_KEY_GO", R_RETURN_KEY_GO, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_RETURN_KEY_NEXT", R_RETURN_KEY_NEXT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_RETURN_KEY_SEARCH", R_RETURN_KEY_SEARCH, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_RETURN_KEY_SEND", R_RETURN_KEY_SEND, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_EDGE_LEFT", R_EDGE_LEFT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_EDGE_RIGHT", R_EDGE_RIGHT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_EDGE_TOP", R_EDGE_TOP, CONST_PERSISTENT);
@@ -719,6 +840,80 @@ static void register_raven_window_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_DROP_MOVE", R_DROP_MOVE, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_DROP_LEAVE", R_DROP_LEAVE, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_DROP_DROPPED", R_DROP_DROPPED, CONST_PERSISTENT);
+}
+
+static zend_class_entry *register_class_RInsets(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RInsets", class_RInsets_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+
+	zval property_top_default_value;
+	ZVAL_DOUBLE(&property_top_default_value, 0.0);
+	zend_string *property_top_name = zend_string_init("top", sizeof("top") - 1, 1);
+	zend_declare_typed_property(class_entry, property_top_name, &property_top_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_top_name);
+
+	zval property_right_default_value;
+	ZVAL_DOUBLE(&property_right_default_value, 0.0);
+	zend_string *property_right_name = zend_string_init("right", sizeof("right") - 1, 1);
+	zend_declare_typed_property(class_entry, property_right_name, &property_right_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_right_name);
+
+	zval property_bottom_default_value;
+	ZVAL_DOUBLE(&property_bottom_default_value, 0.0);
+	zend_string *property_bottom_name = zend_string_init("bottom", sizeof("bottom") - 1, 1);
+	zend_declare_typed_property(class_entry, property_bottom_name, &property_bottom_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_bottom_name);
+
+	zval property_left_default_value;
+	ZVAL_DOUBLE(&property_left_default_value, 0.0);
+	zend_string *property_left_name = zend_string_init("left", sizeof("left") - 1, 1);
+	zend_declare_typed_property(class_entry, property_left_name, &property_left_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_left_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_RTextInputInfo(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RTextInputInfo", class_RTextInputInfo_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+
+	zval property_type_default_value;
+	ZVAL_LONG(&property_type_default_value, 0);
+	zend_string *property_type_name = zend_string_init("type", sizeof("type") - 1, 1);
+	zend_declare_typed_property(class_entry, property_type_name, &property_type_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_type_name);
+
+	zval property_return_key_default_value;
+	ZVAL_LONG(&property_return_key_default_value, 0);
+	zend_string *property_return_key_name = zend_string_init("return_key", sizeof("return_key") - 1, 1);
+	zend_declare_typed_property(class_entry, property_return_key_name, &property_return_key_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_return_key_name);
+
+	zval property_password_default_value;
+	ZVAL_LONG(&property_password_default_value, 0);
+	zend_string *property_password_name = zend_string_init("password", sizeof("password") - 1, 1);
+	zend_declare_typed_property(class_entry, property_password_name, &property_password_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_password_name);
+
+	zval property_read_only_default_value;
+	ZVAL_LONG(&property_read_only_default_value, 0);
+	zend_string *property_read_only_name = zend_string_init("read_only", sizeof("read_only") - 1, 1);
+	zend_declare_typed_property(class_entry, property_read_only_name, &property_read_only_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_read_only_name);
+
+	zval property_max_length_default_value;
+	ZVAL_LONG(&property_max_length_default_value, 0);
+	zend_string *property_max_length_name = zend_string_init("max_length", sizeof("max_length") - 1, 1);
+	zend_declare_typed_property(class_entry, property_max_length_name, &property_max_length_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_max_length_name);
+
+	return class_entry;
 }
 
 static zend_class_entry *register_class_RNativeWindow(void)

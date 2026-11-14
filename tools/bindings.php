@@ -26,6 +26,7 @@ return [
         'Rparallel_for' => 'worker ranges run on the calling PHP thread before it returns',
         'Rtask_run_async' => 'the task runs on the PHP thread, posted through Rtask_post',
         'Rfile_read' => 'returns Raven memory released with Rmemory_free',
+        'Rpdf_document_save_memory' => 'returns Raven memory released with Rmemory_free',
         'Rwindow_capture' => 'returns pixels released with Rpixels_free',
         'Rimage_decode' => 'returns pixels released with Rpixels_free',
         'Rvulkan_set_queue_lock_callbacks' => 'two callables on the render thread',
@@ -42,6 +43,7 @@ return [
         'Rtask_post' => 'once',
         'Rtimer_create' => 'return',
         'Rdialog_open' => ['owner' => 'content', 'key' => ['content']],
+        'Rpopup_open' => ['owner' => 'content', 'key' => ['content']],
     ],
 
     // void* parameters that are the application's value: mixed, held per key.

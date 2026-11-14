@@ -1,6 +1,6 @@
 PHP_ARG_ENABLE([raven],
   [whether to enable raven support],
-  [AS_HELP_STRING([--enable-raven], [Enable the Raven 0.2.3 bindings])],
+  [AS_HELP_STRING([--enable-raven], [Enable the Raven bindings])],
   [no])
 
 if test "$PHP_RAVEN" != "no"; then
@@ -30,7 +30,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/gen/raven_window.c \
     src/gen/raven_xml.c"
 
-  dnl Raven 0.2.3 as its CMakeLists.txt builds it for this platform: Vulkan backend on,
+  dnl Raven as its CMakeLists.txt builds it for this platform: Vulkan backend on,
   dnl stb_image and nanosvg on, the web pages (web/) off. lib/raven is never edited.
   raven_lib=" \
     src/core/accessibility.c src/core/context.c src/core/error.c src/core/file.c src/core/fs.c \
@@ -61,14 +61,15 @@ if test "$PHP_RAVEN" != "no"; then
     src/widgets/dialogs.c src/widgets/dock_area.c src/widgets/island.c src/widgets/text_input.c \
     src/widgets/tree_view.c src/widgets/viewport.c src/widgets/table.c src/widgets/date_picker.c \
     src/widgets/time_picker.c src/widgets/toast.c src/widgets/breadcrumb.c src/widgets/rating.c \
-    src/widgets/pagination.c src/widgets/plot.c \
+    src/widgets/pagination.c src/widgets/plot.c src/widgets/pdf_view.c \
+    src/widgets/pdf_document.c src/widgets/pdf_print.c \
     src/xml/xml_attributes.c src/xml/xml_components.c src/xml/xml_dom.c src/xml/xml_schema.c \
     src/xml/xml_loader.c src/xml/xml_watch.c src/xml/xml_parser.c"
 
   raven_defs="-DRAVEN_BACKEND_VULKAN_ENABLED -DRAVEN_WITH_STB_IMAGE -DRAVEN_WITH_SVG"
   case $host_os in
     darwin*)
-      raven_lib="$raven_lib src/platform/cocoa/cocoa_platform.m"
+      raven_lib="$raven_lib src/platform/cocoa/cocoa_platform.m src/platform/cocoa/cocoa_print.m"
       raven_defs="$raven_defs -DRAVEN_PLATFORM_COCOA -D_DARWIN_C_SOURCE"
       raven_frameworks="CoreFoundation AppKit QuartzCore Metal"
       ;;

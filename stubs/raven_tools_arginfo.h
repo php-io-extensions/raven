@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 73322faa30f3655657ee650123b9abbc6b736904 */
+ * Stub hash: 67888ebdfc1318c9cd46c30bd2082fe0ddcb3aa4 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcolor_picker_create, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -645,6 +645,22 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rnode_graph_set_context_callback arginfo_Rnode_graph_set_connect_callback
 
+#define arginfo_Rnode_graph_set_canvas_activated_callback arginfo_Rnode_graph_set_connect_callback
+
+#define arginfo_Rnode_graph_set_wire_dropped_callback arginfo_Rnode_graph_set_connect_callback
+
+#define arginfo_Rnode_graph_set_pin_clicked_callback arginfo_Rnode_graph_set_connect_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_get_node_at, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rnode_graph_get_pin_at arginfo_Rnode_graph_get_node_at
+
+#define arginfo_Rnode_graph_get_link_at arginfo_Rnode_graph_get_node_at
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_pin_multiple, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, pin, IS_LONG, 0)
@@ -665,11 +681,58 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_node_deletable, 
 	ZEND_ARG_TYPE_INFO(0, deletable, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+#define arginfo_Rnode_graph_set_node_shown arginfo_Rnode_graph_remove_node
+
+#define arginfo_Rnode_graph_set_link_shown arginfo_Rnode_graph_disconnect
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_node_icon, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, node, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, texture, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_node_badge, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, node, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_pin_tag, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, pin, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_link_hidden, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, link, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, hidden, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_pin_emphasis, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, pin, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, emphasis, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rnode_graph_get_tag_at arginfo_Rnode_graph_get_node_at
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_pin_tag_lit, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, pin, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, lit, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_set_pin_label_width, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnode_graph_get_pin_label_width, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, graph, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rnode_graph_set_node_badge_color arginfo_Rnode_graph_set_node_color
 
 #define arginfo_Rblock_editor_create arginfo_Rcolor_picker_create
 
@@ -1002,11 +1065,28 @@ ZEND_FUNCTION(Rnode_graph_set_selection_callback);
 ZEND_FUNCTION(Rnode_graph_set_removed_callback);
 ZEND_FUNCTION(Rnode_graph_set_activated_callback);
 ZEND_FUNCTION(Rnode_graph_set_context_callback);
+ZEND_FUNCTION(Rnode_graph_set_canvas_activated_callback);
+ZEND_FUNCTION(Rnode_graph_set_wire_dropped_callback);
+ZEND_FUNCTION(Rnode_graph_set_pin_clicked_callback);
+ZEND_FUNCTION(Rnode_graph_get_node_at);
+ZEND_FUNCTION(Rnode_graph_get_pin_at);
+ZEND_FUNCTION(Rnode_graph_get_link_at);
 ZEND_FUNCTION(Rnode_graph_set_pin_multiple);
 ZEND_FUNCTION(Rnode_graph_set_node_active);
 ZEND_FUNCTION(Rnode_graph_set_node_active_color);
 ZEND_FUNCTION(Rnode_graph_set_node_deletable);
+ZEND_FUNCTION(Rnode_graph_set_node_shown);
+ZEND_FUNCTION(Rnode_graph_set_link_shown);
+ZEND_FUNCTION(Rnode_graph_set_node_icon);
 ZEND_FUNCTION(Rnode_graph_set_node_badge);
+ZEND_FUNCTION(Rnode_graph_set_pin_tag);
+ZEND_FUNCTION(Rnode_graph_set_link_hidden);
+ZEND_FUNCTION(Rnode_graph_set_pin_emphasis);
+ZEND_FUNCTION(Rnode_graph_get_tag_at);
+ZEND_FUNCTION(Rnode_graph_set_pin_tag_lit);
+ZEND_FUNCTION(Rnode_graph_set_pin_label_width);
+ZEND_FUNCTION(Rnode_graph_get_pin_label_width);
+ZEND_FUNCTION(Rnode_graph_set_node_badge_color);
 ZEND_FUNCTION(Rblock_editor_create);
 ZEND_FUNCTION(Rblock_editor_add_kind);
 ZEND_FUNCTION(Rblock_editor_set_category_color);
@@ -1186,11 +1266,28 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rnode_graph_set_removed_callback, arginfo_Rnode_graph_set_removed_callback)
 	ZEND_FE(Rnode_graph_set_activated_callback, arginfo_Rnode_graph_set_activated_callback)
 	ZEND_FE(Rnode_graph_set_context_callback, arginfo_Rnode_graph_set_context_callback)
+	ZEND_FE(Rnode_graph_set_canvas_activated_callback, arginfo_Rnode_graph_set_canvas_activated_callback)
+	ZEND_FE(Rnode_graph_set_wire_dropped_callback, arginfo_Rnode_graph_set_wire_dropped_callback)
+	ZEND_FE(Rnode_graph_set_pin_clicked_callback, arginfo_Rnode_graph_set_pin_clicked_callback)
+	ZEND_FE(Rnode_graph_get_node_at, arginfo_Rnode_graph_get_node_at)
+	ZEND_FE(Rnode_graph_get_pin_at, arginfo_Rnode_graph_get_pin_at)
+	ZEND_FE(Rnode_graph_get_link_at, arginfo_Rnode_graph_get_link_at)
 	ZEND_FE(Rnode_graph_set_pin_multiple, arginfo_Rnode_graph_set_pin_multiple)
 	ZEND_FE(Rnode_graph_set_node_active, arginfo_Rnode_graph_set_node_active)
 	ZEND_FE(Rnode_graph_set_node_active_color, arginfo_Rnode_graph_set_node_active_color)
 	ZEND_FE(Rnode_graph_set_node_deletable, arginfo_Rnode_graph_set_node_deletable)
+	ZEND_FE(Rnode_graph_set_node_shown, arginfo_Rnode_graph_set_node_shown)
+	ZEND_FE(Rnode_graph_set_link_shown, arginfo_Rnode_graph_set_link_shown)
+	ZEND_FE(Rnode_graph_set_node_icon, arginfo_Rnode_graph_set_node_icon)
 	ZEND_FE(Rnode_graph_set_node_badge, arginfo_Rnode_graph_set_node_badge)
+	ZEND_FE(Rnode_graph_set_pin_tag, arginfo_Rnode_graph_set_pin_tag)
+	ZEND_FE(Rnode_graph_set_link_hidden, arginfo_Rnode_graph_set_link_hidden)
+	ZEND_FE(Rnode_graph_set_pin_emphasis, arginfo_Rnode_graph_set_pin_emphasis)
+	ZEND_FE(Rnode_graph_get_tag_at, arginfo_Rnode_graph_get_tag_at)
+	ZEND_FE(Rnode_graph_set_pin_tag_lit, arginfo_Rnode_graph_set_pin_tag_lit)
+	ZEND_FE(Rnode_graph_set_pin_label_width, arginfo_Rnode_graph_set_pin_label_width)
+	ZEND_FE(Rnode_graph_get_pin_label_width, arginfo_Rnode_graph_get_pin_label_width)
+	ZEND_FE(Rnode_graph_set_node_badge_color, arginfo_Rnode_graph_set_node_badge_color)
 	ZEND_FE(Rblock_editor_create, arginfo_Rblock_editor_create)
 	ZEND_FE(Rblock_editor_add_kind, arginfo_Rblock_editor_add_kind)
 	ZEND_FE(Rblock_editor_set_category_color, arginfo_Rblock_editor_set_category_color)

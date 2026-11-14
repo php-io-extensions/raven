@@ -156,7 +156,7 @@ if ! "$PHP_BIN_REAL" build/gen_stub.php stubs >>"$LOG_FILE" 2>&1; then
     show_failure_logs
     die "gen_stub.php failed. See ${LOG_FILE}."
 fi
-# Raven 0.2.3 is vendored under lib/ and compiled into the module. Its only build dependency is
+# Raven is vendored under lib/ and compiled into the module. Its only build dependency is
 # libX11 (Wayland, D-Bus and the Vulkan loader are opened at run time).
 command -v pkg-config >/dev/null 2>&1 || die "pkg-config not found — install: apt install pkg-config"
 pkg-config --exists x11 || die "libX11 headers not found — install: apt install libx11-dev"

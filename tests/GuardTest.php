@@ -13,6 +13,10 @@ it('checks RGBA buffers against width × height × 4', function (): void {
     $tex = Rtexture_create_from_pixels(str_repeat("\xff", 16), 2, 2);
     Rtexture_get_size($tex, $w, $h);
     expect([$w, $h])->toBe([2, 2]);
+    $doc = Rpdf_document_create();
+    Rpdf_document_add_page($doc, 200.0, 200.0);
+    expect(fn () => Rpdf_document_draw_image($doc, 0.0, 0.0, 10.0, 10.0, str_repeat("\0", 15), 2, 2))->toThrow(ValueError::class);
+    Rpdf_document_delete($doc);
 });
 
 it('checks number arrays against their count', function (): void {

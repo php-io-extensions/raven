@@ -134,6 +134,12 @@ function Rdialog_close(int $widget, int $result): void {}
 
 function Rdialog_run(int $window, int $content): int {}
 
+function Rpopup_open(int $window, int $content, float $x, float $y, ?callable $closed, mixed $user_data): void {}
+
+function Rpopup_close(int $widget, int $result): void {}
+
+function Rpopup_is_open(int $content): int {}
+
 function Rwindow_has_dialog(int $window): int {}
 
 function Rmessage_box(int $window, ?string $title, ?string $text, int $buttons): int {}

@@ -144,6 +144,96 @@ const R_WINDOW_SYSTEM_EMSCRIPTEN = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_WINDOW_SYSTEM_ANDROID
+ */
+const R_WINDOW_SYSTEM_ANDROID = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_WINDOW_SYSTEM_UIKIT
+ */
+const R_WINDOW_SYSTEM_UIKIT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TEXT_INPUT_TYPE_TEXT
+ */
+const R_TEXT_INPUT_TYPE_TEXT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TEXT_INPUT_TYPE_EMAIL
+ */
+const R_TEXT_INPUT_TYPE_EMAIL = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TEXT_INPUT_TYPE_NUMBER
+ */
+const R_TEXT_INPUT_TYPE_NUMBER = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TEXT_INPUT_TYPE_DECIMAL
+ */
+const R_TEXT_INPUT_TYPE_DECIMAL = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TEXT_INPUT_TYPE_PHONE
+ */
+const R_TEXT_INPUT_TYPE_PHONE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TEXT_INPUT_TYPE_URL
+ */
+const R_TEXT_INPUT_TYPE_URL = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TEXT_INPUT_TYPE_SEARCH
+ */
+const R_TEXT_INPUT_TYPE_SEARCH = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_RETURN_KEY_DEFAULT
+ */
+const R_RETURN_KEY_DEFAULT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_RETURN_KEY_DONE
+ */
+const R_RETURN_KEY_DONE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_RETURN_KEY_GO
+ */
+const R_RETURN_KEY_GO = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_RETURN_KEY_NEXT
+ */
+const R_RETURN_KEY_NEXT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_RETURN_KEY_SEARCH
+ */
+const R_RETURN_KEY_SEARCH = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_RETURN_KEY_SEND
+ */
+const R_RETURN_KEY_SEND = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_EDGE_LEFT
  */
 const R_EDGE_LEFT = UNKNOWN;
@@ -1030,6 +1120,27 @@ const R_DROP_LEAVE = UNKNOWN;
  */
 const R_DROP_DROPPED = UNKNOWN;
 
+final class RInsets
+{
+    public float $top = 0.0;
+    public float $right = 0.0;
+    public float $bottom = 0.0;
+    public float $left = 0.0;
+
+    public function __construct(float $top = 0.0, float $right = 0.0, float $bottom = 0.0, float $left = 0.0) {}
+}
+
+final class RTextInputInfo
+{
+    public int $type = 0;
+    public int $return_key = 0;
+    public int $password = 0;
+    public int $read_only = 0;
+    public int $max_length = 0;
+
+    public function __construct(int $type = 0, int $return_key = 0, int $password = 0, int $read_only = 0, int $max_length = 0) {}
+}
+
 final class RNativeWindow
 {
     public int $system = 0;
@@ -1100,6 +1211,14 @@ function Rwindow_set_size(int $window, int $width, int $height): void {}
 
 function Rwindow_get_size(int $window, ?int &$width, ?int &$height): void {}
 
+function Rwindow_get_safe_area(int $window, ?RInsets $insets): void {}
+
+function Rwindow_get_keyboard_area(int $window, ?RInsets $insets): void {}
+
+function Rwindow_set_keyboard_callback(int $window, ?callable $callback, mixed $user_data): void {}
+
+function Rwindow_clear_focus(int $window): void {}
+
 function Rwindow_set_min_size(int $window, int $width, int $height): void {}
 
 function Rwindow_set_position(int $window, int $x, int $y): void {}
@@ -1113,6 +1232,8 @@ function Rwindow_get_scale(int $window): float {}
 function Rwindow_show(int $window): void {}
 
 function Rwindow_hide(int $window): void {}
+
+function Rwindow_focus(int $window): void {}
 
 function Rwindow_maximize(int $window): void {}
 
@@ -1154,6 +1275,10 @@ function Rwindow_get_opacity(int $window): float {}
 
 function Rwindow_set_topmost(int $window, int $topmost): int {}
 
+function Rwindow_set_owner(int $window, int $owner): int {}
+
+function Rwindow_get_owner(int $window): int {}
+
 function Rwindow_set_picture_in_picture(int $window, int $enabled): int {}
 
 function Rwindow_is_picture_in_picture(int $window): int {}
@@ -1179,6 +1304,8 @@ function Rwindow_set_close_callback(int $window, ?callable $callback, mixed $use
 function Rwindow_set_resize_callback(int $window, ?callable $callback, mixed $user_data): void {}
 
 function Rwindow_set_drop_callback(int $window, ?callable $callback, mixed $user_data): void {}
+
+function Rdrop_set_highlight_rect(float $x, float $y, float $width, float $height): void {}
 
 function Rwindow_set_user_handle(int $window, mixed $handle): void {}
 
@@ -1215,6 +1342,16 @@ function Rwindow_get_modifiers(int $window): int {}
 function Rwindow_is_mouse_inside(int $window): int {}
 
 function Rwindow_wants_text_input(int $window): int {}
+
+function Rwindow_get_text_input_info(int $window, ?RTextInputInfo $info): int {}
+
+function Rwindow_get_text_input_text(int $window): ?string {}
+
+function Rwindow_get_text_input_selection(int $window, ?int &$start, ?int &$end): int {}
+
+function Rwindow_set_text_input_selection(int $window, int $start, int $end): int {}
+
+function Rwindow_replace_text_input(int $window, int $start, int $end, ?string $text): int {}
 
 function Rwindow_has_popup(int $window): int {}
 

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 6498c9f14e2357ddccaa4a19ad81a3cdfa938cac */
+ * Stub hash: e1379a417531cfc563d9a718e24eefa664124767 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlook_set, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, look, IS_LONG, 0)
@@ -57,6 +57,12 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtheme_set_dark, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, dark, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtheme_get_system_dark arginfo_Rlook_get
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtheme_follow_system, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_Rtheme_is_dark arginfo_Rlook_get
@@ -133,6 +139,8 @@ ZEND_FUNCTION(Rtheme_set_font);
 ZEND_FUNCTION(Rtheme_get_font);
 ZEND_FUNCTION(Rtheme_set_accent);
 ZEND_FUNCTION(Rtheme_set_dark);
+ZEND_FUNCTION(Rtheme_get_system_dark);
+ZEND_FUNCTION(Rtheme_follow_system);
 ZEND_FUNCTION(Rtheme_is_dark);
 ZEND_FUNCTION(Rtheme_set_wallpaper);
 ZEND_FUNCTION(Rtheme_get_wallpaper);
@@ -162,6 +170,8 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtheme_get_font, arginfo_Rtheme_get_font)
 	ZEND_FE(Rtheme_set_accent, arginfo_Rtheme_set_accent)
 	ZEND_FE(Rtheme_set_dark, arginfo_Rtheme_set_dark)
+	ZEND_FE(Rtheme_get_system_dark, arginfo_Rtheme_get_system_dark)
+	ZEND_FE(Rtheme_follow_system, arginfo_Rtheme_follow_system)
 	ZEND_FE(Rtheme_is_dark, arginfo_Rtheme_is_dark)
 	ZEND_FE(Rtheme_set_wallpaper, arginfo_Rtheme_set_wallpaper)
 	ZEND_FE(Rtheme_get_wallpaper, arginfo_Rtheme_get_wallpaper)

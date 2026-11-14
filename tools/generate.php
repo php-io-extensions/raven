@@ -470,12 +470,17 @@ final class Gen
                 continue;
             }
 
-            // const uint8_t* rgba with width and height parameters: width × height × 4 bytes.
-            if ($t === 'const uint8_t *' && isset($byName['width'], $byName['height'])) {
+            // const uint8_t* RGBA pixels sized by the next two int parameters
+            // (width/height, or pixels_width/pixels_height when width/height are already the destination).
+            if ($t === 'const uint8_t *' && isset($params[$i + 1], $params[$i + 2])
+                && $this->norm($params[$i + 1]['type']) === 'int'
+                && $this->norm($params[$i + 2]['type']) === 'int') {
+                $wName = $params[$i + 1]['name'];
+                $hName = $params[$i + 2]['name'];
                 $decls[] = "\tzend_string *$pn;";
                 $parse[] = "\t\tZ_PARAM_STR($pn)";
                 $stubParams[] = "string \$$pn";
-                $checks[] = "\tif (!raven_arg_bytes($pn, $argNum, c_width < 0 ? 0 : (uint64_t)c_width, c_height < 0 ? 0 : (uint64_t)c_height, 4, \"width x height RGBA pixels\")) {\n\t\tRETURN_THROWS();\n\t}";
+                $checks[] = "\tif (!raven_arg_bytes($pn, $argNum, c_$wName < 0 ? 0 : (uint64_t)c_$wName, c_$hName < 0 ? 0 : (uint64_t)c_$hName, 4, \"width x height RGBA pixels\")) {\n\t\tRETURN_THROWS();\n\t}";
                 $args[$i] = "(const uint8_t *)ZSTR_VAL($pn)";
                 continue;
             }

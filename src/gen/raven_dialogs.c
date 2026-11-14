@@ -115,6 +115,96 @@ ZEND_FUNCTION(Rdialog_run)
 	RETURN_LONG((zend_long)r);
 }
 
+ZEND_FUNCTION(Rpopup_open)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_long content;
+	uint32_t c_content;
+	double x;
+	double y;
+	zend_fcall_info fci_closed = empty_fcall_info;
+	zend_fcall_info_cache fcc_closed = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_LONG(window)
+		Z_PARAM_LONG(content)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_FUNC_OR_NULL(fci_closed, fcc_closed)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(content, 2, &c_content)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_closed) ? &fci_closed.function_name : NULL, NULL, user_data, c_content);
+	zend_string *key = raven_slot_key("Rpopup_open", 1, (unsigned long)c_content);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpopup_open(c_window, c_content, (float)x, (float)y, ZEND_FCI_INITIALIZED(fci_closed) ? raven_cb_RDialogClosedCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpopup_close)
+{
+	zend_long widget;
+	uint32_t c_widget;
+	zend_long result;
+	int c_result;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(widget)
+		Z_PARAM_LONG(result)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(widget, 1, &c_widget)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(result, 2, &c_result)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpopup_close(c_widget, c_result);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpopup_is_open)
+{
+	zend_long content;
+	uint32_t c_content;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(content)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(content, 1, &c_content)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpopup_is_open(c_content);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
 ZEND_FUNCTION(Rwindow_has_dialog)
 {
 	zend_long window;

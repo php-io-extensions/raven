@@ -395,6 +395,64 @@ ZEND_FUNCTION(Rwidget_set_accessible_labelled_by)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rwidget_set_accessible_action)
+{
+	zend_long widget;
+	uint32_t c_widget;
+	zend_fcall_info fci_press = empty_fcall_info;
+	zend_fcall_info_cache fcc_press = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(widget)
+		Z_PARAM_FUNC_OR_NULL(fci_press, fcc_press)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(widget, 1, &c_widget)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_press) ? &fci_press.function_name : NULL, NULL, user_data, c_widget);
+	zend_string *key = raven_slot_key("Rwidget_set_accessible_action", 1, (unsigned long)c_widget);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rwidget_set_accessible_action(c_widget, ZEND_FCI_INITIALIZED(fci_press) ? raven_cb_RAccessiblePressCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rwidget_set_accessible_checked)
+{
+	zend_long widget;
+	uint32_t c_widget;
+	zend_long checked;
+	int c_checked;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(widget)
+		Z_PARAM_LONG(checked)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(widget, 1, &c_widget)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(checked, 2, &c_checked)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rwidget_set_accessible_checked(c_widget, c_checked);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Raccessibility_announce)
 {
 	zend_string *text = NULL;

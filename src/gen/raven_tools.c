@@ -3906,6 +3906,180 @@ ZEND_FUNCTION(Rnode_graph_set_context_callback)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rnode_graph_set_canvas_activated_callback)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_graph);
+	zend_string *key = raven_slot_key("Rnode_graph_set_canvas_activated_callback", 1, (unsigned long)c_graph);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_canvas_activated_callback(c_graph, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RNodeGraphPointCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_wire_dropped_callback)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_graph);
+	zend_string *key = raven_slot_key("Rnode_graph_set_wire_dropped_callback", 1, (unsigned long)c_graph);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_wire_dropped_callback(c_graph, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RNodeGraphPointCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_pin_clicked_callback)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_graph);
+	zend_string *key = raven_slot_key("Rnode_graph_set_pin_clicked_callback", 1, (unsigned long)c_graph);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_pin_clicked_callback(c_graph, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RNodeGraphPointCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_get_node_at)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	double x;
+	double y;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rnode_graph_get_node_at(c_graph, (float)x, (float)y);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rnode_graph_get_pin_at)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	double x;
+	double y;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rnode_graph_get_pin_at(c_graph, (float)x, (float)y);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rnode_graph_get_link_at)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	double x;
+	double y;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rnode_graph_get_link_at(c_graph, (float)x, (float)y);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
 ZEND_FUNCTION(Rnode_graph_set_pin_multiple)
 {
 	zend_long graph;
@@ -4034,6 +4208,90 @@ ZEND_FUNCTION(Rnode_graph_set_node_deletable)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rnode_graph_set_node_shown)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long node;
+	int c_node;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(node)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(node, 2, &c_node)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_node_shown(c_graph, c_node);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_link_shown)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long link;
+	int c_link;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(link)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(link, 2, &c_link)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_link_shown(c_graph, c_link);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_node_icon)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long node;
+	int c_node;
+	zend_long texture;
+	uint32_t c_texture;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(node)
+		Z_PARAM_LONG(texture)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(node, 2, &c_node)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(texture, 3, &c_texture)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_node_icon(c_graph, c_node, c_texture);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rnode_graph_set_node_badge)
 {
 	zend_long graph;
@@ -4059,6 +4317,232 @@ ZEND_FUNCTION(Rnode_graph_set_node_badge)
 		RETURN_THROWS();
 	}
 	Rnode_graph_set_node_badge(c_graph, c_node, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_pin_tag)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long pin;
+	int c_pin;
+	zend_string *text = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(pin)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(pin, 2, &c_pin)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_pin_tag(c_graph, c_pin, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_link_hidden)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long link;
+	int c_link;
+	zend_long hidden;
+	int c_hidden;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(link)
+		Z_PARAM_LONG(hidden)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(link, 2, &c_link)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(hidden, 3, &c_hidden)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_link_hidden(c_graph, c_link, c_hidden);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_pin_emphasis)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long pin;
+	int c_pin;
+	zend_long emphasis;
+	int c_emphasis;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(pin)
+		Z_PARAM_LONG(emphasis)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(pin, 2, &c_pin)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(emphasis, 3, &c_emphasis)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_pin_emphasis(c_graph, c_pin, c_emphasis);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_get_tag_at)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	double x;
+	double y;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rnode_graph_get_tag_at(c_graph, (float)x, (float)y);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rnode_graph_set_pin_tag_lit)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long pin;
+	int c_pin;
+	zend_long lit;
+	int c_lit;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(pin)
+		Z_PARAM_LONG(lit)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(pin, 2, &c_pin)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(lit, 3, &c_lit)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_pin_tag_lit(c_graph, c_pin, c_lit);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_set_pin_label_width)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	double width;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_DOUBLE(width)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_pin_label_width(c_graph, (float)width);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnode_graph_get_pin_label_width)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	float r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(graph)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rnode_graph_get_pin_label_width(c_graph);
+	raven_leave();
+	RETURN_DOUBLE((double)r);
+}
+
+ZEND_FUNCTION(Rnode_graph_set_node_badge_color)
+{
+	zend_long graph;
+	uint32_t c_graph;
+	zend_long node;
+	int c_node;
+	double r;
+	double g;
+	double b;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(graph)
+		Z_PARAM_LONG(node)
+		Z_PARAM_DOUBLE(r)
+		Z_PARAM_DOUBLE(g)
+		Z_PARAM_DOUBLE(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(graph, 1, &c_graph)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(node, 2, &c_node)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnode_graph_set_node_badge_color(c_graph, c_node, (float)r, (float)g, (float)b);
 	raven_leave();
 }
 

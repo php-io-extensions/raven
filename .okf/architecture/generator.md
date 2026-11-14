@@ -5,7 +5,7 @@ description: How tools/ turns Raven's headers into stubs and C, and where a bind
 resource: tools/generate.php
 tags: [raven, generator]
 status: draft
-generated: { by: claude-opus/5.5, at: 2026-11-12T00:00:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-14T00:00:00Z }
 sources:
   - id: extract
     resource: tools/extract.php
@@ -26,4 +26,4 @@ sources:
 
 Every binding is its own written-out `ZEND_FUNCTION`; structs convert through field tables walked by `src/runtime.c`. Never edit `src/gen/`, `stubs/raven_*.stub.php` or `*_arginfo.h` by hand.
 
-Generated slot keys: the setter's name plus the `Rid` arguments before its first callback (or the `const char*` name, for actions and XML tags). `bindings.php` `slots` overrides it: `Rtask_post` once, `Rtimer_create` keyed by the returned timer, `Rdialog_open` by its content.
+Generated slot keys: the setter's name plus the `Rid` arguments before its first callback (or the `const char*` name, for actions and XML tags). `bindings.php` `slots` overrides it: `Rtask_post` once, `Rtimer_create` keyed by the returned timer, `Rdialog_open` and `Rpopup_open` by their content. `const uint8_t*` RGBA pixels are sized by the next two `int` parameters (`width`/`height`, or `pixels_width`/`pixels_height`).

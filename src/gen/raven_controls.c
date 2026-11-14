@@ -13,6 +13,11 @@
 
 #include "../../stubs/raven_controls_arginfo.h"
 
+ZEND_METHOD(RPdfPrintDesc, __construct)
+{
+	raven_struct_construct(&raven_struct_RPdfPrintDesc, Z_OBJ_P(ZEND_THIS), execute_data);
+}
+
 ZEND_METHOD(RTileItem, __construct)
 {
 	raven_struct_construct(&raven_struct_RTileItem, Z_OBJ_P(ZEND_THIS), execute_data);
@@ -1286,6 +1291,102 @@ ZEND_FUNCTION(Rtext_input_select_all)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rtext_input_set_input_type)
+{
+	zend_long text_input;
+	uint32_t c_text_input;
+	zend_long type;
+	int c_type;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(text_input)
+		Z_PARAM_LONG(type)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(text_input, 1, &c_text_input)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(type, 2, &c_type)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_input_set_input_type(c_text_input, (RTextInputType)c_type);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_input_get_input_type)
+{
+	zend_long text_input;
+	uint32_t c_text_input;
+	RTextInputType r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(text_input)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(text_input, 1, &c_text_input)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rtext_input_get_input_type(c_text_input);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rtext_input_set_return_key)
+{
+	zend_long text_input;
+	uint32_t c_text_input;
+	zend_long key;
+	int c_key;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(text_input)
+		Z_PARAM_LONG(key)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(text_input, 1, &c_text_input)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(key, 2, &c_key)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_input_set_return_key(c_text_input, (RReturnKey)c_key);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_input_get_return_key)
+{
+	zend_long text_input;
+	uint32_t c_text_input;
+	RReturnKey r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(text_input)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(text_input, 1, &c_text_input)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rtext_input_get_return_key(c_text_input);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
 ZEND_FUNCTION(Rtext_input_set_changed_callback)
 {
 	zend_long text_input;
@@ -1496,6 +1597,54 @@ ZEND_FUNCTION(Rspin_box_set_decimals)
 	}
 	Rspin_box_set_decimals(c_spin_box, c_decimals);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Rspin_box_set_buttons)
+{
+	zend_long spin_box;
+	uint32_t c_spin_box;
+	zend_long buttons;
+	int c_buttons;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(spin_box)
+		Z_PARAM_LONG(buttons)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(spin_box, 1, &c_spin_box)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(buttons, 2, &c_buttons)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rspin_box_set_buttons(c_spin_box, c_buttons);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rspin_box_get_buttons)
+{
+	zend_long spin_box;
+	uint32_t c_spin_box;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(spin_box)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(spin_box, 1, &c_spin_box)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rspin_box_get_buttons(c_spin_box);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
 }
 
 ZEND_FUNCTION(Rspin_box_set_changed_callback)
@@ -1919,6 +2068,38 @@ ZEND_FUNCTION(Rlist_view_set_virtual_items)
 		RETURN_THROWS();
 	}
 	Rlist_view_set_virtual_items(c_list_view, c_count, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RListItemTextCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rlist_view_set_item_color_callback)
+{
+	zend_long list_view;
+	uint32_t c_list_view;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(list_view)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(list_view, 1, &c_list_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_list_view);
+	zend_string *key = raven_slot_key("Rlist_view_set_item_color_callback", 1, (unsigned long)c_list_view);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rlist_view_set_item_color_callback(c_list_view, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RListItemColorCallback_0 : NULL, slot);
 	raven_leave();
 }
 
@@ -3017,6 +3198,80 @@ ZEND_FUNCTION(Rmenu_add_separator)
 	RETURN_LONG((zend_long)r);
 }
 
+ZEND_FUNCTION(Rmenu_add_header)
+{
+	zend_long menu;
+	uint32_t c_menu;
+	zend_string *text = NULL;
+	Rid r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(menu)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(menu, 1, &c_menu)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rmenu_add_header(c_menu, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rmenu_bar_add_divider)
+{
+	zend_long menu_bar;
+	uint32_t c_menu_bar;
+	Rid r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(menu_bar)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(menu_bar, 1, &c_menu_bar)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rmenu_bar_add_divider(c_menu_bar);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rmenu_set_title_color)
+{
+	zend_long menu;
+	uint32_t c_menu;
+	double r;
+	double g;
+	double b;
+	double a;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(menu)
+		Z_PARAM_DOUBLE(r)
+		Z_PARAM_DOUBLE(g)
+		Z_PARAM_DOUBLE(b)
+		Z_PARAM_DOUBLE(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(menu, 1, &c_menu)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rmenu_set_title_color(c_menu, (float)r, (float)g, (float)b, (float)a);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rmenu_item_set_text)
 {
 	zend_long item;
@@ -3093,6 +3348,28 @@ ZEND_FUNCTION(Rmenu_item_set_shortcut)
 		RETURN_THROWS();
 	}
 	Rmenu_item_set_shortcut(c_item, (RKey)c_key, c_modifiers);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rmenu_item_set_shortcut_text)
+{
+	zend_long item;
+	uint32_t c_item;
+	zend_string *text = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(item)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(item, 1, &c_item)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rmenu_item_set_shortcut_text(c_item, text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
 }
 
@@ -4295,6 +4572,38 @@ ZEND_FUNCTION(Rtable_set_virtual_rows)
 		RETURN_THROWS();
 	}
 	Rtable_set_virtual_rows(c_table, c_count, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTableCellTextCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_set_cell_color_callback)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(table)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_table);
+	zend_string *key = raven_slot_key("Rtable_set_cell_color_callback", 1, (unsigned long)c_table);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_set_cell_color_callback(c_table, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTableCellColorCallback_0 : NULL, slot);
 	raven_leave();
 }
 
@@ -7540,9 +7849,1192 @@ ZEND_FUNCTION(Rplot_set_series_toggled_callback)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rpdf_is_available)
+{
+	int r;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_is_available();
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_load_file)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_string *path = NULL;
+	zend_string *password = NULL;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(view)
+		Z_PARAM_STR_OR_NULL(path)
+		Z_PARAM_STR_OR_NULL(password)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_load_file(c_view, path ? ZSTR_VAL(path) : NULL, password ? ZSTR_VAL(password) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_load_memory)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_string *data = NULL;
+	zend_long data_size;
+	size_t c_data_size;
+	zend_string *password = NULL;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(view)
+		Z_PARAM_STR_OR_NULL(data)
+		Z_PARAM_LONG(data_size)
+		Z_PARAM_STR_OR_NULL(password)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_size(data_size, 3, &c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (data && !raven_arg_length(data, 2, c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_load_memory(c_view, data ? ZSTR_VAL(data) : NULL, c_data_size, password ? ZSTR_VAL(password) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_close)
+{
+	zend_long view;
+	uint32_t c_view;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_view_close(c_view);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_view_get_status)
+{
+	zend_long view;
+	uint32_t c_view;
+	RPdfStatus r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_get_status(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_get_page_count)
+{
+	zend_long view;
+	uint32_t c_view;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_get_page_count(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_get_page_size)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_long page;
+	int c_page;
+	zval *width;
+	float c_width = 0;
+	zval *height;
+	float c_height = 0;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(view)
+		Z_PARAM_LONG(page)
+		Z_PARAM_ZVAL(width)
+		Z_PARAM_ZVAL(height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(page, 2, &c_page)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_view_get_page_size(c_view, c_page, &c_width, &c_height);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_DOUBLE(width, (double)c_width);
+	ZEND_TRY_ASSIGN_REF_DOUBLE(height, (double)c_height);
+}
+
+ZEND_FUNCTION(Rpdf_view_set_page)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_long page;
+	int c_page;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(view)
+		Z_PARAM_LONG(page)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(page, 2, &c_page)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_view_set_page(c_view, c_page);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_view_get_page)
+{
+	zend_long view;
+	uint32_t c_view;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_get_page(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_set_zoom)
+{
+	zend_long view;
+	uint32_t c_view;
+	double zoom;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(view)
+		Z_PARAM_DOUBLE(zoom)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_view_set_zoom(c_view, (float)zoom);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_view_get_zoom)
+{
+	zend_long view;
+	uint32_t c_view;
+	float r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_get_zoom(c_view);
+	raven_leave();
+	RETURN_DOUBLE((double)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_set_fit)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_long fit;
+	int c_fit;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(view)
+		Z_PARAM_LONG(fit)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(fit, 2, &c_fit)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_view_set_fit(c_view, (RPdfFit)c_fit);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_view_get_fit)
+{
+	zend_long view;
+	uint32_t c_view;
+	RPdfFit r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_get_fit(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_view_get_title)
+{
+	zend_long view;
+	uint32_t c_view;
+	const char *r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_get_title(c_view);
+	raven_leave();
+	if (!r) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(r);
+}
+
+ZEND_FUNCTION(Rpdf_view_get_page_text)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_long page;
+	int c_page;
+	const char *r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(view)
+		Z_PARAM_LONG(page)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(page, 2, &c_page)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_get_page_text(c_view, c_page);
+	raven_leave();
+	if (!r) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(r);
+}
+
+ZEND_FUNCTION(Rpdf_view_set_page_changed_callback)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(view)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_view);
+	zend_string *key = raven_slot_key("Rpdf_view_set_page_changed_callback", 1, (unsigned long)c_view);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_view_set_page_changed_callback(c_view, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RPdfPageChangedCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_view_print)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_object *desc = NULL;
+	RPdfPrintDesc c_desc;
+	RPdfPrintDesc *p_desc = NULL;
+	raven_arena arena = {0};
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(view)
+		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RPdfPrintDesc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (desc) {
+		if (!raven_struct_from_object(&raven_struct_RPdfPrintDesc, desc, &c_desc, &arena, 2)) {
+			raven_arena_free(&arena);
+			RETURN_THROWS();
+		}
+		p_desc = &c_desc;
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	r = Rpdf_view_print(c_view, p_desc);
+	raven_leave();
+	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_create)
+{
+	Rid r;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_create();
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_delete)
+{
+	zend_long document;
+	uint32_t c_document;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(document)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_delete(c_document);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_set_title)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_string *title = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_STR_OR_NULL(title)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_set_title(c_document, title ? ZSTR_VAL(title) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_set_author)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_string *author = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_STR_OR_NULL(author)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_set_author(c_document, author ? ZSTR_VAL(author) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_set_subject)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_string *subject = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_STR_OR_NULL(subject)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_set_subject(c_document, subject ? ZSTR_VAL(subject) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_add_page)
+{
+	zend_long document;
+	uint32_t c_document;
+	double width;
+	double height;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(width)
+		Z_PARAM_DOUBLE(height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_add_page(c_document, (float)width, (float)height);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_get_page_count)
+{
+	zend_long document;
+	uint32_t c_document;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(document)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_get_page_count(c_document);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_set_fill_color)
+{
+	zend_long document;
+	uint32_t c_document;
+	double r;
+	double g;
+	double b;
+	double a;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(r)
+		Z_PARAM_DOUBLE(g)
+		Z_PARAM_DOUBLE(b)
+		Z_PARAM_DOUBLE(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_set_fill_color(c_document, (float)r, (float)g, (float)b, (float)a);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_set_stroke_color)
+{
+	zend_long document;
+	uint32_t c_document;
+	double r;
+	double g;
+	double b;
+	double a;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(r)
+		Z_PARAM_DOUBLE(g)
+		Z_PARAM_DOUBLE(b)
+		Z_PARAM_DOUBLE(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_set_stroke_color(c_document, (float)r, (float)g, (float)b, (float)a);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_set_line_width)
+{
+	zend_long document;
+	uint32_t c_document;
+	double width;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(width)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_set_line_width(c_document, (float)width);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_draw_rect)
+{
+	zend_long document;
+	uint32_t c_document;
+	double x;
+	double y;
+	double width;
+	double height;
+	double radius;
+	zend_long paint;
+	uint32_t c_paint;
+
+	ZEND_PARSE_PARAMETERS_START(7, 7)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_DOUBLE(width)
+		Z_PARAM_DOUBLE(height)
+		Z_PARAM_DOUBLE(radius)
+		Z_PARAM_LONG(paint)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(paint, 7, &c_paint)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_draw_rect(c_document, (float)x, (float)y, (float)width, (float)height, (float)radius, c_paint);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_draw_ellipse)
+{
+	zend_long document;
+	uint32_t c_document;
+	double x;
+	double y;
+	double width;
+	double height;
+	zend_long paint;
+	uint32_t c_paint;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_DOUBLE(width)
+		Z_PARAM_DOUBLE(height)
+		Z_PARAM_LONG(paint)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(paint, 6, &c_paint)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_draw_ellipse(c_document, (float)x, (float)y, (float)width, (float)height, c_paint);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_draw_line)
+{
+	zend_long document;
+	uint32_t c_document;
+	double x1;
+	double y1;
+	double x2;
+	double y2;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(x1)
+		Z_PARAM_DOUBLE(y1)
+		Z_PARAM_DOUBLE(x2)
+		Z_PARAM_DOUBLE(y2)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_draw_line(c_document, (float)x1, (float)y1, (float)x2, (float)y2);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_add_font)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_string *data = NULL;
+	zend_long data_size;
+	size_t c_data_size;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(document)
+		Z_PARAM_STR_OR_NULL(data)
+		Z_PARAM_LONG(data_size)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_size(data_size, 3, &c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (data && !raven_arg_length(data, 2, c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_add_font(c_document, data ? ZSTR_VAL(data) : NULL, c_data_size);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_add_font_from_file)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_string *path = NULL;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_STR_OR_NULL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_add_font_from_file(c_document, path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_set_font)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_long font;
+	int c_font;
+	double size;
+	zend_long style;
+	uint32_t c_style;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(document)
+		Z_PARAM_LONG(font)
+		Z_PARAM_DOUBLE(size)
+		Z_PARAM_LONG(style)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(font, 2, &c_font)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(style, 4, &c_style)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_set_font(c_document, c_font, (float)size, c_style);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_get_line_height)
+{
+	zend_long document;
+	uint32_t c_document;
+	float r;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(document)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_get_line_height(c_document);
+	raven_leave();
+	RETURN_DOUBLE((double)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_measure_text)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_string *text = NULL;
+	float r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_measure_text(c_document, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+	RETURN_DOUBLE((double)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_draw_text)
+{
+	zend_long document;
+	uint32_t c_document;
+	double x;
+	double y;
+	zend_string *text = NULL;
+	float r;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_draw_text(c_document, (float)x, (float)y, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+	RETURN_DOUBLE((double)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_draw_paragraph)
+{
+	zend_long document;
+	uint32_t c_document;
+	double x;
+	double y;
+	double width;
+	zend_string *text = NULL;
+	zend_long align;
+	int c_align;
+	float r;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_DOUBLE(width)
+		Z_PARAM_STR_OR_NULL(text)
+		Z_PARAM_LONG(align)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(align, 6, &c_align)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_draw_paragraph(c_document, (float)x, (float)y, (float)width, text ? ZSTR_VAL(text) : NULL, (RHAlign)c_align);
+	raven_leave();
+	RETURN_DOUBLE((double)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_draw_image)
+{
+	zend_long document;
+	uint32_t c_document;
+	double x;
+	double y;
+	double width;
+	double height;
+	zend_string *rgba;
+	zend_long pixels_width;
+	int c_pixels_width;
+	zend_long pixels_height;
+	int c_pixels_height;
+
+	ZEND_PARSE_PARAMETERS_START(8, 8)
+		Z_PARAM_LONG(document)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_DOUBLE(width)
+		Z_PARAM_DOUBLE(height)
+		Z_PARAM_STR(rgba)
+		Z_PARAM_LONG(pixels_width)
+		Z_PARAM_LONG(pixels_height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(pixels_width, 7, &c_pixels_width)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(pixels_height, 8, &c_pixels_height)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_arg_bytes(rgba, 6, c_pixels_width < 0 ? 0 : (uint64_t)c_pixels_width, c_pixels_height < 0 ? 0 : (uint64_t)c_pixels_height, 4, "width x height RGBA pixels")) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rpdf_document_draw_image(c_document, (float)x, (float)y, (float)width, (float)height, (const uint8_t *)ZSTR_VAL(rgba), c_pixels_width, c_pixels_height);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rpdf_document_draw_window)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_long window;
+	uint32_t c_window;
+	double x;
+	double y;
+	double width;
+	double height;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_LONG(document)
+		Z_PARAM_LONG(window)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_DOUBLE(width)
+		Z_PARAM_DOUBLE(height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(window, 2, &c_window)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_draw_window(c_document, c_window, (float)x, (float)y, (float)width, (float)height);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_save)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_string *path = NULL;
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_STR_OR_NULL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_save(c_document, path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_print)
+{
+	zend_object *desc = NULL;
+	RPdfPrintDesc c_desc;
+	RPdfPrintDesc *p_desc = NULL;
+	zend_string *data = NULL;
+	zend_long data_size;
+	size_t c_data_size;
+	raven_arena arena = {0};
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RPdfPrintDesc)
+		Z_PARAM_STR_OR_NULL(data)
+		Z_PARAM_LONG(data_size)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_size(data_size, 3, &c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (desc) {
+		if (!raven_struct_from_object(&raven_struct_RPdfPrintDesc, desc, &c_desc, &arena, 1)) {
+			raven_arena_free(&arena);
+			RETURN_THROWS();
+		}
+		p_desc = &c_desc;
+	}
+	if (data && !raven_arg_length(data, 2, c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	r = Rpdf_print(p_desc, data ? ZSTR_VAL(data) : NULL, c_data_size);
+	raven_leave();
+	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_print_file)
+{
+	zend_object *desc = NULL;
+	RPdfPrintDesc c_desc;
+	RPdfPrintDesc *p_desc = NULL;
+	zend_string *path = NULL;
+	raven_arena arena = {0};
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RPdfPrintDesc)
+		Z_PARAM_STR_OR_NULL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (desc) {
+		if (!raven_struct_from_object(&raven_struct_RPdfPrintDesc, desc, &c_desc, &arena, 1)) {
+			raven_arena_free(&arena);
+			RETURN_THROWS();
+		}
+		p_desc = &c_desc;
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	r = Rpdf_print_file(p_desc, path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)r);
+}
+
+ZEND_FUNCTION(Rpdf_document_print)
+{
+	zend_long document;
+	uint32_t c_document;
+	zend_object *desc = NULL;
+	RPdfPrintDesc c_desc;
+	RPdfPrintDesc *p_desc = NULL;
+	raven_arena arena = {0};
+	int r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(document)
+		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RPdfPrintDesc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(document, 1, &c_document)) {
+		RETURN_THROWS();
+	}
+
+	if (desc) {
+		if (!raven_struct_from_object(&raven_struct_RPdfPrintDesc, desc, &c_desc, &arena, 2)) {
+			raven_arena_free(&arena);
+			RETURN_THROWS();
+		}
+		p_desc = &c_desc;
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	r = Rpdf_document_print(c_document, p_desc);
+	raven_leave();
+	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)r);
+}
+
 void raven_gen_raven_controls_minit(int module_number)
 {
 	register_raven_controls_symbols(module_number);
 	zend_register_functions(NULL, ext_functions, NULL, MODULE_PERSISTENT);
+	raven_ce_RPdfPrintDesc = register_class_RPdfPrintDesc();
 	raven_ce_RTileItem = register_class_RTileItem();
 }

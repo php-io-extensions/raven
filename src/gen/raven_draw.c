@@ -121,6 +121,47 @@ ZEND_FUNCTION(Rdraw_rect)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rdraw_shadow)
+{
+	zend_object *painter;
+	RPainter *c_painter;
+	double x;
+	double y;
+	double width;
+	double height;
+	double radius;
+	double blur;
+	double r;
+	double g;
+	double b;
+	double a;
+
+	ZEND_PARSE_PARAMETERS_START(11, 11)
+		Z_PARAM_OBJ_OF_CLASS(painter, raven_ce_RPainter)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_DOUBLE(width)
+		Z_PARAM_DOUBLE(height)
+		Z_PARAM_DOUBLE(radius)
+		Z_PARAM_DOUBLE(blur)
+		Z_PARAM_DOUBLE(r)
+		Z_PARAM_DOUBLE(g)
+		Z_PARAM_DOUBLE(b)
+		Z_PARAM_DOUBLE(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_painter = raven_painter_get(painter, 1);
+	if (!c_painter) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdraw_shadow(c_painter, (float)x, (float)y, (float)width, (float)height, (float)radius, (float)blur, (float)r, (float)g, (float)b, (float)a);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rdraw_rect_outline)
 {
 	zend_object *painter;
