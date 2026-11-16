@@ -62,7 +62,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/widgets/tree_view.c src/widgets/viewport.c src/widgets/table.c src/widgets/date_picker.c \
     src/widgets/time_picker.c src/widgets/toast.c src/widgets/breadcrumb.c src/widgets/rating.c \
     src/widgets/pagination.c src/widgets/plot.c src/widgets/pdf_view.c \
-    src/widgets/pdf_document.c src/widgets/pdf_print.c \
+    src/widgets/chart.c src/widgets/pdf_document.c src/widgets/pdf_print.c \
     src/xml/xml_attributes.c src/xml/xml_components.c src/xml/xml_dom.c src/xml/xml_schema.c \
     src/xml/xml_loader.c src/xml/xml_watch.c src/xml/xml_parser.c"
 
@@ -71,7 +71,7 @@ if test "$PHP_RAVEN" != "no"; then
     darwin*)
       raven_lib="$raven_lib src/platform/cocoa/cocoa_platform.m src/platform/cocoa/cocoa_print.m"
       raven_defs="$raven_defs -DRAVEN_PLATFORM_COCOA -D_DARWIN_C_SOURCE"
-      raven_frameworks="CoreFoundation AppKit QuartzCore Metal"
+      raven_frameworks="CoreFoundation AppKit QuartzCore Metal UserNotifications"
       ;;
     *)
       PKG_CHECK_MODULES([X11], [x11])

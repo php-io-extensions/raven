@@ -5,7 +5,7 @@ description: How PHP callables are held, called on the PHP thread only, released
 resource: src/runtime.c
 tags: [raven, callbacks, threads]
 status: draft
-generated: { by: cursor-grok/4.6, at: 2026-11-14T00:00:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-16T00:00:00Z }
 sources:
   - id: runtime
     resource: src/runtime.c

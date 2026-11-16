@@ -25,7 +25,7 @@ ZEND_FUNCTION(Rshader_create)
 	size_t c_size;
 	zend_long flags;
 	uint32_t c_flags;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR(spirv)
@@ -47,9 +47,9 @@ ZEND_FUNCTION(Rshader_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rshader_create((const void *)ZSTR_VAL(spirv), c_size, c_flags);
+	ret = Rshader_create((const void *)ZSTR_VAL(spirv), c_size, c_flags);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rshader_create_from_file)
@@ -57,7 +57,7 @@ ZEND_FUNCTION(Rshader_create_from_file)
 	zend_string *path = NULL;
 	zend_long flags;
 	uint32_t c_flags;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(path)
@@ -71,9 +71,9 @@ ZEND_FUNCTION(Rshader_create_from_file)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rshader_create_from_file(path ? ZSTR_VAL(path) : NULL, c_flags);
+	ret = Rshader_create_from_file(path ? ZSTR_VAL(path) : NULL, c_flags);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rshader_destroy)
@@ -100,7 +100,7 @@ ZEND_FUNCTION(Rshader_is_valid)
 {
 	zend_long shader;
 	uint32_t c_shader;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(shader)
@@ -113,16 +113,16 @@ ZEND_FUNCTION(Rshader_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rshader_is_valid(c_shader);
+	ret = Rshader_is_valid(c_shader);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rshader_get_flags)
 {
 	zend_long shader;
 	uint32_t c_shader;
-	Ruint r;
+	Ruint ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(shader)
@@ -135,16 +135,16 @@ ZEND_FUNCTION(Rshader_get_flags)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rshader_get_flags(c_shader);
+	ret = Rshader_get_flags(c_shader);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Reffect_get)
 {
 	zend_long effect;
 	int c_effect;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(effect)
@@ -157,15 +157,15 @@ ZEND_FUNCTION(Reffect_get)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Reffect_get((REffect)c_effect);
+	ret = Reffect_get((REffect)c_effect);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Reffect_find)
 {
 	zend_string *name = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(name)
@@ -174,16 +174,16 @@ ZEND_FUNCTION(Reffect_find)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Reffect_find(name ? ZSTR_VAL(name) : NULL);
+	ret = Reffect_find(name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Reffect_get_name)
 {
 	zend_long effect;
 	int c_effect;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(effect)
@@ -196,12 +196,12 @@ ZEND_FUNCTION(Reffect_get_name)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Reffect_get_name((REffect)c_effect);
+	ret = Reffect_get_name((REffect)c_effect);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Reffect_get_defaults)
@@ -406,7 +406,7 @@ ZEND_FUNCTION(Rborder_get_effect)
 {
 	zend_long border;
 	uint32_t c_border;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(border)
@@ -419,9 +419,9 @@ ZEND_FUNCTION(Rborder_get_effect)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rborder_get_effect(c_border);
+	ret = Rborder_get_effect(c_border);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 void raven_gen_raven_shader_minit(int module_number)

@@ -5,7 +5,7 @@ description: Build ext-raven into Homebrew PHP 8.4 NTS/ZTS or on Debian, run the
 resource: install-macos.sh
 tags: [raven, build, test]
 status: draft
-generated: { by: cursor-grok/4.6, at: 2026-11-14T00:00:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-16T00:00:00Z }
 sources:
   - id: mac
     resource: install-macos.sh

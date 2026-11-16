@@ -226,7 +226,7 @@ ZEND_FUNCTION(Rwidget_get_touch_mode)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	RTouchMode r;
+	RTouchMode ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -239,9 +239,9 @@ ZEND_FUNCTION(Rwidget_get_touch_mode)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_touch_mode(c_widget);
+	ret = Rwidget_get_touch_mode(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_touch_gestures)
@@ -274,7 +274,7 @@ ZEND_FUNCTION(Rwidget_get_touch_gestures)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -287,9 +287,9 @@ ZEND_FUNCTION(Rwidget_get_touch_gestures)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_touch_gestures(c_widget);
+	ret = Rwidget_get_touch_gestures(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_pen_mouse)
@@ -322,7 +322,7 @@ ZEND_FUNCTION(Rwidget_get_pen_mouse)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -335,9 +335,9 @@ ZEND_FUNCTION(Rwidget_get_pen_mouse)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_pen_mouse(c_widget);
+	ret = Rwidget_get_pen_mouse(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_touch_callback)
@@ -440,7 +440,7 @@ ZEND_FUNCTION(Rwindow_get_touch_count)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -453,16 +453,16 @@ ZEND_FUNCTION(Rwindow_get_touch_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_touch_count(c_window);
+	ret = Rwindow_get_touch_count(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_pen_in_range)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -475,16 +475,16 @@ ZEND_FUNCTION(Rwindow_is_pen_in_range)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_pen_in_range(c_window);
+	ret = Rwindow_is_pen_in_range(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_touch_active)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -497,9 +497,9 @@ ZEND_FUNCTION(Rwindow_is_touch_active)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_touch_active(c_window);
+	ret = Rwindow_is_touch_active(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_inject_touch)

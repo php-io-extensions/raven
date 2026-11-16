@@ -21,7 +21,7 @@ ZEND_METHOD(RLanguageDesc, __construct)
 ZEND_FUNCTION(Rtext_editor_create)
 {
 	zend_string *text = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(text)
@@ -30,9 +30,9 @@ ZEND_FUNCTION(Rtext_editor_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_create(text ? ZSTR_VAL(text) : NULL);
+	ret = Rtext_editor_create(text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_text)
@@ -61,7 +61,7 @@ ZEND_FUNCTION(Rtext_editor_get_text)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -74,19 +74,19 @@ ZEND_FUNCTION(Rtext_editor_get_text)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_text(c_editor);
+	ret = Rtext_editor_get_text(c_editor);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_get_length)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -99,16 +99,16 @@ ZEND_FUNCTION(Rtext_editor_get_length)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_length(c_editor);
+	ret = Rtext_editor_get_length(c_editor);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_get_line_count)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -121,9 +121,9 @@ ZEND_FUNCTION(Rtext_editor_get_line_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_line_count(c_editor);
+	ret = Rtext_editor_get_line_count(c_editor);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_get_line)
@@ -132,7 +132,7 @@ ZEND_FUNCTION(Rtext_editor_get_line)
 	uint32_t c_editor;
 	zend_long line;
 	int c_line;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(editor)
@@ -149,12 +149,12 @@ ZEND_FUNCTION(Rtext_editor_get_line)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_line(c_editor, c_line);
+	ret = Rtext_editor_get_line(c_editor, c_line);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_insert_text)
@@ -315,7 +315,7 @@ ZEND_FUNCTION(Rtext_editor_get_selection)
 	int c_to_line = 0;
 	zval *to_column;
 	int c_to_column = 0;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(5, 5)
 		Z_PARAM_LONG(editor)
@@ -332,20 +332,20 @@ ZEND_FUNCTION(Rtext_editor_get_selection)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_selection(c_editor, &c_from_line, &c_from_column, &c_to_line, &c_to_column);
+	ret = Rtext_editor_get_selection(c_editor, &c_from_line, &c_from_column, &c_to_line, &c_to_column);
 	raven_leave();
 	ZEND_TRY_ASSIGN_REF_LONG(from_line, (zend_long)c_from_line);
 	ZEND_TRY_ASSIGN_REF_LONG(from_column, (zend_long)c_from_column);
 	ZEND_TRY_ASSIGN_REF_LONG(to_line, (zend_long)c_to_line);
 	ZEND_TRY_ASSIGN_REF_LONG(to_column, (zend_long)c_to_column);
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_get_selected_text)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -358,12 +358,12 @@ ZEND_FUNCTION(Rtext_editor_get_selected_text)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_selected_text(c_editor);
+	ret = Rtext_editor_get_selected_text(c_editor);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_scroll_to_line)
@@ -436,7 +436,7 @@ ZEND_FUNCTION(Rtext_editor_can_undo)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -449,16 +449,16 @@ ZEND_FUNCTION(Rtext_editor_can_undo)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_can_undo(c_editor);
+	ret = Rtext_editor_can_undo(c_editor);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_can_redo)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -471,9 +471,9 @@ ZEND_FUNCTION(Rtext_editor_can_redo)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_can_redo(c_editor);
+	ret = Rtext_editor_can_redo(c_editor);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_read_only)
@@ -708,7 +708,7 @@ ZEND_FUNCTION(Rtext_editor_get_zoom)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -721,9 +721,9 @@ ZEND_FUNCTION(Rtext_editor_get_zoom)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_zoom(c_editor);
+	ret = Rtext_editor_get_zoom(c_editor);
 	raven_leave();
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_zoomable)
@@ -790,7 +790,7 @@ ZEND_FUNCTION(Rlanguage_register)
 	RLanguageDesc c_desc;
 	RLanguageDesc *p_desc = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RLanguageDesc)
@@ -808,10 +808,10 @@ ZEND_FUNCTION(Rlanguage_register)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rlanguage_register(p_desc);
+	ret = Rlanguage_register(p_desc);
 	raven_leave();
 	raven_arena_free(&arena);
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlanguage_get)
@@ -821,7 +821,7 @@ ZEND_FUNCTION(Rlanguage_get)
 	RLanguageDesc c_desc;
 	RLanguageDesc *p_desc = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(name)
@@ -840,34 +840,34 @@ ZEND_FUNCTION(Rlanguage_get)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rlanguage_get(name ? ZSTR_VAL(name) : NULL, p_desc);
+	ret = Rlanguage_get(name ? ZSTR_VAL(name) : NULL, p_desc);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_desc) {
 		raven_struct_to_object(&raven_struct_RLanguageDesc, &c_desc, desc);
 	}
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlanguage_get_count)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlanguage_get_count();
+	ret = Rlanguage_get_count();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlanguage_get_name)
 {
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(index)
@@ -880,18 +880,18 @@ ZEND_FUNCTION(Rlanguage_get_name)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlanguage_get_name(c_index);
+	ret = Rlanguage_get_name(c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rlanguage_for_file)
 {
 	zend_string *path = NULL;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -900,12 +900,12 @@ ZEND_FUNCTION(Rlanguage_for_file)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlanguage_for_file(path ? ZSTR_VAL(path) : NULL);
+	ret = Rlanguage_for_file(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_language)
@@ -934,7 +934,7 @@ ZEND_FUNCTION(Rtext_editor_get_language)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -947,12 +947,12 @@ ZEND_FUNCTION(Rtext_editor_get_language)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_language(c_editor);
+	ret = Rtext_editor_get_language(c_editor);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_markdown)
@@ -985,7 +985,7 @@ ZEND_FUNCTION(Rtext_editor_get_markdown)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -998,9 +998,9 @@ ZEND_FUNCTION(Rtext_editor_get_markdown)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_markdown(c_editor);
+	ret = Rtext_editor_get_markdown(c_editor);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_get_token)
@@ -1011,7 +1011,7 @@ ZEND_FUNCTION(Rtext_editor_get_token)
 	int c_line;
 	zend_long column;
 	int c_column;
-	RToken r;
+	RToken ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(editor)
@@ -1032,9 +1032,9 @@ ZEND_FUNCTION(Rtext_editor_get_token)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_token(c_editor, c_line, c_column);
+	ret = Rtext_editor_get_token(c_editor, c_line, c_column);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_completion)
@@ -1087,7 +1087,7 @@ ZEND_FUNCTION(Rtext_editor_is_completing)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -1100,9 +1100,9 @@ ZEND_FUNCTION(Rtext_editor_is_completing)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_is_completing(c_editor);
+	ret = Rtext_editor_is_completing(c_editor);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_completion_callback)
@@ -1309,7 +1309,7 @@ ZEND_FUNCTION(Rtext_editor_get_marker_count)
 {
 	zend_long editor;
 	uint32_t c_editor;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(editor)
@@ -1322,9 +1322,9 @@ ZEND_FUNCTION(Rtext_editor_get_marker_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtext_editor_get_marker_count(c_editor);
+	ret = Rtext_editor_get_marker_count(c_editor);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtext_editor_set_hover_callback)

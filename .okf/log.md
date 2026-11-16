@@ -1,5 +1,9 @@
 # Log
 
+## 2026-11-16
+
+* **Synced**: Raven main `dfac083f27703b458ae359aeb792e7efc0699885` vendored (library still reports 0.2.3). 1,283 `RAVEN_API` functions, 1,278 bound (1,262 generated, 16 manual), 35 classes. Chart (pie, donut, gauge, heatmap, sparkline: 48 functions, `RChartKind`, `R_WIDGET_CHART`), table cell colors and multi-select (7 functions). `const float*` arrays generated: `Rchart_set_values` by `count`, `Rchart_set_grid` by `rows` × `columns`. Generated C return is `ret` so it does not collide with a parameter named `r` (`Rchart_add_band`). Cocoa links UserNotifications. No signature breaks. Suite 57 passed (451 assertions). Crash sweep 1,278 functions, the three headless file dialogs timed out as before.
+
 ## 2026-11-14
 
 * **Synced**: Raven main `b0a4aa786d99442fed08d9f3509e8e4e97a245cf` vendored (library still reports 0.2.3). 1,228 `RAVEN_API` functions, 1,223 bound (1,207 generated, 16 manual), 35 classes. `Rpdf_document_save_memory` is manual (`Rmemory_free`). `const uint8_t*` RGBA is sized by the next two `int` parameters so `Rpdf_document_draw_image` (`pixels_width` / `pixels_height`) is generated. `Rpopup_open` slots by content, as `Rdialog_open`. Suite 54 passed (408 assertions), 1 skipped (gd); crash sweep 1,223 functions, the three headless file dialogs timed out as before. Vulkan demo under Xvfb + lavapipe rendered.

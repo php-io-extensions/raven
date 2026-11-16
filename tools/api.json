@@ -7584,6 +7584,120 @@
                 }
             ]
         },
+        "Rtable_set_cell_text_color": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rtable_set_multi_select": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rtable_set_row_selected": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "selected",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rtable_is_row_selected": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rtable_clear_selection": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtable_get_selection_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtable_get_selection": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ]
+        },
         "Rtable_set_selected": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -9425,6 +9539,758 @@
                 {
                     "name": "user_data",
                     "type": "void *"
+                }
+            ]
+        },
+        "Rchart_create": {
+            "header": "raven_controls.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "kind",
+                    "type": "RChartKind"
+                }
+            ]
+        },
+        "Rchart_set_kind": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "kind",
+                    "type": "RChartKind"
+                }
+            ]
+        },
+        "Rchart_get_kind": {
+            "header": "raven_controls.h",
+            "ret": "RChartKind",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_set_title": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "title",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rchart_get_title": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_set_format": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "format",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rchart_set_color": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rchart_set_legend": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "shown",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_clear": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_get_hovered": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_add_slice": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "label",
+                    "type": "const char *"
+                },
+                {
+                    "name": "value",
+                    "type": "double"
+                }
+            ]
+        },
+        "Rchart_remove_slice": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_get_slice_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_set_slice_value": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                },
+                {
+                    "name": "value",
+                    "type": "double"
+                }
+            ]
+        },
+        "Rchart_get_slice_value": {
+            "header": "raven_controls.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_set_slice_label": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                },
+                {
+                    "name": "label",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rchart_get_slice_label": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_set_slice_color": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rchart_get_total": {
+            "header": "raven_controls.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_set_selected": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_get_selected": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_set_hole": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "ratio",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rchart_set_center_text": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "caption",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rchart_set_slice_clicked_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RChartSliceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rchart_set_range": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "min",
+                    "type": "double"
+                },
+                {
+                    "name": "max",
+                    "type": "double"
+                }
+            ]
+        },
+        "Rchart_get_range": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "min",
+                    "type": "double *"
+                },
+                {
+                    "name": "max",
+                    "type": "double *"
+                }
+            ]
+        },
+        "Rchart_set_value": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "value",
+                    "type": "double"
+                }
+            ]
+        },
+        "Rchart_get_value": {
+            "header": "raven_controls.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_add_band": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "from",
+                    "type": "double"
+                },
+                {
+                    "name": "to",
+                    "type": "double"
+                },
+                {
+                    "name": "r",
+                    "type": "float"
+                },
+                {
+                    "name": "g",
+                    "type": "float"
+                },
+                {
+                    "name": "b",
+                    "type": "float"
+                },
+                {
+                    "name": "a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rchart_clear_bands": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_get_band_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_set_grid": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "rows",
+                    "type": "int"
+                },
+                {
+                    "name": "columns",
+                    "type": "int"
+                },
+                {
+                    "name": "values",
+                    "type": "const float *"
+                }
+            ]
+        },
+        "Rchart_get_row_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_get_column_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_set_cell": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "value",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rchart_get_cell": {
+            "header": "raven_controls.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_set_row_labels": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "labels",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rchart_set_column_labels": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "labels",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "Rchart_get_row_label": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_get_column_label": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_set_color_scale": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "low_r",
+                    "type": "float"
+                },
+                {
+                    "name": "low_g",
+                    "type": "float"
+                },
+                {
+                    "name": "low_b",
+                    "type": "float"
+                },
+                {
+                    "name": "low_a",
+                    "type": "float"
+                },
+                {
+                    "name": "high_r",
+                    "type": "float"
+                },
+                {
+                    "name": "high_g",
+                    "type": "float"
+                },
+                {
+                    "name": "high_b",
+                    "type": "float"
+                },
+                {
+                    "name": "high_a",
+                    "type": "float"
+                }
+            ]
+        },
+        "Rchart_set_cell_clicked_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RChartCellCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rchart_set_values": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "values",
+                    "type": "const float *"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_push_value": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "value",
+                    "type": "float"
+                },
+                {
+                    "name": "max_count",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_get_value_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rchart_get_value_at": {
+            "header": "raven_controls.h",
+            "ret": "float",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_set_fill": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "fill",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rchart_set_marker": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "shown",
+                    "type": "int"
                 }
             ]
         },
@@ -19957,6 +20823,7 @@
                 "R_WIDGET_PAGINATION",
                 "R_WIDGET_PLOT",
                 "R_WIDGET_PDF_VIEW",
+                "R_WIDGET_CHART",
                 "R_WIDGET_LAST_"
             ]
         },
@@ -20177,6 +21044,16 @@
                 "R_PLOT_LEGEND_BOTTOM_LEFT",
                 "R_PLOT_LEGEND_LEFT",
                 "R_PLOT_LEGEND_OUTSIDE"
+            ]
+        },
+        "RChartKind": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_CHART_PIE",
+                "R_CHART_DONUT",
+                "R_CHART_GAUGE",
+                "R_CHART_HEATMAP",
+                "R_CHART_SPARKLINE"
             ]
         },
         "RSyntax": {
@@ -21406,6 +22283,54 @@
                 {
                     "name": "visible",
                     "type": "int"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RChartSliceCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "slice",
+                    "type": "int"
+                },
+                {
+                    "name": "selected",
+                    "type": "int"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RChartCellCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "chart",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "value",
+                    "type": "float"
                 },
                 {
                     "name": "user_data",

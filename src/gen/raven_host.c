@@ -15,16 +15,16 @@
 
 ZEND_FUNCTION(Rhost_platform_is_active)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rhost_platform_is_active();
+	ret = Rhost_platform_is_active();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rhost_window_set_size)

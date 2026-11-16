@@ -129,6 +129,50 @@ void raven_cb_RButtonClickedCallback_0(Rid button, void * user_data)
 	zval_ptr_dtor(&args[1]);
 }
 
+void raven_cb_RChartCellCallback_0(Rid chart, int row, int column, float value, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[5], rv;
+	ZVAL_LONG(&args[0], (zend_long)chart);
+	ZVAL_LONG(&args[1], (zend_long)row);
+	ZVAL_LONG(&args[2], (zend_long)column);
+	ZVAL_DOUBLE(&args[3], (double)value);
+	ZVAL_COPY(&args[4], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 5, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
+}
+
+void raven_cb_RChartSliceCallback_0(Rid chart, int slice, int selected, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[4], rv;
+	ZVAL_LONG(&args[0], (zend_long)chart);
+	ZVAL_LONG(&args[1], (zend_long)slice);
+	ZVAL_LONG(&args[2], (zend_long)selected);
+	ZVAL_COPY(&args[3], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 4, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+}
+
 void raven_cb_RCheckboxChangedCallback_0(Rid checkbox, int checked, void * user_data)
 {
 	raven_slot *slot = user_data;

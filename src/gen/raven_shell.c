@@ -21,7 +21,7 @@ ZEND_METHOD(RJumpTask, __construct)
 ZEND_FUNCTION(Rheader_bar_create)
 {
 	zend_string *title = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(title)
@@ -30,9 +30,9 @@ ZEND_FUNCTION(Rheader_bar_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rheader_bar_create(title ? ZSTR_VAL(title) : NULL);
+	ret = Rheader_bar_create(title ? ZSTR_VAL(title) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rheader_bar_set_title)
@@ -189,16 +189,16 @@ ZEND_FUNCTION(Rheader_bar_set_background)
 
 ZEND_FUNCTION(Rdock_area_create)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_create();
+	ret = Rdock_area_create();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdock_area_add_panel)
@@ -473,7 +473,7 @@ ZEND_FUNCTION(Rdock_area_is_panel_open)
 	uint32_t c_area;
 	zend_long panel;
 	uint32_t c_panel;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(area)
@@ -490,9 +490,9 @@ ZEND_FUNCTION(Rdock_area_is_panel_open)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_is_panel_open(c_area, c_panel);
+	ret = Rdock_area_is_panel_open(c_area, c_panel);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdock_area_set_close_hides)
@@ -553,7 +553,7 @@ ZEND_FUNCTION(Rdock_area_is_panel_shown)
 	uint32_t c_area;
 	zend_long panel;
 	uint32_t c_panel;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(area)
@@ -570,9 +570,9 @@ ZEND_FUNCTION(Rdock_area_is_panel_shown)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_is_panel_shown(c_area, c_panel);
+	ret = Rdock_area_is_panel_shown(c_area, c_panel);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdock_area_set_movable)
@@ -605,7 +605,7 @@ ZEND_FUNCTION(Rdock_area_save_layout)
 {
 	zend_long area;
 	uint32_t c_area;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(area)
@@ -618,12 +618,12 @@ ZEND_FUNCTION(Rdock_area_save_layout)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_save_layout(c_area);
+	ret = Rdock_area_save_layout(c_area);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rdock_area_load_layout)
@@ -631,7 +631,7 @@ ZEND_FUNCTION(Rdock_area_load_layout)
 	zend_long area;
 	uint32_t c_area;
 	zend_string *layout = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(area)
@@ -645,9 +645,9 @@ ZEND_FUNCTION(Rdock_area_load_layout)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_load_layout(c_area, layout ? ZSTR_VAL(layout) : NULL);
+	ret = Rdock_area_load_layout(c_area, layout ? ZSTR_VAL(layout) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdock_area_set_close_callback)
@@ -712,7 +712,7 @@ ZEND_FUNCTION(Rdock_area_is_tearable)
 {
 	zend_long area;
 	uint32_t c_area;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(area)
@@ -725,9 +725,9 @@ ZEND_FUNCTION(Rdock_area_is_tearable)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_is_tearable(c_area);
+	ret = Rdock_area_is_tearable(c_area);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdock_area_set_float_mode)
@@ -766,7 +766,7 @@ ZEND_FUNCTION(Rdock_area_float_panel)
 	int c_x;
 	zend_long y;
 	int c_y;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(area)
@@ -791,9 +791,9 @@ ZEND_FUNCTION(Rdock_area_float_panel)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_float_panel(c_area, c_panel, c_x, c_y);
+	ret = Rdock_area_float_panel(c_area, c_panel, c_x, c_y);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdock_area_dock_panel)
@@ -828,7 +828,7 @@ ZEND_FUNCTION(Rdock_area_get_panel_window)
 	uint32_t c_area;
 	zend_long panel;
 	uint32_t c_panel;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(area)
@@ -845,9 +845,9 @@ ZEND_FUNCTION(Rdock_area_get_panel_window)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdock_area_get_panel_window(c_area, c_panel);
+	ret = Rdock_area_get_panel_window(c_area, c_panel);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdock_area_set_changed_callback)
@@ -884,16 +884,16 @@ ZEND_FUNCTION(Rdock_area_set_changed_callback)
 
 ZEND_FUNCTION(Risland_create)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Risland_create();
+	ret = Risland_create();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Risland_set_expanded)
@@ -926,7 +926,7 @@ ZEND_FUNCTION(Risland_is_expanded)
 {
 	zend_long island;
 	uint32_t c_island;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(island)
@@ -939,9 +939,9 @@ ZEND_FUNCTION(Risland_is_expanded)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Risland_is_expanded(c_island);
+	ret = Risland_is_expanded(c_island);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Risland_expand_for)
@@ -1074,7 +1074,7 @@ ZEND_FUNCTION(Risland_get_notch)
 {
 	zend_long island;
 	uint32_t c_island;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(island)
@@ -1087,16 +1087,16 @@ ZEND_FUNCTION(Risland_get_notch)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Risland_get_notch(c_island);
+	ret = Risland_get_notch(c_island);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Risland_is_in_notch)
 {
 	zend_long island;
 	uint32_t c_island;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(island)
@@ -1109,9 +1109,9 @@ ZEND_FUNCTION(Risland_is_in_notch)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Risland_is_in_notch(c_island);
+	ret = Risland_is_in_notch(c_island);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Risland_set_changed_callback)
@@ -1176,7 +1176,7 @@ ZEND_FUNCTION(Rwindow_get_island)
 {
 	zend_long window;
 	uint32_t c_window;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1189,9 +1189,9 @@ ZEND_FUNCTION(Rwindow_get_island)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_island(c_window);
+	ret = Rwindow_get_island(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_taskbar_progress)
@@ -1201,7 +1201,7 @@ ZEND_FUNCTION(Rwindow_set_taskbar_progress)
 	zend_long state;
 	int c_state;
 	double value;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(window)
@@ -1219,9 +1219,9 @@ ZEND_FUNCTION(Rwindow_set_taskbar_progress)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_taskbar_progress(c_window, (RTaskbarProgress)c_state, (float)value);
+	ret = Rwindow_set_taskbar_progress(c_window, (RTaskbarProgress)c_state, (float)value);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_request_attention)
@@ -1230,7 +1230,7 @@ ZEND_FUNCTION(Rwindow_request_attention)
 	uint32_t c_window;
 	zend_long critical;
 	int c_critical;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1247,15 +1247,15 @@ ZEND_FUNCTION(Rwindow_request_attention)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_request_attention(c_window, c_critical);
+	ret = Rwindow_request_attention(c_window, c_critical);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtaskbar_set_badge)
 {
 	zend_string *text = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(text)
@@ -1264,16 +1264,16 @@ ZEND_FUNCTION(Rtaskbar_set_badge)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtaskbar_set_badge(text ? ZSTR_VAL(text) : NULL);
+	ret = Rtaskbar_set_badge(text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtaskbar_set_menu)
 {
 	zend_long menu;
 	uint32_t c_menu;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(menu)
@@ -1286,9 +1286,9 @@ ZEND_FUNCTION(Rtaskbar_set_menu)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtaskbar_set_menu(c_menu);
+	ret = Rtaskbar_set_menu(c_menu);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtaskbar_set_jump_list)
@@ -1298,7 +1298,7 @@ ZEND_FUNCTION(Rtaskbar_set_jump_list)
 	zend_long count;
 	int c_count;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ARRAY_HT(tasks)
@@ -1318,38 +1318,38 @@ ZEND_FUNCTION(Rtaskbar_set_jump_list)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rtaskbar_set_jump_list(c_tasks, c_count);
+	ret = Rtaskbar_set_jump_list(c_tasks, c_count);
 	raven_leave();
 	raven_arena_free(&arena);
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtray_is_supported)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtray_is_supported();
+	ret = Rtray_is_supported();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtray_create)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtray_create();
+	ret = Rtray_create();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtray_destroy)
@@ -1376,7 +1376,7 @@ ZEND_FUNCTION(Rtray_is_valid)
 {
 	zend_long tray;
 	uint32_t c_tray;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(tray)
@@ -1389,9 +1389,9 @@ ZEND_FUNCTION(Rtray_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtray_is_valid(c_tray);
+	ret = Rtray_is_valid(c_tray);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtray_set_icon)
@@ -1546,7 +1546,7 @@ ZEND_FUNCTION(Rtray_get_rect)
 	int c_width = 0;
 	zval *height;
 	int c_height = 0;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(5, 5)
 		Z_PARAM_LONG(tray)
@@ -1563,13 +1563,13 @@ ZEND_FUNCTION(Rtray_get_rect)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtray_get_rect(c_tray, &c_x, &c_y, &c_width, &c_height);
+	ret = Rtray_get_rect(c_tray, &c_x, &c_y, &c_width, &c_height);
 	raven_leave();
 	ZEND_TRY_ASSIGN_REF_LONG(x, (zend_long)c_x);
 	ZEND_TRY_ASSIGN_REF_LONG(y, (zend_long)c_y);
 	ZEND_TRY_ASSIGN_REF_LONG(width, (zend_long)c_width);
 	ZEND_TRY_ASSIGN_REF_LONG(height, (zend_long)c_height);
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 void raven_gen_raven_shell_minit(int module_number)

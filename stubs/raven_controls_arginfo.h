@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 27ce98e1ec128bd0856472d55594472e3b83778b */
+ * Stub hash: 9e7f0e755b07766018805323c37870dec81433e1 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlabel_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
@@ -797,6 +797,41 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_cell_color_callback, 
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_cell_text_color, 0, 7, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_multi_select, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_row_selected, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, selected, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_is_row_selected, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtable_clear_selection arginfo_Rtable_clear_columns
+
+#define arginfo_Rtable_get_selection_count arginfo_Rtable_get_column_count
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_get_selection, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 #define arginfo_Rtable_set_selected arginfo_Rtable_remove_row
 
 #define arginfo_Rtable_get_selected arginfo_Rtable_get_column_count
@@ -1364,6 +1399,235 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rplot_set_series_toggled_callback arginfo_Rplot_set_view_changed_callback
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_create, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, kind, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_kind, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, kind, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_kind, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_title, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_title, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_format, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, format, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_color, 0, 5, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_legend, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, shown, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_clear, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_get_hovered arginfo_Rchart_get_kind
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_add_slice, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, label, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, value, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_remove_slice, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, slice, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_get_slice_count arginfo_Rchart_get_kind
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_slice_value, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, slice, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_slice_value, 0, 2, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, slice, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_slice_label, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, slice, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, label, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_slice_label, 0, 2, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, slice, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_slice_color, 0, 6, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, slice, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_total, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_set_selected arginfo_Rchart_remove_slice
+
+#define arginfo_Rchart_get_selected arginfo_Rchart_get_kind
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_hole, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, ratio, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_center_text, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, caption, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_slice_clicked_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_range, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, min, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, max, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_range, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, min, IS_DOUBLE, 1)
+	ZEND_ARG_TYPE_INFO(1, max, IS_DOUBLE, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_value, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_get_value arginfo_Rchart_get_total
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_add_band, 0, 7, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, from, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, to, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_clear_bands arginfo_Rchart_clear
+
+#define arginfo_Rchart_get_band_count arginfo_Rchart_get_kind
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_grid, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, rows, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, columns, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, values, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_get_row_count arginfo_Rchart_get_kind
+
+#define arginfo_Rchart_get_column_count arginfo_Rchart_get_kind
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_cell, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_cell, 0, 3, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_row_labels, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, labels, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_set_column_labels arginfo_Rchart_set_row_labels
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_row_label, 0, 2, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_column_label, 0, 2, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_color_scale, 0, 9, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, low_r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, low_g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, low_b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, low_a, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, high_r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, high_g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, high_b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, high_a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_set_cell_clicked_callback arginfo_Rchart_set_slice_clicked_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_values, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, values, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_push_value, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, max_count, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_get_value_count arginfo_Rchart_get_kind
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_get_value_at, 0, 2, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rchart_set_fill, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, chart, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, fill, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rchart_set_marker arginfo_Rchart_set_legend
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_is_available, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
@@ -1793,6 +2057,13 @@ ZEND_FUNCTION(Rtable_clear_rows);
 ZEND_FUNCTION(Rtable_get_row_count);
 ZEND_FUNCTION(Rtable_set_virtual_rows);
 ZEND_FUNCTION(Rtable_set_cell_color_callback);
+ZEND_FUNCTION(Rtable_set_cell_text_color);
+ZEND_FUNCTION(Rtable_set_multi_select);
+ZEND_FUNCTION(Rtable_set_row_selected);
+ZEND_FUNCTION(Rtable_is_row_selected);
+ZEND_FUNCTION(Rtable_clear_selection);
+ZEND_FUNCTION(Rtable_get_selection_count);
+ZEND_FUNCTION(Rtable_get_selection);
 ZEND_FUNCTION(Rtable_set_selected);
 ZEND_FUNCTION(Rtable_get_selected);
 ZEND_FUNCTION(Rtable_scroll_to_row);
@@ -1907,6 +2178,54 @@ ZEND_FUNCTION(Rplot_set_drag_line_color);
 ZEND_FUNCTION(Rplot_set_view_changed_callback);
 ZEND_FUNCTION(Rplot_set_drag_line_callback);
 ZEND_FUNCTION(Rplot_set_series_toggled_callback);
+ZEND_FUNCTION(Rchart_create);
+ZEND_FUNCTION(Rchart_set_kind);
+ZEND_FUNCTION(Rchart_get_kind);
+ZEND_FUNCTION(Rchart_set_title);
+ZEND_FUNCTION(Rchart_get_title);
+ZEND_FUNCTION(Rchart_set_format);
+ZEND_FUNCTION(Rchart_set_color);
+ZEND_FUNCTION(Rchart_set_legend);
+ZEND_FUNCTION(Rchart_clear);
+ZEND_FUNCTION(Rchart_get_hovered);
+ZEND_FUNCTION(Rchart_add_slice);
+ZEND_FUNCTION(Rchart_remove_slice);
+ZEND_FUNCTION(Rchart_get_slice_count);
+ZEND_FUNCTION(Rchart_set_slice_value);
+ZEND_FUNCTION(Rchart_get_slice_value);
+ZEND_FUNCTION(Rchart_set_slice_label);
+ZEND_FUNCTION(Rchart_get_slice_label);
+ZEND_FUNCTION(Rchart_set_slice_color);
+ZEND_FUNCTION(Rchart_get_total);
+ZEND_FUNCTION(Rchart_set_selected);
+ZEND_FUNCTION(Rchart_get_selected);
+ZEND_FUNCTION(Rchart_set_hole);
+ZEND_FUNCTION(Rchart_set_center_text);
+ZEND_FUNCTION(Rchart_set_slice_clicked_callback);
+ZEND_FUNCTION(Rchart_set_range);
+ZEND_FUNCTION(Rchart_get_range);
+ZEND_FUNCTION(Rchart_set_value);
+ZEND_FUNCTION(Rchart_get_value);
+ZEND_FUNCTION(Rchart_add_band);
+ZEND_FUNCTION(Rchart_clear_bands);
+ZEND_FUNCTION(Rchart_get_band_count);
+ZEND_FUNCTION(Rchart_set_grid);
+ZEND_FUNCTION(Rchart_get_row_count);
+ZEND_FUNCTION(Rchart_get_column_count);
+ZEND_FUNCTION(Rchart_set_cell);
+ZEND_FUNCTION(Rchart_get_cell);
+ZEND_FUNCTION(Rchart_set_row_labels);
+ZEND_FUNCTION(Rchart_set_column_labels);
+ZEND_FUNCTION(Rchart_get_row_label);
+ZEND_FUNCTION(Rchart_get_column_label);
+ZEND_FUNCTION(Rchart_set_color_scale);
+ZEND_FUNCTION(Rchart_set_cell_clicked_callback);
+ZEND_FUNCTION(Rchart_set_values);
+ZEND_FUNCTION(Rchart_push_value);
+ZEND_FUNCTION(Rchart_get_value_count);
+ZEND_FUNCTION(Rchart_get_value_at);
+ZEND_FUNCTION(Rchart_set_fill);
+ZEND_FUNCTION(Rchart_set_marker);
 ZEND_FUNCTION(Rpdf_is_available);
 ZEND_FUNCTION(Rpdf_view_load_file);
 ZEND_FUNCTION(Rpdf_view_load_memory);
@@ -2132,6 +2451,13 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtable_get_row_count, arginfo_Rtable_get_row_count)
 	ZEND_FE(Rtable_set_virtual_rows, arginfo_Rtable_set_virtual_rows)
 	ZEND_FE(Rtable_set_cell_color_callback, arginfo_Rtable_set_cell_color_callback)
+	ZEND_FE(Rtable_set_cell_text_color, arginfo_Rtable_set_cell_text_color)
+	ZEND_FE(Rtable_set_multi_select, arginfo_Rtable_set_multi_select)
+	ZEND_FE(Rtable_set_row_selected, arginfo_Rtable_set_row_selected)
+	ZEND_FE(Rtable_is_row_selected, arginfo_Rtable_is_row_selected)
+	ZEND_FE(Rtable_clear_selection, arginfo_Rtable_clear_selection)
+	ZEND_FE(Rtable_get_selection_count, arginfo_Rtable_get_selection_count)
+	ZEND_FE(Rtable_get_selection, arginfo_Rtable_get_selection)
 	ZEND_FE(Rtable_set_selected, arginfo_Rtable_set_selected)
 	ZEND_FE(Rtable_get_selected, arginfo_Rtable_get_selected)
 	ZEND_FE(Rtable_scroll_to_row, arginfo_Rtable_scroll_to_row)
@@ -2246,6 +2572,54 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rplot_set_view_changed_callback, arginfo_Rplot_set_view_changed_callback)
 	ZEND_FE(Rplot_set_drag_line_callback, arginfo_Rplot_set_drag_line_callback)
 	ZEND_FE(Rplot_set_series_toggled_callback, arginfo_Rplot_set_series_toggled_callback)
+	ZEND_FE(Rchart_create, arginfo_Rchart_create)
+	ZEND_FE(Rchart_set_kind, arginfo_Rchart_set_kind)
+	ZEND_FE(Rchart_get_kind, arginfo_Rchart_get_kind)
+	ZEND_FE(Rchart_set_title, arginfo_Rchart_set_title)
+	ZEND_FE(Rchart_get_title, arginfo_Rchart_get_title)
+	ZEND_FE(Rchart_set_format, arginfo_Rchart_set_format)
+	ZEND_FE(Rchart_set_color, arginfo_Rchart_set_color)
+	ZEND_FE(Rchart_set_legend, arginfo_Rchart_set_legend)
+	ZEND_FE(Rchart_clear, arginfo_Rchart_clear)
+	ZEND_FE(Rchart_get_hovered, arginfo_Rchart_get_hovered)
+	ZEND_FE(Rchart_add_slice, arginfo_Rchart_add_slice)
+	ZEND_FE(Rchart_remove_slice, arginfo_Rchart_remove_slice)
+	ZEND_FE(Rchart_get_slice_count, arginfo_Rchart_get_slice_count)
+	ZEND_FE(Rchart_set_slice_value, arginfo_Rchart_set_slice_value)
+	ZEND_FE(Rchart_get_slice_value, arginfo_Rchart_get_slice_value)
+	ZEND_FE(Rchart_set_slice_label, arginfo_Rchart_set_slice_label)
+	ZEND_FE(Rchart_get_slice_label, arginfo_Rchart_get_slice_label)
+	ZEND_FE(Rchart_set_slice_color, arginfo_Rchart_set_slice_color)
+	ZEND_FE(Rchart_get_total, arginfo_Rchart_get_total)
+	ZEND_FE(Rchart_set_selected, arginfo_Rchart_set_selected)
+	ZEND_FE(Rchart_get_selected, arginfo_Rchart_get_selected)
+	ZEND_FE(Rchart_set_hole, arginfo_Rchart_set_hole)
+	ZEND_FE(Rchart_set_center_text, arginfo_Rchart_set_center_text)
+	ZEND_FE(Rchart_set_slice_clicked_callback, arginfo_Rchart_set_slice_clicked_callback)
+	ZEND_FE(Rchart_set_range, arginfo_Rchart_set_range)
+	ZEND_FE(Rchart_get_range, arginfo_Rchart_get_range)
+	ZEND_FE(Rchart_set_value, arginfo_Rchart_set_value)
+	ZEND_FE(Rchart_get_value, arginfo_Rchart_get_value)
+	ZEND_FE(Rchart_add_band, arginfo_Rchart_add_band)
+	ZEND_FE(Rchart_clear_bands, arginfo_Rchart_clear_bands)
+	ZEND_FE(Rchart_get_band_count, arginfo_Rchart_get_band_count)
+	ZEND_FE(Rchart_set_grid, arginfo_Rchart_set_grid)
+	ZEND_FE(Rchart_get_row_count, arginfo_Rchart_get_row_count)
+	ZEND_FE(Rchart_get_column_count, arginfo_Rchart_get_column_count)
+	ZEND_FE(Rchart_set_cell, arginfo_Rchart_set_cell)
+	ZEND_FE(Rchart_get_cell, arginfo_Rchart_get_cell)
+	ZEND_FE(Rchart_set_row_labels, arginfo_Rchart_set_row_labels)
+	ZEND_FE(Rchart_set_column_labels, arginfo_Rchart_set_column_labels)
+	ZEND_FE(Rchart_get_row_label, arginfo_Rchart_get_row_label)
+	ZEND_FE(Rchart_get_column_label, arginfo_Rchart_get_column_label)
+	ZEND_FE(Rchart_set_color_scale, arginfo_Rchart_set_color_scale)
+	ZEND_FE(Rchart_set_cell_clicked_callback, arginfo_Rchart_set_cell_clicked_callback)
+	ZEND_FE(Rchart_set_values, arginfo_Rchart_set_values)
+	ZEND_FE(Rchart_push_value, arginfo_Rchart_push_value)
+	ZEND_FE(Rchart_get_value_count, arginfo_Rchart_get_value_count)
+	ZEND_FE(Rchart_get_value_at, arginfo_Rchart_get_value_at)
+	ZEND_FE(Rchart_set_fill, arginfo_Rchart_set_fill)
+	ZEND_FE(Rchart_set_marker, arginfo_Rchart_set_marker)
 	ZEND_FE(Rpdf_is_available, arginfo_Rpdf_is_available)
 	ZEND_FE(Rpdf_view_load_file, arginfo_Rpdf_view_load_file)
 	ZEND_FE(Rpdf_view_load_memory, arginfo_Rpdf_view_load_memory)
@@ -2371,6 +2745,11 @@ static void register_raven_controls_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_PLOT_LEGEND_BOTTOM_LEFT", R_PLOT_LEGEND_BOTTOM_LEFT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_LEGEND_LEFT", R_PLOT_LEGEND_LEFT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_LEGEND_OUTSIDE", R_PLOT_LEGEND_OUTSIDE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_CHART_PIE", R_CHART_PIE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_CHART_DONUT", R_CHART_DONUT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_CHART_GAUGE", R_CHART_GAUGE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_CHART_HEATMAP", R_CHART_HEATMAP, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_CHART_SPARKLINE", R_CHART_SPARKLINE, CONST_PERSISTENT);
 }
 
 static zend_class_entry *register_class_RPdfPrintDesc(void)

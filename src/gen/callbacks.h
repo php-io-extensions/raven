@@ -11,6 +11,8 @@ void raven_cb_RBlockEditorCallback_0(Rid editor, int block, void * user_data);
 void raven_cb_RBlockEditorContextCallback_0(Rid editor, int block, float x, float y, void * user_data);
 void raven_cb_RBreadcrumbCallback_0(Rid breadcrumb, int index, void * user_data);
 void raven_cb_RButtonClickedCallback_0(Rid button, void * user_data);
+void raven_cb_RChartCellCallback_0(Rid chart, int row, int column, float value, void * user_data);
+void raven_cb_RChartSliceCallback_0(Rid chart, int slice, int selected, void * user_data);
 void raven_cb_RCheckboxChangedCallback_0(Rid checkbox, int checked, void * user_data);
 void raven_cb_RColorChangedCallback_0(Rid picker, float r, float g, float b, float a, void * user_data);
 void raven_cb_RComboBoxChangedCallback_0(Rid combo_box, int index, void * user_data);

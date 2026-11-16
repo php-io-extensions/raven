@@ -318,6 +318,12 @@ const R_WIDGET_PDF_VIEW = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_WIDGET_CHART
+ */
+const R_WIDGET_CHART = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_WIDGET_LAST_
  */
 const R_WIDGET_LAST_ = UNKNOWN;

@@ -17,7 +17,7 @@ ZEND_FUNCTION(Rwidget_create)
 {
 	zend_long type;
 	int c_type;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(type)
@@ -30,9 +30,9 @@ ZEND_FUNCTION(Rwidget_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_create((RWidgetType)c_type);
+	ret = Rwidget_create((RWidgetType)c_type);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_destroy)
@@ -59,7 +59,7 @@ ZEND_FUNCTION(Rwidget_is_valid)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -72,16 +72,16 @@ ZEND_FUNCTION(Rwidget_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_is_valid(c_widget);
+	ret = Rwidget_is_valid(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_get_type)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	RWidgetType r;
+	RWidgetType ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -94,9 +94,9 @@ ZEND_FUNCTION(Rwidget_get_type)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_type(c_widget);
+	ret = Rwidget_get_type(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_add_child)
@@ -105,7 +105,7 @@ ZEND_FUNCTION(Rwidget_add_child)
 	uint32_t c_parent;
 	zend_long child;
 	uint32_t c_child;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(parent)
@@ -122,9 +122,9 @@ ZEND_FUNCTION(Rwidget_add_child)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_add_child(c_parent, c_child);
+	ret = Rwidget_add_child(c_parent, c_child);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_insert_child)
@@ -135,7 +135,7 @@ ZEND_FUNCTION(Rwidget_insert_child)
 	uint32_t c_child;
 	zend_long index;
 	int c_index;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(parent)
@@ -156,9 +156,9 @@ ZEND_FUNCTION(Rwidget_insert_child)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_insert_child(c_parent, c_child, c_index);
+	ret = Rwidget_insert_child(c_parent, c_child, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_remove_child)
@@ -211,7 +211,7 @@ ZEND_FUNCTION(Rwidget_get_parent)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -224,16 +224,16 @@ ZEND_FUNCTION(Rwidget_get_parent)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_parent(c_widget);
+	ret = Rwidget_get_parent(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_get_child_count)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -246,9 +246,9 @@ ZEND_FUNCTION(Rwidget_get_child_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_child_count(c_widget);
+	ret = Rwidget_get_child_count(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_get_child)
@@ -257,7 +257,7 @@ ZEND_FUNCTION(Rwidget_get_child)
 	uint32_t c_widget;
 	zend_long index;
 	int c_index;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(widget)
@@ -274,16 +274,16 @@ ZEND_FUNCTION(Rwidget_get_child)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_child(c_widget, c_index);
+	ret = Rwidget_get_child(c_widget, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_get_window)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -296,9 +296,9 @@ ZEND_FUNCTION(Rwidget_get_window)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_window(c_widget);
+	ret = Rwidget_get_window(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_name)
@@ -327,7 +327,7 @@ ZEND_FUNCTION(Rwidget_get_name)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -340,12 +340,12 @@ ZEND_FUNCTION(Rwidget_get_name)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_name(c_widget);
+	ret = Rwidget_get_name(c_widget);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_find)
@@ -353,7 +353,7 @@ ZEND_FUNCTION(Rwidget_find)
 	zend_long scope;
 	uint32_t c_scope;
 	zend_string *name = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(scope)
@@ -367,9 +367,9 @@ ZEND_FUNCTION(Rwidget_find)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_find(c_scope, name ? ZSTR_VAL(name) : NULL);
+	ret = Rwidget_find(c_scope, name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rslot_set_padding)
@@ -732,7 +732,7 @@ ZEND_FUNCTION(Rwidget_get_visibility)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	RVisibility r;
+	RVisibility ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -745,9 +745,9 @@ ZEND_FUNCTION(Rwidget_get_visibility)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_visibility(c_widget);
+	ret = Rwidget_get_visibility(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_enabled)
@@ -780,7 +780,7 @@ ZEND_FUNCTION(Rwidget_is_enabled)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -793,9 +793,9 @@ ZEND_FUNCTION(Rwidget_is_enabled)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_is_enabled(c_widget);
+	ret = Rwidget_is_enabled(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_hit_testable)
@@ -954,7 +954,7 @@ ZEND_FUNCTION(Rwidget_get_tooltip)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -967,12 +967,12 @@ ZEND_FUNCTION(Rwidget_get_tooltip)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_tooltip(c_widget);
+	ret = Rwidget_get_tooltip(c_widget);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_cursor)
@@ -1141,7 +1141,7 @@ ZEND_FUNCTION(Rwidget_is_hovered)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1154,9 +1154,9 @@ ZEND_FUNCTION(Rwidget_is_hovered)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_is_hovered(c_widget);
+	ret = Rwidget_is_hovered(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_focusable)
@@ -1209,7 +1209,7 @@ ZEND_FUNCTION(Rwidget_is_focused)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1222,9 +1222,9 @@ ZEND_FUNCTION(Rwidget_is_focused)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_is_focused(c_widget);
+	ret = Rwidget_is_focused(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_user_handle)
@@ -1256,7 +1256,7 @@ ZEND_FUNCTION(Rwidget_get_user_handle)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	void *r;
+	void *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1269,9 +1269,9 @@ ZEND_FUNCTION(Rwidget_get_user_handle)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_user_handle(c_widget);
+	ret = Rwidget_get_user_handle(c_widget);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
 	zend_string *key = raven_slot_key("Rwidget_set_user_handle", 1, (unsigned long)c_widget);
@@ -1369,7 +1369,7 @@ ZEND_FUNCTION(Rwidget_get_action)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1382,12 +1382,12 @@ ZEND_FUNCTION(Rwidget_get_action)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_action(c_widget);
+	ret = Rwidget_get_action(c_widget);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_drop_callback)
@@ -1454,7 +1454,7 @@ ZEND_FUNCTION(Rwidget_hit_test)
 	uint32_t c_root;
 	double x;
 	double y;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(root)
@@ -1469,9 +1469,9 @@ ZEND_FUNCTION(Rwidget_hit_test)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_hit_test(c_root, (float)x, (float)y);
+	ret = Rwidget_hit_test(c_root, (float)x, (float)y);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_pick)
@@ -1480,7 +1480,7 @@ ZEND_FUNCTION(Rwidget_pick)
 	uint32_t c_root;
 	double x;
 	double y;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(root)
@@ -1495,9 +1495,9 @@ ZEND_FUNCTION(Rwidget_pick)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_pick(c_root, (float)x, (float)y);
+	ret = Rwidget_pick(c_root, (float)x, (float)y);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_context_menu)
@@ -1678,7 +1678,7 @@ ZEND_FUNCTION(Rwidget_get_material)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	RMaterial r;
+	RMaterial ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1691,9 +1691,9 @@ ZEND_FUNCTION(Rwidget_get_material)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_material(c_widget);
+	ret = Rwidget_get_material(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_metric)
@@ -1756,7 +1756,7 @@ ZEND_FUNCTION(Rwidget_get_metric)
 	uint32_t c_widget;
 	zend_long metric;
 	int c_metric;
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(widget)
@@ -1773,9 +1773,9 @@ ZEND_FUNCTION(Rwidget_get_metric)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_metric(c_widget, (RMetric)c_metric);
+	ret = Rwidget_get_metric(c_widget, (RMetric)c_metric);
 	raven_leave();
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_class)
@@ -1804,7 +1804,7 @@ ZEND_FUNCTION(Rwidget_get_class)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1817,12 +1817,12 @@ ZEND_FUNCTION(Rwidget_get_class)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_class(c_widget);
+	ret = Rwidget_get_class(c_widget);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_add_class)
@@ -1874,7 +1874,7 @@ ZEND_FUNCTION(Rwidget_has_class)
 	zend_long widget;
 	uint32_t c_widget;
 	zend_string *style_class = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(widget)
@@ -1888,9 +1888,9 @@ ZEND_FUNCTION(Rwidget_has_class)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_has_class(c_widget, style_class ? ZSTR_VAL(style_class) : NULL);
+	ret = Rwidget_has_class(c_widget, style_class ? ZSTR_VAL(style_class) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_theme)
@@ -1898,7 +1898,7 @@ ZEND_FUNCTION(Rwidget_set_theme)
 	zend_long widget;
 	uint32_t c_widget;
 	zend_string *name = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(widget)
@@ -1912,16 +1912,16 @@ ZEND_FUNCTION(Rwidget_set_theme)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_set_theme(c_widget, name ? ZSTR_VAL(name) : NULL);
+	ret = Rwidget_set_theme(c_widget, name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_get_theme)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1934,12 +1934,12 @@ ZEND_FUNCTION(Rwidget_get_theme)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_theme(c_widget);
+	ret = Rwidget_get_theme(c_widget);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_font)
@@ -1972,7 +1972,7 @@ ZEND_FUNCTION(Rwidget_get_font)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1985,9 +1985,9 @@ ZEND_FUNCTION(Rwidget_get_font)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_font(c_widget);
+	ret = Rwidget_get_font(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 void raven_gen_raven_widget_minit(int module_number)

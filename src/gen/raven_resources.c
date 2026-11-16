@@ -18,7 +18,7 @@ ZEND_FUNCTION(Rfont_create)
 	zend_string *data = NULL;
 	zend_long data_size;
 	size_t c_data_size;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(data)
@@ -36,15 +36,15 @@ ZEND_FUNCTION(Rfont_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfont_create(data ? ZSTR_VAL(data) : NULL, c_data_size);
+	ret = Rfont_create(data ? ZSTR_VAL(data) : NULL, c_data_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfont_create_from_file)
 {
 	zend_string *path = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -53,9 +53,9 @@ ZEND_FUNCTION(Rfont_create_from_file)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfont_create_from_file(path ? ZSTR_VAL(path) : NULL);
+	ret = Rfont_create_from_file(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfont_destroy)
@@ -82,7 +82,7 @@ ZEND_FUNCTION(Rfont_is_valid)
 {
 	zend_long font;
 	uint32_t c_font;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(font)
@@ -95,37 +95,37 @@ ZEND_FUNCTION(Rfont_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfont_is_valid(c_font);
+	ret = Rfont_is_valid(c_font);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfont_get_default)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfont_get_default();
+	ret = Rfont_get_default();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfont_get_monospace)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfont_get_monospace();
+	ret = Rfont_get_monospace();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfont_set_fallback)
@@ -192,7 +192,7 @@ ZEND_FUNCTION(Rfont_get_variant)
 	uint32_t c_font;
 	zend_long style;
 	int c_style;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(font)
@@ -209,9 +209,9 @@ ZEND_FUNCTION(Rfont_get_variant)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfont_get_variant(c_font, (RFontStyle)c_style);
+	ret = Rfont_get_variant(c_font, (RFontStyle)c_style);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfont_measure_text)
@@ -251,7 +251,7 @@ ZEND_FUNCTION(Rtexture_create)
 	zend_string *data = NULL;
 	zend_long data_size;
 	size_t c_data_size;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(data)
@@ -269,9 +269,9 @@ ZEND_FUNCTION(Rtexture_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_create(data ? ZSTR_VAL(data) : NULL, c_data_size);
+	ret = Rtexture_create(data ? ZSTR_VAL(data) : NULL, c_data_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_create_async)
@@ -279,7 +279,7 @@ ZEND_FUNCTION(Rtexture_create_async)
 	zend_string *data = NULL;
 	zend_long data_size;
 	size_t c_data_size;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(data)
@@ -297,9 +297,9 @@ ZEND_FUNCTION(Rtexture_create_async)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_create_async(data ? ZSTR_VAL(data) : NULL, c_data_size);
+	ret = Rtexture_create_async(data ? ZSTR_VAL(data) : NULL, c_data_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_create_from_svg)
@@ -308,7 +308,7 @@ ZEND_FUNCTION(Rtexture_create_from_svg)
 	zend_long svg_size;
 	size_t c_svg_size;
 	double scale;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR_OR_NULL(svg)
@@ -327,16 +327,16 @@ ZEND_FUNCTION(Rtexture_create_from_svg)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_create_from_svg(svg ? ZSTR_VAL(svg) : NULL, c_svg_size, (float)scale);
+	ret = Rtexture_create_from_svg(svg ? ZSTR_VAL(svg) : NULL, c_svg_size, (float)scale);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_get_density)
 {
 	zend_long texture;
 	uint32_t c_texture;
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(texture)
@@ -349,15 +349,15 @@ ZEND_FUNCTION(Rtexture_get_density)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_get_density(c_texture);
+	ret = Rtexture_get_density(c_texture);
 	raven_leave();
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rtexture_create_from_file)
 {
 	zend_string *path = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -366,15 +366,15 @@ ZEND_FUNCTION(Rtexture_create_from_file)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_create_from_file(path ? ZSTR_VAL(path) : NULL);
+	ret = Rtexture_create_from_file(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_create_from_file_async)
 {
 	zend_string *path = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -383,9 +383,9 @@ ZEND_FUNCTION(Rtexture_create_from_file_async)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_create_from_file_async(path ? ZSTR_VAL(path) : NULL);
+	ret = Rtexture_create_from_file_async(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_create_from_pixels)
@@ -395,7 +395,7 @@ ZEND_FUNCTION(Rtexture_create_from_pixels)
 	int c_width;
 	zend_long height;
 	int c_height;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR(rgba)
@@ -417,9 +417,9 @@ ZEND_FUNCTION(Rtexture_create_from_pixels)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_create_from_pixels((const uint8_t *)ZSTR_VAL(rgba), c_width, c_height);
+	ret = Rtexture_create_from_pixels((const uint8_t *)ZSTR_VAL(rgba), c_width, c_height);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_update)
@@ -464,7 +464,7 @@ ZEND_FUNCTION(Rtexture_is_ready)
 {
 	zend_long texture;
 	uint32_t c_texture;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(texture)
@@ -477,9 +477,9 @@ ZEND_FUNCTION(Rtexture_is_ready)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_is_ready(c_texture);
+	ret = Rtexture_is_ready(c_texture);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_wait)
@@ -526,7 +526,7 @@ ZEND_FUNCTION(Rtexture_is_valid)
 {
 	zend_long texture;
 	uint32_t c_texture;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(texture)
@@ -539,9 +539,9 @@ ZEND_FUNCTION(Rtexture_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtexture_is_valid(c_texture);
+	ret = Rtexture_is_valid(c_texture);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_get_size)

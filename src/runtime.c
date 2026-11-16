@@ -138,6 +138,34 @@ bool raven_arg_doubles(HashTable *ht, uint32_t arg_num, int count, double **out,
 	return true;
 }
 
+bool raven_arg_floats(HashTable *ht, uint32_t arg_num, int count, float **out, raven_arena *arena)
+{
+	if (count < 0 || zend_hash_num_elements(ht) < (uint32_t)count) {
+		zend_argument_value_error(arg_num, "must hold at least %d elements", count < 0 ? 0 : count);
+		return false;
+	}
+	float *values = raven_arena_alloc(arena, sizeof(float) * (size_t)(count ? count : 1));
+	int i = 0;
+	zval *v;
+	ZEND_HASH_FOREACH_VAL(ht, v) {
+		if (i == count) {
+			break;
+		}
+		ZVAL_DEREF(v);
+		if (Z_TYPE_P(v) == IS_DOUBLE) {
+			values[i] = (float)Z_DVAL_P(v);
+		} else if (Z_TYPE_P(v) == IS_LONG) {
+			values[i] = (float)Z_LVAL_P(v);
+		} else {
+			zend_argument_type_error(arg_num, "must hold only int or float, %s given at position %d", zend_zval_value_name(v), i);
+			return false;
+		}
+		i++;
+	} ZEND_HASH_FOREACH_END();
+	*out = values;
+	return true;
+}
+
 bool raven_arg_strings(HashTable *ht, uint32_t arg_num, int count, const char ***out, raven_arena *arena)
 {
 	if (count < 0 || zend_hash_num_elements(ht) < (uint32_t)count) {

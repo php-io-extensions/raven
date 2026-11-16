@@ -16,7 +16,7 @@
 ZEND_FUNCTION(Rlocale_load_csv)
 {
 	zend_string *path = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -25,9 +25,9 @@ ZEND_FUNCTION(Rlocale_load_csv)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_load_csv(path ? ZSTR_VAL(path) : NULL);
+	ret = Rlocale_load_csv(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlocale_load_csv_from_memory)
@@ -35,7 +35,7 @@ ZEND_FUNCTION(Rlocale_load_csv_from_memory)
 	zend_string *csv = NULL;
 	zend_long size;
 	size_t c_size;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(csv)
@@ -53,9 +53,9 @@ ZEND_FUNCTION(Rlocale_load_csv_from_memory)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_load_csv_from_memory(csv ? ZSTR_VAL(csv) : NULL, c_size);
+	ret = Rlocale_load_csv_from_memory(csv ? ZSTR_VAL(csv) : NULL, c_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlocale_clear)
@@ -91,23 +91,23 @@ ZEND_FUNCTION(Rlocale_set_text)
 
 ZEND_FUNCTION(Rlocale_get_language_count)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_get_language_count();
+	ret = Rlocale_get_language_count();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlocale_get_language_at)
 {
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(index)
@@ -120,18 +120,18 @@ ZEND_FUNCTION(Rlocale_get_language_at)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_get_language_at(c_index);
+	ret = Rlocale_get_language_at(c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rlocale_set_language)
 {
 	zend_string *code = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(code)
@@ -140,43 +140,43 @@ ZEND_FUNCTION(Rlocale_set_language)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_set_language(code ? ZSTR_VAL(code) : NULL);
+	ret = Rlocale_set_language(code ? ZSTR_VAL(code) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlocale_get_language)
 {
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_get_language();
+	ret = Rlocale_get_language();
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rlocale_get_system_language)
 {
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_get_system_language();
+	ret = Rlocale_get_system_language();
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rlocale_set_fallback_language)
@@ -196,16 +196,16 @@ ZEND_FUNCTION(Rlocale_set_fallback_language)
 
 ZEND_FUNCTION(Rlocale_is_rtl)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_is_rtl();
+	ret = Rlocale_is_rtl();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rlocale_set_changed_callback)
@@ -236,7 +236,7 @@ ZEND_FUNCTION(Rlocale_set_changed_callback)
 ZEND_FUNCTION(Rtr)
 {
 	zend_string *key = NULL;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(key)
@@ -245,18 +245,18 @@ ZEND_FUNCTION(Rtr)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtr(key ? ZSTR_VAL(key) : NULL);
+	ret = Rtr(key ? ZSTR_VAL(key) : NULL);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtr_exists)
 {
 	zend_string *key = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(key)
@@ -265,9 +265,9 @@ ZEND_FUNCTION(Rtr_exists)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtr_exists(key ? ZSTR_VAL(key) : NULL);
+	ret = Rtr_exists(key ? ZSTR_VAL(key) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtr_format)
@@ -278,7 +278,7 @@ ZEND_FUNCTION(Rtr_format)
 	zend_long arg_count;
 	int c_arg_count;
 	raven_arena arena = {0};
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR_OR_NULL(key)
@@ -299,13 +299,13 @@ ZEND_FUNCTION(Rtr_format)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rtr_format(key ? ZSTR_VAL(key) : NULL, c_args, c_arg_count);
+	ret = Rtr_format(key ? ZSTR_VAL(key) : NULL, c_args, c_arg_count);
 	raven_leave();
 	raven_arena_free(&arena);
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtr_plural)
@@ -313,7 +313,7 @@ ZEND_FUNCTION(Rtr_plural)
 	zend_string *key = NULL;
 	zend_long count;
 	int c_count;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(key)
@@ -327,12 +327,12 @@ ZEND_FUNCTION(Rtr_plural)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtr_plural(key ? ZSTR_VAL(key) : NULL, c_count);
+	ret = Rtr_plural(key ? ZSTR_VAL(key) : NULL, c_count);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_text_key)
@@ -364,7 +364,7 @@ ZEND_FUNCTION(Rlocale_format_number)
 	double value;
 	zend_long decimals;
 	int c_decimals;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_DOUBLE(value)
@@ -378,12 +378,12 @@ ZEND_FUNCTION(Rlocale_format_number)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlocale_format_number(value, c_decimals);
+	ret = Rlocale_format_number(value, c_decimals);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 void raven_gen_raven_locale_minit(int module_number)

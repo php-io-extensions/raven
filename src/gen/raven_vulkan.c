@@ -22,7 +22,7 @@ ZEND_FUNCTION(Rvulkan_get_required_instance_extensions)
 {
 	zval *count;
 	Ruint c_count = 0;
-	const char *const *r;
+	const char *const *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(count)
@@ -31,12 +31,12 @@ ZEND_FUNCTION(Rvulkan_get_required_instance_extensions)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_get_required_instance_extensions(&c_count);
+	ret = Rvulkan_get_required_instance_extensions(&c_count);
 	raven_leave();
 	ZEND_TRY_ASSIGN_REF_LONG(count, (zend_long)c_count);
 	array_init(return_value);
-	for (uint32_t i = 0; r && i < (uint32_t)c_count; i++) {
-		add_next_index_string(return_value, r[i]);
+	for (uint32_t i = 0; ret && i < (uint32_t)c_count; i++) {
+		add_next_index_string(return_value, ret[i]);
 	}
 }
 
@@ -44,7 +44,7 @@ ZEND_FUNCTION(Rvulkan_get_required_device_extensions)
 {
 	zval *count;
 	Ruint c_count = 0;
-	const char *const *r;
+	const char *const *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(count)
@@ -53,12 +53,12 @@ ZEND_FUNCTION(Rvulkan_get_required_device_extensions)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_get_required_device_extensions(&c_count);
+	ret = Rvulkan_get_required_device_extensions(&c_count);
 	raven_leave();
 	ZEND_TRY_ASSIGN_REF_LONG(count, (zend_long)c_count);
 	array_init(return_value);
-	for (uint32_t i = 0; r && i < (uint32_t)c_count; i++) {
-		add_next_index_string(return_value, r[i]);
+	for (uint32_t i = 0; ret && i < (uint32_t)c_count; i++) {
+		add_next_index_string(return_value, ret[i]);
 	}
 }
 
@@ -92,72 +92,72 @@ ZEND_FUNCTION(Rvulkan_set_external_device)
 
 ZEND_FUNCTION(Rvulkan_get_instance)
 {
-	void *r;
+	void *ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_get_instance();
+	ret = Rvulkan_get_instance();
 	raven_leave();
-	RETURN_LONG((zend_long)(uintptr_t)r);
+	RETURN_LONG((zend_long)(uintptr_t)ret);
 }
 
 ZEND_FUNCTION(Rvulkan_get_physical_device)
 {
-	void *r;
+	void *ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_get_physical_device();
+	ret = Rvulkan_get_physical_device();
 	raven_leave();
-	RETURN_LONG((zend_long)(uintptr_t)r);
+	RETURN_LONG((zend_long)(uintptr_t)ret);
 }
 
 ZEND_FUNCTION(Rvulkan_get_device)
 {
-	void *r;
+	void *ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_get_device();
+	ret = Rvulkan_get_device();
 	raven_leave();
-	RETURN_LONG((zend_long)(uintptr_t)r);
+	RETURN_LONG((zend_long)(uintptr_t)ret);
 }
 
 ZEND_FUNCTION(Rvulkan_get_graphics_queue)
 {
-	void *r;
+	void *ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_get_graphics_queue();
+	ret = Rvulkan_get_graphics_queue();
 	raven_leave();
-	RETURN_LONG((zend_long)(uintptr_t)r);
+	RETURN_LONG((zend_long)(uintptr_t)ret);
 }
 
 ZEND_FUNCTION(Rvulkan_get_graphics_queue_family)
 {
-	Ruint r;
+	Ruint ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_get_graphics_queue_family();
+	ret = Rvulkan_get_graphics_queue_family();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rvulkan_simulate_device_lost)
@@ -182,7 +182,7 @@ ZEND_FUNCTION(Rvulkan_texture_create_from_image_view)
 	int c_width;
 	zend_long height;
 	int c_height;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(image_view)
@@ -207,9 +207,9 @@ ZEND_FUNCTION(Rvulkan_texture_create_from_image_view)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_texture_create_from_image_view(c_image_view, c_sampler, c_width, c_height);
+	ret = Rvulkan_texture_create_from_image_view(c_image_view, c_sampler, c_width, c_height);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rvulkan_texture_set_image_view)
@@ -262,7 +262,7 @@ ZEND_FUNCTION(Rvulkan_texture_create_shared)
 	int c_width;
 	zend_long height;
 	int c_height;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(width)
@@ -279,9 +279,9 @@ ZEND_FUNCTION(Rvulkan_texture_create_shared)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rvulkan_texture_create_shared(c_width, c_height);
+	ret = Rvulkan_texture_create_shared(c_width, c_height);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rvulkan_texture_get_shared_info)
@@ -292,7 +292,7 @@ ZEND_FUNCTION(Rvulkan_texture_get_shared_info)
 	RSharedTextureInfo c_info;
 	RSharedTextureInfo *p_info = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(texture)
@@ -315,13 +315,13 @@ ZEND_FUNCTION(Rvulkan_texture_get_shared_info)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rvulkan_texture_get_shared_info(c_texture, p_info);
+	ret = Rvulkan_texture_get_shared_info(c_texture, p_info);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_info) {
 		raven_struct_to_object(&raven_struct_RSharedTextureInfo, &c_info, info);
 	}
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 void raven_gen_raven_vulkan_minit(int module_number)

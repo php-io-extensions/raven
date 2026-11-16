@@ -47,7 +47,7 @@ ZEND_FUNCTION(Rwindow_create)
 	int c_height;
 	zend_long flags;
 	uint32_t c_flags;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_STR_OR_NULL(title)
@@ -69,9 +69,9 @@ ZEND_FUNCTION(Rwindow_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_create(title ? ZSTR_VAL(title) : NULL, c_width, c_height, c_flags);
+	ret = Rwindow_create(title ? ZSTR_VAL(title) : NULL, c_width, c_height, c_flags);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_destroy)
@@ -98,7 +98,7 @@ ZEND_FUNCTION(Rwindow_is_valid)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -111,9 +111,9 @@ ZEND_FUNCTION(Rwindow_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_valid(c_window);
+	ret = Rwindow_is_valid(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_content)
@@ -146,7 +146,7 @@ ZEND_FUNCTION(Rwindow_get_content)
 {
 	zend_long window;
 	uint32_t c_window;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -159,9 +159,9 @@ ZEND_FUNCTION(Rwindow_get_content)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_content(c_window);
+	ret = Rwindow_get_content(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_title)
@@ -190,7 +190,7 @@ ZEND_FUNCTION(Rwindow_get_title)
 {
 	zend_long window;
 	uint32_t c_window;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -203,12 +203,12 @@ ZEND_FUNCTION(Rwindow_get_title)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_title(c_window);
+	ret = Rwindow_get_title(c_window);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_size)
@@ -523,7 +523,7 @@ ZEND_FUNCTION(Rwindow_get_scale)
 {
 	zend_long window;
 	uint32_t c_window;
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -536,9 +536,9 @@ ZEND_FUNCTION(Rwindow_get_scale)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_scale(c_window);
+	ret = Rwindow_get_scale(c_window);
 	raven_leave();
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rwindow_show)
@@ -665,7 +665,7 @@ ZEND_FUNCTION(Rwindow_is_maximized)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -678,16 +678,16 @@ ZEND_FUNCTION(Rwindow_is_maximized)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_maximized(c_window);
+	ret = Rwindow_is_maximized(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_minimized)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -700,16 +700,16 @@ ZEND_FUNCTION(Rwindow_is_minimized)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_minimized(c_window);
+	ret = Rwindow_is_minimized(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_active)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -722,9 +722,9 @@ ZEND_FUNCTION(Rwindow_is_active)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_active(c_window);
+	ret = Rwindow_is_active(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_close)
@@ -891,7 +891,7 @@ ZEND_FUNCTION(Rwindow_set_backdrop)
 	uint32_t c_window;
 	zend_long backdrop;
 	int c_backdrop;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -908,16 +908,16 @@ ZEND_FUNCTION(Rwindow_set_backdrop)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_backdrop(c_window, (RBackdrop)c_backdrop);
+	ret = Rwindow_set_backdrop(c_window, (RBackdrop)c_backdrop);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_backdrop)
 {
 	zend_long window;
 	uint32_t c_window;
-	RBackdrop r;
+	RBackdrop ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -930,9 +930,9 @@ ZEND_FUNCTION(Rwindow_get_backdrop)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_backdrop(c_window);
+	ret = Rwindow_get_backdrop(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_theme)
@@ -940,7 +940,7 @@ ZEND_FUNCTION(Rwindow_set_theme)
 	zend_long window;
 	uint32_t c_window;
 	zend_string *name = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -954,16 +954,16 @@ ZEND_FUNCTION(Rwindow_set_theme)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_theme(c_window, name ? ZSTR_VAL(name) : NULL);
+	ret = Rwindow_set_theme(c_window, name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_theme)
 {
 	zend_long window;
 	uint32_t c_window;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -976,19 +976,19 @@ ZEND_FUNCTION(Rwindow_get_theme)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_theme(c_window);
+	ret = Rwindow_get_theme(c_window);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwindow_has_own_theme)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1001,9 +1001,9 @@ ZEND_FUNCTION(Rwindow_has_own_theme)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_has_own_theme(c_window);
+	ret = Rwindow_has_own_theme(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_opacity)
@@ -1011,7 +1011,7 @@ ZEND_FUNCTION(Rwindow_set_opacity)
 	zend_long window;
 	uint32_t c_window;
 	double opacity;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1025,16 +1025,16 @@ ZEND_FUNCTION(Rwindow_set_opacity)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_opacity(c_window, (float)opacity);
+	ret = Rwindow_set_opacity(c_window, (float)opacity);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_opacity)
 {
 	zend_long window;
 	uint32_t c_window;
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1047,9 +1047,9 @@ ZEND_FUNCTION(Rwindow_get_opacity)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_opacity(c_window);
+	ret = Rwindow_get_opacity(c_window);
 	raven_leave();
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_topmost)
@@ -1058,7 +1058,7 @@ ZEND_FUNCTION(Rwindow_set_topmost)
 	uint32_t c_window;
 	zend_long topmost;
 	int c_topmost;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1075,9 +1075,9 @@ ZEND_FUNCTION(Rwindow_set_topmost)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_topmost(c_window, c_topmost);
+	ret = Rwindow_set_topmost(c_window, c_topmost);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_owner)
@@ -1086,7 +1086,7 @@ ZEND_FUNCTION(Rwindow_set_owner)
 	uint32_t c_window;
 	zend_long owner;
 	uint32_t c_owner;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1103,16 +1103,16 @@ ZEND_FUNCTION(Rwindow_set_owner)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_owner(c_window, c_owner);
+	ret = Rwindow_set_owner(c_window, c_owner);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_owner)
 {
 	zend_long window;
 	uint32_t c_window;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1125,9 +1125,9 @@ ZEND_FUNCTION(Rwindow_get_owner)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_owner(c_window);
+	ret = Rwindow_get_owner(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_picture_in_picture)
@@ -1136,7 +1136,7 @@ ZEND_FUNCTION(Rwindow_set_picture_in_picture)
 	uint32_t c_window;
 	zend_long enabled;
 	int c_enabled;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1153,16 +1153,16 @@ ZEND_FUNCTION(Rwindow_set_picture_in_picture)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_picture_in_picture(c_window, c_enabled);
+	ret = Rwindow_set_picture_in_picture(c_window, c_enabled);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_picture_in_picture)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1175,9 +1175,9 @@ ZEND_FUNCTION(Rwindow_is_picture_in_picture)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_picture_in_picture(c_window);
+	ret = Rwindow_is_picture_in_picture(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_picture_in_picture_layout)
@@ -1268,7 +1268,7 @@ ZEND_FUNCTION(Rwindow_is_inspector_shown)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1281,16 +1281,16 @@ ZEND_FUNCTION(Rwindow_is_inspector_shown)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_inspector_shown(c_window);
+	ret = Rwindow_is_inspector_shown(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_inspector)
 {
 	zend_long window;
 	uint32_t c_window;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1303,16 +1303,16 @@ ZEND_FUNCTION(Rwindow_get_inspector)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_inspector(c_window);
+	ret = Rwindow_get_inspector(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_splash_screen)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1325,9 +1325,9 @@ ZEND_FUNCTION(Rwindow_is_splash_screen)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_splash_screen(c_window);
+	ret = Rwindow_is_splash_screen(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_request_redraw)
@@ -1522,7 +1522,7 @@ ZEND_FUNCTION(Rwindow_get_user_handle)
 {
 	zend_long window;
 	uint32_t c_window;
-	void *r;
+	void *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1535,9 +1535,9 @@ ZEND_FUNCTION(Rwindow_get_user_handle)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_user_handle(c_window);
+	ret = Rwindow_get_user_handle(c_window);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
 	zend_string *key = raven_slot_key("Rwindow_set_user_handle", 1, (unsigned long)c_window);
@@ -1553,7 +1553,7 @@ ZEND_FUNCTION(Rwindow_get_native_handle)
 	RNativeWindow c_native;
 	RNativeWindow *p_native = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1576,20 +1576,20 @@ ZEND_FUNCTION(Rwindow_get_native_handle)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_native_handle(c_window, p_native);
+	ret = Rwindow_get_native_handle(c_window, p_native);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_native) {
 		raven_struct_to_object(&raven_struct_RNativeWindow, &c_native, native);
 	}
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_focused_widget)
 {
 	zend_long window;
 	uint32_t c_window;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1602,16 +1602,16 @@ ZEND_FUNCTION(Rwindow_get_focused_widget)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_focused_widget(c_window);
+	ret = Rwindow_get_focused_widget(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_hovered_widget)
 {
 	zend_long window;
 	uint32_t c_window;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1624,9 +1624,9 @@ ZEND_FUNCTION(Rwindow_get_hovered_widget)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_hovered_widget(c_window);
+	ret = Rwindow_get_hovered_widget(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_mouse_position)
@@ -1805,7 +1805,7 @@ ZEND_FUNCTION(Rwindow_inject_drag)
 	double y;
 	zend_long inside;
 	int c_inside;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(window)
@@ -1824,9 +1824,9 @@ ZEND_FUNCTION(Rwindow_inject_drag)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_inject_drag(c_window, (float)x, (float)y, c_inside);
+	ret = Rwindow_inject_drag(c_window, (float)x, (float)y, c_inside);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_inject_drop)
@@ -1841,7 +1841,7 @@ ZEND_FUNCTION(Rwindow_inject_drop)
 	int c_path_count;
 	zend_string *text = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(6, 6)
 		Z_PARAM_LONG(window)
@@ -1868,10 +1868,10 @@ ZEND_FUNCTION(Rwindow_inject_drop)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rwindow_inject_drop(c_window, (float)x, (float)y, c_paths, c_path_count, text ? ZSTR_VAL(text) : NULL);
+	ret = Rwindow_inject_drop(c_window, (float)x, (float)y, c_paths, c_path_count, text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
 	raven_arena_free(&arena);
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_key_down)
@@ -1880,7 +1880,7 @@ ZEND_FUNCTION(Rwindow_is_key_down)
 	uint32_t c_window;
 	zend_long key;
 	int c_key;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1897,9 +1897,9 @@ ZEND_FUNCTION(Rwindow_is_key_down)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_key_down(c_window, (RKey)c_key);
+	ret = Rwindow_is_key_down(c_window, (RKey)c_key);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_mouse_button_down)
@@ -1908,7 +1908,7 @@ ZEND_FUNCTION(Rwindow_is_mouse_button_down)
 	uint32_t c_window;
 	zend_long button;
 	int c_button;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -1925,16 +1925,16 @@ ZEND_FUNCTION(Rwindow_is_mouse_button_down)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_mouse_button_down(c_window, (RMouseButton)c_button);
+	ret = Rwindow_is_mouse_button_down(c_window, (RMouseButton)c_button);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_modifiers)
 {
 	zend_long window;
 	uint32_t c_window;
-	Ruint r;
+	Ruint ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1947,16 +1947,16 @@ ZEND_FUNCTION(Rwindow_get_modifiers)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_modifiers(c_window);
+	ret = Rwindow_get_modifiers(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_is_mouse_inside)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1969,16 +1969,16 @@ ZEND_FUNCTION(Rwindow_is_mouse_inside)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_is_mouse_inside(c_window);
+	ret = Rwindow_is_mouse_inside(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_wants_text_input)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -1991,9 +1991,9 @@ ZEND_FUNCTION(Rwindow_wants_text_input)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_wants_text_input(c_window);
+	ret = Rwindow_wants_text_input(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_text_input_info)
@@ -2004,7 +2004,7 @@ ZEND_FUNCTION(Rwindow_get_text_input_info)
 	RTextInputInfo c_info;
 	RTextInputInfo *p_info = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -2027,20 +2027,20 @@ ZEND_FUNCTION(Rwindow_get_text_input_info)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_text_input_info(c_window, p_info);
+	ret = Rwindow_get_text_input_info(c_window, p_info);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_info) {
 		raven_struct_to_object(&raven_struct_RTextInputInfo, &c_info, info);
 	}
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_text_input_text)
 {
 	zend_long window;
 	uint32_t c_window;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -2053,12 +2053,12 @@ ZEND_FUNCTION(Rwindow_get_text_input_text)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_text_input_text(c_window);
+	ret = Rwindow_get_text_input_text(c_window);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_text_input_selection)
@@ -2069,7 +2069,7 @@ ZEND_FUNCTION(Rwindow_get_text_input_selection)
 	int c_start = 0;
 	zval *end;
 	int c_end = 0;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(window)
@@ -2084,11 +2084,11 @@ ZEND_FUNCTION(Rwindow_get_text_input_selection)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_text_input_selection(c_window, &c_start, &c_end);
+	ret = Rwindow_get_text_input_selection(c_window, &c_start, &c_end);
 	raven_leave();
 	ZEND_TRY_ASSIGN_REF_LONG(start, (zend_long)c_start);
 	ZEND_TRY_ASSIGN_REF_LONG(end, (zend_long)c_end);
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_text_input_selection)
@@ -2099,7 +2099,7 @@ ZEND_FUNCTION(Rwindow_set_text_input_selection)
 	int c_start;
 	zend_long end;
 	int c_end;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(window)
@@ -2120,9 +2120,9 @@ ZEND_FUNCTION(Rwindow_set_text_input_selection)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_set_text_input_selection(c_window, c_start, c_end);
+	ret = Rwindow_set_text_input_selection(c_window, c_start, c_end);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_replace_text_input)
@@ -2134,7 +2134,7 @@ ZEND_FUNCTION(Rwindow_replace_text_input)
 	zend_long end;
 	int c_end;
 	zend_string *text = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(window)
@@ -2156,16 +2156,16 @@ ZEND_FUNCTION(Rwindow_replace_text_input)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_replace_text_input(c_window, c_start, c_end, text ? ZSTR_VAL(text) : NULL);
+	ret = Rwindow_replace_text_input(c_window, c_start, c_end, text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_has_popup)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -2178,9 +2178,9 @@ ZEND_FUNCTION(Rwindow_has_popup)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_has_popup(c_window);
+	ret = Rwindow_has_popup(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_text_input_rect)
@@ -2195,7 +2195,7 @@ ZEND_FUNCTION(Rwindow_get_text_input_rect)
 	int c_width = 0;
 	zval *height;
 	int c_height = 0;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(5, 5)
 		Z_PARAM_LONG(window)
@@ -2212,20 +2212,20 @@ ZEND_FUNCTION(Rwindow_get_text_input_rect)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_text_input_rect(c_window, &c_x, &c_y, &c_width, &c_height);
+	ret = Rwindow_get_text_input_rect(c_window, &c_x, &c_y, &c_width, &c_height);
 	raven_leave();
 	ZEND_TRY_ASSIGN_REF_LONG(x, (zend_long)c_x);
 	ZEND_TRY_ASSIGN_REF_LONG(y, (zend_long)c_y);
 	ZEND_TRY_ASSIGN_REF_LONG(width, (zend_long)c_width);
 	ZEND_TRY_ASSIGN_REF_LONG(height, (zend_long)c_height);
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_popup_count)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -2238,9 +2238,9 @@ ZEND_FUNCTION(Rwindow_get_popup_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_popup_count(c_window);
+	ret = Rwindow_get_popup_count(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_get_popup)
@@ -2249,7 +2249,7 @@ ZEND_FUNCTION(Rwindow_get_popup)
 	uint32_t c_window;
 	zend_long index;
 	int c_index;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -2266,9 +2266,9 @@ ZEND_FUNCTION(Rwindow_get_popup)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_get_popup(c_window, c_index);
+	ret = Rwindow_get_popup(c_window, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_set_tab_navigation)
@@ -2336,7 +2336,7 @@ ZEND_FUNCTION(Rdrag_begin)
 	zend_string *type = NULL;
 	zend_string *data = NULL;
 	zend_string *label = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(source)
@@ -2352,16 +2352,16 @@ ZEND_FUNCTION(Rdrag_begin)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdrag_begin(c_source, type ? ZSTR_VAL(type) : NULL, data ? ZSTR_VAL(data) : NULL, label ? ZSTR_VAL(label) : NULL);
+	ret = Rdrag_begin(c_source, type ? ZSTR_VAL(type) : NULL, data ? ZSTR_VAL(data) : NULL, label ? ZSTR_VAL(label) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdrag_is_active)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -2374,16 +2374,16 @@ ZEND_FUNCTION(Rdrag_is_active)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdrag_is_active(c_window);
+	ret = Rdrag_is_active(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rdrag_get_type)
 {
 	zend_long window;
 	uint32_t c_window;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -2396,19 +2396,19 @@ ZEND_FUNCTION(Rdrag_get_type)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdrag_get_type(c_window);
+	ret = Rdrag_get_type(c_window);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rdrag_get_data)
 {
 	zend_long window;
 	uint32_t c_window;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -2421,12 +2421,12 @@ ZEND_FUNCTION(Rdrag_get_data)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdrag_get_data(c_window);
+	ret = Rdrag_get_data(c_window);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rdrag_cancel)

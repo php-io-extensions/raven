@@ -74,6 +74,7 @@ bool raven_arg_length(zend_string *s, uint32_t arg_num, size_t size);
 
 /* Arrays of numbers with at least `count` elements, copied into arena memory. */
 bool raven_arg_doubles(HashTable *ht, uint32_t arg_num, int count, double **out, raven_arena *arena);
+bool raven_arg_floats(HashTable *ht, uint32_t arg_num, int count, float **out, raven_arena *arena);
 bool raven_arg_strings(HashTable *ht, uint32_t arg_num, int count, const char ***out, raven_arena *arena);
 bool raven_arg_structs(HashTable *ht, uint32_t arg_num, int count, const raven_struct *s, void **out, raven_arena *arena);
 

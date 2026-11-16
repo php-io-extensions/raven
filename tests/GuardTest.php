@@ -23,6 +23,10 @@ it('checks number arrays against their count', function (): void {
     $plot = Rwidget_create(R_WIDGET_PLOT);
     $series = Rplot_add_series($plot, "s");
     expect(fn () => Rplot_set_series_data($plot, $series, [1.0], [1.0], 2))->toThrow(ValueError::class);
+    $chart = Rchart_create(R_CHART_SPARKLINE);
+    expect(fn () => Rchart_set_values($chart, [1.0], 2))->toThrow(ValueError::class);
+    $heat = Rchart_create(R_CHART_HEATMAP);
+    expect(fn () => Rchart_set_grid($heat, 2, 2, [1.0]))->toThrow(ValueError::class);
 });
 
 it('round-trips pixels through Rimage_decode', function (): void {

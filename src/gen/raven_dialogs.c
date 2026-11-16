@@ -93,7 +93,7 @@ ZEND_FUNCTION(Rdialog_run)
 	uint32_t c_window;
 	zend_long content;
 	uint32_t c_content;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(window)
@@ -110,9 +110,9 @@ ZEND_FUNCTION(Rdialog_run)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rdialog_run(c_window, c_content);
+	ret = Rdialog_run(c_window, c_content);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rpopup_open)
@@ -187,7 +187,7 @@ ZEND_FUNCTION(Rpopup_is_open)
 {
 	zend_long content;
 	uint32_t c_content;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(content)
@@ -200,16 +200,16 @@ ZEND_FUNCTION(Rpopup_is_open)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rpopup_is_open(c_content);
+	ret = Rpopup_is_open(c_content);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_has_dialog)
 {
 	zend_long window;
 	uint32_t c_window;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(window)
@@ -222,9 +222,9 @@ ZEND_FUNCTION(Rwindow_has_dialog)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_has_dialog(c_window);
+	ret = Rwindow_has_dialog(c_window);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rmessage_box)
@@ -235,7 +235,7 @@ ZEND_FUNCTION(Rmessage_box)
 	zend_string *text = NULL;
 	zend_long buttons;
 	int c_buttons;
-	RMessageResult r;
+	RMessageResult ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(window)
@@ -254,9 +254,9 @@ ZEND_FUNCTION(Rmessage_box)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rmessage_box(c_window, title ? ZSTR_VAL(title) : NULL, text ? ZSTR_VAL(text) : NULL, (RMessageButtons)c_buttons);
+	ret = Rmessage_box(c_window, title ? ZSTR_VAL(title) : NULL, text ? ZSTR_VAL(text) : NULL, (RMessageButtons)c_buttons);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_dialog_open)
@@ -265,7 +265,7 @@ ZEND_FUNCTION(Rfile_dialog_open)
 	RFileDialogDesc c_desc;
 	RFileDialogDesc *p_desc = NULL;
 	raven_arena arena = {0};
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RFileDialogDesc)
@@ -283,13 +283,13 @@ ZEND_FUNCTION(Rfile_dialog_open)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rfile_dialog_open(p_desc);
+	ret = Rfile_dialog_open(p_desc);
 	raven_leave();
 	raven_arena_free(&arena);
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rfile_dialog_save)
@@ -298,7 +298,7 @@ ZEND_FUNCTION(Rfile_dialog_save)
 	RFileDialogDesc c_desc;
 	RFileDialogDesc *p_desc = NULL;
 	raven_arena arena = {0};
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RFileDialogDesc)
@@ -316,13 +316,13 @@ ZEND_FUNCTION(Rfile_dialog_save)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rfile_dialog_save(p_desc);
+	ret = Rfile_dialog_save(p_desc);
 	raven_leave();
 	raven_arena_free(&arena);
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rfile_dialog_select_folder)
@@ -331,7 +331,7 @@ ZEND_FUNCTION(Rfile_dialog_select_folder)
 	RFileDialogDesc c_desc;
 	RFileDialogDesc *p_desc = NULL;
 	raven_arena arena = {0};
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RFileDialogDesc)
@@ -349,34 +349,34 @@ ZEND_FUNCTION(Rfile_dialog_select_folder)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rfile_dialog_select_folder(p_desc);
+	ret = Rfile_dialog_select_folder(p_desc);
 	raven_leave();
 	raven_arena_free(&arena);
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rfile_dialog_get_result_count)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_dialog_get_result_count();
+	ret = Rfile_dialog_get_result_count();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_dialog_get_result)
 {
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(index)
@@ -389,12 +389,12 @@ ZEND_FUNCTION(Rfile_dialog_get_result)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_dialog_get_result(c_index);
+	ret = Rfile_dialog_get_result(c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rfile_register_memory)
@@ -405,7 +405,7 @@ ZEND_FUNCTION(Rfile_register_memory)
 	size_t c_size;
 	zend_long copy;
 	int c_copy;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_STR_OR_NULL(path)
@@ -428,9 +428,9 @@ ZEND_FUNCTION(Rfile_register_memory)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_register_memory(path ? ZSTR_VAL(path) : NULL, (const void *)ZSTR_VAL(data), c_size, c_copy);
+	ret = Rfile_register_memory(path ? ZSTR_VAL(path) : NULL, (const void *)ZSTR_VAL(data), c_size, c_copy);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_unregister_memory)
@@ -451,7 +451,7 @@ ZEND_FUNCTION(Rfile_unregister_memory)
 ZEND_FUNCTION(Rfile_is_memory)
 {
 	zend_string *path = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -460,9 +460,9 @@ ZEND_FUNCTION(Rfile_is_memory)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_is_memory(path ? ZSTR_VAL(path) : NULL);
+	ret = Rfile_is_memory(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_write)
@@ -471,7 +471,7 @@ ZEND_FUNCTION(Rfile_write)
 	zend_string *data;
 	zend_long size;
 	size_t c_size;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR_OR_NULL(path)
@@ -490,23 +490,23 @@ ZEND_FUNCTION(Rfile_write)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_write(path ? ZSTR_VAL(path) : NULL, (const void *)ZSTR_VAL(data), c_size);
+	ret = Rfile_write(path ? ZSTR_VAL(path) : NULL, (const void *)ZSTR_VAL(data), c_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_browser_create)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_browser_create();
+	ret = Rfile_browser_create();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_browser_set_mode)
@@ -540,7 +540,7 @@ ZEND_FUNCTION(Rfile_browser_set_directory)
 	zend_long browser;
 	uint32_t c_browser;
 	zend_string *path = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(browser)
@@ -554,16 +554,16 @@ ZEND_FUNCTION(Rfile_browser_set_directory)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_browser_set_directory(c_browser, path ? ZSTR_VAL(path) : NULL);
+	ret = Rfile_browser_set_directory(c_browser, path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_browser_get_directory)
 {
 	zend_long browser;
 	uint32_t c_browser;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(browser)
@@ -576,12 +576,12 @@ ZEND_FUNCTION(Rfile_browser_get_directory)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_browser_get_directory(c_browser);
+	ret = Rfile_browser_get_directory(c_browser);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rfile_browser_refresh)
@@ -793,7 +793,7 @@ ZEND_FUNCTION(Rfile_browser_get_selection_count)
 {
 	zend_long browser;
 	uint32_t c_browser;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(browser)
@@ -806,9 +806,9 @@ ZEND_FUNCTION(Rfile_browser_get_selection_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_browser_get_selection_count(c_browser);
+	ret = Rfile_browser_get_selection_count(c_browser);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rfile_browser_get_selection)
@@ -817,7 +817,7 @@ ZEND_FUNCTION(Rfile_browser_get_selection)
 	uint32_t c_browser;
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(browser)
@@ -834,12 +834,12 @@ ZEND_FUNCTION(Rfile_browser_get_selection)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rfile_browser_get_selection(c_browser, c_index);
+	ret = Rfile_browser_get_selection(c_browser, c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rfile_browser_select)
@@ -966,7 +966,7 @@ ZEND_FUNCTION(Rnotification_show)
 	zend_string *body = NULL;
 	zend_long urgency;
 	int c_urgency;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR_OR_NULL(title)
@@ -981,23 +981,23 @@ ZEND_FUNCTION(Rnotification_show)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rnotification_show(title ? ZSTR_VAL(title) : NULL, body ? ZSTR_VAL(body) : NULL, (RNotificationUrgency)c_urgency);
+	ret = Rnotification_show(title ? ZSTR_VAL(title) : NULL, body ? ZSTR_VAL(body) : NULL, (RNotificationUrgency)c_urgency);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rnotification_is_supported)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rnotification_is_supported();
+	ret = Rnotification_is_supported();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rnotification_set_fallback)

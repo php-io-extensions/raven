@@ -406,6 +406,36 @@ const R_PLOT_LEGEND_LEFT = UNKNOWN;
  */
 const R_PLOT_LEGEND_OUTSIDE = UNKNOWN;
 
+/**
+ * @var int
+ * @cvalue R_CHART_PIE
+ */
+const R_CHART_PIE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_CHART_DONUT
+ */
+const R_CHART_DONUT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_CHART_GAUGE
+ */
+const R_CHART_GAUGE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_CHART_HEATMAP
+ */
+const R_CHART_HEATMAP = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_CHART_SPARKLINE
+ */
+const R_CHART_SPARKLINE = UNKNOWN;
+
 final class RPdfPrintDesc
 {
     public int $window = 0;
@@ -789,6 +819,20 @@ function Rtable_set_virtual_rows(int $table, int $count, ?callable $callback, mi
 
 function Rtable_set_cell_color_callback(int $table, ?callable $callback, mixed $user_data): void {}
 
+function Rtable_set_cell_text_color(int $table, int $row, int $column, float $r, float $g, float $b, float $a): void {}
+
+function Rtable_set_multi_select(int $table, int $enabled): void {}
+
+function Rtable_set_row_selected(int $table, int $row, int $selected): void {}
+
+function Rtable_is_row_selected(int $table, int $row): int {}
+
+function Rtable_clear_selection(int $table): void {}
+
+function Rtable_get_selection_count(int $table): int {}
+
+function Rtable_get_selection(int $table, int $index): int {}
+
 function Rtable_set_selected(int $table, int $row): void {}
 
 function Rtable_get_selected(int $table): int {}
@@ -1016,6 +1060,102 @@ function Rplot_set_view_changed_callback(int $plot, ?callable $callback, mixed $
 function Rplot_set_drag_line_callback(int $plot, ?callable $callback, mixed $user_data): void {}
 
 function Rplot_set_series_toggled_callback(int $plot, ?callable $callback, mixed $user_data): void {}
+
+function Rchart_create(int $kind): int {}
+
+function Rchart_set_kind(int $chart, int $kind): void {}
+
+function Rchart_get_kind(int $chart): int {}
+
+function Rchart_set_title(int $chart, ?string $title): void {}
+
+function Rchart_get_title(int $chart): ?string {}
+
+function Rchart_set_format(int $chart, ?string $format): void {}
+
+function Rchart_set_color(int $chart, float $r, float $g, float $b, float $a): void {}
+
+function Rchart_set_legend(int $chart, int $shown): void {}
+
+function Rchart_clear(int $chart): void {}
+
+function Rchart_get_hovered(int $chart): int {}
+
+function Rchart_add_slice(int $chart, ?string $label, float $value): int {}
+
+function Rchart_remove_slice(int $chart, int $slice): void {}
+
+function Rchart_get_slice_count(int $chart): int {}
+
+function Rchart_set_slice_value(int $chart, int $slice, float $value): void {}
+
+function Rchart_get_slice_value(int $chart, int $slice): float {}
+
+function Rchart_set_slice_label(int $chart, int $slice, ?string $label): void {}
+
+function Rchart_get_slice_label(int $chart, int $slice): ?string {}
+
+function Rchart_set_slice_color(int $chart, int $slice, float $r, float $g, float $b, float $a): void {}
+
+function Rchart_get_total(int $chart): float {}
+
+function Rchart_set_selected(int $chart, int $slice): void {}
+
+function Rchart_get_selected(int $chart): int {}
+
+function Rchart_set_hole(int $chart, float $ratio): void {}
+
+function Rchart_set_center_text(int $chart, ?string $text, ?string $caption): void {}
+
+function Rchart_set_slice_clicked_callback(int $chart, ?callable $callback, mixed $user_data): void {}
+
+function Rchart_set_range(int $chart, float $min, float $max): void {}
+
+function Rchart_get_range(int $chart, ?float &$min, ?float &$max): void {}
+
+function Rchart_set_value(int $chart, float $value): void {}
+
+function Rchart_get_value(int $chart): float {}
+
+function Rchart_add_band(int $chart, float $from, float $to, float $r, float $g, float $b, float $a): int {}
+
+function Rchart_clear_bands(int $chart): void {}
+
+function Rchart_get_band_count(int $chart): int {}
+
+function Rchart_set_grid(int $chart, int $rows, int $columns, array $values): void {}
+
+function Rchart_get_row_count(int $chart): int {}
+
+function Rchart_get_column_count(int $chart): int {}
+
+function Rchart_set_cell(int $chart, int $row, int $column, float $value): void {}
+
+function Rchart_get_cell(int $chart, int $row, int $column): float {}
+
+function Rchart_set_row_labels(int $chart, ?string $labels): void {}
+
+function Rchart_set_column_labels(int $chart, ?string $labels): void {}
+
+function Rchart_get_row_label(int $chart, int $row): ?string {}
+
+function Rchart_get_column_label(int $chart, int $column): ?string {}
+
+function Rchart_set_color_scale(int $chart, float $low_r, float $low_g, float $low_b, float $low_a, float $high_r, float $high_g, float $high_b, float $high_a): void {}
+
+function Rchart_set_cell_clicked_callback(int $chart, ?callable $callback, mixed $user_data): void {}
+
+function Rchart_set_values(int $chart, array $values, int $count): void {}
+
+function Rchart_push_value(int $chart, float $value, int $max_count): void {}
+
+function Rchart_get_value_count(int $chart): int {}
+
+function Rchart_get_value_at(int $chart, int $index): float {}
+
+function Rchart_set_fill(int $chart, int $fill): void {}
+
+function Rchart_set_marker(int $chart, int $shown): void {}
 
 function Rpdf_is_available(): int {}
 

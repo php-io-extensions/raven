@@ -102,7 +102,7 @@ ZEND_FUNCTION(Rviewport_set_native)
 	uint32_t c_viewport;
 	zend_long enabled;
 	int c_enabled;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(viewport)
@@ -119,9 +119,9 @@ ZEND_FUNCTION(Rviewport_set_native)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rviewport_set_native(c_viewport, c_enabled);
+	ret = Rviewport_set_native(c_viewport, c_enabled);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rviewport_get_native_handle)
@@ -132,7 +132,7 @@ ZEND_FUNCTION(Rviewport_get_native_handle)
 	RNativeWindow c_native;
 	RNativeWindow *p_native = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(viewport)
@@ -155,13 +155,13 @@ ZEND_FUNCTION(Rviewport_get_native_handle)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rviewport_get_native_handle(c_viewport, p_native);
+	ret = Rviewport_get_native_handle(c_viewport, p_native);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_native) {
 		raven_struct_to_object(&raven_struct_RNativeWindow, &c_native, native);
 	}
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rviewport_get_pixel_size)

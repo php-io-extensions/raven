@@ -28,7 +28,7 @@ guard against it.
 
 ext-raven runs Raven in the PHP process. Raven opens the windows, files, fonts and images the script
 names, loads the Vulkan loader and (on Linux) Wayland and D-Bus libraries at run time, and runs worker
-and render threads. Raven is compiled into the module from an unchanged upstream copy (main `b0a4aa7` on 0.11.x-nightly).
+and render threads. Raven is compiled into the module from an unchanged upstream copy (main `dfac083` on 0.11.x-nightly).
 
 - **Inputs.** Narrow C integers are range-checked; pixel buffers must hold `width × height × 4` bytes;
   sized text and byte strings must hold the size passed with them; arrays must hold their count;

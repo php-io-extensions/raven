@@ -501,7 +501,7 @@ ZEND_FUNCTION(Rdraw_spring)
 	zend_long motion;
 	int c_motion;
 	raven_arena arena = {0};
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_OBJ_OF_CLASS(painter, raven_ce_RPainter)
@@ -530,13 +530,13 @@ ZEND_FUNCTION(Rdraw_spring)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rdraw_spring(c_painter, p_spring, (float)target, (RMotion)c_motion);
+	ret = Rdraw_spring(c_painter, p_spring, (float)target, (RMotion)c_motion);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_spring) {
 		raven_struct_to_object(&raven_struct_RSpring, &c_spring, spring);
 	}
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rspring_kick)

@@ -28,7 +28,7 @@ ZEND_FUNCTION(Rwindow_create_from_xml)
 	zend_string *xml = NULL;
 	zend_long size;
 	size_t c_size;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(xml)
@@ -46,15 +46,15 @@ ZEND_FUNCTION(Rwindow_create_from_xml)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_create_from_xml(xml ? ZSTR_VAL(xml) : NULL, c_size);
+	ret = Rwindow_create_from_xml(xml ? ZSTR_VAL(xml) : NULL, c_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_create_from_xml_file)
 {
 	zend_string *path = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -63,9 +63,9 @@ ZEND_FUNCTION(Rwindow_create_from_xml_file)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwindow_create_from_xml_file(path ? ZSTR_VAL(path) : NULL);
+	ret = Rwindow_create_from_xml_file(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_create_from_xml)
@@ -73,7 +73,7 @@ ZEND_FUNCTION(Rwidget_create_from_xml)
 	zend_string *xml = NULL;
 	zend_long size;
 	size_t c_size;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(xml)
@@ -91,15 +91,15 @@ ZEND_FUNCTION(Rwidget_create_from_xml)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_create_from_xml(xml ? ZSTR_VAL(xml) : NULL, c_size);
+	ret = Rwidget_create_from_xml(xml ? ZSTR_VAL(xml) : NULL, c_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_create_from_xml_file)
 {
 	zend_string *path = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -108,9 +108,9 @@ ZEND_FUNCTION(Rwidget_create_from_xml_file)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_create_from_xml_file(path ? ZSTR_VAL(path) : NULL);
+	ret = Rwidget_create_from_xml_file(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_set_base_path)
@@ -150,16 +150,16 @@ ZEND_FUNCTION(Rxml_set_auto_load)
 
 ZEND_FUNCTION(Rxml_get_auto_load)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_auto_load();
+	ret = Rxml_get_auto_load();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_set_live_reload)
@@ -184,16 +184,16 @@ ZEND_FUNCTION(Rxml_set_live_reload)
 
 ZEND_FUNCTION(Rxml_get_live_reload)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_live_reload();
+	ret = Rxml_get_live_reload();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_set_reload_callback)
@@ -223,16 +223,16 @@ ZEND_FUNCTION(Rxml_set_reload_callback)
 
 ZEND_FUNCTION(Rxml_check_files)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_check_files();
+	ret = Rxml_check_files();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_register_widgets)
@@ -240,7 +240,7 @@ ZEND_FUNCTION(Rxml_register_widgets)
 	zend_string *xml = NULL;
 	zend_long size;
 	size_t c_size;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(xml)
@@ -258,15 +258,15 @@ ZEND_FUNCTION(Rxml_register_widgets)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_register_widgets(xml ? ZSTR_VAL(xml) : NULL, c_size);
+	ret = Rxml_register_widgets(xml ? ZSTR_VAL(xml) : NULL, c_size);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_register_widgets_from_file)
 {
 	zend_string *path = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -275,9 +275,9 @@ ZEND_FUNCTION(Rxml_register_widgets_from_file)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_register_widgets_from_file(path ? ZSTR_VAL(path) : NULL);
+	ret = Rxml_register_widgets_from_file(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_unregister_widget)
@@ -298,7 +298,7 @@ ZEND_FUNCTION(Rxml_unregister_widget)
 ZEND_FUNCTION(Rxml_is_widget_registered)
 {
 	zend_string *name = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(name)
@@ -307,30 +307,30 @@ ZEND_FUNCTION(Rxml_is_widget_registered)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_is_widget_registered(name ? ZSTR_VAL(name) : NULL);
+	ret = Rxml_is_widget_registered(name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_get_registered_widget_count)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_registered_widget_count();
+	ret = Rxml_get_registered_widget_count();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_get_registered_widget_name)
 {
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(index)
@@ -343,12 +343,12 @@ ZEND_FUNCTION(Rxml_get_registered_widget_name)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_registered_widget_name(c_index);
+	ret = Rxml_get_registered_widget_name(c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_register_tag)
@@ -359,7 +359,7 @@ ZEND_FUNCTION(Rxml_register_tag)
 	zend_fcall_info fci_set_attribute = empty_fcall_info;
 	zend_fcall_info_cache fcc_set_attribute = empty_fcall_info_cache;
 	zval *user_data;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_STR_OR_NULL(tag)
@@ -378,9 +378,9 @@ ZEND_FUNCTION(Rxml_register_tag)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_register_tag(tag ? ZSTR_VAL(tag) : NULL, ZEND_FCI_INITIALIZED(fci_create) ? raven_cb_RXmlTagCreateCallback_0 : NULL, ZEND_FCI_INITIALIZED(fci_set_attribute) ? raven_cb_RXmlTagAttributeCallback_1 : NULL, slot);
+	ret = Rxml_register_tag(tag ? ZSTR_VAL(tag) : NULL, ZEND_FCI_INITIALIZED(fci_create) ? raven_cb_RXmlTagCreateCallback_0 : NULL, ZEND_FCI_INITIALIZED(fci_set_attribute) ? raven_cb_RXmlTagAttributeCallback_1 : NULL, slot);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_unregister_tag)
@@ -401,7 +401,7 @@ ZEND_FUNCTION(Rxml_unregister_tag)
 ZEND_FUNCTION(Rxml_is_tag_registered)
 {
 	zend_string *tag = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(tag)
@@ -410,15 +410,15 @@ ZEND_FUNCTION(Rxml_is_tag_registered)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_is_tag_registered(tag ? ZSTR_VAL(tag) : NULL);
+	ret = Rxml_is_tag_registered(tag ? ZSTR_VAL(tag) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_resolve_path)
 {
 	zend_string *path = NULL;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -427,12 +427,12 @@ ZEND_FUNCTION(Rxml_resolve_path)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_resolve_path(path ? ZSTR_VAL(path) : NULL);
+	ret = Rxml_resolve_path(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_attribute)
@@ -441,7 +441,7 @@ ZEND_FUNCTION(Rwidget_set_attribute)
 	uint32_t c_widget;
 	zend_string *name = NULL;
 	zend_string *value = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(widget)
@@ -456,15 +456,15 @@ ZEND_FUNCTION(Rwidget_set_attribute)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_set_attribute(c_widget, name ? ZSTR_VAL(name) : NULL, value ? ZSTR_VAL(value) : NULL);
+	ret = Rwidget_set_attribute(c_widget, name ? ZSTR_VAL(name) : NULL, value ? ZSTR_VAL(value) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_create)
 {
 	zend_string *root_tag = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(root_tag)
@@ -473,9 +473,9 @@ ZEND_FUNCTION(Rxml_document_create)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_create(root_tag ? ZSTR_VAL(root_tag) : NULL);
+	ret = Rxml_document_create(root_tag ? ZSTR_VAL(root_tag) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_parse)
@@ -487,7 +487,7 @@ ZEND_FUNCTION(Rxml_document_parse)
 	RXmlError c_error;
 	RXmlError *p_error = NULL;
 	raven_arena arena = {0};
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR_OR_NULL(xml)
@@ -514,19 +514,19 @@ ZEND_FUNCTION(Rxml_document_parse)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rxml_document_parse(xml ? ZSTR_VAL(xml) : NULL, c_size, p_error);
+	ret = Rxml_document_parse(xml ? ZSTR_VAL(xml) : NULL, c_size, p_error);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_error) {
 		raven_struct_to_object(&raven_struct_RXmlError, &c_error, error);
 	}
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_load)
 {
 	zend_string *path = NULL;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -535,9 +535,9 @@ ZEND_FUNCTION(Rxml_document_load)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_load(path ? ZSTR_VAL(path) : NULL);
+	ret = Rxml_document_load(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_destroy)
@@ -564,7 +564,7 @@ ZEND_FUNCTION(Rxml_document_is_valid)
 {
 	zend_long document;
 	uint32_t c_document;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(document)
@@ -577,16 +577,16 @@ ZEND_FUNCTION(Rxml_document_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_is_valid(c_document);
+	ret = Rxml_document_is_valid(c_document);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_get_root)
 {
 	zend_long document;
 	uint32_t c_document;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(document)
@@ -599,16 +599,16 @@ ZEND_FUNCTION(Rxml_document_get_root)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_get_root(c_document);
+	ret = Rxml_document_get_root(c_document);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_to_string)
 {
 	zend_long document;
 	uint32_t c_document;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(document)
@@ -621,12 +621,12 @@ ZEND_FUNCTION(Rxml_document_to_string)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_to_string(c_document);
+	ret = Rxml_document_to_string(c_document);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_document_save)
@@ -634,7 +634,7 @@ ZEND_FUNCTION(Rxml_document_save)
 	zend_long document;
 	uint32_t c_document;
 	zend_string *path = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(document)
@@ -648,16 +648,16 @@ ZEND_FUNCTION(Rxml_document_save)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_save(c_document, path ? ZSTR_VAL(path) : NULL);
+	ret = Rxml_document_save(c_document, path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_create_widget)
 {
 	zend_long document;
 	uint32_t c_document;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(document)
@@ -670,16 +670,16 @@ ZEND_FUNCTION(Rxml_document_create_widget)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_create_widget(c_document);
+	ret = Rxml_document_create_widget(c_document);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_document_create_window)
 {
 	zend_long document;
 	uint32_t c_document;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(document)
@@ -692,16 +692,16 @@ ZEND_FUNCTION(Rxml_document_create_window)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_document_create_window(c_document);
+	ret = Rxml_document_create_window(c_document);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_is_valid)
 {
 	zend_long node;
 	uint32_t c_node;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -714,16 +714,16 @@ ZEND_FUNCTION(Rxml_node_is_valid)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_is_valid(c_node);
+	ret = Rxml_node_is_valid(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_document)
 {
 	zend_long node;
 	uint32_t c_node;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -736,16 +736,16 @@ ZEND_FUNCTION(Rxml_node_get_document)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_document(c_node);
+	ret = Rxml_node_get_document(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_tag)
 {
 	zend_long node;
 	uint32_t c_node;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -758,12 +758,12 @@ ZEND_FUNCTION(Rxml_node_get_tag)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_tag(c_node);
+	ret = Rxml_node_get_tag(c_node);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_node_set_tag)
@@ -792,7 +792,7 @@ ZEND_FUNCTION(Rxml_node_is_comment)
 {
 	zend_long node;
 	uint32_t c_node;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -805,16 +805,16 @@ ZEND_FUNCTION(Rxml_node_is_comment)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_is_comment(c_node);
+	ret = Rxml_node_is_comment(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_text)
 {
 	zend_long node;
 	uint32_t c_node;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -827,12 +827,12 @@ ZEND_FUNCTION(Rxml_node_get_text)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_text(c_node);
+	ret = Rxml_node_get_text(c_node);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_node_set_text)
@@ -861,7 +861,7 @@ ZEND_FUNCTION(Rxml_node_get_parent)
 {
 	zend_long node;
 	uint32_t c_node;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -874,16 +874,16 @@ ZEND_FUNCTION(Rxml_node_get_parent)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_parent(c_node);
+	ret = Rxml_node_get_parent(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_child_count)
 {
 	zend_long node;
 	uint32_t c_node;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -896,9 +896,9 @@ ZEND_FUNCTION(Rxml_node_get_child_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_child_count(c_node);
+	ret = Rxml_node_get_child_count(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_child)
@@ -907,7 +907,7 @@ ZEND_FUNCTION(Rxml_node_get_child)
 	uint32_t c_node;
 	zend_long index;
 	int c_index;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(node)
@@ -924,16 +924,16 @@ ZEND_FUNCTION(Rxml_node_get_child)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_child(c_node, c_index);
+	ret = Rxml_node_get_child(c_node, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_index)
 {
 	zend_long node;
 	uint32_t c_node;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -946,9 +946,9 @@ ZEND_FUNCTION(Rxml_node_get_index)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_index(c_node);
+	ret = Rxml_node_get_index(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_add_child)
@@ -958,7 +958,7 @@ ZEND_FUNCTION(Rxml_node_add_child)
 	zend_string *tag = NULL;
 	zend_long index;
 	int c_index;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(parent)
@@ -976,9 +976,9 @@ ZEND_FUNCTION(Rxml_node_add_child)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_add_child(c_parent, tag ? ZSTR_VAL(tag) : NULL, c_index);
+	ret = Rxml_node_add_child(c_parent, tag ? ZSTR_VAL(tag) : NULL, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_add_comment)
@@ -988,7 +988,7 @@ ZEND_FUNCTION(Rxml_node_add_comment)
 	zend_string *text = NULL;
 	zend_long index;
 	int c_index;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(parent)
@@ -1006,9 +1006,9 @@ ZEND_FUNCTION(Rxml_node_add_comment)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_add_comment(c_parent, text ? ZSTR_VAL(text) : NULL, c_index);
+	ret = Rxml_node_add_comment(c_parent, text ? ZSTR_VAL(text) : NULL, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_add_xml)
@@ -1020,7 +1020,7 @@ ZEND_FUNCTION(Rxml_node_add_xml)
 	size_t c_size;
 	zend_long index;
 	int c_index;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(parent)
@@ -1046,9 +1046,9 @@ ZEND_FUNCTION(Rxml_node_add_xml)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_add_xml(c_parent, xml ? ZSTR_VAL(xml) : NULL, c_size, c_index);
+	ret = Rxml_node_add_xml(c_parent, xml ? ZSTR_VAL(xml) : NULL, c_size, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_remove)
@@ -1079,7 +1079,7 @@ ZEND_FUNCTION(Rxml_node_move)
 	uint32_t c_new_parent;
 	zend_long index;
 	int c_index;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(node)
@@ -1100,16 +1100,16 @@ ZEND_FUNCTION(Rxml_node_move)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_move(c_node, c_new_parent, c_index);
+	ret = Rxml_node_move(c_node, c_new_parent, c_index);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_duplicate)
 {
 	zend_long node;
 	uint32_t c_node;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -1122,16 +1122,16 @@ ZEND_FUNCTION(Rxml_node_duplicate)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_duplicate(c_node);
+	ret = Rxml_node_duplicate(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_to_string)
 {
 	zend_long node;
 	uint32_t c_node;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -1144,19 +1144,19 @@ ZEND_FUNCTION(Rxml_node_to_string)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_to_string(c_node);
+	ret = Rxml_node_to_string(c_node);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_attribute_count)
 {
 	zend_long node;
 	uint32_t c_node;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -1169,9 +1169,9 @@ ZEND_FUNCTION(Rxml_node_get_attribute_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_attribute_count(c_node);
+	ret = Rxml_node_get_attribute_count(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_attribute_name)
@@ -1180,7 +1180,7 @@ ZEND_FUNCTION(Rxml_node_get_attribute_name)
 	uint32_t c_node;
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(node)
@@ -1197,12 +1197,12 @@ ZEND_FUNCTION(Rxml_node_get_attribute_name)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_attribute_name(c_node, c_index);
+	ret = Rxml_node_get_attribute_name(c_node, c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_attribute_value)
@@ -1211,7 +1211,7 @@ ZEND_FUNCTION(Rxml_node_get_attribute_value)
 	uint32_t c_node;
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(node)
@@ -1228,12 +1228,12 @@ ZEND_FUNCTION(Rxml_node_get_attribute_value)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_attribute_value(c_node, c_index);
+	ret = Rxml_node_get_attribute_value(c_node, c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_attribute)
@@ -1241,7 +1241,7 @@ ZEND_FUNCTION(Rxml_node_get_attribute)
 	zend_long node;
 	uint32_t c_node;
 	zend_string *name = NULL;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(node)
@@ -1255,12 +1255,12 @@ ZEND_FUNCTION(Rxml_node_get_attribute)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_attribute(c_node, name ? ZSTR_VAL(name) : NULL);
+	ret = Rxml_node_get_attribute(c_node, name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_node_set_attribute)
@@ -1291,7 +1291,7 @@ ZEND_FUNCTION(Rxml_node_get_line)
 {
 	zend_long node;
 	uint32_t c_node;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -1304,16 +1304,16 @@ ZEND_FUNCTION(Rxml_node_get_line)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_line(c_node);
+	ret = Rxml_node_get_line(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_node_get_widget)
 {
 	zend_long node;
 	uint32_t c_node;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(node)
@@ -1326,16 +1326,16 @@ ZEND_FUNCTION(Rxml_node_get_widget)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_node_get_widget(c_node);
+	ret = Rxml_node_get_widget(c_node);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_get_xml_node)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -1348,30 +1348,30 @@ ZEND_FUNCTION(Rwidget_get_xml_node)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_xml_node(c_widget);
+	ret = Rwidget_get_xml_node(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_get_tag_count)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_tag_count();
+	ret = Rxml_get_tag_count();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_get_tag_name)
 {
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(index)
@@ -1384,18 +1384,18 @@ ZEND_FUNCTION(Rxml_get_tag_name)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_tag_name(c_index);
+	ret = Rxml_get_tag_name(c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_get_tag_description)
 {
 	zend_string *tag = NULL;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(tag)
@@ -1404,18 +1404,18 @@ ZEND_FUNCTION(Rxml_get_tag_description)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_tag_description(tag ? ZSTR_VAL(tag) : NULL);
+	ret = Rxml_get_tag_description(tag ? ZSTR_VAL(tag) : NULL);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rxml_get_tag_children)
 {
 	zend_string *tag = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(tag)
@@ -1424,15 +1424,15 @@ ZEND_FUNCTION(Rxml_get_tag_children)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_tag_children(tag ? ZSTR_VAL(tag) : NULL);
+	ret = Rxml_get_tag_children(tag ? ZSTR_VAL(tag) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_get_attribute_count)
 {
 	zend_string *tag = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(tag)
@@ -1441,9 +1441,9 @@ ZEND_FUNCTION(Rxml_get_attribute_count)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rxml_get_attribute_count(tag ? ZSTR_VAL(tag) : NULL);
+	ret = Rxml_get_attribute_count(tag ? ZSTR_VAL(tag) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rxml_get_attribute_info)
@@ -1455,7 +1455,7 @@ ZEND_FUNCTION(Rxml_get_attribute_info)
 	RXmlAttributeInfo c_info;
 	RXmlAttributeInfo *p_info = NULL;
 	raven_arena arena = {0};
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR_OR_NULL(tag)
@@ -1479,13 +1479,13 @@ ZEND_FUNCTION(Rxml_get_attribute_info)
 		raven_arena_free(&arena);
 		RETURN_THROWS();
 	}
-	r = Rxml_get_attribute_info(tag ? ZSTR_VAL(tag) : NULL, c_index, p_info);
+	ret = Rxml_get_attribute_info(tag ? ZSTR_VAL(tag) : NULL, c_index, p_info);
 	raven_leave();
 	raven_arena_free(&arena);
 	if (p_info) {
 		raven_struct_to_object(&raven_struct_RXmlAttributeInfo, &c_info, info);
 	}
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 void raven_gen_raven_xml_minit(int module_number)

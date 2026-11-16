@@ -35,16 +35,16 @@ ZEND_FUNCTION(Rlook_set)
 
 ZEND_FUNCTION(Rlook_get)
 {
-	RLook r;
+	RLook ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rlook_get();
+	ret = Rlook_get();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_apply)
@@ -157,7 +157,7 @@ ZEND_FUNCTION(Rtheme_get_metric)
 {
 	zend_long metric;
 	int c_metric;
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(metric)
@@ -170,9 +170,9 @@ ZEND_FUNCTION(Rtheme_get_metric)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_metric((RMetric)c_metric);
+	ret = Rtheme_get_metric((RMetric)c_metric);
 	raven_leave();
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rtheme_set_material)
@@ -197,16 +197,16 @@ ZEND_FUNCTION(Rtheme_set_material)
 
 ZEND_FUNCTION(Rtheme_get_material)
 {
-	RMaterial r;
+	RMaterial ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_material();
+	ret = Rtheme_get_material();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_set_font)
@@ -231,16 +231,16 @@ ZEND_FUNCTION(Rtheme_set_font)
 
 ZEND_FUNCTION(Rtheme_get_font)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_font();
+	ret = Rtheme_get_font();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_set_accent)
@@ -284,16 +284,16 @@ ZEND_FUNCTION(Rtheme_set_dark)
 
 ZEND_FUNCTION(Rtheme_get_system_dark)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_system_dark();
+	ret = Rtheme_get_system_dark();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_follow_system)
@@ -318,16 +318,16 @@ ZEND_FUNCTION(Rtheme_follow_system)
 
 ZEND_FUNCTION(Rtheme_is_dark)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_is_dark();
+	ret = Rtheme_is_dark();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_set_wallpaper)
@@ -352,16 +352,16 @@ ZEND_FUNCTION(Rtheme_set_wallpaper)
 
 ZEND_FUNCTION(Rtheme_get_wallpaper)
 {
-	Rid r;
+	Rid ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_wallpaper();
+	ret = Rtheme_get_wallpaper();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_set_style_color)
@@ -461,7 +461,7 @@ ZEND_FUNCTION(Rtheme_clear_styles)
 ZEND_FUNCTION(Rtheme_load)
 {
 	zend_string *path = NULL;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(path)
@@ -470,12 +470,12 @@ ZEND_FUNCTION(Rtheme_load)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_load(path ? ZSTR_VAL(path) : NULL);
+	ret = Rtheme_load(path ? ZSTR_VAL(path) : NULL);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtheme_load_from_memory)
@@ -483,7 +483,7 @@ ZEND_FUNCTION(Rtheme_load_from_memory)
 	zend_string *xml = NULL;
 	zend_long size;
 	size_t c_size;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(xml)
@@ -501,18 +501,18 @@ ZEND_FUNCTION(Rtheme_load_from_memory)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_load_from_memory(xml ? ZSTR_VAL(xml) : NULL, c_size);
+	ret = Rtheme_load_from_memory(xml ? ZSTR_VAL(xml) : NULL, c_size);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtheme_use)
 {
 	zend_string *name = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR_OR_NULL(name)
@@ -521,47 +521,47 @@ ZEND_FUNCTION(Rtheme_use)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_use(name ? ZSTR_VAL(name) : NULL);
+	ret = Rtheme_use(name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_get_name)
 {
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_name();
+	ret = Rtheme_get_name();
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtheme_get_count)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_count();
+	ret = Rtheme_get_count();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtheme_get_name_at)
 {
 	zend_long index;
 	int c_index;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(index)
@@ -574,19 +574,19 @@ ZEND_FUNCTION(Rtheme_get_name_at)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_get_name_at(c_index);
+	ret = Rtheme_get_name_at(c_index);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rtheme_save)
 {
 	zend_string *path = NULL;
 	zend_string *name = NULL;
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR_OR_NULL(path)
@@ -596,9 +596,9 @@ ZEND_FUNCTION(Rtheme_save)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rtheme_save(path ? ZSTR_VAL(path) : NULL, name ? ZSTR_VAL(name) : NULL);
+	ret = Rtheme_save(path ? ZSTR_VAL(path) : NULL, name ? ZSTR_VAL(name) : NULL);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 void raven_gen_raven_style_minit(int module_number)

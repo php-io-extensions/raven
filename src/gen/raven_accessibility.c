@@ -35,16 +35,16 @@ ZEND_FUNCTION(Raccessibility_set_text_scale)
 
 ZEND_FUNCTION(Raccessibility_get_text_scale)
 {
-	float r;
+	float ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Raccessibility_get_text_scale();
+	ret = Raccessibility_get_text_scale();
 	raven_leave();
-	RETURN_DOUBLE((double)r);
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Raccessibility_set_high_contrast)
@@ -69,16 +69,16 @@ ZEND_FUNCTION(Raccessibility_set_high_contrast)
 
 ZEND_FUNCTION(Raccessibility_get_high_contrast)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Raccessibility_get_high_contrast();
+	ret = Raccessibility_get_high_contrast();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Raccessibility_set_focus_always_visible)
@@ -103,16 +103,16 @@ ZEND_FUNCTION(Raccessibility_set_focus_always_visible)
 
 ZEND_FUNCTION(Raccessibility_get_focus_always_visible)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Raccessibility_get_focus_always_visible();
+	ret = Raccessibility_get_focus_always_visible();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Raccessibility_set_reduce_motion)
@@ -137,16 +137,16 @@ ZEND_FUNCTION(Raccessibility_set_reduce_motion)
 
 ZEND_FUNCTION(Raccessibility_get_reduce_motion)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Raccessibility_get_reduce_motion();
+	ret = Raccessibility_get_reduce_motion();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Raccessibility_set_color_filter)
@@ -171,16 +171,16 @@ ZEND_FUNCTION(Raccessibility_set_color_filter)
 
 ZEND_FUNCTION(Raccessibility_get_color_filter)
 {
-	RColorFilter r;
+	RColorFilter ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Raccessibility_get_color_filter();
+	ret = Raccessibility_get_color_filter();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Raccessibility_get_system_settings)
@@ -252,7 +252,7 @@ ZEND_FUNCTION(Rwidget_get_accessible_name)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	const char *r;
+	const char *ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -265,12 +265,12 @@ ZEND_FUNCTION(Rwidget_get_accessible_name)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_accessible_name(c_widget);
+	ret = Rwidget_get_accessible_name(c_widget);
 	raven_leave();
-	if (!r) {
+	if (!ret) {
 		RETURN_NULL();
 	}
-	RETURN_STRING(r);
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_accessible_description)
@@ -325,7 +325,7 @@ ZEND_FUNCTION(Rwidget_get_accessible_role)
 {
 	zend_long widget;
 	uint32_t c_widget;
-	RAccessibleRole r;
+	RAccessibleRole ret;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(widget)
@@ -338,9 +338,9 @@ ZEND_FUNCTION(Rwidget_get_accessible_role)
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Rwidget_get_accessible_role(c_widget);
+	ret = Rwidget_get_accessible_role(c_widget);
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwidget_set_accessible_hidden)
@@ -477,16 +477,16 @@ ZEND_FUNCTION(Raccessibility_announce)
 
 ZEND_FUNCTION(Raccessibility_is_screen_reader_active)
 {
-	int r;
+	int ret;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	if (!raven_enter()) {
 		RETURN_THROWS();
 	}
-	r = Raccessibility_is_screen_reader_active();
+	ret = Raccessibility_is_screen_reader_active();
 	raven_leave();
-	RETURN_LONG((zend_long)r);
+	RETURN_LONG((zend_long)ret);
 }
 
 void raven_gen_raven_accessibility_minit(int module_number)

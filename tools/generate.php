@@ -496,10 +496,19 @@ final class Gen
                 continue;
             }
 
-            // Arrays with a count parameter after them.
-            if (in_array($t, ['const double *', 'const char *const *'], true) || (preg_match('/^const (\w+) \*$/', $t, $m) && $this->isStruct($m[1]) && $this->countParam($params, $i) !== null)) {
+            // Arrays with a count parameter after them, or const float* sized by the two
+            // preceding ints (Rchart_set_grid: rows, columns).
+            if (in_array($t, ['const double *', 'const float *', 'const char *const *'], true) || (preg_match('/^const (\w+) \*$/', $t, $m) && $this->isStruct($m[1]) && $this->countParam($params, $i) !== null)) {
                 $countName = $this->countParam($params, $i);
-                if ($countName === null) {
+                $rowsName = null;
+                $colsName = null;
+                if ($countName === null && $t === 'const float *' && $i >= 2
+                    && $this->norm($params[$i - 2]['type']) === 'int'
+                    && $this->norm($params[$i - 1]['type']) === 'int') {
+                    $rowsName = $params[$i - 2]['name'];
+                    $colsName = $params[$i - 1]['name'];
+                }
+                if ($countName === null && $rowsName === null) {
                     $this->pending[$name] = "array $pn without a count";
 
                     return null;
@@ -511,6 +520,14 @@ final class Gen
                 if ($t === 'const double *') {
                     $decls[] = "\tdouble *$v = NULL;";
                     $checks[] = "\tif (!raven_arg_doubles($pn, $argNum, c_$countName, &$v, &arena)) {\n\t\traven_arena_free(&arena);\n\t\tRETURN_THROWS();\n\t}";
+                } elseif ($t === 'const float *') {
+                    $decls[] = "\tfloat *$v = NULL;";
+                    if ($rowsName !== null) {
+                        $decls[] = "\tint {$v}_count = 0;";
+                        $checks[] = "\tif (c_$rowsName > 0 && c_$colsName > 0 && __builtin_mul_overflow(c_$rowsName, c_$colsName, &{$v}_count)) {\n\t\tzend_argument_value_error($argNum, \"must hold $rowsName x $colsName values, whose size overflows\");\n\t\tRETURN_THROWS();\n\t}\n\tif (!raven_arg_floats($pn, $argNum, {$v}_count, &$v, &arena)) {\n\t\traven_arena_free(&arena);\n\t\tRETURN_THROWS();\n\t}";
+                    } else {
+                        $checks[] = "\tif (!raven_arg_floats($pn, $argNum, c_$countName, &$v, &arena)) {\n\t\traven_arena_free(&arena);\n\t\tRETURN_THROWS();\n\t}";
+                    }
                 } elseif ($t === 'const char *const *') {
                     $decls[] = "\tconst char **$v = NULL;";
                     $checks[] = "\tif (!raven_arg_strings($pn, $argNum, c_$countName, &$v, &arena)) {\n\t\traven_arena_free(&arena);\n\t\tRETURN_THROWS();\n\t}";
@@ -562,26 +579,26 @@ final class Gen
             $retType = 'void';
         } elseif ($rsc !== null) {
             $ctype = $ret;
-            $retDecl = "\t$ctype r;";
+            $retDecl = "\t$ctype ret;";
             if (in_array($rsc, ['float', 'double'], true)) {
                 $retType = 'float';
-                $retStmt = "\tRETURN_DOUBLE((double)r);";
+                $retStmt = "\tRETURN_DOUBLE((double)ret);";
             } else {
                 $retType = 'int';
-                $retStmt = "\tRETURN_LONG((zend_long)r);";
+                $retStmt = "\tRETURN_LONG((zend_long)ret);";
             }
         } elseif ($ret === 'const char *') {
             $retType = '?string';
-            $retDecl = "\tconst char *r;";
-            $retStmt = "\tif (!r) {\n\t\tRETURN_NULL();\n\t}\n\tRETURN_STRING(r);";
+            $retDecl = "\tconst char *ret;";
+            $retStmt = "\tif (!ret) {\n\t\tRETURN_NULL();\n\t}\n\tRETURN_STRING(ret);";
         } elseif ($ret === 'void *' && $uhGetter !== null) {
             $retType = 'mixed';
-            $retDecl = "\tvoid *r;";
+            $retDecl = "\tvoid *ret;";
             $retStmt = '__UH_GET__';
         } elseif ($ret === 'void *') {
             $retType = 'int';
-            $retDecl = "\tvoid *r;";
-            $retStmt = "\tRETURN_LONG((zend_long)(uintptr_t)r);";
+            $retDecl = "\tvoid *ret;";
+            $retStmt = "\tRETURN_LONG((zend_long)(uintptr_t)ret);";
         } elseif ($ret === 'const char *const *') {
             $countOut = null;
             foreach ($params as $p) {
@@ -595,8 +612,8 @@ final class Gen
                 return null;
             }
             $retType = 'array';
-            $retDecl = "\tconst char *const *r;";
-            $retStmt = "\tarray_init(return_value);\n\tfor (uint32_t i = 0; r && i < (uint32_t)c_$countOut; i++) {\n\t\tadd_next_index_string(return_value, r[i]);\n\t}";
+            $retDecl = "\tconst char *const *ret;";
+            $retStmt = "\tarray_init(return_value);\n\tfor (uint32_t i = 0; ret && i < (uint32_t)c_$countOut; i++) {\n\t\tadd_next_index_string(return_value, ret[i]);\n\t}";
         } else {
             $this->pending[$name] = "return $ret";
 
@@ -636,7 +653,7 @@ final class Gen
             if ($mode === 'once') {
                 $slotPre .= "\tif (slot) {\n\t\tslot->once = true;\n\t\tzend_string *key = raven_slot_key(\"$name\", 1, (unsigned long)++RAVEN_G(once_serial));\n\t\traven_slot_register(key, slot);\n\t\tzend_string_release(key);\n\t}\n";
             } elseif ($mode === 'return') {
-                $slotPost = "\tif (slot) {\n\t\tif (r != 0 && r != R_INVALID_ID) {\n\t\t\tslot->owner = r;\n\t\t\tzend_string *key = raven_slot_key(\"$name\", 1, (unsigned long)r);\n\t\t\traven_slot_register(key, slot);\n\t\t\tzend_string_release(key);\n\t\t} else {\n\t\t\traven_slot_release(slot);\n\t\t}\n\t}\n";
+                $slotPost = "\tif (slot) {\n\t\tif (ret != 0 && ret != R_INVALID_ID) {\n\t\t\tslot->owner = ret;\n\t\t\tzend_string *key = raven_slot_key(\"$name\", 1, (unsigned long)ret);\n\t\t\traven_slot_register(key, slot);\n\t\t\tzend_string_release(key);\n\t\t} else {\n\t\t\traven_slot_release(slot);\n\t\t}\n\t}\n";
             } else {
                 $keyExpr = $keyStr !== null
                     ? "raven_slot_key_str(\"$name\", $keyStr ? ZSTR_VAL($keyStr) : NULL)"
@@ -671,7 +688,7 @@ final class Gen
         }
         $body .= "\n" . $slotPre;
         $body .= $arena ? "\tif (!raven_enter()) {\n\t\traven_arena_free(&arena);\n\t\tRETURN_THROWS();\n\t}\n" : "\tif (!raven_enter()) {\n\t\tRETURN_THROWS();\n\t}\n";
-        $body .= $retDecl !== '' ? "\tr = $call;\n" : "\t$call;\n";
+        $body .= $retDecl !== '' ? "\tret = $call;\n" : "\t$call;\n";
         $body .= "\traven_leave();\n";
         $body .= $slotPost;
         if ($uh !== null) {
@@ -695,7 +712,7 @@ final class Gen
         if ($retStmt === '__UH_GET__') {
             $setter = array_search($uhGetter, $this->cfg['user_handles'], true);
             $parts = implode(', ', array_map(fn ($k) => "(unsigned long)c_$k", $uhGetter['key']));
-            $retStmt = "\tif (!r) {\n\t\tRETURN_NULL();\n\t}\n\tzend_string *key = raven_slot_key(\"$setter\", " . count($uhGetter['key']) . ", $parts);\n\traven_user_handle_get(key, return_value);\n\tzend_string_release(key);";
+            $retStmt = "\tif (!ret) {\n\t\tRETURN_NULL();\n\t}\n\tzend_string *key = raven_slot_key(\"$setter\", " . count($uhGetter['key']) . ", $parts);\n\traven_user_handle_get(key, return_value);\n\tzend_string_release(key);";
         }
         if ($retStmt !== '') {
             $body .= "$retStmt\n";
