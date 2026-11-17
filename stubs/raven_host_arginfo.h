@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: bd4378b110ec18d372d1bcf62dc1d15c478dc679 */
+ * Stub hash: f52cc38f599340c16237b884371652c58d841ed3 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rhost_platform_is_active, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()

@@ -208,60 +208,175 @@ final class RFrameStats
 
 function Ris_initialized(): int {}
 
+/**
+ * Returns The library version, e.g. "0.1.0".
+ */
 function Rget_version(): ?string {}
 
+/**
+ * What the library holds right now. Thread-safe.
+ */
 function Rmemory_get_stats(?RMemoryStats $stats): void {}
 
+/**
+ * Walks the whole heap of Raven and verifies its structure.
+ * Returns R_FALSE when it is corrupted (a buffer overrun wrote over a block
+ * header). Slow: for tests and for hunting a bug. Thread-safe.
+ */
 function Rmemory_check(): int {}
 
+/**
+ * Returns to the OS the regions of the heap that hold nothing. Thread-safe.
+ */
 function Rmemory_trim(): void {}
 
+/**
+ * Raven has no loop of its own: the application writes it and asks for one
+ * frame at a time.
+ *
+ * while (Rdraw_frame()) {            a game or an engine: never waits,
+ * update_and_render_my_scene();  call it once per frame of yours
+ * }
+ *
+ * while (Rwait_frame(-1.0)) {        a tool: sleeps until something
+ * }                                  happens, costs nothing when idle
+ *
+ * return Rget_exit_code();
+ * /
+ *
+ * /**
+ * Produces one frame: processes the pending OS events without
+ * waiting, runs the posted tasks and the timers, then lays out, paints and
+ * submits every window that changed. A window in which nothing changed is
+ * not drawn again, so the call is cheap when the UI is idle.
+ * Returns R_FALSE once Rquit was called or the last window is closed.
+ */
 function Rdraw_frame(): int {}
 
+/**
+ * Same as Rdraw_frame, but first sleeps until there is something to
+ * do: an OS event, a posted task, a timer, an animation, a pending redraw.
+ * Longest sleep. Negative sleeps without limit, 0
+ * does not sleep.
+ */
 function Rwait_frame(float $timeout_seconds): int {}
 
+/**
+ * Makes Rdraw_frame and Rwait_frame return R_FALSE. Thread-safe.
+ */
 function Rquit(int $exit_code): void {}
 
+/**
+ * Returns The code given to Rquit, 0 when the last window was closed.
+ */
 function Rget_exit_code(): int {}
 
+/**
+ * Returns R_FALSE once Rquit was called or every window is closed.
+ */
 function Ris_running(): int {}
 
+/**
+ * Processes the pending OS events without producing a frame.
+ * Rdraw_frame does it already: only useful to keep the windows responsive
+ * during a long operation.
+ */
 function Rpoll_events(): void {}
 
+/**
+ * Sleeps until an OS event, a posted task, a timer or a pending
+ * redraw, and processes the OS events. Rwait_frame does it already.
+ * Maximum wait. Negative waits without limit.
+ */
 function Rwait_events(float $timeout_seconds): void {}
 
 function Rset_frame_callback(?callable $callback, mixed $user_data): void {}
 
+/**
+ * Registers a function called once per frame, before the layout.
+ * The body of your loop does the same job; the callback is also called
+ * while the OS keeps the thread in a loop of its own (on Windows, while
+ * the user moves or resizes a window), when your loop is not running.
+ * /
+ * typedef void (*RFrameCallback)(double delta_seconds, void* user_data);
+ * RAVEN_API void Rset_frame_callback(RFrameCallback callback, void* user_data);
+ *
+ * /** return Seconds between the last two frames.
+ */
 function Rget_delta_time(): float {}
 
+/**
+ * Returns Seconds elapsed since Rinit, from a monotonic clock. Thread-safe.
+ */
 function Rget_time(): float {}
 
+/**
+ * Controls move with springs: buttons squash when pressed and bounce back,
+ * switches slide and stretch, popups pop out of what opened them, lists
+ * scroll with inertia and stretch at their ends. Nothing has to be done
+ * for it; these functions only tune it. See also Rwidget_set_transition
+ * (widgets that fly in) and Rdraw_spring (custom widgets).
+ * /
+ *
+ * /**
+ * Scale of the whole interface, on top of the one of the monitor
+ * (RInitDesc.ui_scale at start): every window is laid out again. 0.25 .. 4.
+ */
 function Rset_ui_scale(float $scale): void {}
 
+/**
+ * R_TRUE: every frame waits for the vertical synchronization of the
+ * screen (no tearing, no wasted frames); R_FALSE: as fast as possible
+ * (RInitDesc.disable_vsync at start). Takes effect at the next frame.
+ */
 function Rset_vsync(int $enabled): void {}
 
 function Rget_vsync(): int {}
 
 function Rget_ui_scale(): float {}
 
+/**
+ * R_FALSE makes every change immediate: for users who ask for
+ * reduced motion (Raccessibility_set_reduce_motion), and for tests that
+ * read the state right after an input.
+ */
 function Rset_animations_enabled(int $enabled): void {}
 
 function Rget_animations_enabled(): int {}
 
+/**
+ * Multiplies the speed of every animation. 1 is the default, 0.25 a slow motion.
+ */
 function Rset_animation_speed(float $speed): void {}
 
 function Rget_animation_speed(): float {}
 
+/**
+ * When positive, each frame advances the animations by exactly this
+ * many seconds instead of the time really elapsed: frames rendered one by
+ * one for a video or a screenshot, deterministic tests. 0 follows the clock.
+ */
 function Rset_animation_time_step(float $seconds): void {}
 
+/**
+ * Queues a function to run on the UI thread during the next frame
+ * and wakes Rwait_frame. Thread-safe: this is how worker threads touch the UI.
+ */
 function Rtask_post(?callable $task, mixed $user_data): void {}
 
+/**
+ * Wakes Rwait_frame and Rwait_events from any thread.
+ */
 function Rwake_up(): void {}
 
 function Rget_worker_thread_count(): int {}
 
 function Ris_ui_thread(): int {}
 
+/**
+ * Calls a function on the UI thread after `interval_seconds`.
+ * R_TRUE to fire repeatedly, R_FALSE to fire once and delete itself.
+ */
 function Rtimer_create(float $interval_seconds, int $repeat, ?callable $callback, mixed $user_data): int {}
 
 function Rtimer_destroy(int $timer): void {}
@@ -272,22 +387,95 @@ function Raction_bind(?string $name, ?callable $callback, mixed $user_data): voi
 
 function Raction_unbind(?string $name): void {}
 
+/**
+ * Actions connect widgets to application code by name. A widget carries an
+ * action name (set from XML with OnClicked="file.save", or from C with
+ * Rwidget_set_action); when its main event fires, the function bound to that
+ * name is called. Names are resolved when the event fires, so actions can be
+ * bound before or after the widgets are created.
+ * /
+ * typedef void (*RActionCallback)(Rid sender, const char* action, void* user_data);
+ *
+ * RAVEN_API void Raction_bind(const char* name, RActionCallback callback, void* user_data);
+ * RAVEN_API void Raction_unbind(const char* name);
+ * /**
+ * Fires an action as a widget would: the function bound to the
+ * name is called, or the default handler. What a tool bar button, a
+ * script or a test uses to do what a menu item does.
+ * Passed to the function; R_INVALID_ID when there is none.
+ */
 function Raction_fire(?string $name, int $sender): void {}
 
+/**
+ * Receives every action that has no bound function and is not one of the built-in actions (e.g. a script bridge).
+ */
 function Raction_set_default_handler(?callable $callback, mixed $user_data): void {}
 
+/**
+ * The actions Raven knows by itself: an interface written in XML
+ * uses them with no C at all (OnClicked="app.quit").
+ *
+ * app.quit                          quits (Rquit(0))
+ * window.close, window.minimize,    the window of the widget
+ * window.maximize, window.restore   (maximize goes back when it already is)
+ * window.picture_in_picture         in and out of picture in picture
+ * island.expand, island.fold,       the island of that window
+ * island.toggle
+ * theme.dark, theme.light,          the look of Raven, dark or light
+ * theme.toggle
+ * theme:NAME                        Rtheme_use(NAME): a theme loaded or built in
+ * language:CODE                     Rlocale_set_language(CODE)
+ * open:ADDRESS                      Ropen_url (https:, mailto:, a file)
+ * copy:TEXT                         the text to the clipboard
+ * show:NAME, hide:NAME, toggle:NAME the widget named NAME in the window (hidden: Collapsed)
+ * enable:NAME, disable:NAME
+ * focus:NAME
+ * page:NAME=2, page:NAME=+1         what a Switcher, a TabView, a ComboBox or a ListView
+ * shows; +1 and -1 step, and go round
+ *
+ * A function bound to one of these names (Raction_bind) replaces it; the
+ * default handler receives the others only.
+ * R_FALSE turns them all off: a design tool that shows
+ * interfaces without running them. On by default.
+ */
 function Raction_set_builtins(int $enabled): void {}
 
+/**
+ * Returns R_TRUE when the name is one of the built-in actions (Raction_set_builtins), whether they are on or not.
+ */
 function Raction_is_builtin(?string $name): int {}
 
+/**
+ * Opens an address with the program the user has for it: a web
+ * page in the browser, a mailto: in the mail program, a file in its
+ * application. Returns at once.
+ * Returns R_FALSE when the OS could not be asked (nothing tells whether
+ * a program then really opened it).
+ */
 function Ropen_url(?string $url): int {}
 
 function Rclipboard_set_text(?string $text): void {}
 
+/**
+ * Copies one content in two formats: `html` for the programs that
+ * paste formatting (word processors, chat, mail) and `text` for the
+ * others (editors, terminals). Each program takes the format it prefers.
+ * Where the window system has no clipboard formats (Win32 and macOS for
+ * now), or `html` is NULL, it is Rclipboard_set_text(text).
+ */
 function Rclipboard_set_html(?string $text, ?string $html): void {}
 
+/**
+ * Returns The clipboard text, or "" when empty. Valid until the next call.
+ */
 function Rclipboard_get_text(): ?string {}
 
+/**
+ * Retrieves and clears the last recorded error.
+ * Optional output: human-readable description.
+ * Optional output: severity of the error.
+ * Returns R_NO_ERROR when nothing was recorded.
+ */
 function Rerror_get_last(?string &$detail, ?int &$severity): int {}
 
 function Rerror_to_string(int $error): ?string {}
@@ -296,4 +484,37 @@ function Rseverity_to_string(int $severity): ?string {}
 
 function Rset_device_reset_callback(?callable $callback, mixed $user_data): void {}
 
+/**
+ * Registers a function called whenever an error is raised.
+ * The function may be registered before Rinit. It is called on the
+ * thread that raised the error: errors of the renderer (and the messages
+ * of the Vulkan validation layers) come from the render thread.
+ * /
+ * typedef void (*RErrorCallback)(RError code, RSeverity severity, const char* detail);
+ * RAVEN_API void Rerror_set_callback(RErrorCallback callback);
+ *
+ * /**
+ * Registers a function called after Raven recovered from the loss
+ * of the GPU device (a driver reset or update, a GPU removed, a long sleep).
+ *
+ * Raven then starts the backend again and remakes what it can by itself:
+ * the surfaces of the windows, the fonts, the shaders, the textures made
+ * from image files and the small textures (up to 256 x 256). The pixels of
+ * the larger textures made from pixels are lost: the textures keep their
+ * handle and size but are transparent until Rtexture_update fills them
+ * again, which is what this function is for. Textures that wrap objects of
+ * the backend (raven_vulkan.h) must be made again, and the Vulkan handles
+ * returned by Rvulkan_get_device... have changed.
+ *
+ * Called on the UI thread, during Rdraw_frame / Rwait_frame. Set it after
+ * Rinit; NULL removes it.
+ * /
+ * typedef void (*RDeviceResetCallback)(void* user_data);
+ * RAVEN_API void Rset_device_reset_callback(RDeviceResetCallback callback, void* user_data);
+ *
+ *
+ * /* ============================================================================
+ * DIAGNOSTICS
+ * ============================================================================
+ */
 function Rwindow_get_frame_stats(int $window, ?RFrameStats $stats): void {}

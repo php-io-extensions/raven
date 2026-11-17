@@ -115,120 +115,526 @@ final class RJumpTask
     public function __construct(?string $title = null, ?string $arguments = null, ?string $description = null) {}
 }
 
+/**
+ * Raven
+ * raven_shell.h : what frames an application: its header bar and its docked panels.
+ *
+ * HEADER BAR
+ *
+ * A window created with R_WINDOW_CUSTOM_HEADER has no title bar from the OS:
+ * its content covers the whole window and draws the title bar itself. The
+ * simplest way is a R_WIDGET_HEADER_BAR at the top of the content:
+ *
+ * <Window Title="Notes" CustomHeader="true" Width="900" Height="600">
+ * <VBox>
+ * <HeaderBar>
+ * <Button Text="Open" Style="Flat"/>
+ * <TextInput Placeholder="Search" Width="180" Slot.HAlign="Right"/>
+ * </HeaderBar>
+ * ...
+ * </VBox>
+ * </Window>
+ *
+ * The bar shows the title of the window and the close / minimize / maximize
+ * buttons, and holds any widget: its children are placed from the left, and
+ * from the right for those with Slot.HAlign="Right". Dragging the bar moves
+ * the window, a double click maximizes it, the edges of the window resize
+ * it: all of that is done by the window system itself where it can (Windows:
+ * snapping, the system menu and the shake gesture keep working).
+ *
+ * Any other widget becomes a handle to move the window with
+ * Rwidget_set_window_drag (raven_widget.h), without a header bar at all.
+ *
+ * DOCK AREA
+ *
+ * A R_WIDGET_DOCK_AREA arranges its children as panels with a tab each:
+ * side by side, one above the other, or stacked behind the same tabs. The
+ * user drags a tab to move its panel elsewhere, drags the borders to resize,
+ * and closes panels. In XML, how a child is docked is given by its slot:
+ *
+ * <DockArea Name="dock" Slot.Fill="1">
+ * <TextEditor Name="source" Slot.Title="Source"/>
+ * <TreeView Name="files" Slot.Title="Files" Slot.Dock="Left" Slot.DockSize="0.22"/>
+ * <ListView Name="log" Slot.Title="Output" Slot.Dock="Bottom" Slot.DockSize="0.3"/>
+ * <Label Slot.Title="Problems" Slot.Dock="Tab" Slot.DockTo="log"/>
+ * </DockArea>
+ *
+ * ISLAND
+ *
+ * A R_WIDGET_ISLAND is a small dark capsule that unfolds into a panel when
+ * the pointer comes over it or when it is clicked, and folds back: a notch
+ * made useful, for what is going on right now (a download, a timer, the
+ * track being played) and the controls that go with it. Its first child is
+ * what it shows folded, its second child what it shows unfolded; both are
+ * any widgets. Nothing has to use one.
+ *
+ * In XML, an <Island> written in a <Window> next to its content floats at
+ * the top of the window, in the middle, above the content:
+ *
+ * <Window Title="Player">
+ * <Island Slot.Padding="0,8,0,0">
+ * <Label>Now playing</Label>
+ * <VBox Spacing="8" Width="260">
+ * <Label>Clair de lune</Label>
+ * <Slider Name="position"/>
+ * </VBox>
+ * </Island>
+ * <VBox> ... </VBox>
+ * </Window>
+ *
+ * An island is also a widget like any other, to place anywhere in a layout.
+ *
+ * TASKBAR AND DOCK
+ *
+ * What the system shows of the application outside of its windows: a
+ * progress bar and a badge on its icon (the taskbar of Windows, the Dock of
+ * macOS, the launcher of Linux desktops: KDE, Ubuntu Dock, Dash to Dock,
+ * Plank), a request for attention, the menu of the icon in the Dock and the
+ * tasks of the jump list of Windows.
+ *
+ * Rwindow_set_taskbar_progress(window, R_TASKBAR_PROGRESS_NORMAL, 0.4f);
+ * Rtaskbar_set_badge("3");
+ * Rtaskbar_set_menu(menu);        (its MenuItems fire as when clicked in a window)
+ *
+ * Each call returns R_FALSE where the system has nothing to show it with.
+ *
+ * TRAY ICON
+ *
+ * An icon of the application beside the clock: in the notification area
+ * (Windows), in the menu bar (macOS, a status item), in the panel of Linux
+ * desktops through StatusNotifierItem (KDE, GNOME with the AppIndicator
+ * extension, Cinnamon, XFCE, waybar...). It lives without any window: an
+ * application can close its windows and stay there.
+ *
+ * Rid tray = Rtray_create();
+ * Rtray_set_icon(tray, pixels, 32, 32);
+ * Rtray_set_tooltip(tray, "Raven Player");
+ * Rtray_set_menu(tray, menu);              (shown by the system)
+ * Rtray_set_clicked_callback(tray, on_tray, NULL);
+ * /
+ *
+ * #ifndef RAVEN_SHELL_H
+ * #define RAVEN_SHELL_H
+ *
+ * #include "raven_widget.h"
+ *
+ * /** Buttons of a header bar. * /
+ * typedef enum RHeaderButtons{
+ * R_HEADER_NO_BUTTONS = 0,
+ * R_HEADER_CLOSE      = (1 << 0),
+ * R_HEADER_MINIMIZE   = (1 << 1),
+ * R_HEADER_MAXIMIZE   = (1 << 2),
+ * R_HEADER_ALL_BUTTONS = R_HEADER_CLOSE | R_HEADER_MINIMIZE | R_HEADER_MAXIMIZE
+ * }RHeaderButtons;
+ *
+ * /** A progress bar on the icon of the application (Rwindow_set_taskbar_progress). * /
+ * typedef enum RTaskbarProgress{
+ * R_TASKBAR_PROGRESS_NONE = 0x07A0,
+ * R_TASKBAR_PROGRESS_NORMAL,
+ * /** Shown as paused (yellow on Windows). * /
+ * R_TASKBAR_PROGRESS_PAUSED,
+ * /** Shown as failed (red on Windows). * /
+ * R_TASKBAR_PROGRESS_ERROR,
+ * /** Something goes on, without knowing how far it is. * /
+ * R_TASKBAR_PROGRESS_INDETERMINATE
+ * }RTaskbarProgress;
+ *
+ * /** Called when the tray icon is clicked (Rtray_set_clicked_callback). * /
+ * typedef void (*RTrayClickedCallback)(Rid tray, RMouseButton button, void* user_data);
+ *
+ * /** A task of the jump list of Windows (Rtaskbar_set_jump_list). * /
+ * typedef struct RJumpTask{
+ * /** What the list shows. * /
+ * const char* title;
+ * /** The command line given to the application when it is chosen: it is started again with these arguments. * /
+ * const char* arguments;
+ * /** The tooltip; NULL: none. * /
+ * const char* description;
+ * }RJumpTask;
+ *
+ * /** Where a panel goes in a dock area, relative to another panel or to the whole area. * /
+ * typedef enum RDockSide{
+ * R_DOCK_LEFT = 0x0360,
+ * R_DOCK_RIGHT,
+ * R_DOCK_TOP,
+ * R_DOCK_BOTTOM,
+ * /** Behind the same tabs as the other panel. * /
+ * R_DOCK_TAB
+ * }RDockSide;
+ *
+ *
+ * #ifdef __cplusplus
+ * extern "C" {
+ * #endif
+ *
+ * /* ============================================================================
+ * HEADER BAR
+ * ============================================================================ * /
+ *
+ * /** param title Text shown in the bar; NULL shows the title of the window.
+ */
 function Rheader_bar_create(?string $title): int {}
 
+/**
+ * NULL shows the title of the window.
+ */
 function Rheader_bar_set_title(int $bar, ?string $title): void {}
 
+/**
+ * Bitmask of RHeaderButtons. All by default; the maximize button only shows on a resizable window.
+ */
 function Rheader_bar_set_buttons(int $bar, int $buttons): void {}
 
+/**
+ * R_HALIGN_RIGHT: minimize, maximize, close, as on Windows.
+ * R_HALIGN_LEFT: three round colored buttons, as on macOS. Until it is
+ * set, the side is the one of the system the program runs on (left on
+ * macOS, right elsewhere), whatever the look.
+ */
 function Rheader_bar_set_button_side(int $bar, int $side): void {}
 
+/**
+ * R_HALIGN_CENTER (default) or R_HALIGN_LEFT.
+ */
 function Rheader_bar_set_title_align(int $bar, int $align): void {}
 
+/**
+ * R_TRUE: the title sits in a dark tab hanging from the top edge of
+ * the bar (slanted sides, round bottom corners). XML: TitleStyle="Notch".
+ */
 function Rheader_bar_set_title_notch(int $bar, int $notch): void {}
 
+/**
+ * R_FALSE removes the background of the bar: for a header that
+ * floats above the content (in an Overlay) or sits inside a glass panel.
+ */
 function Rheader_bar_set_background(int $bar, int $enabled): void {}
 
 function Rdock_area_create(): int {}
 
+/**
+ * Adds a panel. The dock area takes ownership of the widget.
+ * Text of its tab.
+ * Where it goes.
+ * A panel of the area to split or to share tabs with, or
+ * R_INVALID_ID for the whole area (with R_DOCK_TAB: the
+ * first group of tabs).
+ * Part of the split space given to the new panel, 0..1
+ * (0 = a half, or a quarter along the whole area).
+ */
 function Rdock_area_add_panel(int $area, int $panel, ?string $title, int $side, int $relative, float $size): void {}
 
+/**
+ * Moves a panel of the area somewhere else in it.
+ */
 function Rdock_area_move_panel(int $area, int $panel, int $side, int $relative, float $size): void {}
 
+/**
+ * Removes a panel and deletes it.
+ */
 function Rdock_area_close_panel(int $area, int $panel): void {}
 
 function Rdock_area_set_panel_title(int $area, int $panel, ?string $title): void {}
 
+/**
+ * Icon drawn before the title of the tab of a panel (and on the chip while it is dragged).
+ * Texture of the icon, R_INVALID_ID removes it.
+ * Region of the texture (0, 0, 1, 1 : all of it).
+ * R_TRUE: the texture is a mask drawn in the text color of the tab (monochrome icons).
+ */
 function Rdock_area_set_panel_icon(int $area, int $panel, int $texture, float $u0, float $v0, float $u1, float $v1, int $tint): void {}
 
+/**
+ * R_FALSE removes the close button of the tab of a panel. Panels can be closed by default.
+ */
 function Rdock_area_set_panel_closable(int $area, int $panel, int $closable): void {}
 
+/**
+ * Takes a panel out of the arrangement without deleting it (a
+ * window of an application closed from its menu). Its tab disappears
+ * and its neighbours take its place; the area remembers where it was.
+ */
 function Rdock_area_hide_panel(int $area, int $panel): void {}
 
+/**
+ * Puts a hidden panel back where it was, and brings its tab to the front (also for a panel that is not hidden).
+ */
 function Rdock_area_open_panel(int $area, int $panel): void {}
 
+/**
+ * Returns R_TRUE when the panel is in the arrangement (not hidden), shown or behind another tab.
+ */
 function Rdock_area_is_panel_open(int $area, int $panel): int {}
 
+/**
+ * R_TRUE: the close button of a tab hides its panel
+ * (Rdock_area_hide_panel) instead of deleting it. XML: CloseHides="true".
+ * The close callback is asked first either way.
+ */
 function Rdock_area_set_close_hides(int $area, int $hides): void {}
 
+/**
+ * Brings the tab of a panel to the front.
+ */
 function Rdock_area_show_panel(int $area, int $panel): void {}
 
+/**
+ * Returns R_TRUE when the panel is the one shown in its group of tabs.
+ */
 function Rdock_area_is_panel_shown(int $area, int $panel): int {}
 
+/**
+ * R_FALSE stops the user from moving the panels (the borders can still be dragged).
+ */
 function Rdock_area_set_movable(int $area, int $movable): void {}
 
+/**
+ * Describes how the panels are arranged, as a short text to keep
+ * in a settings file. Panels are named by their widget name
+ * (Rwidget_set_name): unnamed panels are not part of the description.
+ * Returns A string valid until the next call.
+ */
 function Rdock_area_save_layout(int $area): ?string {}
 
+/**
+ * Arranges the panels as a saved description says. Panels of the
+ * area that the description does not name keep a place; names it has
+ * that match no panel are ignored in legacy descriptions. Versioned
+ * descriptions with floating cards reject unknown or duplicate names.
+ * Returns R_FALSE when the text is not a layout (nothing is changed).
+ */
 function Rdock_area_load_layout(int $area, ?string $layout): int {}
 
 function Rdock_area_set_close_callback(int $area, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the user closes a panel, before it is deleted.
+ * Return R_FALSE to keep the panel.
+ * /
+ * typedef int (*RDockCloseCallback)(Rid area, Rid panel, void* user_data);
+ * RAVEN_API void Rdock_area_set_close_callback(Rid area, RDockCloseCallback callback, void* user_data);
+ *
+ * /**
+ * Tearing: a tab dragged out of the area takes its panel to a
+ * window of its own (a floating area of the same family), and a tab
+ * dragged from such a window over the area docks it back where it is
+ * dropped. A double click on the tab of a floating window, or closing
+ * that window, puts its panels back where they were. Dragging the only
+ * tab of a floating window moves the window. R_TRUE by default; XML:
+ * Tearable="false". The functions of this area that take a panel also
+ * work on its panels that are in floating windows.
+ */
 function Rdock_area_set_tearable(int $area, int $tearable): void {}
 
 function Rdock_area_is_tearable(int $area): int {}
 
+/**
+ * Default for future floats/tears; existing floating panels keep their mode.
+ */
 function Rdock_area_set_float_mode(int $area, int $mode): void {}
 
+/**
+ * Floats a panel. Native mode: screen x/y; in-window mode: window-local logical x/y. Returns its containing window.
+ */
 function Rdock_area_float_panel(int $area, int $panel, int $x, int $y): int {}
 
+/**
+ * A floating panel goes back where it was in the area.
+ */
 function Rdock_area_dock_panel(int $area, int $panel): void {}
 
+/**
+ * The window a floating panel is in, R_INVALID_ID when it is docked in the area.
+ */
 function Rdock_area_get_panel_window(int $area, int $panel): int {}
 
 function Rdock_area_set_changed_callback(int $area, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called after the user moved, resized, showed or closed a panel. * /
+ * typedef void (*RDockChangedCallback)(Rid area, void* user_data);
+ * RAVEN_API void Rdock_area_set_changed_callback(Rid area, RDockChangedCallback callback, void* user_data);
+ *
+ *
+ *
+ * /* ============================================================================
+ * ISLAND
+ * ============================================================================
+ */
 function Risland_create(): int {}
 
+/**
+ * Unfolds or folds the island. The changed callback is not called.
+ */
 function Risland_set_expanded(int $island, int $expanded): void {}
 
 function Risland_is_expanded(int $island): int {}
 
+/**
+ * Unfolds the island, and folds it back by itself after a while:
+ * to tell something to the user. It stays open while the pointer is on it.
+ */
 function Risland_expand_for(int $island, float $seconds): void {}
 
+/**
+ * R_TRUE (default): the island unfolds under the pointer and folds back when it leaves.
+ */
 function Risland_set_expand_on_hover(int $island, int $enabled): void {}
 
+/**
+ * R_TRUE (default): a click on the island unfolds or folds it.
+ */
 function Risland_set_expand_on_click(int $island, int $enabled): void {}
 
+/**
+ * R_TRUE gives the island square upper corners: a notch that hangs
+ * from the edge it touches, instead of a capsule that floats under it.
+ */
 function Risland_set_attached(int $island, int $attached): void {}
 
+/**
+ * R_TRUE: on a screen with a camera housing at its top (the notch
+ * of a MacBook), the island of a window (Rwindow_set_island) lives in the
+ * housing itself, in a window of its own anchored to the screen: it stays
+ * there when the window is moved, and takes the mouse and the keyboard as
+ * usual. Folded, it is the housing grown into two ears: the first Spacer
+ * of its folded content becomes the room of the camera (what is before
+ * it shows on the left, what is after on the right). Unfolded, its
+ * content starts under the camera.
+ *
+ * It is in the housing while its window is the last one of the
+ * application the user worked in, is shown, and is on that screen; it
+ * goes back into its window otherwise, and on the window systems and
+ * screens without a housing (where nothing changes). XML: Notch="true".
+ */
 function Risland_set_notch(int $island, int $enabled): void {}
 
 function Risland_get_notch(int $island): int {}
 
+/**
+ * R_TRUE while the island is in the camera housing of the screen.
+ */
 function Risland_is_in_notch(int $island): int {}
 
 function Risland_set_changed_callback(int $island, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the user unfolds or folds the island. The action of the widget (OnChanged) fires too. * /
+ * typedef void (*RIslandChangedCallback)(Rid island, int expanded, void* user_data);
+ * RAVEN_API void Risland_set_changed_callback(Rid island, RIslandChangedCallback callback, void* user_data);
+ *
+ * /**
+ * Shows a widget (usually an island) floating at the top of a
+ * window, in the middle, above its content. The window takes ownership;
+ * the previous one is deleted. R_INVALID_ID removes it. The padding of
+ * its slot (Rslot_set_padding) is its distance from the top edge.
+ */
 function Rwindow_set_island(int $window, int $widget): void {}
 
 function Rwindow_get_island(int $window): int {}
 
+/**
+ * A progress bar on the icon of the application: on the button of
+ * the window in the taskbar (Windows), on the icon in the Dock (macOS),
+ * on the launcher (Linux). There is one icon for the whole application in
+ * the Dock and the launchers: the last window that set it is shown.
+ * From 0 to 1 (not used by NONE and INDETERMINATE).
+ * Returns R_FALSE where the system shows no progress.
+ */
 function Rwindow_set_taskbar_progress(int $window, int $state, float $value): int {}
 
+/**
+ * Asks the user to look at the window when it is not the active
+ * one: its taskbar button flashes (Windows), the icon bounces in the
+ * Dock (macOS), the window is marked urgent (X11, the launchers of
+ * Linux). `critical`: until the user comes to the window; otherwise a few
+ * times. Nothing happens when the window is already the active one.
+ */
 function Rwindow_request_attention(int $window, int $critical): int {}
 
+/**
+ * A short text on the icon of the application: a number of unread
+ * messages, "!". macOS: the badge of the Dock. Windows: a small round
+ * icon on the taskbar buttons of the windows, drawn from the text (one
+ * to three characters fit). Linux: a number only (the text is read as
+ * one; anything else shows nothing). NULL or "": no badge.
+ */
 function Rtaskbar_set_badge(?string $text): int {}
 
+/**
+ * The menu of the icon of the application in the Dock (macOS),
+ * above the entries of the system. A MENU without a parent: its
+ * MenuItems fire as when chosen in a window (clicked callback, action),
+ * and what changes in it shows the next time the menu opens.
+ * R_INVALID_ID: none. R_FALSE where the system has no such menu.
+ */
 function Rtaskbar_set_menu(int $menu): int {}
 
+/**
+ * The tasks of the jump list of Windows (right click on the button
+ * of the application in the taskbar, or on its tile in the Start menu).
+ * Choosing one starts the application again with its arguments: the
+ * application reads them as any other command line. count 0: none.
+ * R_FALSE where there is no jump list.
+ */
 function Rtaskbar_set_jump_list(array $tasks, int $count): int {}
 
+/**
+ * Returns R_TRUE when the system shows tray icons: always on Windows and
+ * macOS; on Linux, when a host of StatusNotifierItem runs (the panel of
+ * the desktop). An icon made where none runs yet appears when one starts.
+ */
 function Rtray_is_supported(): int {}
 
+/**
+ * Puts an icon of the application beside the clock. While one
+ * exists, the application goes on running when its last window closes
+ * (Ris_running): Rquit (or the action app.quit) ends it.
+ * Returns R_INVALID_ID where the system has none.
+ */
 function Rtray_create(): int {}
 
 function Rtray_destroy(int $tray): void {}
 
 function Rtray_is_valid(int $tray): int {}
 
+/**
+ * The picture, from tightly packed RGBA8 pixels (straight alpha);
+ * the system scales it (16 to 32 pixels square fit everywhere). Copied.
+ */
 function Rtray_set_icon(int $tray, string $rgba, int $width, int $height): void {}
 
+/**
+ * The text shown when the pointer rests on the icon (and its title for the Linux panels).
+ */
 function Rtray_set_tooltip(int $tray, ?string $text): void {}
 
+/**
+ * The menu the system shows for the icon: on a right click
+ * (Windows, Linux), on a click (macOS). A MENU without a parent, whose
+ * MenuItems fire as when chosen in a window; what changes in it shows
+ * the next time it opens. R_INVALID_ID: none.
+ */
 function Rtray_set_menu(int $tray, int $menu): void {}
 
+/**
+ * Called on a click: the left button (activate), the right one
+ * when there is no menu, the middle one. On macOS an icon with a menu
+ * opens it instead.
+ */
 function Rtray_set_clicked_callback(int $tray, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * A short text shown beside the icon (macOS menu bar), drawn by the
+ * system in its own font and colors; the item widens to fit it. NULL or
+ * "": the icon alone. Systems that show no text there ignore it (the
+ * tooltip is the place for it).
+ */
 function Rtray_set_title(int $tray, ?string $text): void {}
 
+/**
+ * Where the icon is on the screen, in the units and coordinates of
+ * Rwindow_set_position (a window can then open just under it).
+ * Returns R_FALSE when the system does not tell (the outputs are then 0).
+ */
 function Rtray_get_rect(int $tray, ?int &$x, ?int &$y, ?int &$width, ?int &$height): int {}

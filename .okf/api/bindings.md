@@ -5,7 +5,7 @@ description: What ext-raven binds from Raven.h, the translations from C, and the
 resource: stubs/
 tags: [raven, api]
 status: draft
-generated: { by: cursor-grok/4.6, at: 2026-11-16T00:00:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-17T15:00:00Z }
 sources:
   - id: stubs
     resource: stubs/
@@ -17,7 +17,7 @@ sources:
 
 # Bindings
 
-Every function `Raven.h` declares (its 21 headers, 1,283 `RAVEN_API` functions) under the C name, except `Rmemory_alloc`, `Rmemory_realloc`, `Rmemory_free`, `Rpixels_alloc`, `Rpixels_free`: raw memory has no PHP meaning. 1,262 are generated into `src/gen/<header>.c`, 16 are written in `src/manual.c` (lifecycle, allocator, Raven-owned memory including `Rpdf_document_save_memory`, foreign-thread callbacks, the backend and host-platform tables). `tests/CoverageTest.php` checks the set.
+Every function `Raven.h` declares (its 21 headers, 1,283 `RAVEN_API` functions) under the C name, except `Rmemory_alloc`, `Rmemory_realloc`, `Rmemory_free`, `Rpixels_alloc`, `Rpixels_free`: raw memory has no PHP meaning. 1,262 are generated into `src/gen/<header>.c`, 16 are written in `src/manual.c` (lifecycle, allocator, Raven-owned memory including `Rpdf_document_save_memory`, foreign-thread callbacks, the backend and host-platform tables). Generated stubs copy the header comment of each function. `tests/CoverageTest.php` checks the set. A Label with a tooltip takes the hover (`Rwidget_set_tooltip`; XML `Tooltip` uses that setter).
 
 Classes: one final class per struct of the headers (30 generated, with field tables in `src/gen/structs.c`), plus `RPainter`, `RAllocator` (not constructible), `RCapture`, `RBackendVTable`, `RHostPlatformDesc` (in `stubs/manual.stub.php`).
 

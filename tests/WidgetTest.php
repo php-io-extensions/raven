@@ -88,3 +88,37 @@ it('reads theme colors through four float out-parameters', function (): void {
     Rcolor_rgb_to_hsv(1.0, 0.0, 0.0, $hue, $s, $v);
     expect([$hue, $s, $v])->toBe([0.0, 1.0, 1.0]);
 });
+
+it('lets a label with a tooltip take the hover', function (): void {
+    $window = raven_window(320, 200);
+    $label = Rlabel_create('Hover me');
+    Rwindow_set_content($window, $label);
+    raven_frames();
+    Rwidget_get_rect($label, $x, $y, $w, $h);
+    $cx = $x + $w / 2;
+    $cy = $y + $h / 2;
+
+    Rwindow_inject_mouse_move($window, $cx, $cy);
+    raven_frames(2);
+    expect(Rwidget_get_tooltip($label))->toBe('')
+        ->and(Rwidget_is_hovered($label))->toBe(R_FALSE)
+        ->and(Rwindow_get_hovered_widget($window))->not->toBe($label);
+
+    Rwidget_set_tooltip($label, 'A tip');
+    Rwindow_inject_mouse_move($window, 0.0, 0.0);
+    raven_frames(1);
+    Rwindow_inject_mouse_move($window, $cx, $cy);
+    raven_frames(2);
+    expect(Rwidget_get_tooltip($label))->toBe('A tip')
+        ->and(Rwidget_is_hovered($label))->toBe(R_TRUE)
+        ->and(Rwindow_get_hovered_widget($window))->toBe($label);
+
+    Rwidget_set_tooltip($label, null);
+    Rwindow_inject_mouse_move($window, 0.0, 0.0);
+    raven_frames(1);
+    Rwindow_inject_mouse_move($window, $cx, $cy);
+    raven_frames(2);
+    expect(Rwidget_get_tooltip($label))->toBe('')
+        ->and(Rwidget_is_hovered($label))->toBe(R_FALSE)
+        ->and(Rwindow_get_hovered_widget($window))->not->toBe($label);
+});

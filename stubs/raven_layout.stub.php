@@ -52,36 +52,139 @@ const R_DIRECTION_RTL = UNKNOWN;
  */
 const R_DIRECTION_AUTO = UNKNOWN;
 
+/**
+ * Raven
+ * raven_layout.h : panels (widgets that arrange children).
+ *
+ * Children are added with Rwidget_add_child and placed according to their slot
+ * (Rslot_set_..., raven_widget.h). This header holds the settings that belong
+ * to the panel itself.
+ *
+ * Panel          Slot values it reads
+ * -------------  ----------------------------------------------------------
+ * VBox / HBox    padding, halign, valign, auto / fill, max size
+ * Grid           padding, halign, valign, grid cell, grid span
+ * UniformGrid    padding, halign, valign, grid cell
+ * Overlay        padding, halign, valign
+ * Border         padding, halign, valign                   (single child)
+ * SizeBox        padding, halign, valign                   (single child)
+ * ScrollBox      padding, halign / valign across the scroll direction
+ * Splitter       fill coefficient = relative pane size
+ * WrapBox        padding
+ * Canvas         anchors, position, size, alignment
+ * Switcher       padding, halign, valign
+ * TabView        title, padding
+ * Expander       padding                                    (single child)
+ * /
+ *
+ * #ifndef RAVEN_LAYOUT_H
+ * #define RAVEN_LAYOUT_H
+ *
+ * #include "raven_widget.h"
+ *
+ * /**
+ * The looks of a R_WIDGET_BACKGROUND_BLUR. The first three are drawn by
+ * Raven from what the window shows behind the widget; the last one is the
+ * blur of the OS, which sees what is behind the window itself.
+ * /
+ * typedef enum RBlurStyle{
+ * /** What is behind, out of focus, and nothing else (a Gaussian blur). * /
+ * R_BLUR_PLAIN = 0x0440,
+ * /**
+ * Frosted: blurred, its colors a little stronger, under a veil of the
+ * panel color of the theme, a fine grain and a hairline. The default.
+ * /
+ * R_BLUR_FROSTED,
+ * /**
+ * Glass: a slab that bends what is behind at its rim and catches the
+ * light, as the glass materials do (RMaterial); the radius says how
+ * frosted it is.
+ * /
+ * R_BLUR_GLASS,
+ * /**
+ * Native: the widget opens the window there, and what shows is what the
+ * OS puts behind the window (Rwindow_set_backdrop: the blurred desktop,
+ * acrylic, mica), under a light veil. It needs a window created with
+ * R_WINDOW_TRANSPARENT that the OS could make see-through; anywhere
+ * else it is drawn as R_BLUR_FROSTED. The radius is the one of the OS.
+ * /
+ * R_BLUR_NATIVE
+ * }RBlurStyle;
+ *
+ * #ifdef __cplusplus
+ * extern "C" {
+ * #endif
+ *
+ * /* VBOX, HBOX, WRAP_BOX, GRID, UNIFORM_GRID, SCROLL_BOX * /
+ *
+ * /** brief Gap inserted between neighbouring children.
+ */
 function Rpanel_set_spacing(int $panel, float $spacing): void {}
 
 function Rpanel_get_spacing(int $panel): float {}
 
+/**
+ * Lets a column / row grow to take a share of the free space
+ * (Slate FillColumn / FillRow). 0 sizes it to its content (default).
+ */
 function Rgrid_set_column_fill(int $grid, int $column, float $coefficient): void {}
 
 function Rgrid_set_row_fill(int $grid, int $row, float $coefficient): void {}
 
+/**
+ * Places children automatically, left to right then top to bottom,
+ * in the given number of columns. 0 uses the grid cell of each slot (default).
+ */
 function Runiform_grid_set_columns(int $grid, int $columns): void {}
 
 function Runiform_grid_set_min_cell_size(int $grid, float $width, float $height): void {}
 
+/**
+ * Space between the outline and the child.
+ */
 function Rborder_set_padding(int $border, float $left, float $top, float $right, float $bottom): void {}
 
+/**
+ * Background color (R_COLOR_PANEL of this widget). Alpha 0 draws no background.
+ */
 function Rborder_set_background(int $border, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Outline width and color. Width 0 draws no outline (default).
+ */
 function Rborder_set_outline(int $border, float $width, float $r, float $g, float $b, float $a): void {}
 
 function Rborder_set_corner_radius(int $border, float $top_left, float $top_right, float $bottom_right, float $bottom_left): void {}
 
+/**
+ * Soft drop shadow behind the border. Blur 0 disables it (default).
+ */
 function Rborder_set_shadow(int $border, float $blur, float $offset_x, float $offset_y): void {}
 
+/**
+ * What the border is made of. R_MATERIAL_GLASS turns it into a
+ * panel of glass tinted by its background color (the alpha of the color
+ * is the strength of the tint): floating tool bars, side bars, cards.
+ */
 function Rborder_set_material(int $border, int $material): void {}
 
+/**
+ * Keeps the child at a fixed width / height ratio, as large as fits.
+ * 0 disables it (default). The fixed, minimum and maximum sizes are set
+ * with Rwidget_set_size, Rwidget_set_min_size and Rwidget_set_max_size.
+ */
 function Rsize_box_set_aspect_ratio(int $size_box, float $ratio): void {}
 
 function Rspacer_set_size(int $spacer, float $width, float $height): void {}
 
+/**
+ * Direction in which children are stacked and scrolled. Default: R_VERTICAL.
+ */
 function Rscroll_box_set_orientation(int $scroll_box, int $orientation): void {}
 
+/**
+ * R_TRUE also scrolls across the stacking direction when the content is too large.
+ */
 function Rscroll_box_set_scroll_both(int $scroll_box, int $enabled): void {}
 
 function Rscroll_box_set_offset(int $scroll_box, float $x, float $y): void {}
@@ -90,40 +193,88 @@ function Rscroll_box_get_offset(int $scroll_box, ?float &$x, ?float &$y): void {
 
 function Rscroll_box_scroll_to_end(int $scroll_box): void {}
 
+/**
+ * Scrolls every ScrollBox above the widget so that the widget is visible.
+ */
 function Rwidget_scroll_into_view(int $widget): void {}
 
+/**
+ * R_HORIZONTAL puts the panes side by side (default), R_VERTICAL stacks them.
+ */
 function Rsplitter_set_orientation(int $splitter, int $orientation): void {}
 
 function Rsplitter_set_min_pane_size(int $splitter, float $size): void {}
 
+/**
+ * Creates a panel that shows what is behind it out of focus,
+ * with one child over it. In XML:
+ *
+ * <BackgroundBlur Style="Frosted" Radius="24" CornerRadius="18" Padding="16">
+ * <Label>Over a blurred view of the window</Label>
+ * </BackgroundBlur>
+ *
+ * It works in any theme and with any material: it is not the glass of
+ * the glass themes (which bends and reflects), but the looks of
+ * RBlurStyle. Unlike the opacity of a widget, it does not let what is
+ * behind show sharp.
+ */
 function Rbackground_blur_create(): int {}
 
 function Rbackground_blur_set_style(int $blur, int $style): void {}
 
 function Rbackground_blur_get_style(int $blur): int {}
 
+/**
+ * How far what is behind goes out of focus, in logical units:
+ * 4 softens, 20 hides the details, 60 leaves only colors. A negative
+ * value (the default) uses R_METRIC_BLUR_RADIUS of the theme.
+ */
 function Rbackground_blur_set_radius(int $blur, float $radius): void {}
 
 function Rbackground_blur_get_radius(int $blur): float {}
 
+/**
+ * Color laid over the blur; its alpha is how much of it. Without
+ * one, R_BLUR_PLAIN has none and the other styles take theirs from the
+ * theme (R_COLOR_PANEL).
+ */
 function Rbackground_blur_set_tint(int $blur, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Removes the tint given with Rbackground_blur_set_tint.
+ */
 function Rbackground_blur_clear_tint(int $blur): void {}
 
+/**
+ * Saturation of what is seen through: 1 = as it is, 0 = gray, 1.5 = vivid. Negative = the one of the style.
+ */
 function Rbackground_blur_set_saturation(int $blur, float $saturation): void {}
 
+/**
+ * Fine grain over the blur, 0 = none .. 1. Negative = the one of the style.
+ */
 function Rbackground_blur_set_grain(int $blur, float $grain): void {}
 
 function Rbackground_blur_set_corner_radius(int $blur, float $top_left, float $top_right, float $bottom_right, float $bottom_left): void {}
 
+/**
+ * Space between the edge and the child.
+ */
 function Rbackground_blur_set_padding(int $blur, float $left, float $top, float $right, float $bottom): void {}
 
+/**
+ * Soft shadow under the panel; blur 0 = none (default).
+ */
 function Rbackground_blur_set_shadow(int $blur, float $shadow_blur): void {}
 
 function Rswitcher_set_index(int $switcher, int $index): void {}
 
 function Rswitcher_get_index(int $switcher): int {}
 
+/**
+ * Adds a page. Same as Rwidget_add_child followed by Rslot_set_title.
+ * Returns The index of the new tab, or -1.
+ */
 function Rtab_view_add_tab(int $tab_view, ?string $title, int $content): int {}
 
 function Rtab_view_set_active(int $tab_view, int $index): void {}
@@ -132,24 +283,55 @@ function Rtab_view_get_active(int $tab_view): int {}
 
 function Rtab_view_set_changed_callback(int $tab_view, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Documents mode: the major tabs of an application (the level,
+ * then one tab per open asset, as in Unreal): tabs on the left with an
+ * icon and a close button (a middle click closes too), shrinking when
+ * they do not fit, no slide between pages. XML: Documents="true".
+ */
 function Rtab_view_set_documents(int $tab_view, int $documents): void {}
 
 function Rtab_view_get_tab_count(int $tab_view): int {}
 
+/**
+ * The page of a tab, R_INVALID_ID if none.
+ */
 function Rtab_view_get_tab(int $tab_view, int $index): int {}
 
+/**
+ * Index of the tab of a page, -1 if none.
+ */
 function Rtab_view_find_tab(int $tab_view, int $content): int {}
 
 function Rtab_view_set_tab_title(int $tab_view, int $content, ?string $title): void {}
 
+/**
+ * Icon before the title (documents). R_INVALID_ID removes it; tint: a mask in the text color.
+ */
 function Rtab_view_set_tab_icon(int $tab_view, int $content, int $texture, float $u0, float $v0, float $u1, float $v1, int $tint): void {}
 
+/**
+ * R_FALSE: no close button (documents ; the level tab). Tabs can be closed by default.
+ */
 function Rtab_view_set_tab_closable(int $tab_view, int $content, int $closable): void {}
 
+/**
+ * Shows the tab of a page (the changed callback is called).
+ */
 function Rtab_view_show_tab(int $tab_view, int $content): void {}
 
 function Rtab_view_set_close_callback(int $tab_view, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * The user closes a tab (its button, a middle click). Return R_TRUE
+ * to delete its page now, R_FALSE to keep it (the application may ask to
+ * save, then delete the page itself with Rwidget_destroy).
+ * /
+ * typedef int (*RTabCloseCallback)(Rid tab_view, int index, Rid content, void* user_data);
+ * RAVEN_API void Rtab_view_set_close_callback(Rid tab_view, RTabCloseCallback callback, void* user_data);
+ *
+ * /* EXPANDER
+ */
 function Rexpander_set_title(int $expander, ?string $title): void {}
 
 function Rexpander_get_title(int $expander): ?string {}
@@ -160,10 +342,30 @@ function Rexpander_is_expanded(int $expander): int {}
 
 function Rexpander_set_changed_callback(int $expander, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * A widget: the direction of its parent (the default). * /
+ * R_DIRECTION_INHERIT = 0,
+ * R_DIRECTION_LTR = 0x0720,
+ * R_DIRECTION_RTL,
+ * /** The windows: the direction of the language. * /
+ * R_DIRECTION_AUTO
+ * } RDirection;
+ *
+ * /** brief Direction of every window: R_DIRECTION_AUTO (the default), _LTR or _RTL.
+ */
 function Rset_layout_direction(int $direction): void {}
 
+/**
+ * The direction the windows use now: R_DIRECTION_LTR or _RTL.
+ */
 function Rget_layout_direction(): int {}
 
+/**
+ * Direction of a part of a window: R_DIRECTION_INHERIT, _LTR or _RTL.
+ */
 function Rwidget_set_direction(int $widget, int $direction): void {}
 
+/**
+ * The direction the widget is laid out in: R_DIRECTION_LTR or _RTL.
+ */
 function Rwidget_get_direction(int $widget): int {}

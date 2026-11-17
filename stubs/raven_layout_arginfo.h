@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 1d37e0af1a6c440f952abe8e4ac75abef135d5c6 */
+ * Stub hash: 861248eb1d163f3729ecc8e7d3e7473389751779 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpanel_set_spacing, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, panel, IS_LONG, 0)

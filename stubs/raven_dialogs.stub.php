@@ -128,36 +128,215 @@ final class RFileDialogDesc
     public function __construct(int $parent = 0, ?string $title = null, ?string $directory = null, ?string $file_name = null, ?array $filters = null, int $filter_count = 0, ?string $default_extension = null, int $flags = 0) {}
 }
 
+/**
+ * Raven
+ * raven_dialogs.h : dialogs, message boxes, file dialogs and the file browser.
+ *
+ * DIALOGS
+ *
+ * A dialog is any widget shown as a sheet over the content of a window: a
+ * veil falls on the window, the sheet rises in the middle, and the window
+ * only listens to the sheet until it is closed. Rdialog_open returns at
+ * once; Rdialog_run waits for the dialog to close and returns its result.
+ *
+ * FILE DIALOGS
+ *
+ * Rfile_dialog_open / _save / _select_folder ask the user for a path and
+ * return when it is chosen. They show the dialog of the operating system
+ * (Windows: the Explorer dialog; Linux: the one of the desktop, through
+ * zenity or kdialog) and, where there is none, the file browser of Raven in a
+ * dialog. R_FILE_DIALOG_RAVEN always uses the latter.
+ *
+ * The file browser is also a widget, R_WIDGET_FILE_BROWSER, to put in any
+ * layout: a side panel showing a project folder, a custom "open" page...
+ *
+ * <FileBrowser Name="files" Directory="~/Projects" Filter="*.xml;*.c" Controls="false"/>
+ *
+ * The functions that wait (Rdialog_run, Rmessage_box, Rfile_dialog_...) run
+ * the frames of the application themselves while they wait: timers, tasks
+ * and the frame callback keep running, the windows keep being drawn.
+ * /
+ *
+ * #ifndef RAVEN_DIALOGS_H
+ * #define RAVEN_DIALOGS_H
+ *
+ * #include "raven_widget.h"
+ *
+ * /** How much a notification of the system asks for attention (Rnotification_show). * /
+ * typedef enum RNotificationUrgency{
+ * /** No sound; may only go to the list of notifications. * /
+ * R_NOTIFICATION_LOW = 0x04F0,
+ * R_NOTIFICATION_NORMAL,
+ * /** Stays until the user dismisses it, where the system allows it. * /
+ * R_NOTIFICATION_CRITICAL
+ * }RNotificationUrgency;
+ *
+ * /** A kind of file in a file dialog. * /
+ * typedef struct RFileFilter {
+ * /** Shown to the user: "Images". * /
+ * const char* name;
+ * /** Patterns separated by ';': "*.png;*.jpg". "*" matches everything. * /
+ * const char* patterns;
+ * } RFileFilter;
+ *
+ * typedef enum RFileDialogFlags{
+ * /** Several files can be chosen (Rfile_dialog_open): see Rfile_dialog_get_result. * /
+ * R_FILE_DIALOG_MULTIPLE    = (1 << 0),
+ * /** Never the dialog of the OS: the file browser of Raven, in a dialog of the parent window. * /
+ * R_FILE_DIALOG_RAVEN       = (1 << 1),
+ * R_FILE_DIALOG_SHOW_HIDDEN = (1 << 2)
+ * }RFileDialogFlags;
+ *
+ * /** Every field may be left to zero. * /
+ * typedef struct RFileDialogDesc {
+ * /** Window the dialog belongs to. R_INVALID_ID: none (a window is opened when Raven needs one). * /
+ * Rid parent;
+ * /** NULL: "Open", "Save as"... * /
+ * const char* title;
+ * /** Folder shown first. NULL: the one of the previous dialog, else the home of the user. * /
+ * const char* directory;
+ * /** Name proposed to the user (save dialogs). * /
+ * const char* file_name;
+ * const RFileFilter* filters;
+ * int filter_count;
+ * /** Save dialogs: added to a name typed without extension ("xml"). * /
+ * const char* default_extension;
+ * /** Bitmask of RFileDialogFlags. * /
+ * Ruint flags;
+ * } RFileDialogDesc;
+ *
+ * typedef enum RFileBrowserMode{
+ * /** Choose an existing file. * /
+ * R_FILE_BROWSER_OPEN = 0x0380,
+ * /** Choose where to save: a name is typed; an existing file must be confirmed. * /
+ * R_FILE_BROWSER_SAVE,
+ * /** Choose a folder. * /
+ * R_FILE_BROWSER_FOLDER
+ * }RFileBrowserMode;
+ *
+ * typedef enum RMessageButtons{
+ * R_MESSAGE_OK = 0x0390,
+ * R_MESSAGE_OK_CANCEL,
+ * R_MESSAGE_YES_NO,
+ * R_MESSAGE_YES_NO_CANCEL
+ * }RMessageButtons;
+ *
+ * typedef enum RMessageResult{
+ * /** Dismissed (Escape), or the Cancel button. * /
+ * R_MESSAGE_RESULT_CANCEL = 0,
+ * R_MESSAGE_RESULT_OK,
+ * R_MESSAGE_RESULT_YES,
+ * R_MESSAGE_RESULT_NO
+ * }RMessageResult;
+ *
+ * /** brief Called when a dialog closes. `result` is the value given to Rdialog_close, 0 when dismissed. * /
+ * typedef void (*RDialogClosedCallback)(Rid content, int result, void* user_data);
+ *
+ *
+ * #ifdef __cplusplus
+ * extern "C" {
+ * #endif
+ *
+ * /* ============================================================================
+ * DIALOGS
+ * ============================================================================ * /
+ *
+ * /**
+ * Shows a widget as a dialog of a window. The window takes
+ * ownership of `content`: it is deleted when the dialog closes, so read
+ * what you need from it before, or in `closed`.
+ * The Escape key dismisses the dialog (result 0).
+ */
 function Rdialog_open(int $window, int $content, ?callable $closed, mixed $user_data): void {}
 
+/**
+ * Closes the dialog that contains a widget (the content itself or
+ * anything inside it: the button that was clicked).
+ * Passed to the closed callback and returned by Rdialog_run.
+ */
 function Rdialog_close(int $widget, int $result): void {}
 
+/**
+ * Shows a dialog and waits until it closes. Returns its result.
+ */
 function Rdialog_run(int $window, int $content): int {}
 
+/**
+ * Shows a widget as a popup over the window, its top-left corner at
+ * x, y (window coordinates; moved to stay inside the window): a search box,
+ * a palette, a picker. Unlike a dialog it does not block the window: a click
+ * outside it, or Escape, closes it. The application keeps the content (it is
+ * not deleted on close) and can open it again. `closed` (may be NULL) is
+ * called when it closes, with the result given to Rpopup_close (0 when dismissed).
+ * The content draws its own background (a Border with a Background...).
+ */
 function Rpopup_open(int $window, int $content, float $x, float $y, ?callable $closed, mixed $user_data): void {}
 
+/**
+ * Closes the popup that contains a widget (the content or anything inside it).
+ */
 function Rpopup_close(int $widget, int $result): void {}
 
+/**
+ * Returns R_TRUE while the widget is shown as a popup.
+ */
 function Rpopup_is_open(int $content): int {}
 
+/**
+ * Returns R_TRUE while a dialog is shown in the window.
+ */
 function Rwindow_has_dialog(int $window): int {}
 
+/**
+ * Shows a message with buttons and waits for the answer.
+ * R_INVALID_ID: the first window of the application.
+ * May be NULL.
+ */
 function Rmessage_box(int $window, ?string $title, ?string $text, int $buttons): int {}
 
+/**
+ * Asks for a file to open.
+ * May be NULL.
+ * Returns The path (UTF-8), valid until the next file dialog, or NULL when the user cancelled.
+ */
 function Rfile_dialog_open(?RFileDialogDesc $desc): ?string {}
 
+/**
+ * Asks where to save a file. An existing file was confirmed by the user.
+ */
 function Rfile_dialog_save(?RFileDialogDesc $desc): ?string {}
 
+/**
+ * Asks for a folder.
+ */
 function Rfile_dialog_select_folder(?RFileDialogDesc $desc): ?string {}
 
+/**
+ * What the last file dialog returned: several paths with R_FILE_DIALOG_MULTIPLE.
+ */
 function Rfile_dialog_get_result_count(): int {}
 
 function Rfile_dialog_get_result(int $index): ?string {}
 
+/**
+ * Registers a file held in memory under a path: every file Raven
+ * reads (XML documents and their Include, Source and Font attributes,
+ * themes, textures, fonts, Rfile_read) is looked up here first, so that
+ * resources embedded in the executable need no file beside it. A relative
+ * path names the file as it is written in the XML once joined to the
+ * folder of the document that names it (Rxml_set_base_path for a
+ * document given as text), e.g. "ui/editor.xml". Paths compare with '/'
+ * and '\\' alike. Memory files are not watched for live reload. Call it
+ * after Rinit; Rshutdown forgets every file.
+ * R_TRUE: Raven keeps a copy; R_FALSE: `data` must outlive Raven (static data).
+ */
 function Rfile_register_memory(?string $path, string $data, int $size, int $copy): int {}
 
 function Rfile_unregister_memory(?string $path): void {}
 
+/**
+ * R_TRUE when `path` is a file registered with Rfile_register_memory.
+ */
 function Rfile_is_memory(?string $path): int {}
 
 function Rfile_write(?string $path, string $data, int $size): int {}
@@ -166,42 +345,102 @@ function Rfile_browser_create(): int {}
 
 function Rfile_browser_set_mode(int $browser, int $mode): void {}
 
+/**
+ * Shows a folder. "~" is the home of the user. Returns R_FALSE when it cannot be read.
+ */
 function Rfile_browser_set_directory(int $browser, ?string $path): int {}
 
 function Rfile_browser_get_directory(int $browser): ?string {}
 
+/**
+ * Reads the folder again.
+ */
 function Rfile_browser_refresh(int $browser): void {}
 
+/**
+ * Kinds of files the user chooses from; the first one is active. The strings are copied.
+ */
 function Rfile_browser_set_filters(int $browser, array $filters, int $count): void {}
 
 function Rfile_browser_set_show_hidden(int $browser, int $show): void {}
 
+/**
+ * R_TRUE lets several files be selected (Ctrl and Shift with a click).
+ */
 function Rfile_browser_set_multiple(int $browser, int $multiple): void {}
 
+/**
+ * R_FALSE hides the name field, the filter list and the buttons:
+ * what remains is an explorer to put in a side panel. Shown by default.
+ */
 function Rfile_browser_set_controls_visible(int $browser, int $visible): void {}
 
+/**
+ * R_FALSE hides the list of places on the left.
+ */
 function Rfile_browser_set_places_visible(int $browser, int $visible): void {}
 
+/**
+ * Name typed in the name field (save mode).
+ */
 function Rfile_browser_set_file_name(int $browser, ?string $name): void {}
 
+/**
+ * Added to a name typed without extension, in save mode.
+ */
 function Rfile_browser_set_default_extension(int $browser, ?string $extension): void {}
 
+/**
+ * Paths of the selected entries. The strings are valid until the selection or the folder changes.
+ */
 function Rfile_browser_get_selection_count(int $browser): int {}
 
 function Rfile_browser_get_selection(int $browser, int $index): ?string {}
 
+/**
+ * Selects an entry of the folder by its name.
+ */
 function Rfile_browser_select(int $browser, ?string $name): void {}
 
 function Rfile_browser_set_accepted_callback(int $browser, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the user chooses: a double click or Enter on a file,
+ * the Open / Save button. `path` is the first chosen path; with several
+ * files, read them with Rfile_browser_get_selection. The action of the
+ * widget (OnActivated in XML) fires at the same time.
+ * /
+ * typedef void (*RFileBrowserCallback)(Rid browser, const char* path, void* user_data);
+ * RAVEN_API void Rfile_browser_set_accepted_callback(Rid browser, RFileBrowserCallback callback, void* user_data);
+ * /** brief Called by the Cancel button.
+ */
 function Rfile_browser_set_cancelled_callback(int $browser, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the selection changes; `path` is the entry under the cursor, or NULL.
+ */
 function Rfile_browser_set_selection_changed_callback(int $browser, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Returns R_TRUE when the system took the notification.
+ */
 function Rnotification_show(?string $title, ?string $body, int $urgency): int {}
 
+/**
+ * R_FALSE when the platform has no notifications (Rnotification_show then always uses the fallback).
+ */
 function Rnotification_is_supported(): int {}
 
+/**
+ * Called with the notifications the system could not show; NULL: none.
+ */
 function Rnotification_set_fallback(?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the user clicks a notification of Rnotification_show
+ * (on the UI thread; the application may then bring its window to the
+ * front: the system lets it). It is the last one shown that was clicked:
+ * the application remembers what it was about. NULL: none.
+ * Windows and macOS (elsewhere it is never called).
+ */
 function Rnotification_set_clicked_callback(?callable $callback, mixed $user_data): void {}

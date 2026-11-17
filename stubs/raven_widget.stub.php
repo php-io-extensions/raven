@@ -472,20 +472,242 @@ const R_HORIZONTAL = UNKNOWN;
  */
 const R_VERTICAL = UNKNOWN;
 
+/**
+ * Raven
+ * raven_widget.h : widget tree, slots and properties shared by every widget.
+ *
+ * The layout model follows Unreal's Slate:
+ * - a widget computes a desired size from its content (bottom-up pass),
+ * - a panel then arranges its children inside the space it received
+ * (top-down pass),
+ * - how a child is placed inside its parent is described by its *slot*:
+ * padding, alignment, auto / fill sizing, grid cell, canvas anchors.
+ *
+ * A widget has at most one parent, so the slot is stored with the child and
+ * is edited with Rslot_set_...(child, ...). Slot values a panel does not use
+ * are ignored.
+ * /
+ *
+ * #ifndef RAVEN_WIDGET_H
+ * #define RAVEN_WIDGET_H
+ *
+ * #include "raven_core.h"
+ * #include "raven_window.h"
+ * #include "raven_style.h"
+ *
+ *
+ * typedef enum RWidgetType{
+ * /* ---- panels (raven_layout.h) ---- * /
+ * /** Stacks children top to bottom. Slate: SVerticalBox. * /
+ * R_WIDGET_VBOX = 0x0200,
+ * /** Stacks children left to right. Slate: SHorizontalBox. * /
+ * R_WIDGET_HBOX,
+ * /** Rows and columns with spans and fill coefficients. Slate: SGridPanel. * /
+ * R_WIDGET_GRID,
+ * /** Grid whose cells all have the same size. Slate: SUniformGridPanel. * /
+ * R_WIDGET_UNIFORM_GRID,
+ * /** Draws children on top of each other. Slate: SOverlay. * /
+ * R_WIDGET_OVERLAY,
+ * /** One child with a background, an outline and inner padding. Slate: SBorder. * /
+ * R_WIDGET_BORDER,
+ * /** One child with size constraints or a fixed aspect ratio. Slate: SBox. * /
+ * R_WIDGET_SIZE_BOX,
+ * /** Empty space. Slate: SSpacer. * /
+ * R_WIDGET_SPACER,
+ * /** Scrollable stack of children. Slate: SScrollBox. * /
+ * R_WIDGET_SCROLL_BOX,
+ * /** Children separated by draggable handles. Slate: SSplitter. * /
+ * R_WIDGET_SPLITTER,
+ * /** Flows children and wraps to the next line. Slate: SWrapBox. * /
+ * R_WIDGET_WRAP_BOX,
+ * /** Children placed with anchors and offsets. Slate: SConstraintCanvas. * /
+ * R_WIDGET_CANVAS,
+ * /** Shows one child at a time. Slate: SWidgetSwitcher. * /
+ * R_WIDGET_SWITCHER,
+ * /** Tab bar + one page per child. * /
+ * R_WIDGET_TAB_VIEW,
+ * /** Collapsible header + one child. Slate: SExpandableArea. * /
+ * R_WIDGET_EXPANDER,
+ *
+ * /* ---- controls (raven_controls.h) ---- * /
+ * R_WIDGET_LABEL,
+ * R_WIDGET_BUTTON,
+ * R_WIDGET_CHECKBOX,
+ * R_WIDGET_SLIDER,
+ * R_WIDGET_PROGRESSBAR,
+ * R_WIDGET_IMAGE,
+ * R_WIDGET_TEXT_INPUT,
+ * R_WIDGET_SPIN_BOX,
+ * R_WIDGET_COMBO_BOX,
+ * R_WIDGET_SEPARATOR,
+ * R_WIDGET_LIST_VIEW,
+ * R_WIDGET_TREE_VIEW,
+ * R_WIDGET_MENU_BAR,
+ * R_WIDGET_MENU,
+ * R_WIDGET_MENU_ITEM,
+ *
+ * /* ---- raven_viewport.h / raven_draw.h ---- * /
+ * /** Area showing content rendered by the application. * /
+ * R_WIDGET_VIEWPORT,
+ * /** Widget painted and measured by application callbacks. * /
+ * R_WIDGET_CUSTOM,
+ *
+ * /* ---- raven_text_editor.h ---- * /
+ * /** Multi-line text editor. * /
+ * R_WIDGET_TEXT_EDITOR,
+ *
+ * /* ---- raven_shell.h ---- * /
+ * /** Title bar of a window with a custom header, holding any widget. * /
+ * R_WIDGET_HEADER_BAR,
+ * /** Panels docked side by side or behind tabs, that the user rearranges. * /
+ * R_WIDGET_DOCK_AREA,
+ * /** A capsule that unfolds into a panel, at the top of a window. * /
+ * R_WIDGET_ISLAND,
+ *
+ * /* ---- raven_dialogs.h ---- * /
+ * /** Explorer of the files of the computer. * /
+ * R_WIDGET_FILE_BROWSER,
+ *
+ * /* ---- raven_layout.h ---- * /
+ * /** One child over a blurred view of what is behind it. * /
+ * R_WIDGET_BACKGROUND_BLUR,
+ *
+ * /* ---- raven_tools.h ---- * /
+ * /** Chooses a color: hue, saturation, value, opacity, by hand or by numbers. * /
+ * R_WIDGET_COLOR_PICKER,
+ * /** Tracks of clips and keys along a time ruler. * /
+ * R_WIDGET_TIMELINE,
+ * /** Nodes linked by wires, on a canvas that pans and zooms. * /
+ * R_WIDGET_NODE_GRAPH,
+ *
+ * /* ---- raven_controls.h ---- * /
+ * /** Grid of tiles (an icon over a name), virtualized. Slate: STileView. * /
+ * R_WIDGET_TILE_VIEW,
+ *
+ * /* ---- raven_tools.h ---- * /
+ * /** Blocks that snap into each other, in the style of Scratch. * /
+ * R_WIDGET_BLOCK_EDITOR,
+ *
+ * /* ---- raven_controls.h ---- * /
+ * /** Rows of cells under columns that can be resized and sorted, virtualized. * /
+ * R_WIDGET_TABLE,
+ * /** A date, chosen in a calendar that drops down. * /
+ * R_WIDGET_DATE_PICKER,
+ * /** A time of the day: hours, minutes, optionally seconds. * /
+ * R_WIDGET_TIME_PICKER,
+ * /** A short message that rises for a few seconds, with an optional action ("Undo"). * /
+ * R_WIDGET_TOAST,
+ * /** The path to the current place: links separated by chevrons. * /
+ * R_WIDGET_BREADCRUMB,
+ * /** A score shown and chosen with stars. * /
+ * R_WIDGET_RATING,
+ * /** Page numbers with previous and next. * /
+ * R_WIDGET_PAGINATION,
+ * /** Curves of X / Y data: legend, line styles, markers, log axes, a second X and Y axis, pan and zoom. * /
+ * R_WIDGET_PLOT,
+ * /** The pages of a PDF document, scrolled and zoomed (drawn by PDFium, loaded at run time). * /
+ * R_WIDGET_PDF_VIEW,
+ * /** The charts of dashboards: pie, donut, gauge, heatmap, sparkline (RChartKind). * /
+ * R_WIDGET_CHART,
+ *
+ * R_WIDGET_LAST_
+ * }RWidgetType;
+ *
+ * typedef enum RHAlign{
+ * R_HALIGN_FILL = 0x0240,
+ * R_HALIGN_LEFT,
+ * R_HALIGN_CENTER,
+ * R_HALIGN_RIGHT
+ * }RHAlign;
+ *
+ * typedef enum RVAlign{
+ * R_VALIGN_FILL = 0x0250,
+ * R_VALIGN_TOP,
+ * R_VALIGN_CENTER,
+ * R_VALIGN_BOTTOM
+ * }RVAlign;
+ *
+ * typedef enum RVisibility{
+ * /** Drawn and laid out. * /
+ * R_VISIBLE = 0x0260,
+ * /** Not drawn, but still takes its space in the layout. * /
+ * R_HIDDEN,
+ * /** Not drawn and takes no space. * /
+ * R_COLLAPSED
+ * }RVisibility;
+ *
+ * /**
+ * How a widget arrives. A transition animates what the widget and its
+ * children draw; the layout is not affected, the widget is in place from the
+ * first frame for its neighbours and for the mouse.
+ * /
+ * typedef enum RTransition{
+ * R_TRANSITION_NONE = 0x0300,
+ * /** Becomes opaque. * /
+ * R_TRANSITION_FADE,
+ * /** Grows from a smaller size and bounces a little past its own. * /
+ * R_TRANSITION_POP,
+ * /** Shrinks from a larger size. * /
+ * R_TRANSITION_ZOOM,
+ * /** Flies in from below / above / the right / the left, and settles with a bounce. * /
+ * R_TRANSITION_FLY_UP,
+ * R_TRANSITION_FLY_DOWN,
+ * R_TRANSITION_FLY_LEFT,
+ * R_TRANSITION_FLY_RIGHT,
+ * /** Falls from above, squashes on landing and wobbles. * /
+ * R_TRANSITION_DROP,
+ * /** Short slide from the right / from the left, without bounce: pages that replace one another. * /
+ * R_TRANSITION_SLIDE_LEFT,
+ * R_TRANSITION_SLIDE_RIGHT
+ * }RTransition;
+ *
+ * typedef enum ROrientation{
+ * R_HORIZONTAL = 0x0270,
+ * R_VERTICAL
+ * }ROrientation;
+ *
+ *
+ * #ifdef __cplusplus
+ * extern "C" {
+ * #endif
+ *
+ * /* ============================================================================
+ * CREATION & TREE
+ * ============================================================================ * /
+ *
+ * /**
+ * Creates a widget. It is not shown until it is added to a parent
+ * that belongs to a window (Rwidget_add_child, Rwindow_set_content).
+ */
 function Rwidget_create(int $type): int {}
 
+/**
+ * Deletes a widget and all its descendants.
+ */
 function Rwidget_destroy(int $widget): void {}
 
 function Rwidget_is_valid(int $widget): int {}
 
 function Rwidget_get_type(int $widget): int {}
 
+/**
+ * Appends a child to a panel. The parent takes ownership.
+ * A widget that already has a parent is moved.
+ * Returns `child`, so calls can be nested:
+ * Rid ok = Rwidget_add_child(row, Rbutton_create("OK"));
+ */
 function Rwidget_add_child(int $parent, int $child): int {}
 
 function Rwidget_insert_child(int $parent, int $child, int $index): int {}
 
+/**
+ * Detaches a child without deleting it. The caller owns it again.
+ */
 function Rwidget_remove_child(int $parent, int $child): void {}
 
+/**
+ * Deletes every child of a panel.
+ */
 function Rwidget_clear_children(int $parent): void {}
 
 function Rwidget_get_parent(int $widget): int {}
@@ -494,30 +716,68 @@ function Rwidget_get_child_count(int $widget): int {}
 
 function Rwidget_get_child(int $widget, int $index): int {}
 
+/**
+ * Returns The window showing the widget, or R_INVALID_ID.
+ */
 function Rwidget_get_window(int $widget): int {}
 
 function Rwidget_set_name(int $widget, ?string $name): void {}
 
 function Rwidget_get_name(int $widget): ?string {}
 
+/**
+ * Finds a widget by name.
+ * A window or a widget; the search covers its whole subtree.
+ * Returns R_INVALID_ID when no widget has that name.
+ */
 function Rwidget_find(int $scope, ?string $name): int {}
 
+/**
+ * Space kept around the child, inside its slot. All panels.
+ */
 function Rslot_set_padding(int $child, float $left, float $top, float $right, float $bottom): void {}
 
+/**
+ * Alignment of the child inside its slot. Default: fill. All panels.
+ */
 function Rslot_set_halign(int $child, int $align): void {}
 
 function Rslot_set_valign(int $child, int $align): void {}
 
+/**
+ * The slot takes the desired size of the child along the panel
+ * direction (Slate AutoWidth / AutoHeight). This is the default.
+ * VBox, HBox.
+ */
 function Rslot_set_auto(int $child): void {}
 
+/**
+ * The slot shares the space left by the auto slots, in proportion
+ * to `coefficient` (Slate FillWidth / FillHeight). VBox, HBox.
+ * In a Splitter, the coefficient is the relative size of the pane.
+ */
 function Rslot_set_fill(int $child, float $coefficient): void {}
 
+/**
+ * Upper bound of the slot along the panel direction. 0 = none. VBox, HBox.
+ */
 function Rslot_set_max_size(int $child, float $max_size): void {}
 
+/**
+ * Cell of the child. Grid, UniformGrid.
+ */
 function Rslot_set_grid(int $child, int $column, int $row): void {}
 
 function Rslot_set_grid_span(int $child, int $column_span, int $row_span): void {}
 
+/**
+ * Canvas placement. Anchors are fractions of the canvas size (0..1).
+ * - anchors equal on an axis: the child is at anchor + position, with
+ * the slot size (or its desired size when the slot size is <= 0);
+ * - anchors different on an axis: the child stretches between them,
+ * position and size are then the near and far margins.
+ * Alignment is the pivot of the child (0,0 = top-left, 0.5,0.5 = center).
+ */
 function Rslot_set_anchors(int $child, float $min_x, float $min_y, float $max_x, float $max_y): void {}
 
 function Rslot_set_position(int $child, float $x, float $y): void {}
@@ -526,38 +786,79 @@ function Rslot_set_size(int $child, float $width, float $height): void {}
 
 function Rslot_set_alignment(int $child, float $x, float $y): void {}
 
+/**
+ * Title of the tab showing the child. TabView.
+ */
 function Rslot_set_title(int $child, ?string $title): void {}
 
 function Rwidget_set_visibility(int $widget, int $visibility): void {}
 
 function Rwidget_get_visibility(int $widget): int {}
 
+/**
+ * A disabled widget ignores input and is drawn dimmed, with its descendants.
+ */
 function Rwidget_set_enabled(int $widget, int $enabled): void {}
 
 function Rwidget_is_enabled(int $widget): int {}
 
+/**
+ * R_FALSE lets mouse events pass through the widget (not its children).
+ */
 function Rwidget_set_hit_testable(int $widget, int $hit_testable): void {}
 
+/**
+ * Opacity multiplier applied to the widget and its descendants (0..1).
+ */
 function Rwidget_set_opacity(int $widget, float $opacity): void {}
 
+/**
+ * Gives the widget a transition that plays each time it appears:
+ * when its window is first drawn, when it is added to a window that is
+ * shown, and when it becomes visible again (Rwidget_set_visibility, a
+ * tab or a switcher showing it). In XML: Appear="FlyUp" AppearDelay="0.1".
+ * Time before it starts. Give growing delays to the
+ * items of a group to make them arrive one after the other.
+ */
 function Rwidget_set_transition(int $widget, int $transition, float $delay_seconds): void {}
 
+/**
+ * Plays a transition once, now, whatever the widget was given with Rwidget_set_transition.
+ */
 function Rwidget_play_transition(int $widget, int $transition, float $delay_seconds): void {}
 
+/**
+ * R_TRUE clips the descendants to the bounds of the widget.
+ */
 function Rwidget_set_clipping(int $widget, int $clip): void {}
 
+/**
+ * Text shown when the cursor rests on the widget. NULL removes it. A label, which otherwise
+ * lets the mouse through, takes the hover while it has a tooltip (events it does not use still bubble).
+ */
 function Rwidget_set_tooltip(int $widget, ?string $text): void {}
 
+/**
+ * Returns The tooltip text of the widget, "" when it has none.
+ */
 function Rwidget_get_tooltip(int $widget): ?string {}
 
 function Rwidget_set_cursor(int $widget, int $cursor): void {}
 
+/**
+ * Size constraints, in logical units. They apply to the desired size the
+ * widget reports to its parent. A negative value removes the constraint
+ * on that axis.
+ */
 function Rwidget_set_size(int $widget, float $width, float $height): void {}
 
 function Rwidget_set_min_size(int $widget, float $width, float $height): void {}
 
 function Rwidget_set_max_size(int $widget, float $width, float $height): void {}
 
+/**
+ * Bounds of the widget in its window, in logical units, after the last layout.
+ */
 function Rwidget_get_rect(int $widget, ?float &$x, ?float &$y, ?float &$width, ?float &$height): void {}
 
 function Rwidget_get_desired_size(int $widget, ?float &$width, ?float &$height): void {}
@@ -566,6 +867,9 @@ function Rwidget_is_hovered(int $widget): int {}
 
 function Rwidget_set_focusable(int $widget, int $focusable): void {}
 
+/**
+ * Gives the keyboard focus to the widget.
+ */
 function Rwidget_focus(int $widget): void {}
 
 function Rwidget_is_focused(int $widget): int {}
@@ -578,40 +882,122 @@ function Rwidget_set_destroy_callback(int $widget, ?callable $callback, mixed $u
 
 function Rwidget_set_event_callback(int $widget, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called once when the widget is gone: deleted by the application,
+ * with its parent or its window, or by Rshutdown. The place to release
+ * what belonged to it (a texture, a connection). The handle it receives
+ * names nothing any more: it is only there to tell widgets apart.
+ * Called on the UI thread, shortly after the deletion.
+ * /
+ * typedef void (*RWidgetDestroyCallback)(Rid widget, void* user_data);
+ * RAVEN_API void Rwidget_set_destroy_callback(Rid widget, RWidgetDestroyCallback callback, void* user_data);
+ *
+ * /**
+ * Receives the input events of a widget before the widget itself.
+ * Return R_TRUE to consume the event (the widget and its parents will
+ * not see it), R_FALSE to let it continue.
+ * /
+ * typedef int (*RWidgetEventCallback)(Rid widget, const REvent* event, void* user_data);
+ * RAVEN_API void Rwidget_set_event_callback(Rid widget, RWidgetEventCallback callback, void* user_data);
+ *
+ * /**
+ * Name of the action fired by the main event of the widget: button
+ * click, value change, text commit, item activation (see Raction_bind).
+ */
 function Rwidget_set_action(int $widget, ?string $action): void {}
 
 function Rwidget_get_action(int $widget): ?string {}
 
+/**
+ * Makes the widget a target for what is dragged from other
+ * applications: files from the file manager, text. It is highlighted
+ * while a drop on it would be accepted. NULL removes the callback.
+ */
 function Rwidget_set_drop_callback(int $widget, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * In a window created with R_WINDOW_CUSTOM_HEADER: dragging the
+ * widget moves the window and a double click maximizes it, as a title bar
+ * does. The buttons, fields and other controls inside it keep working.
+ * In XML: WindowDrag="true".
+ */
 function Rwidget_set_window_drag(int $widget, int $enabled): void {}
 
+/**
+ * Deepest widget of a subtree under a point of its window, or R_INVALID_ID.
+ */
 function Rwidget_hit_test(int $root, float $x, float $y): int {}
 
+/**
+ * Deepest visible widget of a subtree under a point of its window,
+ * whether it reacts to the pointer or not: a label, a panel, a disabled
+ * button. What a design tool selects with a click.
+ */
 function Rwidget_pick(int $root, float $x, float $y): int {}
 
+/**
+ * Menu opened by a right click on the widget. The widget does not own it.
+ */
 function Rwidget_set_context_menu(int $widget, int $menu): void {}
 
+/**
+ * Asks for the widget to be laid out and painted again.
+ */
 function Rwidget_invalidate(int $widget): void {}
 
+/**
+ * Overrides a theme color for one widget. R_COLOR_TEXT is also
+ * inherited by its descendants.
+ */
 function Rwidget_set_color(int $widget, int $role, float $r, float $g, float $b, float $a): void {}
 
 function Rwidget_clear_color(int $widget, int $role): void {}
 
+/**
+ * The color the widget is drawn with for a role: its own, else
+ * the one of the styles of its theme that apply to it, else the one of
+ * its theme. What a custom widget should draw itself with.
+ */
 function Rwidget_get_color(int $widget, int $role, ?float &$r, ?float &$g, ?float &$b, ?float &$a): void {}
 
+/**
+ * Gives one widget a material of its own, whatever the theme:
+ * a solid button in a glass window, a panel of clear glass in a flat one.
+ * A widget that draws no surface (a box, a label) gets one of this
+ * material behind it: any widget can become a panel of glass.
+ * In XML: Material="Glass | FrostedGlass | TintedGlass | Solid".
+ * R_MATERIAL_DEFAULT follows the theme again.
+ */
 function Rwidget_set_material(int $widget, int $material): void {}
 
+/**
+ * Returns The material the widget is drawn with: its own, or the one of the theme.
+ */
 function Rwidget_get_material(int $widget): int {}
 
+/**
+ * Overrides a theme metric for one widget.
+ */
 function Rwidget_set_metric(int $widget, int $metric, float $value): void {}
 
 function Rwidget_clear_metric(int $widget, int $metric): void {}
 
+/**
+ * Returns The metric the widget uses: its own, else the one of a style, else the one of its theme.
+ */
 function Rwidget_get_metric(int $widget, int $metric): float {}
 
+/**
+ * Classes of the widget, separated by spaces ("danger large"):
+ * the styles of the theme made for these classes apply to it
+ * (Rtheme_set_style_color, <Style Class="danger" .../> in a theme file).
+ * In XML: Class="...". NULL or "" removes them.
+ */
 function Rwidget_set_class(int $widget, ?string $classes): void {}
 
+/**
+ * Returns The classes, "" when it has none. Valid until they change.
+ */
 function Rwidget_get_class(int $widget): ?string {}
 
 function Rwidget_add_class(int $widget, ?string $style_class): void {}
@@ -620,10 +1006,32 @@ function Rwidget_remove_class(int $widget, ?string $style_class): void {}
 
 function Rwidget_has_class(int $widget, ?string $style_class): int {}
 
+/**
+ * Gives the widget and everything inside it a theme of their own,
+ * by name ("Dark", "GlassLight", or a theme of Rtheme_load): a dark side
+ * bar in a light window, a preview of another theme. Menus and lists
+ * opened from inside follow. In XML: Theme="...".
+ * NULL or "" follows the parent (the application theme) again.
+ * Returns R_FALSE, after reporting an error, when no theme has that name.
+ */
 function Rwidget_set_theme(int $widget, ?string $name): int {}
 
+/**
+ * Returns Name of the theme the widget is drawn with.
+ */
 function Rwidget_get_theme(int $widget): ?string {}
 
+/**
+ * Gives the widget and everything inside it a font, for the texts
+ * that have none of their own (a label given Rlabel_set_font keeps its
+ * own): a tool whose panels wear one font while the interface it shows
+ * keeps the font of the application. Menus and lists opened from inside
+ * follow.
+ * R_INVALID_ID: the font of the parent (in the end, the one of the theme, Rtheme_set_font) again.
+ */
 function Rwidget_set_font(int $widget, int $font): void {}
 
+/**
+ * Returns The font given to the widget itself, or R_INVALID_ID.
+ */
 function Rwidget_get_font(int $widget): int {}

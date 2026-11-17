@@ -112,120 +112,343 @@ const R_BLOCK_BODY = UNKNOWN;
  */
 const R_BLOCK_INPUT = UNKNOWN;
 
+/**
+ * Raven
+ * raven_tools.h : the widgets of creative tools.
+ *
+ * R_WIDGET_COLOR_PICKER   chooses a color
+ * R_WIDGET_TIMELINE       tracks of clips and keys along a time ruler (a sequencer)
+ * R_WIDGET_NODE_GRAPH     nodes linked by wires
+ * R_WIDGET_BLOCK_EDITOR   blocks that snap into each other (Scratch)
+ *
+ * Each of them holds a small model (a color; tracks, clips and keys; nodes,
+ * pins and links) that the application fills and reads through the
+ * functions below, or writes in XML. The things inside a timeline or a
+ * graph are named by integers that are only meaningful for that widget, 0
+ * meaning "none"; they are never reused while the widget lives.
+ * /
+ *
+ * #ifndef RAVEN_TOOLS_H
+ * #define RAVEN_TOOLS_H
+ *
+ * #include "raven_widget.h"
+ *
+ *
+ * #ifdef __cplusplus
+ * extern "C" {
+ * #endif
+ *
+ * /* ============================================================================
+ * COLOR PICKER
+ *
+ * A square of saturation and value, a strip of hues, a strip of opacity
+ * over a checkerboard, the color before and the color now side by side,
+ * its hexadecimal code, its numbers (red green blue, or hue saturation
+ * value), and a row of swatches. Everything is linked: dragging in the
+ * square moves the numbers, typing a code moves the square.
+ *
+ * <ColorPicker Name="tint" Color="#3B82F6" Alpha="true" OnChanged="tint.changed"/>
+ *
+ * With Popup="true" the widget is a swatch the size of a button, which
+ * opens the picker in a popup when clicked.
+ * ============================================================================
+ */
 function Rcolor_picker_create(): int {}
 
+/**
+ * Sets the color (0..1 each). The callback is not called.
+ */
 function Rcolor_picker_set_color(int $picker, float $r, float $g, float $b, float $a): void {}
 
 function Rcolor_picker_get_color(int $picker, ?float &$r, ?float &$g, ?float &$b, ?float &$a): void {}
 
+/**
+ * The same color as hue (0..360), saturation and value (0..1).
+ * The picker remembers the hue of a gray and the saturation of black,
+ * which red, green and blue cannot tell.
+ */
 function Rcolor_picker_set_hsv(int $picker, float $hue, float $saturation, float $value): void {}
 
 function Rcolor_picker_get_hsv(int $picker, ?float &$hue, ?float &$saturation, ?float &$value): void {}
 
+/**
+ * Sets the color from text: "#RGB", "#RRGGBB", "#RRGGBBAA" (the
+ * '#' may be left out) or one of the color names of the XML attributes.
+ * A code without opacity leaves the opacity as it is.
+ * Returns R_FALSE when the text is not a color (the color is unchanged).
+ */
 function Rcolor_picker_set_hex(int $picker, ?string $text): int {}
 
+/**
+ * Returns "#RRGGBB", or "#RRGGBBAA" when the opacity is shown and not full. Valid until the color changes.
+ */
 function Rcolor_picker_get_hex(int $picker): ?string {}
 
+/**
+ * R_TRUE (default) shows the opacity strip and the fourth number. R_FALSE: colors are opaque.
+ */
 function Rcolor_picker_set_alpha_enabled(int $picker, int $enabled): void {}
 
+/**
+ * The color shown next to the current one, to compare with what
+ * was there before: clicking it comes back to it. Rcolor_picker_set_color
+ * does not change it; a popup picker takes it when it opens.
+ */
 function Rcolor_picker_set_previous_color(int $picker, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Adds a color to the row of swatches: one click takes it.
+ */
 function Rcolor_picker_add_swatch(int $picker, float $r, float $g, float $b, float $a): void {}
 
 function Rcolor_picker_clear_swatches(int $picker): void {}
 
 function Rcolor_picker_get_swatch_count(int $picker): int {}
 
+/**
+ * R_TRUE turns the widget into a swatch that opens the picker in a popup.
+ */
 function Rcolor_picker_set_popup(int $picker, int $popup): void {}
 
+/**
+ * R_TRUE hides the code and the numbers: only the square, the strips and the swatches.
+ */
 function Rcolor_picker_set_compact(int $picker, int $compact): void {}
 
 function Rcolor_picker_set_changed_callback(int $picker, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called each time the user changes the color: while dragging,
+ * and when a code or a number is entered. The action of the widget
+ * (OnChanged in XML) fires too.
+ * /
+ * typedef void (*RColorChangedCallback)(Rid picker, float r, float g, float b, float a, void* user_data);
+ * RAVEN_API void Rcolor_picker_set_changed_callback(Rid picker, RColorChangedCallback callback, void* user_data);
+ *
+ * /* ---- colors as numbers ---- * /
+ *
+ * /** brief Red, green, blue (0..1) to hue (0..360), saturation, value (0..1).
+ */
 function Rcolor_rgb_to_hsv(float $r, float $g, float $b, ?float &$hue, ?float &$saturation, ?float &$value): void {}
 
 function Rcolor_hsv_to_rgb(float $hue, float $saturation, float $value, ?float &$r, ?float &$g, ?float &$b): void {}
 
 function Rtimeline_create(): int {}
 
+/**
+ * The look of the theme of the window: its platform, dark or light. * /
+ * R_PRESET_AUTO = 0x0510,
+ * /** Cards with soft shadows, few lines (follows dark or light). * /
+ * R_PRESET_MODERN,
+ * /** Headers in gradients, a grid of lines, thick links that glow; pins of the type "exec" are arrows. * /
+ * R_PRESET_BLUEPRINT,
+ * /** Compact nodes, flat headers in muted colors, thin links. * /
+ * R_PRESET_BLENDER,
+ * /** Almost black, outlines and links of light. * /
+ * R_PRESET_NEON
+ * }RVisualPreset;
+ *
+ *
+ * /* ============================================================================
+ * TIMELINE
+ *
+ * A sequencer: a ruler of time at the top, a playhead, and tracks one
+ * under the other. A track holds clips (something that lasts: a start
+ * and a length) and keys (a moment). The user scrubs the playhead on
+ * the ruler, moves clips along their track or to another one, stretches
+ * them by their ends, moves keys, selects by clicking or with a
+ * rectangle, zooms with Ctrl + wheel, pans with the wheel, the middle
+ * button or the scrollbars. Moves snap to the frames, to the playhead,
+ * to the markers and to the ends of the other clips.
+ *
+ * <Timeline Name="sequence" Duration="12" FrameRate="24">
+ * <Track Name="Camera" Color="#0A84FF">
+ * <Clip Start="0" Length="3.5" Label="Wide shot"/>
+ * <Clip Start="4" Length="2" Label="Close up" Color="#FF9F0A"/>
+ * </Track>
+ * <Track Name="Opacity">
+ * <Key Time="1"/> <Key Time="2.5"/>
+ * </Track>
+ * <Marker Time="6" Label="Drop"/>
+ * </Timeline>
+ *
+ * Times are in seconds. Tracks and items (clips, keys, markers) are
+ * named by the integers the add functions return.
+ * ============================================================================ * /
+ *
+ * /** What an item of a timeline is. * /
+ * typedef enum RTimelineItem{
+ * R_TIMELINE_NONE = 0x0460,
+ * R_TIMELINE_CLIP,
+ * R_TIMELINE_KEY,
+ * R_TIMELINE_MARKER
+ * }RTimelineItem;
+ *
+ * RAVEN_API Rid Rtimeline_create(void);
+ *
+ * /* ---- time ---- * /
+ *
+ * /** brief Length of the sequence. The view and the playhead stay within 0 .. duration.
+ */
 function Rtimeline_set_duration(int $timeline, float $seconds): void {}
 
 function Rtimeline_get_duration(int $timeline): float {}
 
+/**
+ * Moves the playhead. The time callback is not called.
+ */
 function Rtimeline_set_time(int $timeline, float $seconds): void {}
 
 function Rtimeline_get_time(int $timeline): float {}
 
+/**
+ * Frames per second. With a frame rate the ruler counts in
+ * frames ("2:12" is second 2, frame 12) and everything snaps to frames;
+ * 0 (default) counts in seconds and snaps to the marks of the ruler.
+ */
 function Rtimeline_set_frame_rate(int $timeline, float $frames_per_second): void {}
 
 function Rtimeline_get_frame_rate(int $timeline): float {}
 
+/**
+ * R_FALSE lets items be placed anywhere (holding Alt while dragging does it for one move).
+ */
 function Rtimeline_set_snapping(int $timeline, int $enabled): void {}
 
+/**
+ * The part of the sequence that is shown. Zooming is showing less.
+ */
 function Rtimeline_set_view(int $timeline, float $start, float $end): void {}
 
 function Rtimeline_get_view(int $timeline, ?float &$start, ?float &$end): void {}
 
+/**
+ * Makes the playhead run by itself, at the speed of the clock,
+ * calling the time callback at each frame; at the end it stops, or
+ * starts again with Rtimeline_set_loop.
+ */
 function Rtimeline_set_playing(int $timeline, int $playing): void {}
 
 function Rtimeline_is_playing(int $timeline): int {}
 
 function Rtimeline_set_loop(int $timeline, int $loop): void {}
 
+/**
+ * Width of the column of the names of the tracks. 0 (default): fits the longest name.
+ */
 function Rtimeline_set_header_width(int $timeline, float $width): void {}
 
+/**
+ * Returns The width of the column of the names, as laid out now.
+ */
 function Rtimeline_get_header_width(int $timeline): float {}
 
+/**
+ * Height of the ruler of time (and of the markers' flags band). 0 (default): automatic.
+ */
 function Rtimeline_set_ruler_height(int $timeline, float $height): void {}
 
 function Rtimeline_get_ruler_height(int $timeline): float {}
 
+/**
+ * Height of the tracks that have none of their own (Rtimeline_set_track_height). 0 (default): automatic.
+ */
 function Rtimeline_set_default_track_height(int $timeline, float $height): void {}
 
 function Rtimeline_get_default_track_height(int $timeline): float {}
 
+/**
+ * Returns The track, or 0. Tracks are shown in the order they were added.
+ */
 function Rtimeline_add_track(int $timeline, ?string $name): int {}
 
+/**
+ * Removes a track and everything on it.
+ */
 function Rtimeline_remove_track(int $timeline, int $track): void {}
 
 function Rtimeline_get_track_count(int $timeline): int {}
 
+/**
+ * Returns The index-th track from the top, or 0.
+ */
 function Rtimeline_get_track(int $timeline, int $index): int {}
 
 function Rtimeline_set_track_name(int $timeline, int $track, ?string $name): void {}
 
 function Rtimeline_get_track_name(int $timeline, int $track): ?string {}
 
+/**
+ * Color of the clips and keys of the track that have none of their own.
+ */
 function Rtimeline_set_track_color(int $timeline, int $track, float $r, float $g, float $b): void {}
 
+/**
+ * Height of the track in logical units; 0 = the default.
+ */
 function Rtimeline_set_track_height(int $timeline, int $track, float $height): void {}
 
+/**
+ * A locked track shows its items but does not let the user change them.
+ */
 function Rtimeline_set_track_locked(int $timeline, int $track, int $locked): void {}
 
+/**
+ * A muted track is drawn dimmed; what muting means is up to the application.
+ */
 function Rtimeline_set_track_muted(int $timeline, int $track, int $muted): void {}
 
+/**
+ * A property of the look of a track: "ClipStyle" (Solid,
+ * Gradient, Tint, Outline), "KeyShape" (Diamond, Circle, Square...),
+ * "KeySize", "ClipRadius", "Background" (its lane), or a part and a
+ * property ("Clip.Glow", "Key.BorderColor"). "" or "Default" gives back
+ * the one of the timeline.
+ * Returns R_FALSE when the name or the value is not one.
+ */
 function Rtimeline_set_track_style(int $timeline, int $track, ?string $property, ?string $value): int {}
 
 function Rtimeline_is_track_muted(int $timeline, int $track): int {}
 
+/**
+ * Returns The clip, or 0 when the track does not exist.
+ */
 function Rtimeline_add_clip(int $timeline, int $track, float $start, float $length, ?string $label): int {}
 
+/**
+ * Returns The key, or 0.
+ */
 function Rtimeline_add_key(int $timeline, int $track, float $time): int {}
 
+/**
+ * A named moment of the whole sequence, shown on the ruler and across the tracks.
+ */
 function Rtimeline_add_marker(int $timeline, float $time, ?string $label): int {}
 
 function Rtimeline_remove_item(int $timeline, int $item): void {}
 
+/**
+ * Removes every track, clip, key and marker.
+ */
 function Rtimeline_clear(int $timeline): void {}
 
 function Rtimeline_get_item_type(int $timeline, int $item): int {}
 
+/**
+ * Returns The track of a clip or of a key; 0 for a marker.
+ */
 function Rtimeline_get_item_track(int $timeline, int $item): int {}
 
 function Rtimeline_get_item_start(int $timeline, int $item): float {}
 
+/**
+ * Returns The length of a clip; 0 for a key or a marker.
+ */
 function Rtimeline_get_item_length(int $timeline, int $item): float {}
 
+/**
+ * Moves an item: to another track (0 = keep), another start, another length (clips; negative = keep).
+ */
 function Rtimeline_set_item(int $timeline, int $item, int $track, float $start, float $length): void {}
 
 function Rtimeline_set_item_label(int $timeline, int $item, ?string $label): void {}
@@ -234,16 +457,31 @@ function Rtimeline_get_item_label(int $timeline, int $item): ?string {}
 
 function Rtimeline_set_item_color(int $timeline, int $item, float $r, float $g, float $b): void {}
 
+/**
+ * A property of the look of one clip, key or marker: "Style"
+ * (Solid, Gradient, Tint, Outline: clips), "Shape" (keys), or any
+ * property of its part ("Background", "BorderColor", "Glow",
+ * "CornerRadius", "Foreground" for its label...).
+ */
 function Rtimeline_set_item_style(int $timeline, int $item, ?string $property, ?string $value): int {}
 
+/**
+ * The look the timeline starts from (R_PRESET_AUTO by default; Preset="..." in XML).
+ */
 function Rtimeline_set_preset(int $timeline, int $preset): void {}
 
 function Rtimeline_get_preset(int $timeline): int {}
 
 function Rtimeline_get_item_count(int $timeline): int {}
 
+/**
+ * Returns The index-th item, in the order they were added, or 0.
+ */
 function Rtimeline_get_item(int $timeline, int $index): int {}
 
+/**
+ * Selects an item, alone or (add) with the ones already selected.
+ */
 function Rtimeline_select(int $timeline, int $item, int $add): void {}
 
 function Rtimeline_clear_selection(int $timeline): void {}
@@ -256,18 +494,46 @@ function Rtimeline_get_selected(int $timeline, int $index): int {}
 
 function Rtimeline_set_time_callback(int $timeline, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * The playhead moved: scrubbed by the user, or running by itself. * /
+ * typedef void (*RTimelineTimeCallback)(Rid timeline, double seconds, void* user_data);
+ * RAVEN_API void Rtimeline_set_time_callback(Rid timeline, RTimelineTimeCallback callback, void* user_data);
+ * /** brief Something happened to an item; which thing depends on the function the callback was given to. * /
+ * typedef void (*RTimelineItemCallback)(Rid timeline, int item, void* user_data);
+ * /**
+ * Called for each item the user moved, stretched or retimed, as
+ * it happens. The action of the widget (OnChanged in XML) fires once
+ * per gesture, when the button is released.
+ */
 function Rtimeline_set_changed_callback(int $timeline, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the selection changed; `item` is the item just clicked, or 0.
+ */
 function Rtimeline_set_selection_callback(int $timeline, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when an item is double-clicked.
+ */
 function Rtimeline_set_activated_callback(int $timeline, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the user deletes an item (the Delete key), before
+ * it is removed: its values can still be read. Without this callback the
+ * Delete key does nothing: the application decides what can be deleted.
+ */
 function Rtimeline_set_removed_callback(int $timeline, ?callable $callback, mixed $user_data): void {}
 
 function Rnode_graph_create(): int {}
 
+/**
+ * Top-left corner of the node, in the units of the canvas.
+ */
 function Rnode_graph_add_node(int $graph, ?string $title, float $x, float $y): int {}
 
+/**
+ * Removes a node, its pins, their links, and the widget it holds.
+ */
 function Rnode_graph_remove_node(int $graph, int $node): void {}
 
 function Rnode_graph_clear(int $graph): void {}
@@ -284,26 +550,58 @@ function Rnode_graph_set_node_position(int $graph, int $node, float $x, float $y
 
 function Rnode_graph_get_node_position(int $graph, int $node, ?float &$x, ?float &$y): void {}
 
+/**
+ * Size of a node on the canvas: Raven works it out from its title, its pins and its content.
+ */
 function Rnode_graph_get_node_size(int $graph, int $node, ?float &$width, ?float &$height): void {}
 
+/**
+ * Color of the header of the node; without one it takes the accent color of the theme.
+ */
 function Rnode_graph_set_node_color(int $graph, int $node, float $r, float $g, float $b): void {}
 
+/**
+ * A property of the look of one node: "HeaderStyle" (Solid,
+ * Gradient, Stripe, Tint, None), "HeaderColor", "TitleColor",
+ * "Background", "BorderColor", "BorderWidth", "CornerRadius", "Glow",
+ * "Icon" (an image file shown before its title), or a part and a property
+ * ("Header.Gradient", "Node.ShadowSize"). "" or "Default" gives back the
+ * one of the graph.
+ * Returns R_FALSE when the name or the value is not one.
+ */
 function Rnode_graph_set_node_style(int $graph, int $node, ?string $property, ?string $value): int {}
 
+/**
+ * Puts a widget inside the node, under its pins: the graph owns
+ * it from now on. R_INVALID_ID removes (and deletes) the one it had.
+ */
 function Rnode_graph_set_node_content(int $graph, int $node, int $widget): void {}
 
 function Rnode_graph_get_node_content(int $graph, int $node): int {}
 
+/**
+ * Name of the node, the `Name` of its XML element: what
+ * <Link From="name.pin"> and Rnode_graph_find_node look for. Not shown.
+ */
 function Rnode_graph_set_node_name(int $graph, int $node, ?string $name): void {}
 
 function Rnode_graph_get_node_name(int $graph, int $node): ?string {}
 
+/**
+ * Returns The node of that name, or 0.
+ */
 function Rnode_graph_find_node(int $graph, ?string $name): int {}
 
+/**
+ * Value the application attaches to a node.
+ */
 function Rnode_graph_set_node_user_data(int $graph, int $node, mixed $user_data): void {}
 
 function Rnode_graph_get_node_user_data(int $graph, int $node): mixed {}
 
+/**
+ * Free text, or NULL for a pin that links to any type. return The pin, or 0.
+ */
 function Rnode_graph_add_input(int $graph, int $node, ?string $label, ?string $type): int {}
 
 function Rnode_graph_add_output(int $graph, int $node, ?string $label, ?string $type): int {}
@@ -318,22 +616,51 @@ function Rnode_graph_get_pin_label(int $graph, int $pin): ?string {}
 
 function Rnode_graph_get_pin_type(int $graph, int $pin): ?string {}
 
+/**
+ * Name of the pin for Rnode_graph_find_pin and for the links of XML; a pin without one answers to its label.
+ */
 function Rnode_graph_set_pin_name(int $graph, int $pin, ?string $name): void {}
 
+/**
+ * Returns The pin of a node with that name (or label), or 0.
+ */
 function Rnode_graph_find_pin(int $graph, int $node, ?string $name): int {}
 
+/**
+ * Where a pin is on the canvas (the middle of its dot).
+ */
 function Rnode_graph_get_pin_position(int $graph, int $pin, ?float &$x, ?float &$y): void {}
 
+/**
+ * Returns The index-th input (or output) of a node, or 0.
+ */
 function Rnode_graph_get_input(int $graph, int $node, int $index): int {}
 
 function Rnode_graph_get_output(int $graph, int $node, int $index): int {}
 
+/**
+ * Color of the pins of a type and of the links between them.
+ */
 function Rnode_graph_set_type_color(int $graph, ?string $type, float $r, float $g, float $b): void {}
 
+/**
+ * A property of the pins of a type and of their links: "Shape"
+ * (Circle, Ring, Square, Diamond, Triangle, Arrow), "Size", "Glow",
+ * "LinkShape" (Bezier, Straight, Step, Angled), "LinkWidth", "LinkGlow".
+ */
 function Rnode_graph_set_type_style(int $graph, ?string $type, ?string $property, ?string $value): int {}
 
+/**
+ * The same for one pin ("Shape", "Size", "Glow", "Color").
+ */
 function Rnode_graph_set_pin_style(int $graph, int $pin, ?string $property, ?string $value): int {}
 
+/**
+ * Links an output to an input, as the user does by dragging.
+ * The connect callback is not asked.
+ * Returns The link; 0 when the pins cannot be linked (two inputs, the
+ * same node, different types).
+ */
 function Rnode_graph_connect(int $graph, int $output_pin, int $input_pin): int {}
 
 function Rnode_graph_disconnect(int $graph, int $link): void {}
@@ -346,24 +673,51 @@ function Rnode_graph_get_link_output(int $graph, int $link): int {}
 
 function Rnode_graph_get_link_input(int $graph, int $link): int {}
 
+/**
+ * Returns The link that arrives at an input pin, or 0.
+ */
 function Rnode_graph_get_input_link(int $graph, int $input_pin): int {}
 
+/**
+ * What the middle of the widget shows: a point of the canvas, and how large (1 = one unit per logical unit).
+ */
 function Rnode_graph_set_view(int $graph, float $center_x, float $center_y, float $zoom): void {}
 
 function Rnode_graph_get_view(int $graph, ?float &$center_x, ?float &$center_y, ?float &$zoom): void {}
 
+/**
+ * Converts a point of the widget (from its corner, as in the events) to the canvas, and back, with the view as it is shown now.
+ */
 function Rnode_graph_to_canvas(int $graph, float $x, float $y, ?float &$canvas_x, ?float &$canvas_y): void {}
 
 function Rnode_graph_from_canvas(int $graph, float $canvas_x, float $canvas_y, ?float &$x, ?float &$y): void {}
 
+/**
+ * Moves and zooms so that every node shows.
+ */
 function Rnode_graph_frame_all(int $graph): void {}
 
+/**
+ * R_FALSE hides the grid of dots (shown by default).
+ */
 function Rnode_graph_set_grid_visible(int $graph, int $visible): void {}
 
+/**
+ * The pulses of light that run along the links, from output to
+ * input. By default they run while the pointer is over the graph, and
+ * the window rests the rest of the time. R_TRUE makes them run all the
+ * time (the window then draws without pause); R_FALSE stops them.
+ */
 function Rnode_graph_set_flow_visible(int $graph, int $visible): void {}
 
+/**
+ * R_TRUE: the user can look but not move, link or delete.
+ */
 function Rnode_graph_set_read_only(int $graph, int $read_only): void {}
 
+/**
+ * The look the graph starts from (R_PRESET_AUTO by default; Preset="..." in XML).
+ */
 function Rnode_graph_set_preset(int $graph, int $preset): void {}
 
 function Rnode_graph_get_preset(int $graph): int {}
@@ -380,110 +734,295 @@ function Rnode_graph_get_selected_node(int $graph, int $index): int {}
 
 function Rnode_graph_set_connect_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Asked when the user is about to link two pins that may be
+ * linked: return R_FALSE to refuse (a loop, a rule of the application).
+ * /
+ * typedef int (*RNodeGraphConnectCallback)(Rid graph, int output_pin, int input_pin, void* user_data);
+ * RAVEN_API void Rnode_graph_set_connect_callback(Rid graph, RNodeGraphConnectCallback callback, void* user_data);
+ * /** brief Something happened to a link or to a node; which thing depends on the function the callback was given to. * /
+ * typedef void (*RNodeGraphItemCallback)(Rid graph, int item, void* user_data);
+ * /** brief Called after the user made a link, and before a link the user removed goes (its pins can still be read).
+ */
 function Rnode_graph_set_linked_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
 function Rnode_graph_set_unlinked_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called for each node the user moved, when the button is released.
+ */
 function Rnode_graph_set_moved_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the selection changed; `item` is the node just clicked, or 0.
+ */
 function Rnode_graph_set_selection_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the user deletes a node (the Delete key), before
+ * it is removed. Without this callback the Delete key only removes
+ * links: the application decides whether nodes can be deleted.
+ */
 function Rnode_graph_set_removed_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Called when the user double-clicks a node (to open what it stands for).
+ */
 function Rnode_graph_set_activated_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
 function Rnode_graph_set_context_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Right click: `node` is the node under the pointer (selected first),
+ * or 0 on the empty canvas; x, y are in the widget (Rnode_graph_to_canvas).
+ * Without this callback the right button does nothing.
+ * /
+ * typedef void (*RNodeGraphContextCallback)(Rid graph, int node, float x, float y, void* user_data);
+ * RAVEN_API void Rnode_graph_set_context_callback(Rid graph, RNodeGraphContextCallback callback, void* user_data);
+ * /**
+ * Something happened at a point of the canvas: `item` depends on the
+ * function the callback was given to; x, y are in canvas units (as node positions).
+ * /
+ * typedef void (*RNodeGraphPointCallback)(Rid graph, int item, float x, float y, void* user_data);
+ * /**
+ * Double click on the empty canvas (`item` 0): the application acts
+ * there (a search to add a node...). Without this callback it frames all nodes.
+ */
 function Rnode_graph_set_canvas_activated_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * A wire the user pulled from a pin was released on nothing: `item` is
+ * that pin, x, y where it was dropped (to offer a node to connect it to). The
+ * wire draws back as usual.
+ */
 function Rnode_graph_set_wire_dropped_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * A pin was clicked, not dragged (`item` is the pin, x, y on the canvas):
+ * the application may link in two clicks (Rnode_graph_set_pin_emphasis shows where
+ * the second may go). With this callback such a click neither detaches the wire
+ * of an input nor counts as a wire dropped on nothing.
+ */
 function Rnode_graph_set_pin_clicked_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * The node under a point of the widget (x, y as in the events: Rnode_graph_to_canvas), or 0.
+ */
 function Rnode_graph_get_node_at(int $graph, float $x, float $y): int {}
 
+/**
+ * The pin near a point of the widget (or whose tag is under it: Rnode_graph_set_pin_tag), or 0 (a menu for a pin).
+ */
 function Rnode_graph_get_pin_at(int $graph, float $x, float $y): int {}
 
+/**
+ * The link under a point of the widget, or 0 (hidden links are never under it).
+ */
 function Rnode_graph_get_link_at(int $graph, float $x, float $y): int {}
 
+/**
+ * R_TRUE: this input keeps every link made to it (a state that several
+ * transitions enter) instead of one. Pulling a wire from it starts a new one.
+ */
 function Rnode_graph_set_pin_multiple(int $graph, int $pin, int $multiple): void {}
 
+/**
+ * R_TRUE: the node is running (live debug) : a soft ring breathes around it.
+ */
 function Rnode_graph_set_node_active(int $graph, int $node, int $active): void {}
 
+/**
+ * Color of that ring (the success color of the theme by default).
+ */
 function Rnode_graph_set_node_active_color(int $graph, int $node, float $r, float $g, float $b): void {}
 
+/**
+ * R_FALSE: the Delete key does not remove this node (the root of a tree, the output of a graph).
+ */
 function Rnode_graph_set_node_deletable(int $graph, int $node, int $deletable): void {}
 
+/**
+ * Shows a node at once, without the animation a node added to a shown graph pops in with (an application that rebuilds its graph).
+ */
 function Rnode_graph_set_node_shown(int $graph, int $node): void {}
 
+/**
+ * The same for a link made with Rnode_graph_connect: drawn whole at once instead of growing from its output.
+ */
 function Rnode_graph_set_link_shown(int $graph, int $link): void {}
 
+/**
+ * An icon before the title: a texture of the application, shared by many nodes and not deleted with them (the "Icon" style loads one per node from a file). R_INVALID_ID removes it.
+ */
 function Rnode_graph_set_node_icon(int $graph, int $node, int $texture): void {}
 
+/**
+ * A short text in a pill on the top right corner of the node ("1", "!"...); NULL or "" removes it.
+ */
 function Rnode_graph_set_node_badge(int $graph, int $node, ?string $text): void {}
 
+/**
+ * A short text in a chip of the pin's color outside the node, beside the pin
+ * (left of an input, right of an output): the name of what goes out or comes in
+ * there, as a net label of a schematic. NULL or "" removes it.
+ */
 function Rnode_graph_set_pin_tag(int $graph, int $pin, ?string $text): void {}
 
+/**
+ * R_TRUE: the link stays (its pins are linked, the application keeps
+ * it) but is not drawn and not picked: its two ends are shown otherwise (pin
+ * tags naming it, as the labels of a schematic stand for a wire).
+ */
 function Rnode_graph_set_link_hidden(int $graph, int $link, int $hidden): void {}
 
+/**
+ * How much a pin stands out, as while a wire is pulled: 1 shows it as a pin
+ * to go to, -1 steps it back, 0 as usual (an application that links in two clicks).
+ */
 function Rnode_graph_set_pin_emphasis(int $graph, int $pin, int $emphasis): void {}
 
+/**
+ * The pin whose tag (Rnode_graph_set_pin_tag) is under a point of the widget, or 0: the chip only, not the pin.
+ */
 function Rnode_graph_get_tag_at(int $graph, float $x, float $y): int {}
 
+/**
+ * R_TRUE: the pin's tag is drawn as under the pointer (a stronger fill, a
+ * thicker edge) — every tag of one net lit while the pointer is on one of them.
+ */
 function Rnode_graph_set_pin_tag_lit(int $graph, int $pin, int $lit): void {}
 
+/**
+ * Pin labels wider than `width` (logical units) are cut short with an
+ * ellipsis and the nodes are laid out with them so (compact ports); 0, the
+ * default, shows every label whole.
+ */
 function Rnode_graph_set_pin_label_width(int $graph, float $width): void {}
 
 function Rnode_graph_get_pin_label_width(int $graph): float {}
 
+/**
+ * Color of the badge pill of one node (Rnode_graph_set_node_badge); its text turns dark or light to suit it. A negative component restores the look's color.
+ */
 function Rnode_graph_set_node_badge_color(int $graph, int $node, float $r, float $g, float $b): void {}
 
 function Rblock_editor_create(): int {}
 
+/**
+ * A step: snaps under another one, others snap under it. * /
+ * R_BLOCK_STATEMENT = 0x0700,
+ * /** Starts a script ("when the game starts"): nothing goes above it. * /
+ * R_BLOCK_HAT,
+ * /** Ends a script ("stop"): nothing goes under it. * /
+ * R_BLOCK_CAP,
+ * /** Wraps stacks in its mouths ("repeat", "if ... else"). * /
+ * R_BLOCK_C,
+ * /** A rounded value that goes into a slot. * /
+ * R_BLOCK_REPORTER,
+ * /** A hexagonal condition that goes into a %b slot (or a %r one). * /
+ * R_BLOCK_BOOLEAN
+ * } RBlockShape;
+ *
+ * typedef enum RBlockPlace {
+ * R_BLOCK_NEXT = 0x0710,
+ * R_BLOCK_BODY,
+ * R_BLOCK_INPUT
+ * } RBlockPlace;
+ *
+ * /** brief A block changed (0: several, or one was deleted), or a script was clicked (its top block). * /
+ * typedef void (*RBlockEditorCallback)(Rid editor, int block, void* user_data);
+ * /** brief Right click: on a block (0 on the canvas), at x, y in the widget. * /
+ * typedef void (*RBlockEditorContextCallback)(Rid editor, int block, float x, float y, void* user_data);
+ *
+ * RAVEN_API Rid Rblock_editor_create(void);
+ * /** brief A kind of block, and its block in the palette. Returns its index, -1 on an error.
+ */
 function Rblock_editor_add_kind(int $editor, ?string $name, ?string $label, int $shape, ?string $category): int {}
 
+/**
+ * Color of the blocks of a category (Raven picks one from its name otherwise).
+ */
 function Rblock_editor_set_category_color(int $editor, ?string $category, float $r, float $g, float $b): void {}
 
 function Rblock_editor_set_palette_visible(int $editor, int $visible): void {}
 
+/**
+ * A new block, the top of a script of its own at x, y (canvas units). Returns it, 0 on an error.
+ */
 function Rblock_editor_add_block(int $editor, ?string $kind, float $x, float $y): int {}
 
+/**
+ * Removes a block and everything that hangs under it.
+ */
 function Rblock_editor_remove_block(int $editor, int $block): void {}
 
 function Rblock_editor_clear(int $editor): void {}
 
+/**
+ * Puts a block (with what is under it) at a place of another one. R_FALSE when it does not fit there.
+ */
 function Rblock_editor_attach(int $editor, int $block, int $target, int $place, int $index): int {}
 
+/**
+ * Takes a block (with what is under it) out: a script of its own at x, y.
+ */
 function Rblock_editor_detach(int $editor, int $block, float $x, float $y): void {}
 
 function Rblock_editor_get_script_count(int $editor): int {}
 
+/**
+ * The top block of a script.
+ */
 function Rblock_editor_get_script(int $editor, int $index): int {}
 
 function Rblock_editor_get_kind(int $editor, int $block): ?string {}
 
+/**
+ * The block under it, 0 if none.
+ */
 function Rblock_editor_get_next(int $editor, int $block): int {}
 
 function Rblock_editor_get_mouth_count(int $editor, int $block): int {}
 
+/**
+ * The first block in a mouth of a C block, 0 if empty.
+ */
 function Rblock_editor_get_body(int $editor, int $block, int $mouth): int {}
 
 function Rblock_editor_get_slot_count(int $editor, int $block): int {}
 
+/**
+ * The value block in a slot, 0 if the slot holds a typed value.
+ */
 function Rblock_editor_get_input(int $editor, int $block, int $slot): int {}
 
+/**
+ * The typed value of a slot.
+ */
 function Rblock_editor_get_value(int $editor, int $block, int $slot): ?string {}
 
 function Rblock_editor_set_value(int $editor, int $block, int $slot, ?string $value): void {}
 
+/**
+ * Where a block hangs: the block it hangs from (0: the top of a script).
+ */
 function Rblock_editor_get_parent(int $editor, int $block, ?int &$place, ?int &$index): int {}
 
 function Rblock_editor_get_position(int $editor, int $block, ?float &$x, ?float &$y): void {}
 
+/**
+ * R_TRUE: the block is running: a halo breathes around it.
+ */
 function Rblock_editor_set_block_glow(int $editor, int $block, int $glow): void {}
 
+/**
+ * Every script as text (valid until the next call).
+ */
 function Rblock_editor_save(int $editor): ?string {}
 
+/**
+ * Replaces the scripts with those of a text from Rblock_editor_save.
+ */
 function Rblock_editor_load(int $editor, ?string $text): int {}
 
 function Rblock_editor_set_changed_callback(int $editor, ?callable $callback, mixed $user_data): void {}
@@ -492,20 +1031,39 @@ function Rblock_editor_set_clicked_callback(int $editor, ?callable $callback, mi
 
 function Rblock_editor_set_context_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * The choices of a %m slot of a kind, separated by '\n' ("" : the slot is typed in).
+ */
 function Rblock_editor_set_slot_options(int $editor, ?string $kind, int $slot, ?string $options): void {}
 
+/**
+ * R_FALSE: the kind is not in the palette (its blocks stay where they are).
+ */
 function Rblock_editor_set_kind_visible(int $editor, ?string $kind, int $visible): void {}
 
+/**
+ * A new label for a kind (a function that takes one more input...).
+ * The blocks of that kind keep the values of the slots that are still there.
+ */
 function Rblock_editor_set_kind_label(int $editor, ?string $kind, ?string $label): int {}
 
+/**
+ * R_FALSE: the user cannot delete the block (the entry of a function). Not saved.
+ */
 function Rblock_editor_set_block_deletable(int $editor, int $block, int $deletable): void {}
 
 function Rblock_editor_get_selection_count(int $editor): int {}
 
 function Rblock_editor_get_selected(int $editor, int $index): int {}
 
+/**
+ * Selects a block (add: R_FALSE clears the selection first ; block 0 : only clears).
+ */
 function Rblock_editor_select(int $editor, int $block, int $add): void {}
 
+/**
+ * Pan (canvas units at the top left) and zoom.
+ */
 function Rblock_editor_get_view(int $editor, ?float &$x, ?float &$y, ?float &$zoom): void {}
 
 function Rblock_editor_set_view(int $editor, float $x, float $y, float $zoom): void {}

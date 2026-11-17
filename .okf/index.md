@@ -4,7 +4,7 @@ okf_version: "0.2"
 
 # ext-raven
 
-1:1 PHP bindings of Raven main `0f0da68` (vendored, unchanged; the library still reports 0.2.3), a retained-mode GUI toolkit in C with a Vulkan renderer. Version 0.11.0. Linux, macOS. PHP 8.4 NTS + ZTS.
+1:1 PHP bindings of Raven main `4eaba42` (vendored, unchanged; the library still reports 0.2.3), a retained-mode GUI toolkit in C with a Vulkan renderer. Version 0.11.0. Linux, macOS. PHP 8.4 NTS + ZTS.
 
 # API
 

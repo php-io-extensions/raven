@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8c7bbd57b2b80d0a0aefc1b258d4f86bec7d662a */
+ * Stub hash: 6dcd9aa08a3bec13a157a9bf5c264f9dcccae648 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtouch_get_settings, 0, 1, IS_VOID, 0)
 	ZEND_ARG_OBJ_INFO(0, settings, RTouchSettings, 1)

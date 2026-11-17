@@ -38,3 +38,21 @@ it('creates widgets from a document', function (): void {
     expect(Rwidget_get_type($widget))->toBe(R_WIDGET_VBOX)
         ->and(Rlabel_get_text(Rwidget_get_child($widget, 0)))->toBe('from xml');
 });
+
+it('applies Tooltip from XML so a label takes the hover', function (): void {
+    $xml = '<Label Text="from xml" Tooltip="xml tip"/>';
+    $doc = Rxml_document_parse($xml, strlen($xml), null);
+    $label = Rxml_document_create_widget($doc);
+    expect(Rwidget_get_type($label))->toBe(R_WIDGET_LABEL)
+        ->and(Rlabel_get_text($label))->toBe('from xml')
+        ->and(Rwidget_get_tooltip($label))->toBe('xml tip');
+
+    $window = raven_window(320, 200);
+    Rwindow_set_content($window, $label);
+    raven_frames();
+    Rwidget_get_rect($label, $x, $y, $w, $h);
+    Rwindow_inject_mouse_move($window, $x + $w / 2, $y + $h / 2);
+    raven_frames(2);
+    expect(Rwidget_is_hovered($label))->toBe(R_TRUE)
+        ->and(Rwindow_get_hovered_widget($window))->toBe($label);
+});

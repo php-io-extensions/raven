@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 5ce3f175100cb4b0a4124868f0ed37ffc2845c01 */
+ * Stub hash: b80675b14a8d2abeaf151446374087b425cfb889 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rbackend_device_lost, 0, 0, IS_VOID, 0)
 ZEND_END_ARG_INFO()

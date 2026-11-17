@@ -3,7 +3,7 @@
 /*
  * Writes the binding from tools/api.json and tools/bindings.php:
  *
- *   stubs/<header>.stub.php   functions, struct classes and constants of each Raven header
+ *   stubs/<header>.stub.php   functions (with the header comment as PHPDoc), struct classes and constants of each Raven header
  *   src/gen/<header>.c        one ZEND_FUNCTION per function, the struct constructors, the header's MINIT
  *   src/gen/structs.c/.h      field tables of the struct classes
  *   src/gen/callbacks.c/.h    one trampoline per callback typedef
@@ -155,6 +155,9 @@ final class Gen
                 continue;
             }
             [$decl, $body] = $r;
+            if (! empty($fn['doc'])) {
+                $stub .= "\n" . $this->phpdoc($fn['doc']);
+            }
             $stub .= "\n$decl\n";
             $c .= $body . "\n";
             $this->bound++;
@@ -722,6 +725,18 @@ final class Gen
         $decl = "function $name(" . implode(', ', $stubParams) . "): $retType {}";
 
         return [$decl, $body];
+    }
+
+    /** Header comment of a Raven function, as a PHPDoc block for the stub. */
+    private function phpdoc(string $doc): string
+    {
+        $out = "/**\n";
+        foreach (preg_split("/\r?\n/", $doc) as $line) {
+            $line = str_replace('*/', '* /', $line);
+            $out .= rtrim(' * ' . $line) . "\n";
+        }
+
+        return $out . ' */';
     }
 
     private function countParam(array $params, int $i): ?string

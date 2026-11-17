@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: c24402294b983ae102cbff3ca7c203d88f424188 */
+ * Stub hash: 35f481188e57d58ff7c87598988649e8d98e57d8 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_create, 0, 4, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: b08fa646b89cbfe2763bbf244ebf205bffe626d4 */
+ * Stub hash: 31bd01267082f5e74f1094786caa5c17df81489c */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raccessibility_set_text_scale, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, scale, IS_DOUBLE, 0)

@@ -46,6 +46,53 @@ const R_FILTER_NEAREST = UNKNOWN;
  */
 const R_FILTER_MIPMAP = UNKNOWN;
 
+/**
+ * Raven
+ * raven_resources.h : fonts and textures.
+ * /
+ *
+ * #ifndef RAVEN_RESOURCES_H
+ * #define RAVEN_RESOURCES_H
+ *
+ * #include "raven_core.h"
+ *
+ *
+ * /** The styles of a font (Rfont_get_variant). * /
+ * typedef enum RFontStyle{
+ * R_FONT_REGULAR = 0x0420,
+ * R_FONT_BOLD,
+ * R_FONT_ITALIC,
+ * R_FONT_BOLD_ITALIC
+ * }RFontStyle;
+ *
+ * typedef enum RFilterType{
+ * R_FILTER_LINEAR = 0x02C0,
+ * /** No smoothing: keeps pixel art sharp. * /
+ * R_FILTER_NEAREST,
+ * /**
+ * Smooth, with mipmaps: an image shown much smaller than its size stays
+ * clean instead of shimmering, for a third more GPU memory. The default
+ * of the textures made from image files (Rtexture_create...). Backends
+ * without mipmaps treat it as R_FILTER_LINEAR.
+ * /
+ * R_FILTER_MIPMAP
+ * }RFilterType;
+ *
+ *
+ * #ifdef __cplusplus
+ * extern "C" {
+ * #endif
+ *
+ * /* ============================================================================
+ * FONTS
+ * ============================================================================ * /
+ *
+ * /**
+ * Creates a font from the content of a .ttf / .otf file.
+ * The buffer is copied. Glyphs are rasterized on demand, at the exact
+ * pixel size needed by each window scale, into a shared atlas.
+ * Returns R_INVALID_ID on failure.
+ */
 function Rfont_create(?string $data, int $data_size): int {}
 
 function Rfont_create_from_file(?string $path): int {}
@@ -54,36 +101,113 @@ function Rfont_destroy(int $font): void {}
 
 function Rfont_is_valid(int $font): int {}
 
+/**
+ * Returns The font embedded in the library (Roboto, Latin and Latin Extended-A).
+ */
 function Rfont_get_default(): int {}
 
+/**
+ * Returns The fixed-width font embedded in the library (Roboto Mono, same
+ * characters), used by default by the text editors. In XML: Font="monospace".
+ */
 function Rfont_get_monospace(): int {}
 
+/**
+ * Font used for the characters missing from `font` (symbols, icons,
+ * other scripts). Fallbacks can be chained.
+ */
 function Rfont_set_fallback(int $font, int $fallback): void {}
 
+/**
+ * Gives a font the font to use for one of its styles: the bold
+ * file of the same family, its italic file. Formatted text (Markdown
+ * labels, the Markdown of the text editor) uses them.
+ *
+ * A font that was given none still has the three styles: Raven draws
+ * its glyphs thicker for bold and slanted for italic, keeping their
+ * advances, so that text does not move when its style changes.
+ * R_INVALID_ID goes back to the style Raven derives.
+ */
 function Rfont_set_variant(int $font, int $style, int $variant): void {}
 
+/**
+ * Returns The font drawn for a style of `font`: the one given with
+ * Rfont_set_variant, else the one Raven derives from it (made on first
+ * use; it lives as long as `font` and cannot be deleted by itself).
+ * Usable wherever a font is: Rlabel_set_font, Rdraw_text...
+ */
 function Rfont_get_variant(int $font, int $style): int {}
 
+/**
+ * Measures a UTF-8 string, in logical units, at scale 1.
+ * R_INVALID_ID uses the theme font.
+ * Font size; 0 uses R_METRIC_FONT_SIZE.
+ */
 function Rfont_measure_text(int $font, float $size, ?string $text, ?float &$width, ?float &$height): void {}
 
+/**
+ * Creates a texture from the content of an image file (PNG, JPEG,
+ * BMP, TGA, GIF, PSD, SVG). Decoding happens on the calling thread.
+ * Returns R_INVALID_ID on failure.
+ */
 function Rtexture_create(?string $data, int $data_size): int {}
 
+/**
+ * Same as Rtexture_create, decoded on a worker thread. The handle
+ * is usable at once; widgets showing it draw nothing until it is ready.
+ * The buffer is copied.
+ */
 function Rtexture_create_async(?string $data, int $data_size): int {}
 
+/**
+ * Draws an SVG image (an icon) into a texture, at `scale` pixels per
+ * unit of the SVG. The widgets show it at the size the SVG gives, whatever
+ * the scale (Rtexture_get_density).
+ *
+ * 0 or less: at the size it is shown. It is first drawn at a scale of 2;
+ * once painted, it is drawn again (on a worker thread) with as many pixels
+ * as the screen shows it with: the scale of the monitor of the window, an
+ * Image that stretches it, a zoom. It follows when the window moves to a
+ * screen of another density or the image grows, and comes down when it is
+ * shown much smaller (sides of at most 4096 pixels). Its width and height
+ * in pixels (Rtexture_get_size) change then; its size in logical units
+ * does not. Rtexture_create, Rtexture_create_from_file and the asynchronous
+ * ones read SVG files this way. Paths, fills, strokes and gradients are
+ * drawn; text, filters and masks are not.
+ */
 function Rtexture_create_from_svg(?string $svg, int $svg_size, float $scale): int {}
 
+/**
+ * Pixels of the texture per logical unit: the scale of an SVG, 1 otherwise.
+ */
 function Rtexture_get_density(int $texture): float {}
 
 function Rtexture_create_from_file(?string $path): int {}
 
+/**
+ * Reads and decodes the file on a worker thread.
+ */
 function Rtexture_create_from_file_async(?string $path): int {}
 
+/**
+ * Creates a texture from tightly packed RGBA8 pixels (straight alpha). Its filter is R_FILTER_LINEAR.
+ */
 function Rtexture_create_from_pixels(string $rgba, int $width, int $height): int {}
 
+/**
+ * Replaces the pixels of a texture. The size may change. Use it to
+ * show frames produced on the CPU or read back from another renderer.
+ */
 function Rtexture_update(int $texture, string $rgba, int $width, int $height): void {}
 
+/**
+ * Returns R_TRUE once an asynchronous texture is decoded (or failed).
+ */
 function Rtexture_is_ready(int $texture): int {}
 
+/**
+ * Blocks until an asynchronous texture is ready.
+ */
 function Rtexture_wait(int $texture): void {}
 
 function Rtexture_destroy(int $texture): void {}
@@ -92,4 +216,9 @@ function Rtexture_is_valid(int $texture): int {}
 
 function Rtexture_get_size(int $texture, ?int &$width, ?int &$height): void {}
 
+/**
+ * How the texture is smoothed when it is scaled. The textures made
+ * from image files start with R_FILTER_MIPMAP, the others with
+ * R_FILTER_LINEAR.
+ */
 function Rtexture_set_filter(int $texture, int $filter): void {}
