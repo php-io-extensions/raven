@@ -13,6 +13,6 @@ it('prints the extension version, the Raven version, and the upstream commits', 
 
     expect($info)->toContain('0.11.0')
         ->and($info)->toContain('0.2.3')
-        ->and($info)->toContain('dfac083f27703b458ae359aeb792e7efc0699885')
+        ->and($info)->toContain('0f0da68197c8def4f4ffab93bae53bccb6a199c8')
         ->and($info)->toContain('b379292b2ab6df5771ba9870d53cf8b2c9295daf');
 });
