@@ -205,4 +205,111 @@ it('fills window safe-area insets and follows the system theme flag', function (
         ->and($insets->left)->toBe(0.0);
     Rtheme_follow_system(R_FALSE);
     expect(Rtheme_get_system_dark())->toBeInt();
+    Rhost_set_system_dark(R_TRUE);
+    Rhost_window_set_insets($window, new RInsets(top: 12.0, bottom: 8.0), 0);
+});
+
+it('pages a carousel of labels', function (): void {
+    $window = raven_window(400, 240);
+    $xml = '<Carousel Name="c"><Label Name="p0" Text="Zero"/><Label Name="p1" Text="One"/><Label Name="p2" Text="Two"/></Carousel>';
+    $carousel = Rwidget_create_from_xml($xml, strlen($xml));
+    Rwindow_set_content($window, $carousel);
+    raven_frames();
+    expect(Rwidget_get_type($carousel))->toBe(R_WIDGET_CAROUSEL)
+        ->and(Rcarousel_get_page_count($carousel))->toBe(3)
+        ->and(Rcarousel_get_page($carousel))->toBe(0)
+        ->and(Rcarousel_get_loop($carousel))->toBe(R_FALSE)
+        ->and(Rcarousel_get_indicators_visible($carousel))->toBe(R_TRUE)
+        ->and(Rcarousel_get_arrows_visible($carousel))->toBe(R_TRUE)
+        ->and(Rcarousel_get_orientation($carousel))->toBe(R_HORIZONTAL)
+        ->and(Rcarousel_get_autoplay($carousel))->toBe(0.0);
+    Rcarousel_set_loop($carousel, R_TRUE);
+    Rcarousel_set_indicators_visible($carousel, R_FALSE);
+    Rcarousel_set_arrows_visible($carousel, R_FALSE);
+    Rcarousel_set_page($carousel, 1, R_FALSE);
+    raven_frames();
+    expect(Rcarousel_get_loop($carousel))->toBe(R_TRUE)
+        ->and(Rcarousel_get_indicators_visible($carousel))->toBe(R_FALSE)
+        ->and(Rcarousel_get_arrows_visible($carousel))->toBe(R_FALSE)
+        ->and(Rcarousel_get_page($carousel))->toBe(1);
+    Rcarousel_next($carousel);
+    expect(Rcarousel_get_page($carousel))->toBe(2);
+    Rcarousel_prev($carousel);
+    expect(Rcarousel_get_page($carousel))->toBe(1);
+});
+
+it('centers a map view and pins a marker', function (): void {
+    $window = raven_window(400, 300);
+    $map = Rmap_view_create();
+    Rwindow_set_content($window, $map);
+    raven_frames();
+    expect(Rwidget_get_type($map))->toBe(R_WIDGET_MAP_VIEW)
+        ->and(Rmap_view_get_tile_size($map))->toBe(256);
+    Rmap_view_set_center($map, 48.8566, 2.3522);
+    Rmap_view_get_center($map, $lat, $lon);
+    expect($lat)->toEqualWithDelta(48.8566, 1e-9)
+        ->and($lon)->toEqualWithDelta(2.3522, 1e-9);
+    Rmap_view_set_zoom($map, 10.0);
+    expect(Rmap_view_get_zoom($map))->toBe(10.0);
+    Rmap_view_set_attribution($map, '(c) OpenStreetMap');
+    expect(Rmap_view_get_attribution($map))->toBe('(c) OpenStreetMap');
+    $marker = Rmap_view_add_marker($map, 48.8566, 2.3522, 'Paris');
+    expect($marker)->toBeGreaterThan(0)
+        ->and(Rmap_view_get_marker_count($map))->toBe(1);
+    Rmap_view_set_marker_label($map, $marker, 'Louvre');
+    Rmap_view_clear_markers($map);
+    expect(Rmap_view_get_marker_count($map))->toBe(0);
+});
+
+it('cuts a tile view into foldable sections', function (): void {
+    $window = raven_window(400, 600);
+    $tiles = Rwidget_create(R_WIDGET_TILE_VIEW);
+    Rwindow_set_content($window, $tiles);
+    $labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+    Rtile_view_set_items($tiles, 7, function (int $id, int $index, RTileItem $item, mixed $ud) use ($labels): void {
+        $item->text = $labels[$index];
+    }, null);
+    Rtile_view_set_icon_width($tiles, 40.0);
+    Rtile_view_set_sections($tiles, 2, function (int $id, int $section, RTileSection $out, mixed $ud): void {
+        $out->first = $section === 0 ? 2 : 5;
+        $out->text = $section === 0 ? 'a' : 'b';
+        $out->detail = '(n)';
+    }, null);
+    raven_frames();
+    expect(Rtile_view_get_section_count($tiles))->toBe(2)
+        ->and(Rtile_view_get_section_of($tiles, 1))->toBe(-1)
+        ->and(Rtile_view_get_section_of($tiles, 2))->toBe(0)
+        ->and(Rtile_view_get_section_of($tiles, 6))->toBe(1)
+        ->and(Rtile_view_is_section_folded($tiles, 0))->toBe(R_FALSE);
+    Rtile_view_set_section_folded($tiles, 0, R_TRUE);
+    expect(Rtile_view_is_section_folded($tiles, 0))->toBe(R_TRUE);
+});
+
+it('injects app lifecycle events and a window back', function (): void {
+    $window = raven_window();
+    $events = [];
+    Rset_app_event_callback(function (int $event, mixed $ud) use (&$events): void {
+        $events[] = $event;
+    }, null);
+    expect(Ris_app_paused())->toBe(R_FALSE);
+    Rinject_app_event(R_APP_DID_PAUSE);
+    expect(Ris_app_paused())->toBe(R_TRUE);
+    Rinject_app_event(R_APP_WILL_RESUME);
+    expect(Ris_app_paused())->toBe(R_FALSE)
+        ->and($events)->toBe([R_APP_DID_PAUSE, R_APP_WILL_RESUME]);
+    Rset_app_event_callback(null, null);
+
+    $backs = [];
+    expect(Rwindow_wants_back($window))->toBe(R_FALSE)
+        ->and(Rwindow_inject_back($window))->toBe(R_FALSE);
+    Rwindow_set_back_callback($window, function (int $id, mixed $ud) use (&$backs): int {
+        $backs[] = $id;
+
+        return R_TRUE;
+    }, null);
+    expect(Rwindow_inject_back($window))->toBe(R_TRUE)->and($backs)->toBe([$window]);
+    Rwindow_set_back_enabled($window, R_TRUE);
+    expect(Rwindow_wants_back($window))->toBe(R_TRUE);
+    Rwindow_set_back_enabled($window, R_FALSE);
+    expect(Rwindow_wants_back($window))->toBe(R_FALSE);
 });

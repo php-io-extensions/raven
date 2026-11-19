@@ -129,119 +129,6 @@ final class RFileDialogDesc
 }
 
 /**
- * Raven
- * raven_dialogs.h : dialogs, message boxes, file dialogs and the file browser.
- *
- * DIALOGS
- *
- * A dialog is any widget shown as a sheet over the content of a window: a
- * veil falls on the window, the sheet rises in the middle, and the window
- * only listens to the sheet until it is closed. Rdialog_open returns at
- * once; Rdialog_run waits for the dialog to close and returns its result.
- *
- * FILE DIALOGS
- *
- * Rfile_dialog_open / _save / _select_folder ask the user for a path and
- * return when it is chosen. They show the dialog of the operating system
- * (Windows: the Explorer dialog; Linux: the one of the desktop, through
- * zenity or kdialog) and, where there is none, the file browser of Raven in a
- * dialog. R_FILE_DIALOG_RAVEN always uses the latter.
- *
- * The file browser is also a widget, R_WIDGET_FILE_BROWSER, to put in any
- * layout: a side panel showing a project folder, a custom "open" page...
- *
- * <FileBrowser Name="files" Directory="~/Projects" Filter="*.xml;*.c" Controls="false"/>
- *
- * The functions that wait (Rdialog_run, Rmessage_box, Rfile_dialog_...) run
- * the frames of the application themselves while they wait: timers, tasks
- * and the frame callback keep running, the windows keep being drawn.
- * /
- *
- * #ifndef RAVEN_DIALOGS_H
- * #define RAVEN_DIALOGS_H
- *
- * #include "raven_widget.h"
- *
- * /** How much a notification of the system asks for attention (Rnotification_show). * /
- * typedef enum RNotificationUrgency{
- * /** No sound; may only go to the list of notifications. * /
- * R_NOTIFICATION_LOW = 0x04F0,
- * R_NOTIFICATION_NORMAL,
- * /** Stays until the user dismisses it, where the system allows it. * /
- * R_NOTIFICATION_CRITICAL
- * }RNotificationUrgency;
- *
- * /** A kind of file in a file dialog. * /
- * typedef struct RFileFilter {
- * /** Shown to the user: "Images". * /
- * const char* name;
- * /** Patterns separated by ';': "*.png;*.jpg". "*" matches everything. * /
- * const char* patterns;
- * } RFileFilter;
- *
- * typedef enum RFileDialogFlags{
- * /** Several files can be chosen (Rfile_dialog_open): see Rfile_dialog_get_result. * /
- * R_FILE_DIALOG_MULTIPLE    = (1 << 0),
- * /** Never the dialog of the OS: the file browser of Raven, in a dialog of the parent window. * /
- * R_FILE_DIALOG_RAVEN       = (1 << 1),
- * R_FILE_DIALOG_SHOW_HIDDEN = (1 << 2)
- * }RFileDialogFlags;
- *
- * /** Every field may be left to zero. * /
- * typedef struct RFileDialogDesc {
- * /** Window the dialog belongs to. R_INVALID_ID: none (a window is opened when Raven needs one). * /
- * Rid parent;
- * /** NULL: "Open", "Save as"... * /
- * const char* title;
- * /** Folder shown first. NULL: the one of the previous dialog, else the home of the user. * /
- * const char* directory;
- * /** Name proposed to the user (save dialogs). * /
- * const char* file_name;
- * const RFileFilter* filters;
- * int filter_count;
- * /** Save dialogs: added to a name typed without extension ("xml"). * /
- * const char* default_extension;
- * /** Bitmask of RFileDialogFlags. * /
- * Ruint flags;
- * } RFileDialogDesc;
- *
- * typedef enum RFileBrowserMode{
- * /** Choose an existing file. * /
- * R_FILE_BROWSER_OPEN = 0x0380,
- * /** Choose where to save: a name is typed; an existing file must be confirmed. * /
- * R_FILE_BROWSER_SAVE,
- * /** Choose a folder. * /
- * R_FILE_BROWSER_FOLDER
- * }RFileBrowserMode;
- *
- * typedef enum RMessageButtons{
- * R_MESSAGE_OK = 0x0390,
- * R_MESSAGE_OK_CANCEL,
- * R_MESSAGE_YES_NO,
- * R_MESSAGE_YES_NO_CANCEL
- * }RMessageButtons;
- *
- * typedef enum RMessageResult{
- * /** Dismissed (Escape), or the Cancel button. * /
- * R_MESSAGE_RESULT_CANCEL = 0,
- * R_MESSAGE_RESULT_OK,
- * R_MESSAGE_RESULT_YES,
- * R_MESSAGE_RESULT_NO
- * }RMessageResult;
- *
- * /** brief Called when a dialog closes. `result` is the value given to Rdialog_close, 0 when dismissed. * /
- * typedef void (*RDialogClosedCallback)(Rid content, int result, void* user_data);
- *
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* ============================================================================
- * DIALOGS
- * ============================================================================ * /
- *
- * /**
  * Shows a widget as a dialog of a window. The window takes
  * ownership of `content`: it is deleted when the dialog closes, so read
  * what you need from it before, or in `closed`.
@@ -405,14 +292,7 @@ function Rfile_browser_select(int $browser, ?string $name): void {}
 function Rfile_browser_set_accepted_callback(int $browser, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user chooses: a double click or Enter on a file,
- * the Open / Save button. `path` is the first chosen path; with several
- * files, read them with Rfile_browser_get_selection. The action of the
- * widget (OnActivated in XML) fires at the same time.
- * /
- * typedef void (*RFileBrowserCallback)(Rid browser, const char* path, void* user_data);
- * RAVEN_API void Rfile_browser_set_accepted_callback(Rid browser, RFileBrowserCallback callback, void* user_data);
- * /** brief Called by the Cancel button.
+ * Called by the Cancel button.
  */
 function Rfile_browser_set_cancelled_callback(int $browser, ?callable $callback, mixed $user_data): void {}
 

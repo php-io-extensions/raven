@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 6dcd9aa08a3bec13a157a9bf5c264f9dcccae648 */
+ * Stub hash: 8c5e73057f6f467a55b5b993120e260c51824686 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtouch_get_settings, 0, 1, IS_VOID, 0)
 	ZEND_ARG_OBJ_INFO(0, settings, RTouchSettings, 1)
@@ -116,6 +116,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RTouchSettings___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, trackpad_gestures, IS_LONG, 0, "0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, swipe_navigation, IS_LONG, 0, "0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, swipe_distance, IS_DOUBLE, 0, "0.0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, min_touch_size, IS_DOUBLE, 0, "0.0")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RTouchEvent___construct, 0, 0, 0)
@@ -359,6 +360,12 @@ static zend_class_entry *register_class_RTouchSettings(void)
 	zend_string *property_swipe_distance_name = zend_string_init("swipe_distance", sizeof("swipe_distance") - 1, 1);
 	zend_declare_typed_property(class_entry, property_swipe_distance_name, &property_swipe_distance_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
 	zend_string_release(property_swipe_distance_name);
+
+	zval property_min_touch_size_default_value;
+	ZVAL_DOUBLE(&property_min_touch_size_default_value, 0.0);
+	zend_string *property_min_touch_size_name = zend_string_init("min_touch_size", sizeof("min_touch_size") - 1, 1);
+	zend_declare_typed_property(class_entry, property_min_touch_size_name, &property_min_touch_size_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_min_touch_size_name);
 
 	return class_entry;
 }

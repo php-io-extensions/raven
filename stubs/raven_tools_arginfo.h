@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 729b3b7a362181e8c568974ec136ea246c52d44e */
+ * Stub hash: 56b78ee61ddc37c9e457ed103726a74f6136ba4d */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcolor_picker_create, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()

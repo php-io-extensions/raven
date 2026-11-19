@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: ed990660bc4abc60e719a119ac71aef949de76e1 */
+ * Stub hash: d2bda101b259992d5cc631210283b3975bbaf18d */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rinit, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, backend, IS_LONG, 0)
@@ -83,6 +83,8 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_RAllocator___construct arginfo_class_RPainter___construct
 
+#define arginfo_class_RActionContext___construct arginfo_class_RPainter___construct
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RCapture___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, pixels, IS_STRING, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, width, IS_LONG, 0, "0")
@@ -131,6 +133,7 @@ ZEND_FUNCTION(Rbackend_register);
 ZEND_FUNCTION(Rhost_platform_register);
 ZEND_METHOD(RPainter, __construct);
 ZEND_METHOD(RAllocator, __construct);
+ZEND_METHOD(RActionContext, __construct);
 ZEND_METHOD(RCapture, __construct);
 ZEND_METHOD(RBackendVTable, __construct);
 ZEND_METHOD(RHostPlatformDesc, __construct);
@@ -165,6 +168,11 @@ static const zend_function_entry class_RAllocator_methods[] = {
 	ZEND_FE_END
 };
 
+static const zend_function_entry class_RActionContext_methods[] = {
+	ZEND_ME(RActionContext, __construct, arginfo_class_RActionContext___construct, ZEND_ACC_PRIVATE)
+	ZEND_FE_END
+};
+
 static const zend_function_entry class_RCapture_methods[] = {
 	ZEND_ME(RCapture, __construct, arginfo_class_RCapture___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
@@ -195,6 +203,16 @@ static zend_class_entry *register_class_RAllocator(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "RAllocator", class_RAllocator_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NO_DYNAMIC_PROPERTIES|ZEND_ACC_NOT_SERIALIZABLE);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_RActionContext(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RActionContext", class_RActionContext_methods);
 	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NO_DYNAMIC_PROPERTIES|ZEND_ACC_NOT_SERIALIZABLE);
 
 	return class_entry;

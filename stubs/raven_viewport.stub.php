@@ -23,76 +23,15 @@ final class RViewportDrawInfo
     public int $command_buffer = 0;
     public int $render_pass = 0;
     public int $color_format = 0;
+    public int $metal_encoder = 0;
+    public int $metal_command_buffer = 0;
+    public int $metal_device = 0;
 
-    public function __construct(int $backend = 0, int $viewport = 0, int $window = 0, int $x = 0, int $y = 0, int $width = 0, int $height = 0, int $clip_x = 0, int $clip_y = 0, int $clip_width = 0, int $clip_height = 0, int $framebuffer_width = 0, int $framebuffer_height = 0, int $frame_index = 0, int $command_buffer = 0, int $render_pass = 0, int $color_format = 0) {}
+    public function __construct(int $backend = 0, int $viewport = 0, int $window = 0, int $x = 0, int $y = 0, int $width = 0, int $height = 0, int $clip_x = 0, int $clip_y = 0, int $clip_width = 0, int $clip_height = 0, int $framebuffer_width = 0, int $framebuffer_height = 0, int $frame_index = 0, int $command_buffer = 0, int $render_pass = 0, int $color_format = 0, int $metal_encoder = 0, int $metal_command_buffer = 0, int $metal_device = 0) {}
 }
 
 /**
- * Raven
- * raven_viewport.h : embedding content rendered by the application.
- *
- * A VIEWPORT widget reserves an area of the layout and shows external content
- * in it. Three modes cover every graphics API:
- *
- * 1. Texture  (Rviewport_set_texture)
- * The application renders to an image and Raven draws it like any widget:
- * it is clipped, can have UI on top, and follows the layout exactly.
- * - Vulkan : wrap your VkImageView with
- * Rvulkan_texture_create_from_image_view (raven_vulkan.h), zero copy.
- * - OpenGL : share memory with Rvulkan_texture_create_shared and
- * GL_EXT_memory_object (zero copy), or read pixels back and
- * call Rtexture_update.
- * - Any    : Rtexture_update with CPU pixels.
- *
- * 2. Draw callback  (Rviewport_set_draw_callback)
- * Raven calls the application while it records its own frame, with the
- * viewport and scissor set to the widget. The application draws straight
- * into the window: no intermediate image, UI can still be drawn on top.
- * With the Vulkan backend the callback receives the VkCommandBuffer.
- * The callback runs on the render thread.
- *
- * 3. Native child window  (Rviewport_set_native)
- * Raven creates a child OS window (HWND / X11 Window) kept on the widget.
- * The application attaches its own swapchain or context to it: OpenGL,
- * Vulkan, Direct3D, anything. Raven cannot draw over or clip that area.
- *
- * Input: a viewport is focusable and forwards its mouse and keyboard events
- * through Rwidget_set_event_callback.
- * /
- *
- * #ifndef RAVEN_VIEWPORT_H
- * #define RAVEN_VIEWPORT_H
- *
- * #include "raven_widget.h"
- * #include "raven_controls.h"
- *
- * /** Passed to the draw callback of a viewport. Sizes are in pixels. * /
- * typedef struct RViewportDrawInfo {
- * RBackend backend;
- * Rid viewport;
- * Rid window;
- * /** Area of the viewport in the window framebuffer. * /
- * int x, y, width, height;
- * /** Visible part of that area. Already set as the scissor rectangle. * /
- * int clip_x, clip_y, clip_width, clip_height;
- * int framebuffer_width, framebuffer_height;
- * uint64_t frame_index;
- * /** Vulkan: VkCommandBuffer being recorded, inside the render pass. * /
- * void* command_buffer;
- * /** Vulkan: VkRenderPass in use (one color attachment, no depth). * /
- * void* render_pass;
- * /** Vulkan: VkFormat of the color attachment. * /
- * Ruint color_format;
- * } RViewportDrawInfo;
- *
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* ---- mode 1: texture ---- * /
- *
- * /** brief Shows a texture. R_INVALID_ID shows nothing.
+ * Shows a texture. R_INVALID_ID shows nothing.
  */
 function Rviewport_set_texture(int $viewport, int $texture): void {}
 
@@ -107,16 +46,6 @@ function Rviewport_set_stretch(int $viewport, int $stretch): void {}
 function Rviewport_set_flip_y(int $viewport, int $flip): void {}
 
 /**
- * Called on the render thread each time the window is rendered.
- * State you bind (pipeline, descriptor sets, viewport, scissor) does not
- * need to be restored. NULL removes the callback.
- * /
- * typedef void (*RViewportDrawCallback)(const RViewportDrawInfo* info, void* user_data);
- * RAVEN_API void Rviewport_set_draw_callback(Rid viewport, RViewportDrawCallback callback, void* user_data);
- *
- * /* ---- mode 3: native child window ---- * /
- *
- * /**
  * Creates (or destroys) the native child window of the viewport.
  * The viewport must already be in a window.
  * Returns R_TRUE on success.
@@ -136,11 +65,6 @@ function Rviewport_get_pixel_size(int $viewport, ?int &$width, ?int &$height): v
 function Rviewport_set_resize_callback(int $viewport, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called on the UI thread when the pixel size changes: resize your render target here. * /
- * typedef void (*RViewportResizeCallback)(Rid viewport, int width, int height, void* user_data);
- * RAVEN_API void Rviewport_set_resize_callback(Rid viewport, RViewportResizeCallback callback, void* user_data);
- *
- * /**
  * R_TRUE redraws the window every frame while the viewport is
  * visible (game view). R_FALSE redraws only on Rwidget_invalidate (default).
  */

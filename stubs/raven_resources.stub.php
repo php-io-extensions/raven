@@ -47,47 +47,6 @@ const R_FILTER_NEAREST = UNKNOWN;
 const R_FILTER_MIPMAP = UNKNOWN;
 
 /**
- * Raven
- * raven_resources.h : fonts and textures.
- * /
- *
- * #ifndef RAVEN_RESOURCES_H
- * #define RAVEN_RESOURCES_H
- *
- * #include "raven_core.h"
- *
- *
- * /** The styles of a font (Rfont_get_variant). * /
- * typedef enum RFontStyle{
- * R_FONT_REGULAR = 0x0420,
- * R_FONT_BOLD,
- * R_FONT_ITALIC,
- * R_FONT_BOLD_ITALIC
- * }RFontStyle;
- *
- * typedef enum RFilterType{
- * R_FILTER_LINEAR = 0x02C0,
- * /** No smoothing: keeps pixel art sharp. * /
- * R_FILTER_NEAREST,
- * /**
- * Smooth, with mipmaps: an image shown much smaller than its size stays
- * clean instead of shimmering, for a third more GPU memory. The default
- * of the textures made from image files (Rtexture_create...). Backends
- * without mipmaps treat it as R_FILTER_LINEAR.
- * /
- * R_FILTER_MIPMAP
- * }RFilterType;
- *
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* ============================================================================
- * FONTS
- * ============================================================================ * /
- *
- * /**
  * Creates a font from the content of a .ttf / .otf file.
  * The buffer is copied. Glyphs are rasterized on demand, at the exact
  * pixel size needed by each window scale, into a shared atlas.

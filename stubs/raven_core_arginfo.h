@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 19a4e71c0fe1244d0f2afa0d0df01a6b393702be */
+ * Stub hash: c5f1c7f9985e5897fb7b137e363518a011d483be */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Ris_initialized, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -45,6 +45,14 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rget_delta_time, 0, 0, IS_DOUBLE
 ZEND_END_ARG_INFO()
 
 #define arginfo_Rget_time arginfo_Rget_delta_time
+
+#define arginfo_Rset_app_event_callback arginfo_Rset_frame_callback
+
+#define arginfo_Ris_app_paused arginfo_Ris_initialized
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rinject_app_event, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, event, IS_LONG, 0)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rset_ui_scale, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, scale, IS_DOUBLE, 0)
@@ -114,6 +122,58 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_fire, 0, 2, IS_VOID, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_Raction_set_default_handler arginfo_Rset_frame_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_bind_with_parameters, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, signature, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_get_sender, 0, 1, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_get_name, 0, 1, IS_STRING, 1)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Raction_get_argument_count arginfo_Raction_get_sender
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_get_number, 0, 2, IS_DOUBLE, 0)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_get_string, 0, 2, IS_STRING, 1)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_get_bool, 0, 2, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_return_number, 0, 2, IS_VOID, 0)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_return_string, 0, 2, IS_VOID, 0)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_return_bool, 0, 2, IS_VOID, 0)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+	ZEND_ARG_TYPE_INFO(0, value, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Raction_fail, 0, 2, IS_VOID, 0)
+	ZEND_ARG_OBJ_INFO(0, context, RActionContext, 0)
+	ZEND_ARG_TYPE_INFO(0, message, IS_STRING, 1)
+ZEND_END_ARG_INFO()
 
 #define arginfo_Raction_set_builtins arginfo_Rset_vsync
 
@@ -202,6 +262,9 @@ ZEND_FUNCTION(Rwait_events);
 ZEND_FUNCTION(Rset_frame_callback);
 ZEND_FUNCTION(Rget_delta_time);
 ZEND_FUNCTION(Rget_time);
+ZEND_FUNCTION(Rset_app_event_callback);
+ZEND_FUNCTION(Ris_app_paused);
+ZEND_FUNCTION(Rinject_app_event);
 ZEND_FUNCTION(Rset_ui_scale);
 ZEND_FUNCTION(Rset_vsync);
 ZEND_FUNCTION(Rget_vsync);
@@ -222,6 +285,17 @@ ZEND_FUNCTION(Raction_bind);
 ZEND_FUNCTION(Raction_unbind);
 ZEND_FUNCTION(Raction_fire);
 ZEND_FUNCTION(Raction_set_default_handler);
+ZEND_FUNCTION(Raction_bind_with_parameters);
+ZEND_FUNCTION(Raction_get_sender);
+ZEND_FUNCTION(Raction_get_name);
+ZEND_FUNCTION(Raction_get_argument_count);
+ZEND_FUNCTION(Raction_get_number);
+ZEND_FUNCTION(Raction_get_string);
+ZEND_FUNCTION(Raction_get_bool);
+ZEND_FUNCTION(Raction_return_number);
+ZEND_FUNCTION(Raction_return_string);
+ZEND_FUNCTION(Raction_return_bool);
+ZEND_FUNCTION(Raction_fail);
 ZEND_FUNCTION(Raction_set_builtins);
 ZEND_FUNCTION(Raction_is_builtin);
 ZEND_FUNCTION(Ropen_url);
@@ -253,6 +327,9 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rset_frame_callback, arginfo_Rset_frame_callback)
 	ZEND_FE(Rget_delta_time, arginfo_Rget_delta_time)
 	ZEND_FE(Rget_time, arginfo_Rget_time)
+	ZEND_FE(Rset_app_event_callback, arginfo_Rset_app_event_callback)
+	ZEND_FE(Ris_app_paused, arginfo_Ris_app_paused)
+	ZEND_FE(Rinject_app_event, arginfo_Rinject_app_event)
 	ZEND_FE(Rset_ui_scale, arginfo_Rset_ui_scale)
 	ZEND_FE(Rset_vsync, arginfo_Rset_vsync)
 	ZEND_FE(Rget_vsync, arginfo_Rget_vsync)
@@ -273,6 +350,17 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Raction_unbind, arginfo_Raction_unbind)
 	ZEND_FE(Raction_fire, arginfo_Raction_fire)
 	ZEND_FE(Raction_set_default_handler, arginfo_Raction_set_default_handler)
+	ZEND_FE(Raction_bind_with_parameters, arginfo_Raction_bind_with_parameters)
+	ZEND_FE(Raction_get_sender, arginfo_Raction_get_sender)
+	ZEND_FE(Raction_get_name, arginfo_Raction_get_name)
+	ZEND_FE(Raction_get_argument_count, arginfo_Raction_get_argument_count)
+	ZEND_FE(Raction_get_number, arginfo_Raction_get_number)
+	ZEND_FE(Raction_get_string, arginfo_Raction_get_string)
+	ZEND_FE(Raction_get_bool, arginfo_Raction_get_bool)
+	ZEND_FE(Raction_return_number, arginfo_Raction_return_number)
+	ZEND_FE(Raction_return_string, arginfo_Raction_return_string)
+	ZEND_FE(Raction_return_bool, arginfo_Raction_return_bool)
+	ZEND_FE(Raction_fail, arginfo_Raction_fail)
 	ZEND_FE(Raction_set_builtins, arginfo_Raction_set_builtins)
 	ZEND_FE(Raction_is_builtin, arginfo_Raction_is_builtin)
 	ZEND_FE(Ropen_url, arginfo_Ropen_url)
@@ -304,10 +392,12 @@ static const zend_function_entry class_RFrameStats_methods[] = {
 
 static void register_raven_core_symbols(int module_number)
 {
+	REGISTER_LONG_CONSTANT("R_BACKEND_DEFAULT", R_BACKEND_DEFAULT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_BACKEND_VULKAN", R_BACKEND_VULKAN, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_BACKEND_NULL", R_BACKEND_NULL, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_BACKEND_CUSTOM", R_BACKEND_CUSTOM, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_BACKEND_WEBGL", R_BACKEND_WEBGL, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_BACKEND_METAL", R_BACKEND_METAL, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_NO_ERROR", R_NO_ERROR, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_ERROR_INVALID_ID", R_ERROR_INVALID_ID, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_ERROR_INVALID_ENUM", R_ERROR_INVALID_ENUM, CONST_PERSISTENT);
@@ -320,10 +410,17 @@ static void register_raven_core_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_ERROR_FILE_NOT_FOUND", R_ERROR_FILE_NOT_FOUND, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_ERROR_XML", R_ERROR_XML, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_ERROR_WRONG_THREAD", R_ERROR_WRONG_THREAD, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_ERROR_SCRIPT", R_ERROR_SCRIPT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_SEVERITY_WEAK_WARNING", R_SEVERITY_WEAK_WARNING, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_SEVERITY_WARNING", R_SEVERITY_WARNING, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_SEVERITY_ERROR", R_SEVERITY_ERROR, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_SEVERITY_FATAL", R_SEVERITY_FATAL, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_APP_WILL_PAUSE", R_APP_WILL_PAUSE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_APP_DID_PAUSE", R_APP_DID_PAUSE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_APP_WILL_RESUME", R_APP_WILL_RESUME, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_APP_DID_RESUME", R_APP_DID_RESUME, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_APP_LOW_MEMORY", R_APP_LOW_MEMORY, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_APP_WILL_TERMINATE", R_APP_WILL_TERMINATE, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("RAVEN_VERSION_MAJOR", RAVEN_VERSION_MAJOR, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("RAVEN_VERSION_MINOR", RAVEN_VERSION_MINOR, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("RAVEN_VERSION_PATCH", RAVEN_VERSION_PATCH, CONST_PERSISTENT);

@@ -1,7 +1,7 @@
 {
     "name": "php-io-extensions/raven",
     "type": "php-ext",
-    "description": "1:1 PHP bindings of Raven 0.2.3, a retained-mode GUI toolkit in C, compiled into the extension",
+    "description": "1:1 PHP bindings of Raven 0.3.0, a retained-mode GUI toolkit in C, compiled into the extension",
     "keywords": [
         "raven",
         "gui",

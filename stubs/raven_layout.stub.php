@@ -53,71 +53,7 @@ const R_DIRECTION_RTL = UNKNOWN;
 const R_DIRECTION_AUTO = UNKNOWN;
 
 /**
- * Raven
- * raven_layout.h : panels (widgets that arrange children).
- *
- * Children are added with Rwidget_add_child and placed according to their slot
- * (Rslot_set_..., raven_widget.h). This header holds the settings that belong
- * to the panel itself.
- *
- * Panel          Slot values it reads
- * -------------  ----------------------------------------------------------
- * VBox / HBox    padding, halign, valign, auto / fill, max size
- * Grid           padding, halign, valign, grid cell, grid span
- * UniformGrid    padding, halign, valign, grid cell
- * Overlay        padding, halign, valign
- * Border         padding, halign, valign                   (single child)
- * SizeBox        padding, halign, valign                   (single child)
- * ScrollBox      padding, halign / valign across the scroll direction
- * Splitter       fill coefficient = relative pane size
- * WrapBox        padding
- * Canvas         anchors, position, size, alignment
- * Switcher       padding, halign, valign
- * TabView        title, padding
- * Expander       padding                                    (single child)
- * /
- *
- * #ifndef RAVEN_LAYOUT_H
- * #define RAVEN_LAYOUT_H
- *
- * #include "raven_widget.h"
- *
- * /**
- * The looks of a R_WIDGET_BACKGROUND_BLUR. The first three are drawn by
- * Raven from what the window shows behind the widget; the last one is the
- * blur of the OS, which sees what is behind the window itself.
- * /
- * typedef enum RBlurStyle{
- * /** What is behind, out of focus, and nothing else (a Gaussian blur). * /
- * R_BLUR_PLAIN = 0x0440,
- * /**
- * Frosted: blurred, its colors a little stronger, under a veil of the
- * panel color of the theme, a fine grain and a hairline. The default.
- * /
- * R_BLUR_FROSTED,
- * /**
- * Glass: a slab that bends what is behind at its rim and catches the
- * light, as the glass materials do (RMaterial); the radius says how
- * frosted it is.
- * /
- * R_BLUR_GLASS,
- * /**
- * Native: the widget opens the window there, and what shows is what the
- * OS puts behind the window (Rwindow_set_backdrop: the blurred desktop,
- * acrylic, mica), under a light veil. It needs a window created with
- * R_WINDOW_TRANSPARENT that the OS could make see-through; anywhere
- * else it is drawn as R_BLUR_FROSTED. The radius is the one of the OS.
- * /
- * R_BLUR_NATIVE
- * }RBlurStyle;
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* VBOX, HBOX, WRAP_BOX, GRID, UNIFORM_GRID, SCROLL_BOX * /
- *
- * /** brief Gap inserted between neighbouring children.
+ * Gap inserted between neighbouring children.
  */
 function Rpanel_set_spacing(int $panel, float $spacing): void {}
 
@@ -194,7 +130,10 @@ function Rscroll_box_get_offset(int $scroll_box, ?float &$x, ?float &$y): void {
 function Rscroll_box_scroll_to_end(int $scroll_box): void {}
 
 /**
- * Scrolls every ScrollBox above the widget so that the widget is visible.
+ * Scrolls every ScrollBox above the widget so that the widget is
+ * visible. The library does it by itself for the focused widget when the
+ * focus comes from Tab or Rwidget_focus, and for a text field above the
+ * on-screen keyboard (Rwindow_get_keyboard_area).
  */
 function Rwidget_scroll_into_view(int $widget): void {}
 
@@ -322,16 +261,6 @@ function Rtab_view_show_tab(int $tab_view, int $content): void {}
 
 function Rtab_view_set_close_callback(int $tab_view, ?callable $callback, mixed $user_data): void {}
 
-/**
- * The user closes a tab (its button, a middle click). Return R_TRUE
- * to delete its page now, R_FALSE to keep it (the application may ask to
- * save, then delete the page itself with Rwidget_destroy).
- * /
- * typedef int (*RTabCloseCallback)(Rid tab_view, int index, Rid content, void* user_data);
- * RAVEN_API void Rtab_view_set_close_callback(Rid tab_view, RTabCloseCallback callback, void* user_data);
- *
- * /* EXPANDER
- */
 function Rexpander_set_title(int $expander, ?string $title): void {}
 
 function Rexpander_get_title(int $expander): ?string {}
@@ -343,15 +272,7 @@ function Rexpander_is_expanded(int $expander): int {}
 function Rexpander_set_changed_callback(int $expander, ?callable $callback, mixed $user_data): void {}
 
 /**
- * A widget: the direction of its parent (the default). * /
- * R_DIRECTION_INHERIT = 0,
- * R_DIRECTION_LTR = 0x0720,
- * R_DIRECTION_RTL,
- * /** The windows: the direction of the language. * /
- * R_DIRECTION_AUTO
- * } RDirection;
- *
- * /** brief Direction of every window: R_DIRECTION_AUTO (the default), _LTR or _RTL.
+ * Direction of every window: R_DIRECTION_AUTO (the default), _LTR or _RTL.
  */
 function Rset_layout_direction(int $direction): void {}
 

@@ -155,17 +155,21 @@ void raven_threads_minit(void);
 void raven_threads_owner(void);
 void raven_threads_rshutdown(void);
 
-/* RPainter objects: valid while their paint callback runs. */
+/* RPainter / RActionContext objects: valid while their callback runs. */
 extern zend_class_entry *raven_ce_RPainter;
 extern zend_class_entry *raven_ce_RAllocator;
+extern zend_class_entry *raven_ce_RActionContext;
 void raven_painter_new(RPainter *painter, zval *out);
 void raven_painter_end(zval *obj);
 RPainter *raven_painter_get(zend_object *obj, uint32_t arg_num);
 const RAllocator *raven_allocator_get(zend_object *obj);
 void raven_allocator_new(const RAllocator *allocator, zval *out);
+void raven_action_context_new(RActionContext *context, zval *out);
+void raven_action_context_end(zval *obj);
+RActionContext *raven_action_context_get(zend_object *obj, uint32_t arg_num);
 
 void raven_runtime_minit(void);
-void raven_runtime_pointer_classes(zend_class_entry *painter, zend_class_entry *allocator);
+void raven_runtime_pointer_classes(zend_class_entry *painter, zend_class_entry *allocator, zend_class_entry *action_context);
 void raven_runtime_rinit(void);
 void raven_runtime_rshutdown(void);
 

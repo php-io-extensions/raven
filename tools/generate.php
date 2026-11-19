@@ -473,6 +473,15 @@ final class Gen
                 continue;
             }
 
+            if ($t === 'RActionContext *' || $t === 'const RActionContext *') {
+                $decls[] = "\tzend_object *$pn;\n\tRActionContext *$v;";
+                $parse[] = "\t\tZ_PARAM_OBJ_OF_CLASS($pn, raven_ce_RActionContext)";
+                $stubParams[] = "RActionContext \$$pn";
+                $conv[] = "\t$v = raven_action_context_get($pn, $argNum);\n\tif (!$v) {\n\t\tRETURN_THROWS();\n\t}";
+                $args[$i] = $t === 'const RActionContext *' ? "(const RActionContext *)$v" : $v;
+                continue;
+            }
+
             // const uint8_t* RGBA pixels sized by the next two int parameters
             // (width/height, or pixels_width/pixels_height when width/height are already the destination).
             if ($t === 'const uint8_t *' && isset($params[$i + 1], $params[$i + 2])
@@ -646,7 +655,8 @@ final class Gen
                             $ownerExpr = "c_{$params[$k]['name']}";
                         }
                         $keyParts[] = "(unsigned long)c_{$params[$k]['name']}";
-                    } elseif ($pt === 'const char *') {
+                    } elseif ($pt === 'const char *' && $keyStr === null) {
+                        // First name/tag, not a later string such as Raction_bind_with_parameters's signature.
                         $keyStr = $params[$k]['name'];
                     }
                 }
@@ -806,6 +816,9 @@ final class Gen
             } elseif ($pt === 'RPainter *') {
                 $set[] = "\traven_painter_new($pn, &args[$k]);";
                 $after[] = "\traven_painter_end(&args[$k]);";
+            } elseif ($pt === 'RActionContext *' || $pt === 'const RActionContext *') {
+                $set[] = "\traven_action_context_new($pn, &args[$k]);";
+                $after[] = "\traven_action_context_end(&args[$k]);";
             } elseif (preg_match('/^const (\w+) \*$/', $pt, $m) && $this->isStruct($m[1])) {
                 $set[] = "\tif ($pn) {\n\t\traven_struct_new(&raven_struct_{$m[1]}, $pn, &args[$k]);\n\t} else {\n\t\tZVAL_NULL(&args[$k]);\n\t}";
             } elseif (preg_match('/^(\w+) \*$/', $pt, $m) && $this->isStruct($m[1])) {

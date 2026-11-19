@@ -1093,6 +1093,11 @@ ZEND_METHOD(RAllocator, __construct)
 	ZEND_PARSE_PARAMETERS_NONE();
 }
 
+ZEND_METHOD(RActionContext, __construct)
+{
+	ZEND_PARSE_PARAMETERS_NONE();
+}
+
 ZEND_METHOD(RCapture, __construct)
 {
 	raven_struct_construct(NULL, Z_OBJ_P(ZEND_THIS), execute_data);
@@ -1112,7 +1117,7 @@ void raven_manual_minit(int module_number)
 {
 	(void)module_number;
 	zend_register_functions(NULL, ext_functions, NULL, MODULE_PERSISTENT);
-	raven_runtime_pointer_classes(register_class_RPainter(), register_class_RAllocator());
+	raven_runtime_pointer_classes(register_class_RPainter(), register_class_RAllocator(), register_class_RActionContext());
 	raven_ce_RCapture = register_class_RCapture();
 	raven_ce_RBackendVTable = register_class_RBackendVTable();
 	raven_ce_RHostPlatformDesc = register_class_RHostPlatformDesc();

@@ -33,6 +33,8 @@ extern zend_class_entry *raven_ce_RPdfPrintDesc;
 extern const raven_struct raven_struct_RPdfPrintDesc;
 extern zend_class_entry *raven_ce_RTileItem;
 extern const raven_struct raven_struct_RTileItem;
+extern zend_class_entry *raven_ce_RTileSection;
+extern const raven_struct raven_struct_RTileSection;
 extern zend_class_entry *raven_ce_RLanguageDesc;
 extern const raven_struct raven_struct_RLanguageDesc;
 extern zend_class_entry *raven_ce_RJumpTask;

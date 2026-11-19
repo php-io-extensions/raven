@@ -527,278 +527,6 @@ const R_COLOR_COUNT = UNKNOWN;
 const R_METRIC_COUNT = UNKNOWN;
 
 /**
- * Raven
- * raven_style.h : looks and themes (colors, metrics, materials, styles,
- * theme files).
- *
- * A look is how every widget is drawn: the shapes of the controls, how they
- * show their states, how they move, and the colors, sizes and font that go
- * with them. Raven has its own looks (flat, glass, high contrast) and looks
- * that imitate the platforms (Windows 11, macOS, GNOME); Rlook_set picks the
- * one of the application.
- *
- * A theme is laid over the look: a file that changes colors, sizes and the
- * styles of some widgets (see docs/THEMES.md). A theme file that names no
- * look follows the look in use.
- *
- * Every widget reads its colors and sizes from its theme. A value is looked
- * for in this order:
- *
- * 1. the widget itself   Rwidget_set_color, Rwidget_set_metric, Color.Accent="#f00"
- * 2. the styles          rules of the theme for a type of widget ("Button"),
- * for a class (Class="danger"), or for both; for a
- * part of a widget ("Thumb") and its states ("Hovered")
- * 3. the theme           the theme of the application, or the one given to
- * an ancestor of the widget (Rwidget_set_theme,
- * Theme="Night"): a part of a window can have its own
- *
- * <Theme Name="Night" Accent="#FF9F0A">
- * <Colors Panel="#101018" Text="#FFF4E0"/>
- * <Metrics CornerRadius="6" ControlHeight="34"/>
- * <Style Widget="Button" Class="danger" Accent="#FF453A"/>
- * <Style Widget="Slider" Part="Thumb" State="Hovered" Background="#FFB340"/>
- * </Theme>
- * /
- *
- * #ifndef RAVEN_STYLE_H
- * #define RAVEN_STYLE_H
- *
- * #include "raven_core.h"
- *
- *
- * /**
- * The looks. Each one comes dark and light.
- *
- * Raven's looks are the default; the ones of the platforms imitate them
- * closely (their shapes, colors, sizes, states and motion), without using
- * their widgets. The looks of the platforms are opaque, except macOS Glass
- * (macOS 26), whose bars, menus and floating surfaces are glass as on the
- * system; the glass materials themselves (Rtheme_set_material) belong to
- * the glass looks of Raven.
- * /
- * typedef enum RLook{
- * /** Raven, flat and dense, for tools. The look at start. * /
- * R_LOOK_RAVEN_DARK = 0x00E0,
- * R_LOOK_RAVEN_LIGHT,
- * /**
- * Raven in glass: controls are capsules of translucent glass that refract
- * and blur what is behind them, catch the light on their rim and react
- * to the pointer with short animations. Windows get a soft colored
- * background unless they have their own (Rwindow_set_background,
- * Rwindow_set_clear_color).
- * /
- * R_LOOK_RAVEN_GLASS_DARK,
- * R_LOOK_RAVEN_GLASS_LIGHT,
- * /**
- * High contrast, for low vision: pure black and white, yellow (or blue)
- * focus and selection, thick borders, larger text (raven_accessibility.h,
- * Raccessibility_set_high_contrast).
- * /
- * R_LOOK_RAVEN_HIGH_CONTRAST_DARK,
- * R_LOOK_RAVEN_HIGH_CONTRAST_LIGHT,
- * /**
- * Windows 11 (Fluent): its controls, its colors, the accent color the
- * user chose (on Windows), the Segoe UI font when the system has it, and
- * motion without bounce.
- * /
- * R_LOOK_WINDOWS_DARK,
- * R_LOOK_WINDOWS_LIGHT,
- * /**
- * macOS (Sequoia, Aqua): its controls, its colors, the accent color the
- * user chose (on macOS), the San Francisco font when the system has it,
- * no change under the pointer, and selections in the accent color.
- * /
- * R_LOOK_MACOS_DARK,
- * R_LOOK_MACOS_LIGHT,
- * /**
- * GNOME (libadwaita), the desktop of most Linux distributions: flat
- * rounded controls, the accent and the font of the desktop (on Linux).
- * /
- * R_LOOK_GNOME_DARK,
- * R_LOOK_GNOME_LIGHT,
- * /**
- * The look of the platform the application runs on: Windows on Windows,
- * macOS on macOS (macOS Glass from macOS 26 on), GNOME on Linux and the
- * other systems.
- * /
- * R_LOOK_NATIVE_DARK,
- * R_LOOK_NATIVE_LIGHT,
- * /**
- * macOS 26 (Tahoe, Liquid Glass): the controls of macOS, larger and
- * rounder, and glass where the system puts it, on what floats above the
- * content: header bars and their buttons, menus, drop-down lists,
- * tooltips, sheets; the knobs of sliders and switches turn into a lens
- * of clear glass while they are held. The content itself (fields, lists,
- * text) stays opaque. The accent color and the font of the system, on
- * macOS.
- * /
- * R_LOOK_MACOS_GLASS_DARK,
- * R_LOOK_MACOS_GLASS_LIGHT
- * }RLook;
- *
- * /**
- * deprecated The built-in themes of Raven 0.2, now looks: R_THEME_DARK is
- * R_LOOK_RAVEN_DARK and so on, and Rtheme_apply is Rlook_set.
- * /
- * typedef enum RTheme{
- * /** Flat, dense themes for tools. * /
- * R_THEME_DARK = 0x00E0,
- * R_THEME_LIGHT,
- * /**
- * Glass themes: controls are capsules of translucent glass that refract
- * and blur what is behind them, catch the light on their rim and react
- * to the pointer with short animations. Windows get a soft colored
- * background unless they have their own (Rwindow_set_background,
- * Rwindow_set_clear_color).
- * /
- * R_THEME_GLASS_DARK,
- * R_THEME_GLASS_LIGHT,
- * /**
- * High contrast, for low vision: pure black and white, yellow (or blue)
- * focus and selection, thick borders, larger text (raven_accessibility.h,
- * Raccessibility_set_high_contrast).
- * /
- * R_THEME_HIGH_CONTRAST_DARK,
- * R_THEME_HIGH_CONTRAST_LIGHT
- * }RTheme;
- *
- * /**
- * What surfaces are made of, from the clearest to the most opaque. A theme
- * has one material for everything (Rtheme_set_material); any widget can be
- * given its own (Rwidget_set_material, Material="..." in XML).
- *
- * The three glasses share the same anatomy (a tint over what is behind, a
- * rim that bends it and catches the light, a shadow) and differ by how much
- * they let through. Within one material, surfaces are also told apart by
- * their height above the window: bars lie flat, panels float a little,
- * controls a little more, menus and dialogs highest; each level has a
- * brighter rim and a deeper shadow than the one below.
- * /
- * typedef enum RMaterial{
- * /** Opaque: filled with the colors of the theme. The material of R_THEME_DARK and R_THEME_LIGHT. * /
- * R_MATERIAL_SOLID = 0x02E0,
- * /** Clear glass: what is behind stays sharp enough to be recognized, strongly bent at the rim. * /
- * R_MATERIAL_GLASS,
- * /** Frosted glass: what is behind is blurred into soft colors. The material of the glass themes. * /
- * R_MATERIAL_FROSTED_GLASS,
- * /** Frosted glass colored by the accent color of the theme (or of the widget): for what must stand out. * /
- * R_MATERIAL_TINTED_GLASS,
- * /** Not a material: "the one of the theme". Removes the material given to a widget. * /
- * R_MATERIAL_DEFAULT
- * }RMaterial;
- *
- * /** Color roles. The comment lists the widgets reading each role. * /
- * typedef enum RColorRole{
- * /** Window clear color. * /
- * R_COLOR_WINDOW = 0x0100,
- * /** Border background. * /
- * R_COLOR_PANEL,
- * /** Border outline, list and input outlines. * /
- * R_COLOR_BORDER,
- * /** Text. Inherited by the children of the widget it is set on. * /
- * R_COLOR_TEXT,
- * R_COLOR_TEXT_DISABLED,
- * R_COLOR_TEXT_PLACEHOLDER,
- * /** Primary buttons, checked boxes, slider fill, progress fill. * /
- * R_COLOR_ACCENT,
- * R_COLOR_ACCENT_HOVERED,
- * R_COLOR_ACCENT_PRESSED,
- * /** Text and marks drawn on top of the accent color. * /
- * R_COLOR_ACCENT_TEXT,
- * /** Button, combo box, check box background. * /
- * R_COLOR_CONTROL,
- * R_COLOR_CONTROL_HOVERED,
- * R_COLOR_CONTROL_PRESSED,
- * R_COLOR_CONTROL_BORDER,
- * /** Text input, spin box, list and tree background. * /
- * R_COLOR_INPUT,
- * /** Keyboard focus outline. * /
- * R_COLOR_FOCUS,
- * /** Selected rows and selected text. * /
- * R_COLOR_SELECTION,
- * R_COLOR_ROW_HOVERED,
- * /** Slider track, progress background, scrollbar track. * /
- * R_COLOR_TRACK,
- * /** Scrollbar thumb, slider handle. * /
- * R_COLOR_HANDLE,
- * R_COLOR_HANDLE_HOVERED,
- * R_COLOR_SEPARATOR,
- * /** Menu bar, tab bar, expander header. * /
- * R_COLOR_HEADER,
- * R_COLOR_HEADER_HOVERED,
- * /** Active tab. * /
- * R_COLOR_TAB_ACTIVE,
- * /** Menus, combo box lists. * /
- * R_COLOR_POPUP,
- * R_COLOR_POPUP_BORDER,
- * R_COLOR_SHADOW,
- * R_COLOR_TOOLTIP,
- * R_COLOR_TOOLTIP_TEXT,
- * /** Track of a switch that is on. * /
- * R_COLOR_SWITCH,
- * /** What went well, what needs attention, what is wrong or destroys something (markers, badges, classes). * /
- * R_COLOR_SUCCESS,
- * R_COLOR_WARNING,
- * R_COLOR_DANGER,
- * /** Links of formatted text. * /
- * R_COLOR_LINK,
- * /** Background of code in formatted text. * /
- * R_COLOR_CODE,
- * R_COLOR_LAST_
- * }RColorRole;
- *
- * #define R_COLOR_COUNT ((int)R_COLOR_LAST_ - (int)R_COLOR_WINDOW)
- *
- * /** Sizes, in logical units. * /
- * typedef enum RMetric{
- * R_METRIC_FONT_SIZE = 0x0140,
- * R_METRIC_CORNER_RADIUS,
- * R_METRIC_BORDER_WIDTH,
- * /** Height of buttons, inputs, combo boxes, tabs, menu bars. * /
- * R_METRIC_CONTROL_HEIGHT,
- * /** Horizontal / vertical padding inside controls. * /
- * R_METRIC_PADDING_X,
- * R_METRIC_PADDING_Y,
- * /** Gap between an icon or a check mark and its text. * /
- * R_METRIC_SPACING,
- * R_METRIC_SCROLLBAR_SIZE,
- * /** Height of list, tree and menu rows. * /
- * R_METRIC_ROW_HEIGHT,
- * /** Indentation per tree level. * /
- * R_METRIC_INDENT,
- * R_METRIC_SPLITTER_SIZE,
- * R_METRIC_CHECK_SIZE,
- * R_METRIC_SLIDER_HANDLE_SIZE,
- * /** Corner radius of menus, drop-down lists and tooltips. * /
- * R_METRIC_POPUP_RADIUS,
- * /**
- * The glass of the theme: each one multiplies what the material gives,
- * 1 = unchanged. Frost (how much is blurred), refraction (how far the rim
- * bends what is behind), saturation (of what is seen through), rim (the
- * light it catches) and shadow (the one it drops).
- * /
- * R_METRIC_GLASS_FROST,
- * R_METRIC_GLASS_REFRACTION,
- * R_METRIC_GLASS_SATURATION,
- * R_METRIC_GLASS_RIM,
- * R_METRIC_GLASS_SHADOW,
- * /** Radius of the blur of a BackgroundBlur that was not given one. * /
- * R_METRIC_BLUR_RADIUS,
- * R_METRIC_LAST_
- * }RMetric;
- *
- * #define R_METRIC_COUNT ((int)R_METRIC_LAST_ - (int)R_METRIC_FONT_SIZE)
- *
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* -----------------------------------------------------------------------
- * Looks
- * --------------------------------------------------------------------- * /
- *
- * /**
  * Changes the look of the application. The theme file in use, if
  * it names no look of its own, is laid again over the new one; colors
  * and metrics changed with Rtheme_set_... are lost; what was given to
@@ -825,6 +553,11 @@ function Rtheme_set_color(int $role, float $r, float $g, float $b, float $a): vo
 
 function Rtheme_get_color(int $role, ?float &$r, ?float &$g, ?float &$b, ?float &$a): void {}
 
+/**
+ * Changes a size of the theme in use. It lasts until the look or
+ * the theme is chosen again (Rlook_set, Rtheme_use), but not through a
+ * switch between light and dark made by Rtheme_follow_system.
+ */
 function Rtheme_set_metric(int $metric, float $value): void {}
 
 function Rtheme_get_metric(int $metric): float {}
@@ -867,6 +600,13 @@ function Rtheme_get_system_dark(): int {}
  * Follows the dark or light mode of the system with the Raven look
  * (R_LOOK_RAVEN_DARK / R_LOOK_RAVEN_LIGHT), now and when it changes.
  * Off by default. Does nothing where the platform does not tell (desktop today).
+ *
+ * A switch is Rlook_set, except that the sizes given with
+ * Rtheme_set_metric stay. Colors and styles set with Rtheme_set_... are
+ * those of one mode and are lost; to keep colors, sizes and styles of
+ * the application through the switch, put them in a theme that names no
+ * look (Rtheme_load_from_memory, then Rtheme_use): it is laid over the
+ * new look.
  */
 function Rtheme_follow_system(int $enabled): void {}
 

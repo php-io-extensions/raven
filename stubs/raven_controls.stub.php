@@ -246,6 +246,30 @@ const R_PDF_PRINT_NO_DIALOG = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_MAP_TILE_NONE
+ */
+const R_MAP_TILE_NONE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_MAP_TILE_PENDING
+ */
+const R_MAP_TILE_PENDING = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_MAP_TILE_LOADED
+ */
+const R_MAP_TILE_LOADED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_MAP_TILE_FAILED
+ */
+const R_MAP_TILE_FAILED = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_PLOT_SCALE_LINEAR
  */
 const R_PLOT_SCALE_LINEAR = UNKNOWN;
@@ -459,240 +483,23 @@ final class RTileItem
     public array $tint = [];
     public float $icon_radius = 0.0;
     public array $text_color = [];
+    public ?string $note = null;
+    public array $detail_color = [];
 
-    public function __construct(?string $text = null, ?string $detail = null, ?string $badge = null, int $icon = 0, array $uv = [0.0, 0.0, 0.0, 0.0], array $tint = [0.0, 0.0, 0.0, 0.0], float $icon_radius = 0.0, array $text_color = [0.0, 0.0, 0.0, 0.0]) {}
+    public function __construct(?string $text = null, ?string $detail = null, ?string $badge = null, int $icon = 0, array $uv = [0.0, 0.0, 0.0, 0.0], array $tint = [0.0, 0.0, 0.0, 0.0], float $icon_radius = 0.0, array $text_color = [0.0, 0.0, 0.0, 0.0], ?string $note = null, array $detail_color = [0.0, 0.0, 0.0, 0.0]) {}
+}
+
+final class RTileSection
+{
+    public int $first = 0;
+    public ?string $text = null;
+    public ?string $detail = null;
+
+    public function __construct(int $first = 0, ?string $text = null, ?string $detail = null) {}
 }
 
 /**
- * Raven
- * raven_controls.h : interactive widgets and their settings.
- *
- * Every control is created with Rwidget_create(type). Its colors and sizes
- * come from the theme and can be overridden per widget (Rwidget_set_color,
- * Rwidget_set_metric). Its main event can be received either through the
- * typed callback declared here, or by name through an action
- * (Rwidget_set_action + Raction_bind).
- * /
- *
- * #ifndef RAVEN_CONTROLS_H
- * #define RAVEN_CONTROLS_H
- *
- * #include "raven_widget.h"
- *
- *
- * typedef enum RTextAlign{
- * R_TEXT_ALIGN_LEFT = 0x0280,
- * R_TEXT_ALIGN_CENTER,
- * R_TEXT_ALIGN_RIGHT
- * }RTextAlign;
- *
- * typedef enum RToastKind{
- * /** A neutral message (the accent of the theme). * /
- * R_TOAST_INFO = 0x04E0,
- * R_TOAST_SUCCESS,
- * R_TOAST_WARNING,
- * R_TOAST_ERROR
- * }RToastKind;
- *
- * /** What a Toast does with a message that comes while another one is shown. * /
- * typedef enum RToastQueue{
- * /** The new message takes the place of the one shown (the default). * /
- * R_TOAST_REPLACE = 0x0500,
- * /** The messages are shown one after the other, each for its own time. * /
- * R_TOAST_SEQUENCE,
- * /** Up to Rtoast_set_max_visible messages are shown at once, one above the other; the others wait. * /
- * R_TOAST_STACK
- * }RToastQueue;
- *
- * typedef enum RButtonStyle{
- * /** Filled with R_COLOR_CONTROL. * /
- * R_BUTTON_DEFAULT = 0x0290,
- * /** Filled with R_COLOR_ACCENT. * /
- * R_BUTTON_PRIMARY,
- * /** No background until hovered (toolbars). * /
- * R_BUTTON_FLAT
- * }RButtonStyle;
- *
- * typedef enum RCheckboxStyle{
- * R_CHECKBOX_CHECK = 0x02A0,
- * /** Round mark. Checking one unchecks the other radio boxes of the same parent. * /
- * R_CHECKBOX_RADIO,
- * /** On / off switch. * /
- * R_CHECKBOX_SWITCH
- * }RCheckboxStyle;
- *
- * typedef enum RStretch{
- * /** Stretches the image to the widget, ignoring its aspect ratio. * /
- * R_STRETCH_FILL = 0x02B0,
- * /** Largest size that fits entirely, keeping the aspect ratio. * /
- * R_STRETCH_FIT,
- * /** Smallest size that covers the widget, keeping the aspect ratio (cropped). * /
- * R_STRETCH_COVER,
- * /** Original size, centered. * /
- * R_STRETCH_NONE
- * }RStretch;
- *
- * /** The axes of a Plot. * /
- * typedef enum RPlotAxis{
- * /** The horizontal axis under the data. * /
- * R_PLOT_X = 0x0520,
- * /** The vertical axis on the left. * /
- * R_PLOT_Y,
- * /** A second horizontal axis, over the data: shown when a series or a drag line uses it. * /
- * R_PLOT_X2,
- * /** A second vertical axis, on the right: shown when a series or a drag line uses it. * /
- * R_PLOT_Y2
- * }RPlotAxis;
- *
- * /** How a PdfView sizes its pages. * /
- * typedef enum RPdfFit{
- * /** The widest page fills the width of the view (default). * /
- * R_PDF_FIT_WIDTH = 0x05C0,
- * /** The largest page fits whole in the view. * /
- * R_PDF_FIT_PAGE,
- * /** The zoom of Rpdf_view_set_zoom; zooming with the wheel or the keys switches to it. * /
- * R_PDF_FIT_NONE
- * }RPdfFit;
- *
- * /** What a PdfView holds. * /
- * typedef enum RPdfStatus{
- * /** No document. * /
- * R_PDF_EMPTY = 0x05D0,
- * /** A document is shown. * /
- * R_PDF_LOADED,
- * /** The document needs a password, or the one given is wrong: load it again with one. * /
- * R_PDF_NEEDS_PASSWORD,
- * /** The file could not be read, or is not a PDF document. * /
- * R_PDF_ERROR,
- * /** The PDFium library was not found (see Rpdf_is_available). * /
- * R_PDF_UNAVAILABLE
- * }RPdfStatus;
- *
- * /** The fonts of a PDF document (Rpdf_document_set_font): those of Raven, then the ones added (2, 3...). * /
- * typedef enum RPdfFont{
- * /** Roboto, the font of the interface of Raven. * /
- * R_PDF_FONT_SANS = 0,
- * /** Roboto Mono. * /
- * R_PDF_FONT_MONO = 1
- * }RPdfFont;
- *
- * /** How a shape of a PDF document is painted: a bitmask. * /
- * typedef enum RPdfPaint{
- * /** Filled with the fill color. * /
- * R_PDF_FILL   = (1 << 0),
- * /** Outlined with the stroke color and the line width. * /
- * R_PDF_STROKE = (1 << 1)
- * }RPdfPaint;
- *
- * /** A bitmask of styles of the text of a PDF document. * /
- * typedef enum RPdfTextStyle{
- * R_PDF_TEXT_BOLD      = (1 << 0),
- * R_PDF_TEXT_ITALIC    = (1 << 1),
- * R_PDF_TEXT_UNDERLINE = (1 << 2)
- * }RPdfTextStyle;
- *
- * typedef enum RPdfPrintFlags{
- * /** No dialog: printed at once on the printer named, else the default one. * /
- * R_PDF_PRINT_NO_DIALOG = (1 << 0)
- * }RPdfPrintFlags;
- *
- * /** How a PDF document is printed. Every field may be left to zero. * /
- * typedef struct RPdfPrintDesc {
- * /** Window the print dialog belongs to (0 or R_INVALID_ID: none). * /
- * Rid window;
- * /** Name of the print job, shown in the queue of the printer. NULL: the title of the document or the name of the file. * /
- * const char* title;
- * /** Name of the printer, as the system knows it. NULL: the one chosen in the dialog, else the default printer. * /
- * const char* printer;
- * /** Copies to print (0: one); the dialog may change it. * /
- * int copies;
- * /** Bitmask of RPdfPrintFlags. * /
- * Ruint flags;
- * /**
- * Path of a file the job is written to instead of a printer. macOS: a
- * PDF made by the print system; Windows: what the driver of the printer
- * makes; elsewhere: the document itself.
- * /
- * const char* output;
- * /** Password of a document protected by one. * /
- * const char* password;
- * } RPdfPrintDesc;
- *
- * /** How an axis of a Plot spreads its values. * /
- * typedef enum RPlotScale{
- * R_PLOT_SCALE_LINEAR = 0x0530,
- * /** Powers of ten at even distances; only values above zero are shown. * /
- * R_PLOT_SCALE_LOG,
- * /**
- * Symmetric logarithm: linear between -t and t (Rplot_set_axis_linear_threshold,
- * 1 by default), logarithmic beyond on both sides: shows zero and the
- * negative values a logarithm cannot.
- * /
- * R_PLOT_SCALE_SYMLOG
- * }RPlotScale;
- *
- * /** How the line of a series of a Plot is drawn. * /
- * typedef enum RPlotLine{
- * R_PLOT_LINE_SOLID = 0x0540,
- * R_PLOT_LINE_DASHED,
- * R_PLOT_LINE_DOTTED,
- * R_PLOT_LINE_DASH_DOT,
- * /** No line: only the markers (a scatter plot). * /
- * R_PLOT_LINE_NONE
- * }RPlotLine;
- *
- * /** The mark drawn on each point of a series of a Plot. * /
- * typedef enum RPlotMarker{
- * R_PLOT_MARKER_NONE = 0x0550,
- * R_PLOT_MARKER_CIRCLE,
- * R_PLOT_MARKER_SQUARE,
- * R_PLOT_MARKER_DIAMOND,
- * R_PLOT_MARKER_TRIANGLE_UP,
- * R_PLOT_MARKER_TRIANGLE_DOWN,
- * R_PLOT_MARKER_CROSS,
- * R_PLOT_MARKER_PLUS,
- * R_PLOT_MARKER_ASTERISK
- * }RPlotMarker;
- *
- * /** Where the legend of a Plot is. * /
- * typedef enum RPlotLegend{
- * R_PLOT_LEGEND_HIDDEN = 0x0560,
- * R_PLOT_LEGEND_TOP_LEFT,
- * R_PLOT_LEGEND_TOP,
- * R_PLOT_LEGEND_TOP_RIGHT,
- * R_PLOT_LEGEND_RIGHT,
- * R_PLOT_LEGEND_BOTTOM_RIGHT,
- * R_PLOT_LEGEND_BOTTOM,
- * R_PLOT_LEGEND_BOTTOM_LEFT,
- * R_PLOT_LEGEND_LEFT,
- * /** To the right of the data, outside it. * /
- * R_PLOT_LEGEND_OUTSIDE
- * }RPlotLegend;
- *
- * /** What a Chart draws. * /
- * typedef enum RChartKind{
- * /** Slices of a whole, as parts of a disc (the default). * /
- * R_CHART_PIE = 0x0590,
- * /** Slices of a whole, as parts of a ring; its middle shows the total, or the slice under the pointer. * /
- * R_CHART_DONUT,
- * /** One value within a range, on an arc; bands color parts of the range. * /
- * R_CHART_GAUGE,
- * /** A grid of values, each cell colored from the low color to the high one. * /
- * R_CHART_HEATMAP,
- * /** A small line of values without axes, to sit in a tile or a cell of a table. * /
- * R_CHART_SPARKLINE
- * }RChartKind;
- *
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* ============================================================================
- * LABEL
- * ============================================================================ * /
- *
- * /** brief Shortcut for Rwidget_create(R_WIDGET_LABEL) + Rlabel_set_text.
+ * Shortcut for Rwidget_create(R_WIDGET_LABEL) + Rlabel_set_text.
  */
 function Rlabel_create(?string $text): int {}
 
@@ -749,15 +556,7 @@ function Rlabel_get_markdown(int $label): int {}
 function Rlabel_set_link_callback(int $label, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user clicks a link of a Markdown label.
- *
- * Without a callback, a link written [Save](action:file.save) fires the
- * action "file.save" (Raction_bind), and http, https and mailto links
- * open in the browser or the mail program of the user (Ropen_url).
- * /
- * typedef void (*RLabelLinkCallback)(Rid label, const char* url, void* user_data);
- * RAVEN_API void Rlabel_set_link_callback(Rid label, RLabelLinkCallback callback, void* user_data);
- * /** brief The text of a Markdown label without its marks, as a reader sees it. Valid until the next call.
+ * The text of a Markdown label without its marks, as a reader sees it. Valid until the next call.
  */
 function Rlabel_get_plain_text(int $label): ?string {}
 
@@ -986,23 +785,7 @@ function Rlist_view_set_virtual_items(int $list_view, int $count, ?callable $cal
 function Rlist_view_set_item_color_callback(int $list_view, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Virtual mode, for large or computed data: the list stores nothing and
- * asks for the text of the rows it draws. The returned string must stay
- * valid until the next call.
- * /
- * typedef const char* (*RListItemTextCallback)(Rid list_view, int index, void* user_data);
- * RAVEN_API void Rlist_view_set_virtual_items(Rid list_view, int count, RListItemTextCallback callback, void* user_data);
- *
- * /**
- * Colors the text of rows (a level, a verdict): the list asks for the color
- * of each row it draws, stored or virtual. Set r, g, b, a (0..1) and return
- * R_TRUE; R_FALSE (or alpha 0) keeps the color of the theme. The color is
- * kept on a selected or hovered row. NULL removes the callback.
- * /
- * typedef int (*RListItemColorCallback)(Rid list_view, int index, float* r, float* g, float* b, float* a, void* user_data);
- * RAVEN_API void Rlist_view_set_item_color_callback(Rid list_view, RListItemColorCallback callback, void* user_data);
- *
- * /** brief Selects a row. -1 selects nothing.
+ * Selects a row. -1 selects nothing.
  */
 function Rlist_view_set_selected(int $list_view, int $index): void {}
 
@@ -1110,13 +893,6 @@ function Rtree_view_scroll_to_item(int $tree_view, int $item): void {}
 function Rtree_view_set_context_callback(int $tree_view, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Right click: `item` is the item under the pointer (selected
- * first), or R_INVALID_ID in the empty space; x, y in the window, for Rmenu_open.
- * /
- * typedef void (*RTreeContextCallback)(Rid tree_view, Rid item, float x, float y, void* user_data);
- * RAVEN_API void Rtree_view_set_context_callback(Rid tree_view, RTreeContextCallback callback, void* user_data);
- *
- * /**
  * Items can be dragged: the selection is given to Rdrag_begin with
  * this type and, as data, the handles of the items in decimal separated
  * by spaces. NULL: no drag (default).
@@ -1134,11 +910,6 @@ function Rtree_view_get_item_at(int $tree_view, float $local_x, float $local_y):
 function Rtree_view_set_drop_highlight(int $tree_view, int $item, int $whole_tree): void {}
 
 /**
- * A MENU_BAR holds MENUs; a MENU holds MENU_ITEMs and sub-MENUs. A MENU
- * that has no parent can be opened anywhere as a context menu.
- * /
- *
- * /**
  * The menu bar of the system. On macOS, the first MenuBar of a
  * window is shown in the bar at the top of the screen while the window is
  * the active one, after the menu of the application (About, Hide, Quit);
@@ -1223,31 +994,7 @@ function Rmenu_open(int $menu, int $window, float $x, float $y): void {}
 function Rwindow_close_popups(int $window): void {}
 
 /**
- * What a tile shows, filled by the application when the tile is drawn. * /
- * typedef struct RTileItem {
- * /** Name under the icon (valid until the callback returns). * /
- * const char* text;
- * /** Second line, dimmer, or NULL. * /
- * const char* detail;
- * /** Small text at the top right of the tile, or NULL. * /
- * const char* badge;
- * /** Icon texture (R_INVALID_ID: none), the region of it and its tint (white by default). * /
- * Rid icon;
- * float uv[4];
- * float tint[4];
- * float icon_radius;
- * /** Color of the name; alpha 0 = the theme. * /
- * float text_color[4];
- * } RTileItem;
- *
- * /** Fills `item` for tile `index`. Called on the UI thread, only for the tiles in view. * /
- * typedef void (*RTileItemCallback)(Rid tile_view, int index, RTileItem* item, void* user_data);
- * /** Selection change (`index`: the current tile, or -1) and activation (double click, Enter). * /
- * typedef void (*RTileEventCallback)(Rid tile_view, int index, void* user_data);
- * /** Right click: the tile under the pointer (selected first), or -1 in the empty space; x, y in the window. * /
- * typedef void (*RTileContextCallback)(Rid tile_view, int index, float x, float y, void* user_data);
- *
- * /** brief Gives the tiles: `count` of them, described by `callback`. The selection is cleared.
+ * Gives the tiles: `count` of them, described by `callback`. The selection is cleared.
  */
 function Rtile_view_set_items(int $tile_view, int $count, ?callable $callback, mixed $user_data): void {}
 
@@ -1264,6 +1011,41 @@ function Rtile_view_get_count(int $tile_view): int {}
 function Rtile_view_set_tile_size(int $tile_view, float $width, float $height, float $icon_size): void {}
 
 function Rtile_view_set_empty_text(int $tile_view, ?string $text): void {}
+
+/**
+ * Layout="Rows": width of the box the icon is drawn in (its height is the
+ * icon size), for icons that are not square; 0 = square (default). XML: IconWidth.
+ */
+function Rtile_view_set_icon_width(int $tile_view, float $width): void {}
+
+/**
+ * `count` sections, described by `callback`, all unfolded. Rtile_view_set_items removes them: give them after the tiles.
+ */
+function Rtile_view_set_sections(int $tile_view, int $count, ?callable $callback, mixed $user_data): void {}
+
+function Rtile_view_get_section_count(int $tile_view): int {}
+
+/**
+ * The section of a tile, or -1 (before the first section).
+ */
+function Rtile_view_get_section_of(int $tile_view, int $index): int {}
+
+/**
+ * Folds or unfolds a section (the toggled callback is not called).
+ */
+function Rtile_view_set_section_folded(int $tile_view, int $section, int $folded): void {}
+
+function Rtile_view_is_section_folded(int $tile_view, int $section): int {}
+
+/**
+ * The section whose header is at a point relative to the widget, or -1.
+ */
+function Rtile_view_get_section_at(int $tile_view, float $local_x, float $local_y): int {}
+
+/**
+ * Called when the user folds or unfolds a section (`index`: the section).
+ */
+function Rtile_view_set_section_toggled_callback(int $tile_view, ?callable $callback, mixed $user_data): void {}
 
 function Rtile_view_set_selected(int $tile_view, int $index, int $selected): void {}
 
@@ -1312,38 +1094,6 @@ function Rtile_view_set_activated_callback(int $tile_view, ?callable $callback, 
 function Rtile_view_set_context_callback(int $tile_view, ?callable $callback, mixed $user_data): void {}
 
 /**
- * The data of a drag, given by the application (paths of files...)
- * instead of the indices: the dragged tiles are the selected ones
- * (Rtile_view_get_selection). The text returned is copied; NULL keeps
- * the indices.
- * /
- * typedef const char* (*RTileDragDataCallback)(Rid tile_view, void* user_data);
- * RAVEN_API void Rtile_view_set_drag_data_callback(Rid tile_view, RTileDragDataCallback callback, void* user_data);
- *
- * RAVEN_API void Rtile_view_set_selection_changed_callback(Rid tile_view, RTileEventCallback callback, void* user_data);
- * RAVEN_API void Rtile_view_set_activated_callback(Rid tile_view, RTileEventCallback callback, void* user_data);
- * RAVEN_API void Rtile_view_set_context_callback(Rid tile_view, RTileContextCallback callback, void* user_data);
- *
- * /* ============================================================================
- * TABLE (rows of cells under columns; virtualized)
- *
- * <Table Name="people" Striped="true">
- * <Column Header="Name" Width="160"/>
- * <Column Header="Age" Width="60" Align="Right"/>
- * <Column Header="City" Fill="1"/>
- * <Row>Ada|36|London</Row>
- * <Row><Cell>Grace</Cell><Cell>85</Cell><Cell>New York</Cell></Row>
- * </Table>
- *
- * The user drags the edge of a header to resize its column (a double
- * click fits it to its texts) and clicks a header to sort. A stored table
- * sorts its rows itself (numbers by value, texts without regard to case):
- * the indices are always those of the order shown. A virtual table only
- * shows the sorted column and calls the sort callback, where the
- * application orders its data.
- * ============================================================================ * /
- *
- * /**
  * Adds a column.
  * Width in logical units; 0 or less gives the default (120).
  * Returns The index of the column. The stored rows get an empty cell in it.
@@ -1406,22 +1156,6 @@ function Rtable_set_virtual_rows(int $table, int $count, ?callable $callback, mi
 function Rtable_set_cell_color_callback(int $table, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Virtual mode, for large or computed data: the table stores nothing and
- * asks for the texts of the cells it draws. The returned string must stay
- * valid until the next call.
- * /
- * typedef const char* (*RTableCellTextCallback)(Rid table, int row, int column, void* user_data);
- * RAVEN_API void Rtable_set_virtual_rows(Rid table, int count, RTableCellTextCallback callback, void* user_data);
- * /**
- * Colors the text of cells (a verdict, a state): the table asks for the
- * color of each cell it draws, stored or virtual (`row` is the index of the
- * order shown). Set r, g, b, a (0..1) and return R_TRUE; R_FALSE (or alpha 0)
- * keeps the color set with Rtable_set_cell_text_color, else the theme's.
- * The color is kept on a selected or hovered row. NULL removes the callback.
- * /
- * typedef int (*RTableCellColorCallback)(Rid table, int row, int column, float* r, float* g, float* b, float* a, void* user_data);
- * RAVEN_API void Rtable_set_cell_color_callback(Rid table, RTableCellColorCallback callback, void* user_data);
- * /**
  * Stored rows: a fixed text color; column -1 colors the row; cells override it.
  * Alpha 0 restores the inherited/theme color. A color from the cell color callback wins over it.
  */
@@ -1482,22 +1216,7 @@ function Rtable_set_activated_callback(int $table, ?callable $callback, mixed $u
 function Rtable_set_sort_callback(int $table, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user clicks a header; `column` -1: not sorted. * /
- * typedef void (*RTableSortCallback)(Rid table, int column, int descending, void* user_data);
- * RAVEN_API void Rtable_set_sort_callback(Rid table, RTableSortCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * DATE PICKER (a date and the calendar that drops down from it)
- *
- * <DatePicker Date="2026-11-03" FirstDayOfWeek="1"/>
- *
- * Months are 1 to 12, days 1 to 31. The names of the months and of the days
- * are English unless the locale has the keys Raven.Month1 to Raven.Month12
- * and Raven.Day0 (Sunday) to Raven.Day6.
- * ============================================================================ * /
- *
- * /** brief Sets the date (today when the picker is created). An invalid date is refused.
+ * Sets the date (today when the picker is created). An invalid date is refused.
  */
 function Rdate_picker_set_date(int $date_picker, int $year, int $month, int $day): void {}
 
@@ -1534,18 +1253,6 @@ function Rdate_picker_is_open(int $date_picker): int {}
 
 function Rdate_picker_set_changed_callback(int $date_picker, ?callable $callback, mixed $user_data): void {}
 
-/**
- * Called when the user chooses a date. This also fires the action of the widget. * /
- * typedef void (*RDateChangedCallback)(Rid date_picker, int year, int month, int day, void* user_data);
- * RAVEN_API void Rdate_picker_set_changed_callback(Rid date_picker, RDateChangedCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * TIME PICKER (hours : minutes [: seconds], 24 hours)
- *
- * A click on a part selects it; the arrows, the wheel or the digits change it.
- * ============================================================================
- */
 function Rtime_picker_set_time(int $time_picker, int $hour, int $minute, int $second): void {}
 
 function Rtime_picker_get_time(int $time_picker, ?int &$hour, ?int &$minute, ?int &$second): void {}
@@ -1560,30 +1267,7 @@ function Rtime_picker_set_minute_step(int $time_picker, int $step): void {}
 function Rtime_picker_set_changed_callback(int $time_picker, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user changes the time. This also fires the action of the widget. * /
- * typedef void (*RTimeChangedCallback)(Rid time_picker, int hour, int minute, int second, void* user_data);
- * RAVEN_API void Rtime_picker_set_changed_callback(Rid time_picker, RTimeChangedCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * TOAST (a short message that rises over the content, then goes)
- *
- * Put it over the content, where it should appear:
- *
- * <Overlay>
- * ...the content...
- * <Toast Name="toast" Slot.HAlign="Center" Slot.VAlign="Bottom" Slot.Padding="16"/>
- * </Overlay>
- *
- * Hidden, it takes no click. By default Rtoast_show replaces the message
- * shown; Rtoast_set_queue makes the messages wait their turn
- * (R_TOAST_SEQUENCE) or stack up (R_TOAST_STACK: the oldest at the top,
- * the newest at the bottom; put the toast against the bottom of the
- * Overlay so that the stack grows upwards). Each message keeps the kind
- * and the button it was shown with, and its own time.
- * ============================================================================ * /
- *
- * /** brief Shows a message for `seconds` (0 or less: until Rtoast_hide), with the kind and button set now.
+ * Shows a message for `seconds` (0 or less: until Rtoast_hide), with the kind and button set now.
  */
 function Rtoast_show(int $toast, ?string $text, float $seconds): void {}
 
@@ -1636,19 +1320,7 @@ function Rtoast_set_action_text(int $toast, ?string $text): void {}
 function Rtoast_set_action_callback(int $toast, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called by the button of a message, which then hides. This also fires the action of the widget. * /
- * typedef void (*RToastCallback)(Rid toast, void* user_data);
- * RAVEN_API void Rtoast_set_action_callback(Rid toast, RToastCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * BREADCRUMB (Home > Documents > Report)
- *
- * The items before the last one are links; the last one is where the user is.
- * When they do not fit, the first ones give their place to "...".
- * ============================================================================ * /
- *
- * /** brief Replaces the items: their texts separated by '|'.
+ * Replaces the items: their texts separated by '|'.
  */
 function Rbreadcrumb_set_items(int $breadcrumb, ?string $items): void {}
 
@@ -1669,16 +1341,7 @@ function Rbreadcrumb_get_item_text(int $breadcrumb, int $index): ?string {}
 function Rbreadcrumb_set_clicked_callback(int $breadcrumb, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user clicks an item. This also fires the action of the widget. * /
- * typedef void (*RBreadcrumbCallback)(Rid breadcrumb, int index, void* user_data);
- * RAVEN_API void Rbreadcrumb_set_clicked_callback(Rid breadcrumb, RBreadcrumbCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * RATING (stars)
- * ============================================================================ * /
- *
- * /** brief The score, from 0 to the number of stars.
+ * The score, from 0 to the number of stars.
  */
 function Rrating_set_value(int $rating, float $value): void {}
 
@@ -1708,18 +1371,6 @@ function Rrating_set_star_size(int $rating, float $size): void {}
 
 function Rrating_set_changed_callback(int $rating, ?callable $callback, mixed $user_data): void {}
 
-/**
- * Called when the user changes the score. This also fires the action of the widget. * /
- * typedef void (*RRatingChangedCallback)(Rid rating, float value, void* user_data);
- * RAVEN_API void Rrating_set_changed_callback(Rid rating, RRatingChangedCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * PAGINATION (< 1 ... 4 5 6 ... 20 >)
- *
- * Pages are counted from 0; they are shown from 1.
- * ============================================================================
- */
 function Rpagination_set_page_count(int $pagination, int $count): void {}
 
 function Rpagination_get_page_count(int $pagination): int {}
@@ -1735,31 +1386,6 @@ function Rpagination_set_siblings(int $pagination, int $siblings): void {}
 
 function Rpagination_set_changed_callback(int $pagination, ?callable $callback, mixed $user_data): void {}
 
-/**
- * Called when the user goes to another page. This also fires the action of the widget. * /
- * typedef void (*RPageChangedCallback)(Rid pagination, int page, void* user_data);
- * RAVEN_API void Rpagination_set_changed_callback(Rid pagination, RPageChangedCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * PLOT (curves of X / Y data)
- *
- * Series of points drawn as lines and markers over two horizontal axes
- * (R_PLOT_X under the data, R_PLOT_X2 over it) and two vertical ones
- * (R_PLOT_Y on the left, R_PLOT_Y2 on the right). Each axis is linear,
- * logarithmic or symmetric logarithmic, and follows the data until the
- * user or the application moves it.
- *
- * The user moves the view with the left (or middle) button, zooms into a
- * rectangle drawn with the right button, zooms around the pointer with
- * the wheel, and fits the data again with a double click. Over an axis,
- * the button and the wheel move only that axis. A click in the legend
- * hides or shows a series; drag lines are dragged. Fingers move and pinch
- * the view; the arrows, + / - and Home do the same from the keyboard.
- *
- * Series and drag lines are counted from 0, in the order they were added.
- * ============================================================================
- */
 function Rplot_set_title(int $plot, ?string $title): void {}
 
 function Rplot_get_title(int $plot): ?string {}
@@ -1980,51 +1606,7 @@ function Rplot_set_drag_line_callback(int $plot, ?callable $callback, mixed $use
 function Rplot_set_series_toggled_callback(int $plot, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user moves, zooms or fits the view (Rplot_get_axis_range tells where it is). * /
- * typedef void (*RPlotViewCallback)(Rid plot, void* user_data);
- * RAVEN_API void Rplot_set_view_changed_callback(Rid plot, RPlotViewCallback callback, void* user_data);
- * /** brief Called while the user drags a drag line. This also fires the action of the widget. * /
- * typedef void (*RPlotDragLineCallback)(Rid plot, int line, double value, void* user_data);
- * RAVEN_API void Rplot_set_drag_line_callback(Rid plot, RPlotDragLineCallback callback, void* user_data);
- * /** brief Called when the user hides or shows a series from the legend. * /
- * typedef void (*RPlotSeriesCallback)(Rid plot, int series, int visible, void* user_data);
- * RAVEN_API void Rplot_set_series_toggled_callback(Rid plot, RPlotSeriesCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * CHART (the charts of dashboards: pie, donut, gauge, heatmap, sparkline)
- *
- * One widget, five kinds (RChartKind), each fed by its own calls:
- *
- * R_CHART_PIE, R_CHART_DONUT   slices: Rchart_add_slice and the others
- * R_CHART_GAUGE                Rchart_set_range, Rchart_set_value, bands
- * R_CHART_HEATMAP              Rchart_set_grid, labels of the rows and columns
- * R_CHART_SPARKLINE            Rchart_set_values or Rchart_push_value
- *
- * The colors follow the theme: the slices take the accent then a palette
- * of ten colors made for the dark and the light themes, the gauge and the
- * sparkline the accent (Rchart_set_color), the heatmap goes from a tint of
- * the accent to the accent. The values glide to their new place when they
- * change. The pointer over a slice lifts it and tells its label, value and
- * share; over a cell of a heatmap or a point of a sparkline, its value. A
- * click on a slice selects it (and again, unselects it), a click on a cell
- * calls the cell callback; both also fire the action of the widget.
- * The background is left to what holds the chart (a tile, a panel).
- *
- * Slices, bands, rows, columns and values are counted from 0.
- *
- * XML:
- * <Chart Kind="Donut" Title="Browsers" Format="%.0f">
- * <Slice Label="Chrome" Value="64"/> <Slice Label="Safari" Value="19" Color="#ff9f0a"/>
- * </Chart>
- * <Chart Kind="Gauge" Min="0" Max="100" Value="72" Format="%.0f%%">
- * <Band From="0" To="60"/> <Band From="60" To="85"/> <Band From="85" To="100"/>
- * </Chart>
- * <Chart Kind="Heatmap" ColumnLabels="0|6|12|18"> <Row Label="Mon" Values="1 4 2 0"/> ... </Chart>
- * <Chart Kind="Sparkline" Values="3 5 4 6 8 7 9"/>
- * ============================================================================ * /
- *
- * /** brief A chart of a kind (Rwidget_create(R_WIDGET_CHART) makes a pie).
+ * A chart of a kind (Rwidget_create(R_WIDGET_CHART) makes a pie).
  */
 function Rchart_create(int $kind): int {}
 
@@ -2116,11 +1698,6 @@ function Rchart_set_center_text(int $chart, ?string $text, ?string $caption): vo
 function Rchart_set_slice_clicked_callback(int $chart, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user clicks a slice; `selected` tells whether it is now the selected one. * /
- * typedef void (*RChartSliceCallback)(Rid chart, int slice, int selected, void* user_data);
- * RAVEN_API void Rchart_set_slice_clicked_callback(Rid chart, RChartSliceCallback callback, void* user_data);
- *
- * /**
  * The range of a gauge (default 0 to 100), and a fixed range for the
  * colors of a heatmap and the height of a sparkline, which otherwise follow
  * their values. min == max goes back to these defaults.
@@ -2189,11 +1766,7 @@ function Rchart_set_color_scale(int $chart, float $low_r, float $low_g, float $l
 function Rchart_set_cell_clicked_callback(int $chart, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user clicks a cell of a heatmap. * /
- * typedef void (*RChartCellCallback)(Rid chart, int row, int column, float value, void* user_data);
- * RAVEN_API void Rchart_set_cell_clicked_callback(Rid chart, RChartCellCallback callback, void* user_data);
- *
- * /** brief The values of a sparkline, copied. NaN leaves a gap.
+ * The values of a sparkline, copied. NaN leaves a gap.
  */
 function Rchart_set_values(int $chart, array $values, int $count): void {}
 
@@ -2284,13 +1857,213 @@ function Rpdf_view_get_page_text(int $view, int $page): ?string {}
 
 function Rpdf_view_set_page_changed_callback(int $view, ?callable $callback, mixed $user_data): void {}
 
+function Rcarousel_create(): int {}
+
 /**
- * Called when the current page changes as the user scrolls. This also fires the action of the widget. * /
- * typedef void (*RPdfPageChangedCallback)(Rid view, int page, void* user_data);
- * RAVEN_API void Rpdf_view_set_page_changed_callback(Rid view, RPdfPageChangedCallback callback, void* user_data);
- * /** brief Prints the document shown (see Rpdf_print); the job is named after its title.
+ * Shows a page, gliding to it when `animated` (and the animations
+ * are on), at once otherwise. The page changed callback is not called.
+ */
+function Rcarousel_set_page(int $carousel, int $page, int $animated): void {}
+
+/**
+ * The page shown, -1 when the carousel has none.
+ */
+function Rcarousel_get_page(int $carousel): int {}
+
+/**
+ * Its children.
+ */
+function Rcarousel_get_page_count(int $carousel): int {}
+
+/**
+ * Glides to the next / previous page; nothing at the last / first one unless it loops.
+ */
+function Rcarousel_next(int $carousel): void {}
+
+function Rcarousel_prev(int $carousel): void {}
+
+/**
+ * R_TRUE: after the last page comes the first one, and before the first the last (default R_FALSE).
+ */
+function Rcarousel_set_loop(int $carousel, int $loop): void {}
+
+function Rcarousel_get_loop(int $carousel): int {}
+
+/**
+ * Goes to the next page by itself every `seconds` (0: never, the
+ * default); after the last page it comes back to the first. It waits
+ * while the pointer is on the carousel, while the pages are dragged and
+ * while the keyboard is in it; a page chosen by the user starts the
+ * interval again.
+ */
+function Rcarousel_set_autoplay(int $carousel, float $seconds): void {}
+
+function Rcarousel_get_autoplay(int $carousel): float {}
+
+/**
+ * The dots along the bottom edge (the right edge when vertical), one per page (default R_TRUE).
+ */
+function Rcarousel_set_indicators_visible(int $carousel, int $visible): void {}
+
+function Rcarousel_get_indicators_visible(int $carousel): int {}
+
+/**
+ * The previous / next buttons shown while the pointer is on the carousel (default R_TRUE).
+ */
+function Rcarousel_set_arrows_visible(int $carousel, int $visible): void {}
+
+function Rcarousel_get_arrows_visible(int $carousel): int {}
+
+/**
+ * R_HORIZONTAL: the pages side by side (default); R_VERTICAL: one above the other.
+ */
+function Rcarousel_set_orientation(int $carousel, int $orientation): void {}
+
+function Rcarousel_get_orientation(int $carousel): int {}
+
+function Rcarousel_set_page_changed_callback(int $carousel, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * Prints the document shown (see Rpdf_print); the job is named after its title.
  */
 function Rpdf_view_print(int $view, ?RPdfPrintDesc $desc): int {}
+
+function Rmap_view_create(): int {}
+
+/**
+ * Centers the map on a place. The latitude is held within +/-85.0511; the longitude wraps.
+ */
+function Rmap_view_set_center(int $map, float $latitude, float $longitude): void {}
+
+/**
+ * The place at the middle of the map (longitude from -180 to 180).
+ */
+function Rmap_view_get_center(int $map, ?float &$latitude, ?float &$longitude): void {}
+
+/**
+ * The zoom: 0 shows the whole world in one tile, each step doubles the scale. Fractions are allowed.
+ */
+function Rmap_view_set_zoom(int $map, float $zoom): void {}
+
+function Rmap_view_get_zoom(int $map): float {}
+
+/**
+ * The zooms the user can reach (default 0 to 19, at most 0 to 24). Tiles are asked for at whole zooms of this range.
+ */
+function Rmap_view_set_zoom_range(int $map, float $min_zoom, float $max_zoom): void {}
+
+function Rmap_view_get_zoom_range(int $map, ?float &$min_zoom, ?float &$max_zoom): void {}
+
+/**
+ * Glides to a place and a zoom (at once when animations are off).
+ */
+function Rmap_view_animate_to(int $map, float $latitude, float $longitude, float $zoom): void {}
+
+/**
+ * The place at a point of the widget.
+ */
+function Rmap_view_screen_to_latlon(int $map, float $x, float $y, ?float &$latitude, ?float &$longitude): void {}
+
+/**
+ * Where a place is in the widget (of the copies of the world side by side, the one nearest the middle).
+ */
+function Rmap_view_latlon_to_screen(int $map, float $latitude, float $longitude, ?float &$x, ?float &$y): void {}
+
+/**
+ * Called once for each tile the map needs. Answer with
+ * Rmap_view_set_tile, Rmap_view_set_tile_data or Rmap_view_set_tile_failed,
+ * at once or later. Setting it forgets the tiles of the previous source.
+ */
+function Rmap_view_set_tile_callback(int $map, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * Called when a tile asked for and not answered yet is no longer wanted (the user went elsewhere). Optional.
+ */
+function Rmap_view_set_tile_cancel_callback(int $map, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * The pixels of a tile: `width` x `height` RGBA8, tightly packed
+ * (they are copied; any size, shown at the tile size). Thread-safe: from
+ * another thread it is applied on the UI thread during the next frame.
+ */
+function Rmap_view_set_tile(int $map, int $z, int $x, int $y, string $rgba, int $width, int $height): void {}
+
+/**
+ * A tile as the bytes of an image file (PNG, JPEG...), decoded on the calling thread. Thread-safe.
+ */
+function Rmap_view_set_tile_data(int $map, int $z, int $x, int $y, string $data, int $data_size): void {}
+
+/**
+ * There is no such tile: the coarser one stays shown in its place. Thread-safe.
+ */
+function Rmap_view_set_tile_failed(int $map, int $z, int $x, int $y): void {}
+
+/**
+ * Reads the tiles from files instead of asking for them: a path
+ * where {z}, {x} and {y} are replaced ({-y}: the row counted from the
+ * south, as in TMS and MBTiles). The files are read and decoded on a
+ * worker thread; a missing file is a tile that failed. NULL or "": the
+ * tile callback again. Local files only.
+ */
+function Rmap_view_set_tile_path(int $map, ?string $path_template): void {}
+
+function Rmap_view_get_tile_path(int $map): ?string {}
+
+/**
+ * Logical size of a tile at a whole zoom (default 256, from 16 to 1024): larger tiles show the map larger.
+ */
+function Rmap_view_set_tile_size(int $map, int $size): void {}
+
+function Rmap_view_get_tile_size(int $map): int {}
+
+/**
+ * Memory the decoded tiles may take, in bytes (default 64 MiB). The tiles on screen are always kept.
+ */
+function Rmap_view_set_cache_size(int $map, int $bytes): void {}
+
+/**
+ * Memory the decoded tiles take now, in bytes.
+ */
+function Rmap_view_get_cache_usage(int $map): int {}
+
+/**
+ * Forgets every tile (they are asked for again): the tiles of the source changed.
+ */
+function Rmap_view_clear_tiles(int $map): void {}
+
+function Rmap_view_get_tile_state(int $map, int $z, int $x, int $y): int {}
+
+/**
+ * Adds a pin at a place, with a label written next to it (may be NULL). Returns its id (from 1), or -1.
+ */
+function Rmap_view_add_marker(int $map, float $latitude, float $longitude, ?string $label): int {}
+
+function Rmap_view_remove_marker(int $map, int $marker): void {}
+
+function Rmap_view_clear_markers(int $map): void {}
+
+function Rmap_view_get_marker_count(int $map): int {}
+
+function Rmap_view_set_marker_position(int $map, int $marker, float $latitude, float $longitude): void {}
+
+function Rmap_view_set_marker_label(int $map, int $marker, ?string $label): void {}
+
+/**
+ * The color of a pin (by default the accent of the theme).
+ */
+function Rmap_view_set_marker_color(int $map, int $marker, float $r, float $g, float $b, float $a): void {}
+
+function Rmap_view_set_marker_clicked_callback(int $map, ?callable $callback, mixed $user_data): void {}
+
+function Rmap_view_set_view_changed_callback(int $map, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * A line written in the bottom right corner: the credit most tile
+ * licences ask for, such as "(c) OpenStreetMap contributors". NULL or "": none.
+ */
+function Rmap_view_set_attribution(int $map, ?string $text): void {}
+
+function Rmap_view_get_attribution(int $map): ?string {}
 
 function Rpdf_document_create(): int {}
 

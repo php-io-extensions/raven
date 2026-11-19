@@ -199,155 +199,7 @@ final class RLanguageDesc
 }
 
 /**
- * Raven
- * raven_text_editor.h : multi-line text editor, and the languages it knows.
- *
- * R_WIDGET_TEXT_EDITOR edits a text of any number of lines: selection with
- * the mouse and the keyboard, clipboard, undo and redo, line numbers, word
- * wrap. It scrolls by itself. In XML:
- *
- * <TextEditor Name="notes" Wrap="true" Placeholder="Write here"/>
- * <TextEditor Language="Rust" LineNumbers="true" Slot.Fill="1"/>
- *
- * Given a language, the editor colors the text, proposes words while typing
- * (the words of the language and the names already written in the text),
- * shows which bracket closes which, indents after an opening bracket, closes
- * brackets and quotes, and comments lines out. C, C++, C#, Java, JavaScript,
- * TypeScript, Python, Rust, Zig, GLSL, JSON, CSS, XML and HTML are built in; any
- * of them can be changed, and others declared, with Rlanguage_register.
- *
- * This is what the editor knows from the text alone. What needs to
- * understand a whole program (the type of an expression, the errors of a
- * compiler) comes from outside, through two doors: a completion callback
- * that adds its own proposals, and markers that underline a part of the text
- * with a message.
- *
- * Positions are a line and a column, both starting at 0; a column is a byte
- * offset in the UTF-8 text of its line. Out-of-range positions are clamped.
- *
- * Keys: arrows, Home / End, Page Up / Down, with Ctrl to move by word or to
- * the ends of the text and with Shift to select; Ctrl+A, C, X, V; Ctrl+Z,
- * Ctrl+Y or Ctrl+Shift+Z; Tab and Shift+Tab indent the selected lines;
- * Ctrl+Space proposes words; Ctrl+/ comments the selected lines out.
- * A double click selects a word, a triple click a line.
- * /
- *
- * #ifndef RAVEN_TEXT_EDITOR_H
- * #define RAVEN_TEXT_EDITOR_H
- *
- * #include "raven_widget.h"
- *
- * /** Shorthands of Rtext_editor_set_language for two languages. * /
- * typedef enum RSyntax{
- * R_SYNTAX_NONE = 0x0340,
- * R_SYNTAX_XML,
- * R_SYNTAX_C
- * }RSyntax;
- *
- * typedef enum RLanguageFlags{
- * /** Tags and attributes instead of code: XML, HTML. The words and the comments of the description are not used. * /
- * R_LANGUAGE_MARKUP          = (1 << 0),
- * /** Selectors, properties and values: CSS. * /
- * R_LANGUAGE_STYLE_SHEET     = (1 << 1),
- * /** A block comment may hold another one (Rust). * /
- * R_LANGUAGE_NESTED_COMMENTS = (1 << 2),
- * /** Between single quotes there is one character; any other single quote is not a text (C, Java, Rust). * /
- * R_LANGUAGE_CHAR_LITERALS   = (1 << 3),
- * /** A line that ends with ':' indents the next one (Python). * /
- * R_LANGUAGE_INDENT_ON_COLON = (1 << 4),
- * /** The words of the language are recognized whatever their case. * /
- * R_LANGUAGE_IGNORE_CASE     = (1 << 5),
- * /** Markup that holds JavaScript in script elements and CSS in style elements (HTML). * /
- * R_LANGUAGE_EMBEDS          = (1 << 6),
- * /**
- * Formatted text written in Markdown: titles, strong and emphasized
- * text, code, links, lists. The editor shows the text as it is written,
- * marks included, with strong text in bold, emphasized text in italic
- * and titles in bold: what will be formatted is seen while typing.
- * /
- * R_LANGUAGE_FORMATTED_TEXT  = (1 << 7)
- * }RLanguageFlags;
- *
- * /**
- * What the editor knows of a language. Every field but the name may be NULL.
- * Lists of words are separated by spaces.
- * /
- * typedef struct RLanguageDesc {
- * /** "Rust". Compared without case. * /
- * const char* name;
- * /** Extensions of its files, separated by ';': "rs". * /
- * const char* extensions;
- * /** Words of the language itself: if, while, return... * /
- * const char* keywords;
- * /** Names of types and of what is always there: int, String, print... * /
- * const char* types;
- * /** Values with a name: true, false, null... * /
- * const char* constants;
- * /** What starts a comment that ends with its line: two slashes, a hash. * /
- * const char* line_comment;
- * /** What opens and closes a comment that may span lines. * /
- * const char* block_comment_start;
- * const char* block_comment_end;
- * /** Characters that open and close a text on one line: a double quote, a single quote. * /
- * const char* string_quotes;
- * /**
- * Marks of the texts that span lines, separated by spaces: three double
- * quotes, a backquote. When what closes such a text is not what opens it,
- * write both around three dots: R"(...)" . Nothing is escaped in those.
- * /
- * const char* multiline_strings;
- * /** What starts a line for the preprocessor: "#". * /
- * const char* directive;
- * /** What starts an annotation: "@" (Override), or "#[" up to its closing bracket. * /
- * const char* annotation;
- * /** Bitmask of RLanguageFlags. * /
- * Ruint flags;
- * /**
- * Markup with R_LANGUAGE_EMBEDS: the language of what is between
- * <script> and </script> (the name of a language: "C", "Rust"...).
- * NULL: JavaScript, as in HTML.
- * /
- * const char* script_language;
- * } RLanguageDesc;
- *
- * /** What a part of the text is, for the language of the editor (Rtext_editor_get_token). * /
- * typedef enum RToken{
- * R_TOKEN_TEXT = 0x03A0,
- * R_TOKEN_COMMENT,
- * R_TOKEN_STRING,
- * R_TOKEN_NUMBER,
- * R_TOKEN_KEYWORD,
- * /** A type, or a name that is always there. * /
- * R_TOKEN_TYPE,
- * /** A name followed by an opening parenthesis. * /
- * R_TOKEN_FUNCTION,
- * /** The name of an element, in markup and in the selectors of a style sheet. * /
- * R_TOKEN_TAG,
- * /** The name of an attribute (markup), of a class or of a property (style sheets), of a key (JSON). * /
- * R_TOKEN_ATTRIBUTE,
- * R_TOKEN_PUNCTUATION,
- * /** A line for the preprocessor, an annotation, a declaration of a document. * /
- * R_TOKEN_DIRECTIVE,
- * /** Formatted text (the Markdown language): a title, strong text, emphasized text, a link. * /
- * R_TOKEN_HEADING,
- * R_TOKEN_STRONG,
- * R_TOKEN_EMPHASIS,
- * R_TOKEN_LINK
- * }RToken;
- *
- * /** What a marker says about the text it underlines. * /
- * typedef enum RMarkerKind{
- * R_MARKER_ERROR = 0x0350,
- * R_MARKER_WARNING,
- * R_MARKER_INFO
- * }RMarkerKind;
- *
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /** param text Initial content, or NULL.
+ * Initial content, or NULL.
  */
 function Rtext_editor_create(?string $text): int {}
 
@@ -474,13 +326,6 @@ function Rtext_editor_set_zoomable(int $editor, int $zoomable): void {}
 function Rtext_editor_set_zoom_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called when the user zoomed (to zoom other editors the same, or to keep it for the next time). * /
- * typedef void (*RTextEditorZoomCallback)(Rid editor, float zoom, void* user_data);
- * RAVEN_API void Rtext_editor_set_zoom_callback(Rid editor, RTextEditorZoomCallback callback, void* user_data);
- *
- * /* ---- languages ---- * /
- *
- * /**
  * Declares a language, or replaces the one that has this name: to
  * add words to a built-in language, read it with Rlanguage_get, change
  * what you want and register it again. The strings are copied.
@@ -547,14 +392,6 @@ function Rtext_editor_is_completing(int $editor): int {}
 function Rtext_editor_set_completion_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called each time the editor gathers its proposals, with the
- * start of the word being typed: add your own with
- * Rtext_editor_add_completion (the fields of a structure, the answers of
- * a language server...). They are listed before the others.
- * /
- * typedef void (*RCompletionCallback)(Rid editor, const char* prefix, void* user_data);
- * RAVEN_API void Rtext_editor_set_completion_callback(Rid editor, RCompletionCallback callback, void* user_data);
- * /**
  * Adds a proposal. Only from a completion callback. Proposals that
  * do not start with the prefix are left out; the others keep the order
  * they were added in.
@@ -599,18 +436,6 @@ function Rtext_editor_get_marker_count(int $editor): int {}
 function Rtext_editor_set_hover_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called while the pointer moves over the text where no marker
- * is, with the position under it: the text returned (NULL or "" for
- * none) is shown as the tooltip, as a marker's message is (what a name
- * stands for, the value of a variable). The text must stay valid until
- * the next call.
- * /
- * typedef const char* (*RTextEditorHoverCallback)(Rid editor, int line, int column, void* user_data);
- * RAVEN_API void Rtext_editor_set_hover_callback(Rid editor, RTextEditorHoverCallback callback, void* user_data);
- *
- * /* ---- colors ---- * /
- *
- * /**
  * Color of a kind of token in the theme in use, instead of the
  * one Raven picks for dark and for light themes. Theme files set them
  * with <Syntax Keyword="#FF7AB2" String="..."/>.

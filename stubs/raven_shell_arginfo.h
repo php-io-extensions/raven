@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: dba28f6ad2da9416ec919b9c3f6ef7392e7aa055 */
+ * Stub hash: 7517e312e56c775ddaaf73bc6bbb5eb4e10724e7 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rheader_bar_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)
@@ -133,6 +133,13 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdock_area_set_float_mode, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, area, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, mode, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdock_area_set_float_window, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, area, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, flags, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdock_area_float_panel, 0, 4, IS_LONG, 0)
@@ -299,6 +306,7 @@ ZEND_FUNCTION(Rdock_area_set_close_callback);
 ZEND_FUNCTION(Rdock_area_set_tearable);
 ZEND_FUNCTION(Rdock_area_is_tearable);
 ZEND_FUNCTION(Rdock_area_set_float_mode);
+ZEND_FUNCTION(Rdock_area_set_float_window);
 ZEND_FUNCTION(Rdock_area_float_panel);
 ZEND_FUNCTION(Rdock_area_dock_panel);
 ZEND_FUNCTION(Rdock_area_get_panel_window);
@@ -361,6 +369,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rdock_area_set_tearable, arginfo_Rdock_area_set_tearable)
 	ZEND_FE(Rdock_area_is_tearable, arginfo_Rdock_area_is_tearable)
 	ZEND_FE(Rdock_area_set_float_mode, arginfo_Rdock_area_set_float_mode)
+	ZEND_FE(Rdock_area_set_float_window, arginfo_Rdock_area_set_float_window)
 	ZEND_FE(Rdock_area_float_panel, arginfo_Rdock_area_float_panel)
 	ZEND_FE(Rdock_area_dock_panel, arginfo_Rdock_area_dock_panel)
 	ZEND_FE(Rdock_area_get_panel_window, arginfo_Rdock_area_get_panel_window)

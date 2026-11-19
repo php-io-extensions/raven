@@ -85,7 +85,8 @@ foreach ($ast['inner'] as $node) {
 foreach ($headers as $header) {
     $text = file_get_contents("$root/raven/$header");
     // The /** */ immediately before a RAVEN_API function is its header comment.
-    if (preg_match_all('/\/\*\*(.*?)\*\/\s*RAVEN_API\b[^;{]*?\b([A-Za-z_]\w*)\s*\(/s', $text, $cm, PREG_SET_ORDER)) {
+    // Match one comment only: do not let .*? backtrack across an earlier */.
+    if (preg_match_all('/\/\*\*((?:[^*]|\*(?!\/))*)\*\/\s*RAVEN_API\b[^;{]*?\b([A-Za-z_]\w*)\s*\(/s', $text, $cm, PREG_SET_ORDER)) {
         foreach ($cm as [, $raw, $name]) {
             if (! isset($api['functions'][$name])) {
                 continue;

@@ -6,6 +6,12 @@
 
 /**
  * @var int
+ * @cvalue R_BACKEND_DEFAULT
+ */
+const R_BACKEND_DEFAULT = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_BACKEND_VULKAN
  */
 const R_BACKEND_VULKAN = UNKNOWN;
@@ -27,6 +33,12 @@ const R_BACKEND_CUSTOM = UNKNOWN;
  * @cvalue R_BACKEND_WEBGL
  */
 const R_BACKEND_WEBGL = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_BACKEND_METAL
+ */
+const R_BACKEND_METAL = UNKNOWN;
 
 /**
  * @var int
@@ -102,6 +114,12 @@ const R_ERROR_WRONG_THREAD = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_ERROR_SCRIPT
+ */
+const R_ERROR_SCRIPT = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_SEVERITY_WEAK_WARNING
  */
 const R_SEVERITY_WEAK_WARNING = UNKNOWN;
@@ -123,6 +141,42 @@ const R_SEVERITY_ERROR = UNKNOWN;
  * @cvalue R_SEVERITY_FATAL
  */
 const R_SEVERITY_FATAL = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_APP_WILL_PAUSE
+ */
+const R_APP_WILL_PAUSE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_APP_DID_PAUSE
+ */
+const R_APP_DID_PAUSE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_APP_WILL_RESUME
+ */
+const R_APP_WILL_RESUME = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_APP_DID_RESUME
+ */
+const R_APP_DID_RESUME = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_APP_LOW_MEMORY
+ */
+const R_APP_LOW_MEMORY = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_APP_WILL_TERMINATE
+ */
+const R_APP_WILL_TERMINATE = UNKNOWN;
 
 /**
  * @var int
@@ -231,20 +285,6 @@ function Rmemory_check(): int {}
 function Rmemory_trim(): void {}
 
 /**
- * Raven has no loop of its own: the application writes it and asks for one
- * frame at a time.
- *
- * while (Rdraw_frame()) {            a game or an engine: never waits,
- * update_and_render_my_scene();  call it once per frame of yours
- * }
- *
- * while (Rwait_frame(-1.0)) {        a tool: sleeps until something
- * }                                  happens, costs nothing when idle
- *
- * return Rget_exit_code();
- * /
- *
- * /**
  * Produces one frame: processes the pending OS events without
  * waiting, runs the posted tasks and the timers, then lays out, paints and
  * submits every window that changed. A window in which nothing changed is
@@ -293,15 +333,7 @@ function Rwait_events(float $timeout_seconds): void {}
 function Rset_frame_callback(?callable $callback, mixed $user_data): void {}
 
 /**
- * Registers a function called once per frame, before the layout.
- * The body of your loop does the same job; the callback is also called
- * while the OS keeps the thread in a loop of its own (on Windows, while
- * the user moves or resizes a window), when your loop is not running.
- * /
- * typedef void (*RFrameCallback)(double delta_seconds, void* user_data);
- * RAVEN_API void Rset_frame_callback(RFrameCallback callback, void* user_data);
- *
- * /** return Seconds between the last two frames.
+ * Returns Seconds between the last two frames.
  */
 function Rget_delta_time(): float {}
 
@@ -310,15 +342,21 @@ function Rget_delta_time(): float {}
  */
 function Rget_time(): float {}
 
+function Rset_app_event_callback(?callable $callback, mixed $user_data): void {}
+
 /**
- * Controls move with springs: buttons squash when pressed and bounce back,
- * switches slide and stretch, popups pop out of what opened them, lists
- * scroll with inertia and stretch at their ends. Nothing has to be done
- * for it; these functions only tune it. See also Rwidget_set_transition
- * (widgets that fly in) and Rdraw_spring (custom widgets).
- * /
- *
- * /**
+ * Returns R_TRUE between R_APP_DID_PAUSE and R_APP_WILL_RESUME: the application is in the background.
+ */
+function Ris_app_paused(): int {}
+
+/**
+ * Handles an RAppEvent as if the system had sent it: for tests,
+ * and for a host application (raven_host.h) that knows the lifecycle.
+ * UI thread.
+ */
+function Rinject_app_event(int $event): void {}
+
+/**
  * Scale of the whole interface, on top of the one of the monitor
  * (RInitDesc.ui_scale at start): every window is laid out again. 0.25 .. 4.
  */
@@ -388,17 +426,6 @@ function Raction_bind(?string $name, ?callable $callback, mixed $user_data): voi
 function Raction_unbind(?string $name): void {}
 
 /**
- * Actions connect widgets to application code by name. A widget carries an
- * action name (set from XML with OnClicked="file.save", or from C with
- * Rwidget_set_action); when its main event fires, the function bound to that
- * name is called. Names are resolved when the event fires, so actions can be
- * bound before or after the widgets are created.
- * /
- * typedef void (*RActionCallback)(Rid sender, const char* action, void* user_data);
- *
- * RAVEN_API void Raction_bind(const char* name, RActionCallback callback, void* user_data);
- * RAVEN_API void Raction_unbind(const char* name);
- * /**
  * Fires an action as a widget would: the function bound to the
  * name is called, or the default handler. What a tool bar button, a
  * script or a test uses to do what a menu item does.
@@ -410,6 +437,47 @@ function Raction_fire(?string $name, int $sender): void {}
  * Receives every action that has no bound function and is not one of the built-in actions (e.g. a script bridge).
  */
 function Raction_set_default_handler(?callable $callback, mixed $user_data): void {}
+
+function Raction_bind_with_parameters(?string $name, ?string $signature, ?callable $callback, mixed $user_data): int {}
+
+/**
+ * Returns The widget whose event fired the action, R_INVALID_ID when a script calls it.
+ */
+function Raction_get_sender(RActionContext $context): int {}
+
+function Raction_get_name(RActionContext $context): ?string {}
+
+/**
+ * Returns The number of arguments given: the parameters of the signature, fewer when an event gives fewer... never more.
+ */
+function Raction_get_argument_count(RActionContext $context): int {}
+
+/**
+ * The arguments, by position from 0. A wrong index or type reports an error and gives 0, "" or R_FALSE.
+ */
+function Raction_get_number(RActionContext $context, int $index): float {}
+
+/**
+ * Returns Valid until the function returns.
+ */
+function Raction_get_string(RActionContext $context, int $index): ?string {}
+
+function Raction_get_bool(RActionContext $context, int $index): int {}
+
+/**
+ * The value returned to the script; of the type of the signature (what is set last counts).
+ */
+function Raction_return_number(RActionContext $context, float $value): void {}
+
+function Raction_return_string(RActionContext $context, ?string $value): void {}
+
+function Raction_return_bool(RActionContext $context, int $value): void {}
+
+/**
+ * The function failed: the script that called it stops with error
+ * RS205 and this message (the application goes on; so does the next event).
+ */
+function Raction_fail(RActionContext $context, ?string $message): void {}
 
 /**
  * The actions Raven knows by itself: an interface written in XML
@@ -484,37 +552,4 @@ function Rseverity_to_string(int $severity): ?string {}
 
 function Rset_device_reset_callback(?callable $callback, mixed $user_data): void {}
 
-/**
- * Registers a function called whenever an error is raised.
- * The function may be registered before Rinit. It is called on the
- * thread that raised the error: errors of the renderer (and the messages
- * of the Vulkan validation layers) come from the render thread.
- * /
- * typedef void (*RErrorCallback)(RError code, RSeverity severity, const char* detail);
- * RAVEN_API void Rerror_set_callback(RErrorCallback callback);
- *
- * /**
- * Registers a function called after Raven recovered from the loss
- * of the GPU device (a driver reset or update, a GPU removed, a long sleep).
- *
- * Raven then starts the backend again and remakes what it can by itself:
- * the surfaces of the windows, the fonts, the shaders, the textures made
- * from image files and the small textures (up to 256 x 256). The pixels of
- * the larger textures made from pixels are lost: the textures keep their
- * handle and size but are transparent until Rtexture_update fills them
- * again, which is what this function is for. Textures that wrap objects of
- * the backend (raven_vulkan.h) must be made again, and the Vulkan handles
- * returned by Rvulkan_get_device... have changed.
- *
- * Called on the UI thread, during Rdraw_frame / Rwait_frame. Set it after
- * Rinit; NULL removes it.
- * /
- * typedef void (*RDeviceResetCallback)(void* user_data);
- * RAVEN_API void Rset_device_reset_callback(RDeviceResetCallback callback, void* user_data);
- *
- *
- * /* ============================================================================
- * DIAGNOSTICS
- * ============================================================================
- */
 function Rwindow_get_frame_stats(int $window, ?RFrameStats $stats): void {}

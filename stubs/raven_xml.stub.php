@@ -79,134 +79,6 @@ final class RXmlAttributeInfo
 }
 
 /**
- * Raven
- * raven_xml.h : building windows and widget trees from XML.
- *
- * <Window Title="Editor" Width="1280" Height="720">
- * <VBox>
- * <Label Text="Hello" Slot.Padding="8" Slot.HAlign="Center"/>
- * <HBox Slot.Fill="1" Spacing="4">
- * <Button Name="save" Text="Save" OnClicked="file.save"/>
- * <Viewport Name="scene" Slot.Fill="1"/>
- * </HBox>
- * </VBox>
- * </Window>
- *
- * - An element is a widget; its tag is the widget type (VBox, Button, ...).
- * - Child elements are child widgets, in order.
- * - Attributes set properties. Attributes starting with "Slot." set the
- * slot of the widget inside its parent (same meaning as Rslot_set_...).
- * - Tags and attribute names are not case sensitive.
- * - Name="..." gives the widget a name for Rwidget_find.
- * - OnClicked / OnChanged / OnCommitted / OnActivated="name" set the action
- * of the widget (Raction_bind). Some work with no C at all: "app.quit",
- * "window.close", "show:panel", "toggle:panel", "page:pages=+1",
- * "theme.toggle", "open:https://..." (Raction_set_builtins lists them).
- *
- *
- * NEW TAGS
- *
- * A document can declare its own tags: a <Widget> names a piece of
- * interface, with parameters, and is then used like any built-in widget.
- *
- * <Widget Name="Field" Label="Name" Hint="" Wide="false">
- * <HBox Spacing="8">
- * <Label Text="{Label}:" Width="{Wide ? 140 : 90}"/>
- * <TextInput Placeholder="{Hint}" Slot.Fill="1"/>
- * <Children/>
- * </HBox>
- * </Widget>
- *
- * <Field Label="Email" Hint="youexample.com" Name="email"/>
- * <Field Label="Password" Wide="true"><Button Text="Show"/></Field>
- *
- * - The attributes of <Widget> other than Name are its parameters, with
- * their default values.
- * - Inside it, {...} is computed: a parameter, or an expression of them
- * (+ - * / %, comparisons, && || !, a ? b : c, 'text', min, max, round,
- * floor, ceil, abs, len, upper, lower, empty, default). "{{" is a brace.
- * - <Children/> is replaced by the children given where the tag is used;
- * <Children Name="x"/> by those marked Into="x".
- * - Where the tag is used, the attributes that are not parameters go to the
- * widget it becomes (Name, Slot.Fill, OnClicked, Material...).
- * - If="..." keeps or drops an element; <Repeat Count="3" Var="i"> and
- * <ForEach Items="a|b|c" Var="item"> repeat their content;
- * <Include Source="file.xml"/> brings in another file.
- * - A declaration is known from the moment it is read until the library
- * shuts down, in every document loaded afterwards.
- *
- *
- * DOCUMENTS
- *
- * A tool that edits an interface (the designer does) needs more than loading
- * a text: Rxml_document_parse gives the document as a tree of nodes that can
- * be read, changed, written back and built. A widget built from a document
- * knows the node it comes from, and the node the widget it became:
- *
- * Rid document = Rxml_document_load("main.xml");
- * Rid button = Rxml_node_add_child(Rxml_document_get_root(document), "Button", -1);
- * Rxml_node_set_attribute(button, "Text", "Save");
- * Rid preview = Rxml_document_create_widget(document);
- * ...
- * Rid node = Rwidget_get_xml_node(Rwidget_hit_test(preview, x, y));
- * Rxml_document_save(document, "main.xml");
- *
- * Rxml_get_tag_count and Rxml_get_attribute_info list what can be written:
- * the tags, and for each tag its attributes with the kind of value they take.
- *
- * The complete list of tags and attributes is in docs/XML.md.
- * /
- *
- * #ifndef RAVEN_XML_H
- * #define RAVEN_XML_H
- *
- * #include "raven_core.h"
- *
- * /** Where and why a text could not be read (Rxml_document_parse). * /
- * typedef struct RXmlError {
- * /** Both start at 1. * /
- * int line;
- * int column;
- * char message[160];
- * } RXmlError;
- *
- * /** The kind of value an attribute takes. * /
- * typedef enum RXmlValueType{
- * R_XML_TEXT = 0x03C0,
- * /** "true" or "false". * /
- * R_XML_BOOL,
- * R_XML_NUMBER,
- * /** One of the words of `choices`. * /
- * R_XML_CHOICE,
- * /** "#RGB", "#RRGGBB", "#RRGGBBAA", or a name: white, black, red, transparent... * /
- * R_XML_COLOR,
- * /** The name of an action (Raction_bind). * /
- * R_XML_ACTION,
- * /** The path of a file. * /
- * R_XML_FILE,
- * /** Several numbers separated by commas: "8,4", "0,0,1,1". * /
- * R_XML_NUMBERS,
- * /** Texts separated by '|': "One|Two|Three". * /
- * R_XML_LIST
- * }RXmlValueType;
- *
- * /** One attribute of a tag (Rxml_get_attribute_info). The strings belong to the library. * /
- * typedef struct RXmlAttributeInfo {
- * const char* name;
- * RXmlValueType type;
- * /** R_XML_CHOICE: the words, separated by '|'. NULL otherwise. * /
- * const char* choices;
- * /** What it belongs to: the tag itself ("Button"), "Widget" for what every widget has, "Slot" for the place in the parent. * /
- * const char* group;
- * /** One line saying what it does. * /
- * const char* description;
- * } RXmlAttributeInfo;
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /**
  * Creates a window from a document whose root element is <Window>.
  * UTF-8 text. It does not need to be null-terminated.
  * Size of the text in bytes.
@@ -253,17 +125,6 @@ function Rxml_get_live_reload(): int {}
 function Rxml_set_reload_callback(?callable $callback, mixed $user_data): void {}
 
 /**
- * Called each time a file was loaded again.
- * The file given when the interface was created.
- * R_FALSE when the file could not be used (the interface is unchanged).
- *
- * Widgets that had to be built again have new handles: this is the
- * place to look them up again (Rwidget_find).
- * /
- * typedef void (*RXmlReloadCallback)(const char* path, int ok, void* user_data);
- * RAVEN_API void Rxml_set_reload_callback(RXmlReloadCallback callback, void* user_data);
- *
- * /**
  * Looks at the files now, without waiting for the next look
  * (there are five per second), even when live reload is off.
  * Returns The number of files found changed.
@@ -292,20 +153,6 @@ function Rxml_get_registered_widget_count(): int {}
 function Rxml_get_registered_widget_name(int $index): ?string {}
 
 /**
- * Tags made by code. A library or an application that builds a widget of
- * its own (a R_WIDGET_CUSTOM with its callbacks, or an assembly of
- * widgets) can give it a tag: documents then write <MyWidget .../> as
- * they write <Button/>.
- *
- * `create` makes the widget and returns it. `set_attribute` (may be
- * NULL) receives the attributes of the element before Raven looks at
- * them: it returns R_TRUE for those it understands, R_FALSE to leave
- * them to the widget (Name, Width, Slot..., and what its type knows).
- * Rwidget_set_attribute goes through it too.
- * /
- * typedef Rid (*RXmlTagCreateCallback)(const char* tag, void* user_data);
- * typedef int (*RXmlTagAttributeCallback)(Rid widget, const char* name, const char* value, void* user_data);
- * /**
  * Registers a tag (or replaces what it was registered with).
  * Returns R_FALSE when the name is the one of a widget of Raven, or when too many tags are registered (64).
  */

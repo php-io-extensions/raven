@@ -40,56 +40,7 @@ final class RSpring
 function Rcustom_set_paint_callback(int $widget, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Raven
- * raven_draw.h : custom-painted widgets.
- *
- * A CUSTOM widget is measured and painted by the application. Coordinates are
- * in logical units, relative to the top-left corner of the widget; Raven applies
- * the window scale, pixel snapping, clipping and opacity.
- *
- * The paint callback runs on the UI thread and may only call Rdraw_...
- * functions with the painter it received.
- * /
- *
- * #ifndef RAVEN_DRAW_H
- * #define RAVEN_DRAW_H
- *
- * #include "raven_widget.h"
- *
- * typedef struct RPainter RPainter;
- *
- * /**
- * How a spring moves. Animations in Raven are springs, as on iOS: a value is
- * pulled toward its target and may run past it before settling, which is what
- * makes a control feel alive rather than mechanical.
- * /
- * typedef enum RMotion{
- * /** Fast, no bounce: hover, highlights. * /
- * R_MOTION_SNAPPY = 0x0320,
- * /** Slower, no bounce: scrolling, fades, sizes. * /
- * R_MOTION_SMOOTH,
- * /** Runs a little past the target and comes back: switches, popups, pressed buttons. * /
- * R_MOTION_BOUNCY,
- * /** Swings several times around the target: things that fly in or get dropped. * /
- * R_MOTION_WOBBLY
- * }RMotion;
- *
- * /** State of one animated value. Zero-initialize it and keep it with the widget. * /
- * typedef struct RSpring {
- * float value;
- * float velocity;
- * int started;
- * } RSpring;
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * typedef void (*RPaintCallback)(Rid widget, RPainter* painter, float width, float height, void* user_data);
- * typedef void (*RMeasureCallback)(Rid widget, float* width, float* height, void* user_data);
- *
- * RAVEN_API void Rcustom_set_paint_callback(Rid widget, RPaintCallback callback, void* user_data);
- * /** brief Reports the desired size of the widget. Without it the widget asks for 0 x 0.
+ * Reports the desired size of the widget. Without it the widget asks for 0 x 0.
  */
 function Rcustom_set_measure_callback(int $widget, ?callable $callback, mixed $user_data): void {}
 

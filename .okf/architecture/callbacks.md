@@ -5,11 +5,11 @@ description: How PHP callables are held, called on the PHP thread only, released
 resource: src/runtime.c
 tags: [raven, callbacks, threads]
 status: draft
-generated: { by: cursor-grok/4.6, at: 2026-11-16T00:00:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-19T02:30:00Z }
 sources:
   - id: runtime
     resource: src/runtime.c
-    title: slots, sweep, user handles, RPainter
+    title: slots, sweep, user handles, RPainter, RActionContext
   - id: threads
     resource: src/threads.c
     title: owner queue, deadlines, fork
@@ -28,3 +28,4 @@ sources:
 * **Rparallel_for** records worker ranges and runs them on the PHP thread before returning. **Rtask_run_async** reposts from the worker with `Rtask_post`.
 * **Fork.** `pthread_atfork` marks the child when Raven was initialised; every binding call there is an `Error`, and its request end skips `Rshutdown()` (the join would never return).
 * **Request end.** `ending` is set (callables no longer run), `Rshutdown()` if Raven is still up on this thread, then slots, user handles and backend/host tables are freed.
+* **RActionContext.** A parameterized action's context is an `RActionContext` object valid only while that callback runs, the same as `RPainter` during paint. After the callback returns, `Raction_get_*` / `Raction_return_*` throw `ValueError`.

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: a5b636cbb96995f88aa7fed42e37ddf952f1ac37 */
+ * Stub hash: 46784941b969bf5baf27c14a00560bb34c47af9a */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlocale_load_csv, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)

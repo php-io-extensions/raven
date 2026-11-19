@@ -297,51 +297,7 @@ final class RAccessibilitySettings
 }
 
 /**
- * Raven
- * raven_accessibility.h : interfaces for everyone.
- *
- * Screen readers. Every window of Raven is exposed to the screen reader of
- * the system: UI Automation on Windows (Narrator, NVDA, JAWS), NSAccessibility
- * on macOS (VoiceOver), AT-SPI on Linux (Orca). Nothing is needed for that:
- * the widgets say what they are (a button, a check box, a slider, a list and
- * its items, a tab...), their name (the text they show, or the label just
- * before them), their value and their state, and they can be used from the
- * screen reader (press, toggle, set a value, expand). The focus is followed,
- * and the application can have a message read (Raccessibility_announce).
- * What a widget cannot know (an icon button, a drawing) is given with
- * Rwidget_set_accessible_name / _description / _role, or in XML with the
- * attributes AccessibleName, AccessibleDescription, AccessibleRole and
- * AccessibleHidden.
- *
- * Sight. The size of every text (Raccessibility_set_text_scale), themes of
- * high contrast, a focus that is always shown and thicker, animations that
- * can be stopped, and color filters for the color blind: a correction that
- * moves the colors they confuse to colors they tell apart, and simulations
- * for those who design for them. Raccessibility_follow_system takes the
- * settings of the system.
- *
- * Writings. Right-to-left languages (Arabic, Hebrew, Persian, Urdu) are
- * drawn in their order, with their letters joined, and the layout mirrors
- * itself for them (raven_layout.h, Rset_layout_direction). The characters
- * that the fonts of the application do not have (other alphabets, Chinese,
- * Japanese, Korean, symbols, emoji in color) are taken from the fonts of the
- * system. See raven_locale.h for translations.
- * /
- *
- * #ifndef RAVEN_ACCESSIBILITY_H
- * #define RAVEN_ACCESSIBILITY_H
- *
- * #include "raven_core.h"
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* ============================================================================
- * Sight
- * ============================================================================ * /
- *
- * /** brief Size of every text, 1 = as designed (0.5 to 4). Controls grow with their text.
+ * Size of every text, 1 = as designed (0.5 to 4). Controls grow with their text.
  */
 function Raccessibility_set_text_scale(float $scale): void {}
 
@@ -374,20 +330,7 @@ function Raccessibility_set_reduce_motion(int $enabled): void {}
 function Raccessibility_get_reduce_motion(): int {}
 
 /**
- * Corrections: the colors that cannot be told apart are moved to colors that can. * /
- * R_COLOR_FILTER_PROTANOPIA,      /* red is weak * /
- * R_COLOR_FILTER_DEUTERANOPIA,    /* green is weak (the most frequent) * /
- * R_COLOR_FILTER_TRITANOPIA,      /* blue is weak * /
- * R_COLOR_FILTER_GRAYSCALE,
- * R_COLOR_FILTER_INVERT,
- * /** Simulations, to see an interface as the color blind see it. * /
- * R_COLOR_FILTER_SIMULATE_PROTANOPIA,
- * R_COLOR_FILTER_SIMULATE_DEUTERANOPIA,
- * R_COLOR_FILTER_SIMULATE_TRITANOPIA,
- * R_COLOR_FILTER_SIMULATE_ACHROMATOPSIA
- * } RColorFilter;
- *
- * /** brief A filter on the colors of the interface (pictures and viewports keep theirs).
+ * A filter on the colors of the interface (pictures and viewports keep theirs).
  */
 function Raccessibility_set_color_filter(int $filter): void {}
 
@@ -396,64 +339,12 @@ function Raccessibility_get_color_filter(): int {}
 function Raccessibility_get_system_settings(?RAccessibilitySettings $settings): void {}
 
 /**
- * What the system asks for. * /
- * typedef struct RAccessibilitySettings {
- * /** Size of the texts asked by the user (1 = normal). * /
- * float text_scale;
- * int high_contrast;
- * int reduce_motion;
- * /** R_TRUE when a screen reader is running. * /
- * int screen_reader;
- * } RAccessibilitySettings;
- *
- * RAVEN_API void Raccessibility_get_system_settings(RAccessibilitySettings* settings);
- * /** brief Applies the settings of the system (text size, contrast, motion).
+ * Applies the settings of the system (text size, contrast, motion).
  */
 function Raccessibility_follow_system(): void {}
 
 /**
- * The role of the type of the widget (the default). * /
- * R_ROLE_AUTO = 0,
- * /** Not exposed: its children are seen as the children of its parent. * /
- * R_ROLE_NONE = 0x0760,
- * R_ROLE_WINDOW,
- * R_ROLE_GROUP,
- * R_ROLE_TEXT,
- * R_ROLE_HEADING,
- * R_ROLE_LINK,
- * R_ROLE_BUTTON,
- * R_ROLE_TOGGLE_BUTTON,
- * R_ROLE_CHECKBOX,
- * R_ROLE_RADIO_BUTTON,
- * R_ROLE_SLIDER,
- * R_ROLE_PROGRESS_BAR,
- * R_ROLE_SPIN_BUTTON,
- * R_ROLE_TEXT_FIELD,
- * R_ROLE_DOCUMENT,
- * R_ROLE_COMBO_BOX,
- * R_ROLE_LIST,
- * R_ROLE_LIST_ITEM,
- * R_ROLE_TREE,
- * R_ROLE_TREE_ITEM,
- * R_ROLE_TABLE,
- * R_ROLE_MENU_BAR,
- * R_ROLE_MENU,
- * R_ROLE_MENU_ITEM,
- * R_ROLE_TAB_LIST,
- * R_ROLE_TAB,
- * R_ROLE_TAB_PANEL,
- * R_ROLE_TOOLBAR,
- * R_ROLE_STATUS_BAR,
- * R_ROLE_DIALOG,
- * R_ROLE_ALERT,
- * R_ROLE_IMAGE,
- * R_ROLE_CANVAS,
- * R_ROLE_SEPARATOR,
- * R_ROLE_SCROLL_BAR,
- * R_ROLE_PANE
- * } RAccessibleRole;
- *
- * /** brief What the screen reader says of the widget; NULL: what it shows (or the label before it).
+ * What the screen reader says of the widget; NULL: what it shows (or the label before it).
  */
 function Rwidget_set_accessible_name(int $widget, ?string $name): void {}
 

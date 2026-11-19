@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 35f481188e57d58ff7c87598988649e8d98e57d8 */
+ * Stub hash: 7e5d7fa04adb8149a7082650d3409508cab07e7f */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_create, 0, 4, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)
@@ -58,6 +58,15 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_keyboard_callback, 0
 ZEND_END_ARG_INFO()
 
 #define arginfo_Rwindow_clear_focus arginfo_Rwindow_destroy
+
+#define arginfo_Rwindow_set_back_callback arginfo_Rwindow_set_keyboard_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_back_enabled, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rwindow_wants_back arginfo_Rwindow_is_valid
 
 #define arginfo_Rwindow_set_min_size arginfo_Rwindow_set_size
 
@@ -190,10 +199,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rwindow_request_redraw arginfo_Rwindow_destroy
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_continuous_redraw, 0, 2, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rwindow_set_continuous_redraw arginfo_Rwindow_set_back_enabled
 
 #define arginfo_Rwindow_set_close_callback arginfo_Rwindow_set_keyboard_callback
 
@@ -278,6 +284,8 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_inject_drop, 0, 6, IS_LO
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
+#define arginfo_Rwindow_inject_back arginfo_Rwindow_is_valid
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_is_key_down, 0, 2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, key, IS_LONG, 0)
@@ -337,7 +345,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_get_popup, 0, 2, IS_LONG
 	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_Rwindow_set_tab_navigation arginfo_Rwindow_set_continuous_redraw
+#define arginfo_Rwindow_set_tab_navigation arginfo_Rwindow_set_back_enabled
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_set_event_hook, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
@@ -444,6 +452,9 @@ ZEND_FUNCTION(Rwindow_get_safe_area);
 ZEND_FUNCTION(Rwindow_get_keyboard_area);
 ZEND_FUNCTION(Rwindow_set_keyboard_callback);
 ZEND_FUNCTION(Rwindow_clear_focus);
+ZEND_FUNCTION(Rwindow_set_back_callback);
+ZEND_FUNCTION(Rwindow_set_back_enabled);
+ZEND_FUNCTION(Rwindow_wants_back);
 ZEND_FUNCTION(Rwindow_set_min_size);
 ZEND_FUNCTION(Rwindow_set_position);
 ZEND_FUNCTION(Rwindow_get_position);
@@ -501,6 +512,7 @@ ZEND_FUNCTION(Rwindow_inject_key);
 ZEND_FUNCTION(Rwindow_inject_text);
 ZEND_FUNCTION(Rwindow_inject_drag);
 ZEND_FUNCTION(Rwindow_inject_drop);
+ZEND_FUNCTION(Rwindow_inject_back);
 ZEND_FUNCTION(Rwindow_is_key_down);
 ZEND_FUNCTION(Rwindow_is_mouse_button_down);
 ZEND_FUNCTION(Rwindow_get_modifiers);
@@ -544,6 +556,9 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_get_keyboard_area, arginfo_Rwindow_get_keyboard_area)
 	ZEND_FE(Rwindow_set_keyboard_callback, arginfo_Rwindow_set_keyboard_callback)
 	ZEND_FE(Rwindow_clear_focus, arginfo_Rwindow_clear_focus)
+	ZEND_FE(Rwindow_set_back_callback, arginfo_Rwindow_set_back_callback)
+	ZEND_FE(Rwindow_set_back_enabled, arginfo_Rwindow_set_back_enabled)
+	ZEND_FE(Rwindow_wants_back, arginfo_Rwindow_wants_back)
 	ZEND_FE(Rwindow_set_min_size, arginfo_Rwindow_set_min_size)
 	ZEND_FE(Rwindow_set_position, arginfo_Rwindow_set_position)
 	ZEND_FE(Rwindow_get_position, arginfo_Rwindow_get_position)
@@ -601,6 +616,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_inject_text, arginfo_Rwindow_inject_text)
 	ZEND_FE(Rwindow_inject_drag, arginfo_Rwindow_inject_drag)
 	ZEND_FE(Rwindow_inject_drop, arginfo_Rwindow_inject_drop)
+	ZEND_FE(Rwindow_inject_back, arginfo_Rwindow_inject_back)
 	ZEND_FE(Rwindow_is_key_down, arginfo_Rwindow_is_key_down)
 	ZEND_FE(Rwindow_is_mouse_button_down, arginfo_Rwindow_is_mouse_button_down)
 	ZEND_FE(Rwindow_get_modifiers, arginfo_Rwindow_get_modifiers)

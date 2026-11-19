@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 949dfea899dff636c91cd65174357d2fcae95c2a */
+ * Stub hash: 61d7c85849fc74a08fdba0685f07e138411af23a */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rviewport_set_texture, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, viewport, IS_LONG, 0)
@@ -61,6 +61,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RViewportDrawInfo___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, command_buffer, IS_LONG, 0, "0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, render_pass, IS_LONG, 0, "0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, color_format, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, metal_encoder, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, metal_command_buffer, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, metal_device, IS_LONG, 0, "0")
 ZEND_END_ARG_INFO()
 
 ZEND_FUNCTION(Rviewport_set_texture);
@@ -198,6 +201,24 @@ static zend_class_entry *register_class_RViewportDrawInfo(void)
 	zend_string *property_color_format_name = zend_string_init("color_format", sizeof("color_format") - 1, 1);
 	zend_declare_typed_property(class_entry, property_color_format_name, &property_color_format_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_color_format_name);
+
+	zval property_metal_encoder_default_value;
+	ZVAL_LONG(&property_metal_encoder_default_value, 0);
+	zend_string *property_metal_encoder_name = zend_string_init("metal_encoder", sizeof("metal_encoder") - 1, 1);
+	zend_declare_typed_property(class_entry, property_metal_encoder_name, &property_metal_encoder_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_metal_encoder_name);
+
+	zval property_metal_command_buffer_default_value;
+	ZVAL_LONG(&property_metal_command_buffer_default_value, 0);
+	zend_string *property_metal_command_buffer_name = zend_string_init("metal_command_buffer", sizeof("metal_command_buffer") - 1, 1);
+	zend_declare_typed_property(class_entry, property_metal_command_buffer_name, &property_metal_command_buffer_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_metal_command_buffer_name);
+
+	zval property_metal_device_default_value;
+	ZVAL_LONG(&property_metal_device_default_value, 0);
+	zend_string *property_metal_device_name = zend_string_init("metal_device", sizeof("metal_device") - 1, 1);
+	zend_declare_typed_property(class_entry, property_metal_device_name, &property_metal_device_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_metal_device_name);
 
 	return class_entry;
 }

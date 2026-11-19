@@ -112,47 +112,6 @@ const R_BLOCK_BODY = UNKNOWN;
  */
 const R_BLOCK_INPUT = UNKNOWN;
 
-/**
- * Raven
- * raven_tools.h : the widgets of creative tools.
- *
- * R_WIDGET_COLOR_PICKER   chooses a color
- * R_WIDGET_TIMELINE       tracks of clips and keys along a time ruler (a sequencer)
- * R_WIDGET_NODE_GRAPH     nodes linked by wires
- * R_WIDGET_BLOCK_EDITOR   blocks that snap into each other (Scratch)
- *
- * Each of them holds a small model (a color; tracks, clips and keys; nodes,
- * pins and links) that the application fills and reads through the
- * functions below, or writes in XML. The things inside a timeline or a
- * graph are named by integers that are only meaningful for that widget, 0
- * meaning "none"; they are never reused while the widget lives.
- * /
- *
- * #ifndef RAVEN_TOOLS_H
- * #define RAVEN_TOOLS_H
- *
- * #include "raven_widget.h"
- *
- *
- * #ifdef __cplusplus
- * extern "C" {
- * #endif
- *
- * /* ============================================================================
- * COLOR PICKER
- *
- * A square of saturation and value, a strip of hues, a strip of opacity
- * over a checkerboard, the color before and the color now side by side,
- * its hexadecimal code, its numbers (red green blue, or hue saturation
- * value), and a row of swatches. Everything is linked: dragging in the
- * square moves the numbers, typing a code moves the square.
- *
- * <ColorPicker Name="tint" Color="#3B82F6" Alpha="true" OnChanged="tint.changed"/>
- *
- * With Popup="true" the widget is a swatch the size of a button, which
- * opens the picker in a popup when clicked.
- * ============================================================================
- */
 function Rcolor_picker_create(): int {}
 
 /**
@@ -218,16 +177,7 @@ function Rcolor_picker_set_compact(int $picker, int $compact): void {}
 function Rcolor_picker_set_changed_callback(int $picker, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Called each time the user changes the color: while dragging,
- * and when a code or a number is entered. The action of the widget
- * (OnChanged in XML) fires too.
- * /
- * typedef void (*RColorChangedCallback)(Rid picker, float r, float g, float b, float a, void* user_data);
- * RAVEN_API void Rcolor_picker_set_changed_callback(Rid picker, RColorChangedCallback callback, void* user_data);
- *
- * /* ---- colors as numbers ---- * /
- *
- * /** brief Red, green, blue (0..1) to hue (0..360), saturation, value (0..1).
+ * Red, green, blue (0..1) to hue (0..360), saturation, value (0..1).
  */
 function Rcolor_rgb_to_hsv(float $r, float $g, float $b, ?float &$hue, ?float &$saturation, ?float &$value): void {}
 
@@ -236,59 +186,7 @@ function Rcolor_hsv_to_rgb(float $hue, float $saturation, float $value, ?float &
 function Rtimeline_create(): int {}
 
 /**
- * The look of the theme of the window: its platform, dark or light. * /
- * R_PRESET_AUTO = 0x0510,
- * /** Cards with soft shadows, few lines (follows dark or light). * /
- * R_PRESET_MODERN,
- * /** Headers in gradients, a grid of lines, thick links that glow; pins of the type "exec" are arrows. * /
- * R_PRESET_BLUEPRINT,
- * /** Compact nodes, flat headers in muted colors, thin links. * /
- * R_PRESET_BLENDER,
- * /** Almost black, outlines and links of light. * /
- * R_PRESET_NEON
- * }RVisualPreset;
- *
- *
- * /* ============================================================================
- * TIMELINE
- *
- * A sequencer: a ruler of time at the top, a playhead, and tracks one
- * under the other. A track holds clips (something that lasts: a start
- * and a length) and keys (a moment). The user scrubs the playhead on
- * the ruler, moves clips along their track or to another one, stretches
- * them by their ends, moves keys, selects by clicking or with a
- * rectangle, zooms with Ctrl + wheel, pans with the wheel, the middle
- * button or the scrollbars. Moves snap to the frames, to the playhead,
- * to the markers and to the ends of the other clips.
- *
- * <Timeline Name="sequence" Duration="12" FrameRate="24">
- * <Track Name="Camera" Color="#0A84FF">
- * <Clip Start="0" Length="3.5" Label="Wide shot"/>
- * <Clip Start="4" Length="2" Label="Close up" Color="#FF9F0A"/>
- * </Track>
- * <Track Name="Opacity">
- * <Key Time="1"/> <Key Time="2.5"/>
- * </Track>
- * <Marker Time="6" Label="Drop"/>
- * </Timeline>
- *
- * Times are in seconds. Tracks and items (clips, keys, markers) are
- * named by the integers the add functions return.
- * ============================================================================ * /
- *
- * /** What an item of a timeline is. * /
- * typedef enum RTimelineItem{
- * R_TIMELINE_NONE = 0x0460,
- * R_TIMELINE_CLIP,
- * R_TIMELINE_KEY,
- * R_TIMELINE_MARKER
- * }RTimelineItem;
- *
- * RAVEN_API Rid Rtimeline_create(void);
- *
- * /* ---- time ---- * /
- *
- * /** brief Length of the sequence. The view and the playhead stay within 0 .. duration.
+ * Length of the sequence. The view and the playhead stay within 0 .. duration.
  */
 function Rtimeline_set_duration(int $timeline, float $seconds): void {}
 
@@ -495,12 +393,6 @@ function Rtimeline_get_selected(int $timeline, int $index): int {}
 function Rtimeline_set_time_callback(int $timeline, ?callable $callback, mixed $user_data): void {}
 
 /**
- * The playhead moved: scrubbed by the user, or running by itself. * /
- * typedef void (*RTimelineTimeCallback)(Rid timeline, double seconds, void* user_data);
- * RAVEN_API void Rtimeline_set_time_callback(Rid timeline, RTimelineTimeCallback callback, void* user_data);
- * /** brief Something happened to an item; which thing depends on the function the callback was given to. * /
- * typedef void (*RTimelineItemCallback)(Rid timeline, int item, void* user_data);
- * /**
  * Called for each item the user moved, stretched or retimed, as
  * it happens. The action of the widget (OnChanged in XML) fires once
  * per gesture, when the button is released.
@@ -735,14 +627,7 @@ function Rnode_graph_get_selected_node(int $graph, int $index): int {}
 function Rnode_graph_set_connect_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Asked when the user is about to link two pins that may be
- * linked: return R_FALSE to refuse (a loop, a rule of the application).
- * /
- * typedef int (*RNodeGraphConnectCallback)(Rid graph, int output_pin, int input_pin, void* user_data);
- * RAVEN_API void Rnode_graph_set_connect_callback(Rid graph, RNodeGraphConnectCallback callback, void* user_data);
- * /** brief Something happened to a link or to a node; which thing depends on the function the callback was given to. * /
- * typedef void (*RNodeGraphItemCallback)(Rid graph, int item, void* user_data);
- * /** brief Called after the user made a link, and before a link the user removed goes (its pins can still be read).
+ * Called after the user made a link, and before a link the user removed goes (its pins can still be read).
  */
 function Rnode_graph_set_linked_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
@@ -773,18 +658,6 @@ function Rnode_graph_set_activated_callback(int $graph, ?callable $callback, mix
 function Rnode_graph_set_context_callback(int $graph, ?callable $callback, mixed $user_data): void {}
 
 /**
- * Right click: `node` is the node under the pointer (selected first),
- * or 0 on the empty canvas; x, y are in the widget (Rnode_graph_to_canvas).
- * Without this callback the right button does nothing.
- * /
- * typedef void (*RNodeGraphContextCallback)(Rid graph, int node, float x, float y, void* user_data);
- * RAVEN_API void Rnode_graph_set_context_callback(Rid graph, RNodeGraphContextCallback callback, void* user_data);
- * /**
- * Something happened at a point of the canvas: `item` depends on the
- * function the callback was given to; x, y are in canvas units (as node positions).
- * /
- * typedef void (*RNodeGraphPointCallback)(Rid graph, int item, float x, float y, void* user_data);
- * /**
  * Double click on the empty canvas (`item` 0): the application acts
  * there (a search to add a node...). Without this callback it frames all nodes.
  */
@@ -909,33 +782,7 @@ function Rnode_graph_set_node_badge_color(int $graph, int $node, float $r, float
 function Rblock_editor_create(): int {}
 
 /**
- * A step: snaps under another one, others snap under it. * /
- * R_BLOCK_STATEMENT = 0x0700,
- * /** Starts a script ("when the game starts"): nothing goes above it. * /
- * R_BLOCK_HAT,
- * /** Ends a script ("stop"): nothing goes under it. * /
- * R_BLOCK_CAP,
- * /** Wraps stacks in its mouths ("repeat", "if ... else"). * /
- * R_BLOCK_C,
- * /** A rounded value that goes into a slot. * /
- * R_BLOCK_REPORTER,
- * /** A hexagonal condition that goes into a %b slot (or a %r one). * /
- * R_BLOCK_BOOLEAN
- * } RBlockShape;
- *
- * typedef enum RBlockPlace {
- * R_BLOCK_NEXT = 0x0710,
- * R_BLOCK_BODY,
- * R_BLOCK_INPUT
- * } RBlockPlace;
- *
- * /** brief A block changed (0: several, or one was deleted), or a script was clicked (its top block). * /
- * typedef void (*RBlockEditorCallback)(Rid editor, int block, void* user_data);
- * /** brief Right click: on a block (0 on the canvas), at x, y in the widget. * /
- * typedef void (*RBlockEditorContextCallback)(Rid editor, int block, float x, float y, void* user_data);
- *
- * RAVEN_API Rid Rblock_editor_create(void);
- * /** brief A kind of block, and its block in the palette. Returns its index, -1 on an error.
+ * A kind of block, and its block in the palette. Returns its index, -1 on an error.
  */
 function Rblock_editor_add_kind(int $editor, ?string $name, ?string $label, int $shape, ?string $category): int {}
 

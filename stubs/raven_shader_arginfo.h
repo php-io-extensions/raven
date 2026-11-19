@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 2d183737512ab400a2526d676001a246c30f748d */
+ * Stub hash: f800f353e4e0bca49265ad7aef770e5d1804b216 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rshader_create, 0, 3, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, spirv, IS_STRING, 0)
