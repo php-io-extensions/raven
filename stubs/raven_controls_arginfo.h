@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 9e7f0e755b07766018805323c37870dec81433e1 */
+ * Stub hash: a331117f94c0e3a0514a633ccaeb9623fd358541 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlabel_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
@@ -649,16 +649,50 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_set_empty_text, 0, 2,
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_set_icon_width, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtile_view_set_sections arginfo_Rtile_view_set_items
+
+#define arginfo_Rtile_view_get_section_count arginfo_Rtile_view_get_count
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_get_section_of, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_set_section_folded, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, section, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, folded, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_is_section_folded, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, section, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_get_section_at, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, local_x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, local_y, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_set_section_toggled_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_set_selected, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, selected, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_is_selected, 0, 2, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rtile_view_is_selected arginfo_Rtile_view_get_section_of
 
 #define arginfo_Rtile_view_clear_selection arginfo_Rtile_view_refresh
 
@@ -678,11 +712,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rtile_view_scroll_to arginfo_Rtile_view_select_only
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_get_item_at, 0, 3, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, local_x, IS_DOUBLE, 0)
-	ZEND_ARG_TYPE_INFO(0, local_y, IS_DOUBLE, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rtile_view_get_item_at arginfo_Rtile_view_get_section_at
 
 #define arginfo_Rtile_view_set_drop_highlight arginfo_Rtile_view_select_only
 
@@ -691,17 +721,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_set_drag_type, 0, 2, 
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtile_view_set_drag_data_callback, 0, 3, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, tile_view, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
-	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rtile_view_set_drag_data_callback arginfo_Rtile_view_set_section_toggled_callback
 
-#define arginfo_Rtile_view_set_selection_changed_callback arginfo_Rtile_view_set_drag_data_callback
+#define arginfo_Rtile_view_set_selection_changed_callback arginfo_Rtile_view_set_section_toggled_callback
 
-#define arginfo_Rtile_view_set_activated_callback arginfo_Rtile_view_set_drag_data_callback
+#define arginfo_Rtile_view_set_activated_callback arginfo_Rtile_view_set_section_toggled_callback
 
-#define arginfo_Rtile_view_set_context_callback arginfo_Rtile_view_set_drag_data_callback
+#define arginfo_Rtile_view_set_context_callback arginfo_Rtile_view_set_section_toggled_callback
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_add_column, 0, 3, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
@@ -1699,10 +1725,247 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_set_page_changed_callb
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
+#define arginfo_Rcarousel_create arginfo_Rpdf_is_available
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_set_page, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, page, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, animated, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_get_page, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcarousel_get_page_count arginfo_Rcarousel_get_page
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_next, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcarousel_prev arginfo_Rcarousel_next
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_set_loop, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, loop, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcarousel_get_loop arginfo_Rcarousel_get_page
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_set_autoplay, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, seconds, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_get_autoplay, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_set_indicators_visible, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, visible, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcarousel_get_indicators_visible arginfo_Rcarousel_get_page
+
+#define arginfo_Rcarousel_set_arrows_visible arginfo_Rcarousel_set_indicators_visible
+
+#define arginfo_Rcarousel_get_arrows_visible arginfo_Rcarousel_get_page
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_set_orientation, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, orientation, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcarousel_get_orientation arginfo_Rcarousel_get_page
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_set_page_changed_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_print, 0, 2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
 	ZEND_ARG_OBJ_INFO(0, desc, RPdfPrintDesc, 1)
 ZEND_END_ARG_INFO()
+
+#define arginfo_Rmap_view_create arginfo_Rpdf_is_available
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_center, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, latitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, longitude, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_get_center, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, latitude, IS_DOUBLE, 1)
+	ZEND_ARG_TYPE_INFO(1, longitude, IS_DOUBLE, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_zoom, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, zoom, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_get_zoom, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_zoom_range, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, min_zoom, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, max_zoom, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_get_zoom_range, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, min_zoom, IS_DOUBLE, 1)
+	ZEND_ARG_TYPE_INFO(1, max_zoom, IS_DOUBLE, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_animate_to, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, latitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, longitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, zoom, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_screen_to_latlon, 0, 5, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(1, latitude, IS_DOUBLE, 1)
+	ZEND_ARG_TYPE_INFO(1, longitude, IS_DOUBLE, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_latlon_to_screen, 0, 5, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, latitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, longitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(1, x, IS_DOUBLE, 1)
+	ZEND_ARG_TYPE_INFO(1, y, IS_DOUBLE, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_tile_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rmap_view_set_tile_cancel_callback arginfo_Rmap_view_set_tile_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_tile, 0, 7, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, z, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, rgba, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_tile_data, 0, 6, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, z, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, data_size, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_tile_failed, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, z, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_tile_path, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, path_template, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_get_tile_path, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_tile_size, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, size, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_get_tile_size, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_cache_size, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, bytes, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rmap_view_get_cache_usage arginfo_Rmap_view_get_tile_size
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_clear_tiles, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_get_tile_state, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, z, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_add_marker, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, latitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, longitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, label, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_remove_marker, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, marker, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rmap_view_clear_markers arginfo_Rmap_view_clear_tiles
+
+#define arginfo_Rmap_view_get_marker_count arginfo_Rmap_view_get_tile_size
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_marker_position, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, marker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, latitude, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, longitude, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_marker_label, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, marker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, label, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_marker_color, 0, 6, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, marker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, r, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, g, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rmap_view_set_marker_clicked_callback arginfo_Rmap_view_set_tile_callback
+
+#define arginfo_Rmap_view_set_view_changed_callback arginfo_Rmap_view_set_tile_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_attribution, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rmap_view_get_attribution arginfo_Rmap_view_get_tile_path
 
 #define arginfo_Rpdf_document_create arginfo_Rpdf_is_available
 
@@ -1877,6 +2140,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RTileItem___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, tint, IS_ARRAY, 0, "[0.0, 0.0, 0.0, 0.0]")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, icon_radius, IS_DOUBLE, 0, "0.0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, text_color, IS_ARRAY, 0, "[0.0, 0.0, 0.0, 0.0]")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, note, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, detail_color, IS_ARRAY, 0, "[0.0, 0.0, 0.0, 0.0]")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RTileSection___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, first, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, text, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, detail, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_FUNCTION(Rlabel_create);
@@ -2024,6 +2295,14 @@ ZEND_FUNCTION(Rtile_view_refresh);
 ZEND_FUNCTION(Rtile_view_get_count);
 ZEND_FUNCTION(Rtile_view_set_tile_size);
 ZEND_FUNCTION(Rtile_view_set_empty_text);
+ZEND_FUNCTION(Rtile_view_set_icon_width);
+ZEND_FUNCTION(Rtile_view_set_sections);
+ZEND_FUNCTION(Rtile_view_get_section_count);
+ZEND_FUNCTION(Rtile_view_get_section_of);
+ZEND_FUNCTION(Rtile_view_set_section_folded);
+ZEND_FUNCTION(Rtile_view_is_section_folded);
+ZEND_FUNCTION(Rtile_view_get_section_at);
+ZEND_FUNCTION(Rtile_view_set_section_toggled_callback);
 ZEND_FUNCTION(Rtile_view_set_selected);
 ZEND_FUNCTION(Rtile_view_is_selected);
 ZEND_FUNCTION(Rtile_view_clear_selection);
@@ -2242,7 +2521,58 @@ ZEND_FUNCTION(Rpdf_view_get_fit);
 ZEND_FUNCTION(Rpdf_view_get_title);
 ZEND_FUNCTION(Rpdf_view_get_page_text);
 ZEND_FUNCTION(Rpdf_view_set_page_changed_callback);
+ZEND_FUNCTION(Rcarousel_create);
+ZEND_FUNCTION(Rcarousel_set_page);
+ZEND_FUNCTION(Rcarousel_get_page);
+ZEND_FUNCTION(Rcarousel_get_page_count);
+ZEND_FUNCTION(Rcarousel_next);
+ZEND_FUNCTION(Rcarousel_prev);
+ZEND_FUNCTION(Rcarousel_set_loop);
+ZEND_FUNCTION(Rcarousel_get_loop);
+ZEND_FUNCTION(Rcarousel_set_autoplay);
+ZEND_FUNCTION(Rcarousel_get_autoplay);
+ZEND_FUNCTION(Rcarousel_set_indicators_visible);
+ZEND_FUNCTION(Rcarousel_get_indicators_visible);
+ZEND_FUNCTION(Rcarousel_set_arrows_visible);
+ZEND_FUNCTION(Rcarousel_get_arrows_visible);
+ZEND_FUNCTION(Rcarousel_set_orientation);
+ZEND_FUNCTION(Rcarousel_get_orientation);
+ZEND_FUNCTION(Rcarousel_set_page_changed_callback);
 ZEND_FUNCTION(Rpdf_view_print);
+ZEND_FUNCTION(Rmap_view_create);
+ZEND_FUNCTION(Rmap_view_set_center);
+ZEND_FUNCTION(Rmap_view_get_center);
+ZEND_FUNCTION(Rmap_view_set_zoom);
+ZEND_FUNCTION(Rmap_view_get_zoom);
+ZEND_FUNCTION(Rmap_view_set_zoom_range);
+ZEND_FUNCTION(Rmap_view_get_zoom_range);
+ZEND_FUNCTION(Rmap_view_animate_to);
+ZEND_FUNCTION(Rmap_view_screen_to_latlon);
+ZEND_FUNCTION(Rmap_view_latlon_to_screen);
+ZEND_FUNCTION(Rmap_view_set_tile_callback);
+ZEND_FUNCTION(Rmap_view_set_tile_cancel_callback);
+ZEND_FUNCTION(Rmap_view_set_tile);
+ZEND_FUNCTION(Rmap_view_set_tile_data);
+ZEND_FUNCTION(Rmap_view_set_tile_failed);
+ZEND_FUNCTION(Rmap_view_set_tile_path);
+ZEND_FUNCTION(Rmap_view_get_tile_path);
+ZEND_FUNCTION(Rmap_view_set_tile_size);
+ZEND_FUNCTION(Rmap_view_get_tile_size);
+ZEND_FUNCTION(Rmap_view_set_cache_size);
+ZEND_FUNCTION(Rmap_view_get_cache_usage);
+ZEND_FUNCTION(Rmap_view_clear_tiles);
+ZEND_FUNCTION(Rmap_view_get_tile_state);
+ZEND_FUNCTION(Rmap_view_add_marker);
+ZEND_FUNCTION(Rmap_view_remove_marker);
+ZEND_FUNCTION(Rmap_view_clear_markers);
+ZEND_FUNCTION(Rmap_view_get_marker_count);
+ZEND_FUNCTION(Rmap_view_set_marker_position);
+ZEND_FUNCTION(Rmap_view_set_marker_label);
+ZEND_FUNCTION(Rmap_view_set_marker_color);
+ZEND_FUNCTION(Rmap_view_set_marker_clicked_callback);
+ZEND_FUNCTION(Rmap_view_set_view_changed_callback);
+ZEND_FUNCTION(Rmap_view_set_attribution);
+ZEND_FUNCTION(Rmap_view_get_attribution);
 ZEND_FUNCTION(Rpdf_document_create);
 ZEND_FUNCTION(Rpdf_document_delete);
 ZEND_FUNCTION(Rpdf_document_set_title);
@@ -2271,6 +2601,7 @@ ZEND_FUNCTION(Rpdf_print_file);
 ZEND_FUNCTION(Rpdf_document_print);
 ZEND_METHOD(RPdfPrintDesc, __construct);
 ZEND_METHOD(RTileItem, __construct);
+ZEND_METHOD(RTileSection, __construct);
 
 static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rlabel_create, arginfo_Rlabel_create)
@@ -2418,6 +2749,14 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtile_view_get_count, arginfo_Rtile_view_get_count)
 	ZEND_FE(Rtile_view_set_tile_size, arginfo_Rtile_view_set_tile_size)
 	ZEND_FE(Rtile_view_set_empty_text, arginfo_Rtile_view_set_empty_text)
+	ZEND_FE(Rtile_view_set_icon_width, arginfo_Rtile_view_set_icon_width)
+	ZEND_FE(Rtile_view_set_sections, arginfo_Rtile_view_set_sections)
+	ZEND_FE(Rtile_view_get_section_count, arginfo_Rtile_view_get_section_count)
+	ZEND_FE(Rtile_view_get_section_of, arginfo_Rtile_view_get_section_of)
+	ZEND_FE(Rtile_view_set_section_folded, arginfo_Rtile_view_set_section_folded)
+	ZEND_FE(Rtile_view_is_section_folded, arginfo_Rtile_view_is_section_folded)
+	ZEND_FE(Rtile_view_get_section_at, arginfo_Rtile_view_get_section_at)
+	ZEND_FE(Rtile_view_set_section_toggled_callback, arginfo_Rtile_view_set_section_toggled_callback)
 	ZEND_FE(Rtile_view_set_selected, arginfo_Rtile_view_set_selected)
 	ZEND_FE(Rtile_view_is_selected, arginfo_Rtile_view_is_selected)
 	ZEND_FE(Rtile_view_clear_selection, arginfo_Rtile_view_clear_selection)
@@ -2636,7 +2975,58 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rpdf_view_get_title, arginfo_Rpdf_view_get_title)
 	ZEND_FE(Rpdf_view_get_page_text, arginfo_Rpdf_view_get_page_text)
 	ZEND_FE(Rpdf_view_set_page_changed_callback, arginfo_Rpdf_view_set_page_changed_callback)
+	ZEND_FE(Rcarousel_create, arginfo_Rcarousel_create)
+	ZEND_FE(Rcarousel_set_page, arginfo_Rcarousel_set_page)
+	ZEND_FE(Rcarousel_get_page, arginfo_Rcarousel_get_page)
+	ZEND_FE(Rcarousel_get_page_count, arginfo_Rcarousel_get_page_count)
+	ZEND_FE(Rcarousel_next, arginfo_Rcarousel_next)
+	ZEND_FE(Rcarousel_prev, arginfo_Rcarousel_prev)
+	ZEND_FE(Rcarousel_set_loop, arginfo_Rcarousel_set_loop)
+	ZEND_FE(Rcarousel_get_loop, arginfo_Rcarousel_get_loop)
+	ZEND_FE(Rcarousel_set_autoplay, arginfo_Rcarousel_set_autoplay)
+	ZEND_FE(Rcarousel_get_autoplay, arginfo_Rcarousel_get_autoplay)
+	ZEND_FE(Rcarousel_set_indicators_visible, arginfo_Rcarousel_set_indicators_visible)
+	ZEND_FE(Rcarousel_get_indicators_visible, arginfo_Rcarousel_get_indicators_visible)
+	ZEND_FE(Rcarousel_set_arrows_visible, arginfo_Rcarousel_set_arrows_visible)
+	ZEND_FE(Rcarousel_get_arrows_visible, arginfo_Rcarousel_get_arrows_visible)
+	ZEND_FE(Rcarousel_set_orientation, arginfo_Rcarousel_set_orientation)
+	ZEND_FE(Rcarousel_get_orientation, arginfo_Rcarousel_get_orientation)
+	ZEND_FE(Rcarousel_set_page_changed_callback, arginfo_Rcarousel_set_page_changed_callback)
 	ZEND_FE(Rpdf_view_print, arginfo_Rpdf_view_print)
+	ZEND_FE(Rmap_view_create, arginfo_Rmap_view_create)
+	ZEND_FE(Rmap_view_set_center, arginfo_Rmap_view_set_center)
+	ZEND_FE(Rmap_view_get_center, arginfo_Rmap_view_get_center)
+	ZEND_FE(Rmap_view_set_zoom, arginfo_Rmap_view_set_zoom)
+	ZEND_FE(Rmap_view_get_zoom, arginfo_Rmap_view_get_zoom)
+	ZEND_FE(Rmap_view_set_zoom_range, arginfo_Rmap_view_set_zoom_range)
+	ZEND_FE(Rmap_view_get_zoom_range, arginfo_Rmap_view_get_zoom_range)
+	ZEND_FE(Rmap_view_animate_to, arginfo_Rmap_view_animate_to)
+	ZEND_FE(Rmap_view_screen_to_latlon, arginfo_Rmap_view_screen_to_latlon)
+	ZEND_FE(Rmap_view_latlon_to_screen, arginfo_Rmap_view_latlon_to_screen)
+	ZEND_FE(Rmap_view_set_tile_callback, arginfo_Rmap_view_set_tile_callback)
+	ZEND_FE(Rmap_view_set_tile_cancel_callback, arginfo_Rmap_view_set_tile_cancel_callback)
+	ZEND_FE(Rmap_view_set_tile, arginfo_Rmap_view_set_tile)
+	ZEND_FE(Rmap_view_set_tile_data, arginfo_Rmap_view_set_tile_data)
+	ZEND_FE(Rmap_view_set_tile_failed, arginfo_Rmap_view_set_tile_failed)
+	ZEND_FE(Rmap_view_set_tile_path, arginfo_Rmap_view_set_tile_path)
+	ZEND_FE(Rmap_view_get_tile_path, arginfo_Rmap_view_get_tile_path)
+	ZEND_FE(Rmap_view_set_tile_size, arginfo_Rmap_view_set_tile_size)
+	ZEND_FE(Rmap_view_get_tile_size, arginfo_Rmap_view_get_tile_size)
+	ZEND_FE(Rmap_view_set_cache_size, arginfo_Rmap_view_set_cache_size)
+	ZEND_FE(Rmap_view_get_cache_usage, arginfo_Rmap_view_get_cache_usage)
+	ZEND_FE(Rmap_view_clear_tiles, arginfo_Rmap_view_clear_tiles)
+	ZEND_FE(Rmap_view_get_tile_state, arginfo_Rmap_view_get_tile_state)
+	ZEND_FE(Rmap_view_add_marker, arginfo_Rmap_view_add_marker)
+	ZEND_FE(Rmap_view_remove_marker, arginfo_Rmap_view_remove_marker)
+	ZEND_FE(Rmap_view_clear_markers, arginfo_Rmap_view_clear_markers)
+	ZEND_FE(Rmap_view_get_marker_count, arginfo_Rmap_view_get_marker_count)
+	ZEND_FE(Rmap_view_set_marker_position, arginfo_Rmap_view_set_marker_position)
+	ZEND_FE(Rmap_view_set_marker_label, arginfo_Rmap_view_set_marker_label)
+	ZEND_FE(Rmap_view_set_marker_color, arginfo_Rmap_view_set_marker_color)
+	ZEND_FE(Rmap_view_set_marker_clicked_callback, arginfo_Rmap_view_set_marker_clicked_callback)
+	ZEND_FE(Rmap_view_set_view_changed_callback, arginfo_Rmap_view_set_view_changed_callback)
+	ZEND_FE(Rmap_view_set_attribution, arginfo_Rmap_view_set_attribution)
+	ZEND_FE(Rmap_view_get_attribution, arginfo_Rmap_view_get_attribution)
 	ZEND_FE(Rpdf_document_create, arginfo_Rpdf_document_create)
 	ZEND_FE(Rpdf_document_delete, arginfo_Rpdf_document_delete)
 	ZEND_FE(Rpdf_document_set_title, arginfo_Rpdf_document_set_title)
@@ -2673,6 +3063,11 @@ static const zend_function_entry class_RPdfPrintDesc_methods[] = {
 
 static const zend_function_entry class_RTileItem_methods[] = {
 	ZEND_ME(RTileItem, __construct, arginfo_class_RTileItem___construct, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+static const zend_function_entry class_RTileSection_methods[] = {
+	ZEND_ME(RTileSection, __construct, arginfo_class_RTileSection___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -2718,6 +3113,10 @@ static void register_raven_controls_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_PDF_TEXT_ITALIC", R_PDF_TEXT_ITALIC, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PDF_TEXT_UNDERLINE", R_PDF_TEXT_UNDERLINE, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PDF_PRINT_NO_DIALOG", R_PDF_PRINT_NO_DIALOG, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_MAP_TILE_NONE", R_MAP_TILE_NONE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_MAP_TILE_PENDING", R_MAP_TILE_PENDING, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_MAP_TILE_LOADED", R_MAP_TILE_LOADED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_MAP_TILE_FAILED", R_MAP_TILE_FAILED, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_SCALE_LINEAR", R_PLOT_SCALE_LINEAR, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_SCALE_LOG", R_PLOT_SCALE_LOG, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_PLOT_SCALE_SYMLOG", R_PLOT_SCALE_SYMLOG, CONST_PERSISTENT);
@@ -2858,6 +3257,46 @@ static zend_class_entry *register_class_RTileItem(void)
 	zend_string *property_text_color_name = zend_string_init("text_color", sizeof("text_color") - 1, 1);
 	zend_declare_typed_property(class_entry, property_text_color_name, &property_text_color_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
 	zend_string_release(property_text_color_name);
+
+	zval property_note_default_value;
+	ZVAL_NULL(&property_note_default_value);
+	zend_string *property_note_name = zend_string_init("note", sizeof("note") - 1, 1);
+	zend_declare_typed_property(class_entry, property_note_name, &property_note_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_note_name);
+
+	zval property_detail_color_default_value;
+	ZVAL_EMPTY_ARRAY(&property_detail_color_default_value);
+	zend_string *property_detail_color_name = zend_string_init("detail_color", sizeof("detail_color") - 1, 1);
+	zend_declare_typed_property(class_entry, property_detail_color_name, &property_detail_color_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
+	zend_string_release(property_detail_color_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_RTileSection(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RTileSection", class_RTileSection_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+
+	zval property_first_default_value;
+	ZVAL_LONG(&property_first_default_value, 0);
+	zend_string *property_first_name = zend_string_init("first", sizeof("first") - 1, 1);
+	zend_declare_typed_property(class_entry, property_first_name, &property_first_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_first_name);
+
+	zval property_text_default_value;
+	ZVAL_NULL(&property_text_default_value);
+	zend_string *property_text_name = zend_string_init("text", sizeof("text") - 1, 1);
+	zend_declare_typed_property(class_entry, property_text_name, &property_text_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_text_name);
+
+	zval property_detail_default_value;
+	ZVAL_NULL(&property_detail_default_value);
+	zend_string *property_detail_name = zend_string_init("detail", sizeof("detail") - 1, 1);
+	zend_declare_typed_property(class_entry, property_detail_name, &property_detail_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_detail_name);
 
 	return class_entry;
 }

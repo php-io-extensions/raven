@@ -23,6 +23,7 @@ zend_class_entry *raven_ce_RPenEvent;
 zend_class_entry *raven_ce_RGestureEvent;
 zend_class_entry *raven_ce_RPdfPrintDesc;
 zend_class_entry *raven_ce_RTileItem;
+zend_class_entry *raven_ce_RTileSection;
 zend_class_entry *raven_ce_RLanguageDesc;
 zend_class_entry *raven_ce_RJumpTask;
 zend_class_entry *raven_ce_RFileFilter;
@@ -159,6 +160,7 @@ static const raven_field raven_fields_RTouchSettings[] = {
 	{"trackpad_gestures", offsetof(RTouchSettings, trackpad_gestures), RAVEN_F_INT, 0, NULL},
 	{"swipe_navigation", offsetof(RTouchSettings, swipe_navigation), RAVEN_F_INT, 0, NULL},
 	{"swipe_distance", offsetof(RTouchSettings, swipe_distance), RAVEN_F_FLOAT, 0, NULL},
+	{"min_touch_size", offsetof(RTouchSettings, min_touch_size), RAVEN_F_FLOAT, 0, NULL},
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RTouchSettings = {"RTouchSettings", sizeof(RTouchSettings), &raven_ce_RTouchSettings, raven_fields_RTouchSettings};
@@ -246,9 +248,19 @@ static const raven_field raven_fields_RTileItem[] = {
 	{"tint", offsetof(RTileItem, tint), RAVEN_F_FLOATS, 4, NULL},
 	{"icon_radius", offsetof(RTileItem, icon_radius), RAVEN_F_FLOAT, 0, NULL},
 	{"text_color", offsetof(RTileItem, text_color), RAVEN_F_FLOATS, 4, NULL},
+	{"note", offsetof(RTileItem, note), RAVEN_F_CSTR, 0, NULL},
+	{"detail_color", offsetof(RTileItem, detail_color), RAVEN_F_FLOATS, 4, NULL},
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RTileItem = {"RTileItem", sizeof(RTileItem), &raven_ce_RTileItem, raven_fields_RTileItem};
+
+static const raven_field raven_fields_RTileSection[] = {
+	{"first", offsetof(RTileSection, first), RAVEN_F_INT, 0, NULL},
+	{"text", offsetof(RTileSection, text), RAVEN_F_CSTR, 0, NULL},
+	{"detail", offsetof(RTileSection, detail), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RTileSection = {"RTileSection", sizeof(RTileSection), &raven_ce_RTileSection, raven_fields_RTileSection};
 
 static const raven_field raven_fields_RLanguageDesc[] = {
 	{"name", offsetof(RLanguageDesc, name), RAVEN_F_CSTR, 0, NULL},
@@ -315,6 +327,9 @@ static const raven_field raven_fields_RViewportDrawInfo[] = {
 	{"command_buffer", offsetof(RViewportDrawInfo, command_buffer), RAVEN_F_ADDR, 0, NULL},
 	{"render_pass", offsetof(RViewportDrawInfo, render_pass), RAVEN_F_ADDR, 0, NULL},
 	{"color_format", offsetof(RViewportDrawInfo, color_format), RAVEN_F_U32, 0, NULL},
+	{"metal_encoder", offsetof(RViewportDrawInfo, metal_encoder), RAVEN_F_ADDR, 0, NULL},
+	{"metal_command_buffer", offsetof(RViewportDrawInfo, metal_command_buffer), RAVEN_F_ADDR, 0, NULL},
+	{"metal_device", offsetof(RViewportDrawInfo, metal_device), RAVEN_F_ADDR, 0, NULL},
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RViewportDrawInfo = {"RViewportDrawInfo", sizeof(RViewportDrawInfo), &raven_ce_RViewportDrawInfo, raven_fields_RViewportDrawInfo};

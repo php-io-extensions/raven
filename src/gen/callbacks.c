@@ -51,6 +51,63 @@ void raven_cb_RActionCallback_0(Rid sender, const char * action, void * user_dat
 	zval_ptr_dtor(&args[2]);
 }
 
+void raven_cb_RActionParametersCallback_0(RActionContext * context, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[2], rv;
+	raven_action_context_new(context, &args[0]);
+	ZVAL_COPY(&args[1], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 2, args);
+	raven_action_context_end(&args[0]);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+}
+
+void raven_cb_RAppEventCallback_0(RAppEvent event, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[2], rv;
+	ZVAL_LONG(&args[0], (zend_long)event);
+	ZVAL_COPY(&args[1], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 2, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+}
+
+int raven_cb_RBackCallback_0(Rid window, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return 0;
+	}
+	int result = 0;
+	zval args[2], rv;
+	ZVAL_LONG(&args[0], (zend_long)window);
+	ZVAL_COPY(&args[1], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 2, args);
+	if (invoked) {
+		result = (int)raven_return_long(&rv, "RBackCallback");
+	}
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	return result;
+}
+
 void raven_cb_RBlockEditorCallback_0(Rid editor, int block, void * user_data)
 {
 	raven_slot *slot = user_data;
@@ -127,6 +184,25 @@ void raven_cb_RButtonClickedCallback_0(Rid button, void * user_data)
 	}
 	zval_ptr_dtor(&args[0]);
 	zval_ptr_dtor(&args[1]);
+}
+
+void raven_cb_RCarouselPageChangedCallback_0(Rid carousel, int page, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[3], rv;
+	ZVAL_LONG(&args[0], (zend_long)carousel);
+	ZVAL_LONG(&args[1], (zend_long)page);
+	ZVAL_COPY(&args[2], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 3, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
 }
 
 void raven_cb_RChartCellCallback_0(Rid chart, int row, int column, float value, void * user_data)
@@ -354,6 +430,34 @@ int raven_cb_RDockCloseCallback_0(Rid area, Rid panel, void * user_data)
 	zval_ptr_dtor(&args[0]);
 	zval_ptr_dtor(&args[1]);
 	zval_ptr_dtor(&args[2]);
+	return result;
+}
+
+Rid raven_cb_RDockFloatWindowCallback_0(Rid area, Rid panel, Rid window, Rid floating_area, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return 0;
+	}
+	Rid result = 0;
+	zval args[5], rv;
+	ZVAL_LONG(&args[0], (zend_long)area);
+	ZVAL_LONG(&args[1], (zend_long)panel);
+	ZVAL_LONG(&args[2], (zend_long)window);
+	ZVAL_LONG(&args[3], (zend_long)floating_area);
+	ZVAL_COPY(&args[4], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 5, args);
+	if (invoked) {
+		result = (Rid)raven_return_long(&rv, "RDockFloatWindowCallback");
+	}
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
 	return result;
 }
 
@@ -645,6 +749,71 @@ void raven_cb_RLocaleChangedCallback_0(const char * language, void * user_data)
 	}
 	zval_ptr_dtor(&args[0]);
 	zval_ptr_dtor(&args[1]);
+}
+
+void raven_cb_RMapMarkerCallback_0(Rid map, int marker, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[3], rv;
+	ZVAL_LONG(&args[0], (zend_long)map);
+	ZVAL_LONG(&args[1], (zend_long)marker);
+	ZVAL_COPY(&args[2], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 3, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+}
+
+void raven_cb_RMapTileCallback_0(Rid map, int z, int x, int y, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[5], rv;
+	ZVAL_LONG(&args[0], (zend_long)map);
+	ZVAL_LONG(&args[1], (zend_long)z);
+	ZVAL_LONG(&args[2], (zend_long)x);
+	ZVAL_LONG(&args[3], (zend_long)y);
+	ZVAL_COPY(&args[4], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 5, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
+}
+
+void raven_cb_RMapViewCallback_0(Rid map, double latitude, double longitude, double zoom, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[5], rv;
+	ZVAL_LONG(&args[0], (zend_long)map);
+	ZVAL_DOUBLE(&args[1], (double)latitude);
+	ZVAL_DOUBLE(&args[2], (double)longitude);
+	ZVAL_DOUBLE(&args[3], (double)zoom);
+	ZVAL_COPY(&args[4], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 5, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
 }
 
 void raven_cb_RMeasureCallback_0(Rid widget, float * width, float * height, void * user_data)
@@ -994,6 +1163,66 @@ void raven_cb_RRatingChangedCallback_0(Rid rating, float value, void * user_data
 	zval_ptr_dtor(&args[0]);
 	zval_ptr_dtor(&args[1]);
 	zval_ptr_dtor(&args[2]);
+}
+
+void raven_cb_RScriptDiagnosticCallback_0(RSeverity severity, const char * code, const char * file, int line, int column, const char * text, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[7], rv;
+	ZVAL_LONG(&args[0], (zend_long)severity);
+	if (code) {
+		ZVAL_STRING(&args[1], code);
+	} else {
+		ZVAL_NULL(&args[1]);
+	}
+	if (file) {
+		ZVAL_STRING(&args[2], file);
+	} else {
+		ZVAL_NULL(&args[2]);
+	}
+	ZVAL_LONG(&args[3], (zend_long)line);
+	ZVAL_LONG(&args[4], (zend_long)column);
+	if (text) {
+		ZVAL_STRING(&args[5], text);
+	} else {
+		ZVAL_NULL(&args[5]);
+	}
+	ZVAL_COPY(&args[6], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 7, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+	zval_ptr_dtor(&args[4]);
+	zval_ptr_dtor(&args[5]);
+	zval_ptr_dtor(&args[6]);
+}
+
+void raven_cb_RScriptLogCallback_0(const char * message, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[2], rv;
+	if (message) {
+		ZVAL_STRING(&args[0], message);
+	} else {
+		ZVAL_NULL(&args[0]);
+	}
+	ZVAL_COPY(&args[1], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 2, args);
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
 }
 
 void raven_cb_RSliderChangedCallback_0(Rid slider, float value, void * user_data)
@@ -1375,6 +1604,33 @@ void raven_cb_RTileItemCallback_0(Rid tile_view, int index, RTileItem * item, vo
 		raven_slot_keep(slot, &args[2]);
 		if (!raven_struct_from_object(&raven_struct_RTileItem, Z_OBJ(args[2]), item, raven_slot_arena(slot), 1)) {
 			memset(item, 0, sizeof(*item));
+		}
+	}
+	if (invoked) {
+		zval_ptr_dtor(&rv);
+	}
+	zval_ptr_dtor(&args[0]);
+	zval_ptr_dtor(&args[1]);
+	zval_ptr_dtor(&args[2]);
+	zval_ptr_dtor(&args[3]);
+}
+
+void raven_cb_RTileSectionCallback_0(Rid tile_view, int section, RTileSection * out, void * user_data)
+{
+	raven_slot *slot = user_data;
+	if (!slot || !raven_on_owner_thread()) {
+		return;
+	}
+	zval args[4], rv;
+	ZVAL_LONG(&args[0], (zend_long)tile_view);
+	ZVAL_LONG(&args[1], (zend_long)section);
+	raven_struct_new(&raven_struct_RTileSection, out, &args[2]);
+	ZVAL_COPY(&args[3], &slot->user_data);
+	bool invoked = raven_invoke(slot, 0, &rv, 4, args);
+	if (invoked && out) {
+		raven_slot_keep(slot, &args[2]);
+		if (!raven_struct_from_object(&raven_struct_RTileSection, Z_OBJ(args[2]), out, raven_slot_arena(slot), 1)) {
+			memset(out, 0, sizeof(*out));
 		}
 	}
 	if (invoked) {

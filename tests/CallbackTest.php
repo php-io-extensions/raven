@@ -61,6 +61,22 @@ it('rethrows an exception a callable threw, and runs no other callable meanwhile
     expect($second)->toBe(1);
 });
 
+it('refuses an action context after its callback has returned', function (): void {
+    $kept = null;
+    expect(Raction_bind_with_parameters('app.mark', '(): void', function (RActionContext $ctx, mixed $ud) use (&$kept): void {
+        expect(Raction_get_name($ctx))->toBe('app.mark');
+        $kept = $ctx;
+    }, null))->toBe(R_TRUE);
+    $script = "fn app.go() {\n    app.mark();\n}\n";
+    expect(Rscript_load($script, strlen($script), 'mark.rvs'))->toBe(R_TRUE);
+    Raction_fire('app.go', R_INVALID_ID);
+    expect($kept)->toBeInstanceOf(RActionContext::class);
+    expect(fn () => Raction_get_name($kept))->toThrow(ValueError::class, 'callback has returned');
+    expect(fn () => clone $kept)->toThrow(Error::class);
+    Raction_unbind('app.mark');
+    Rscript_reset();
+});
+
 it('turns a wrong return type into a TypeError', function (): void {
     $window = raven_window();
     Rwindow_set_close_callback($window, fn () => 'yes', null);

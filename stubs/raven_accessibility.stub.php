@@ -296,48 +296,105 @@ final class RAccessibilitySettings
     public function __construct(float $text_scale = 0.0, int $high_contrast = 0, int $reduce_motion = 0, int $screen_reader = 0) {}
 }
 
+/**
+ * Size of every text, 1 = as designed (0.5 to 4). Controls grow with their text.
+ */
 function Raccessibility_set_text_scale(float $scale): void {}
 
 function Raccessibility_get_text_scale(): float {}
 
+/**
+ * Themes of high contrast: black and white, yellow focus, thick
+ * borders (the dark one, or the light one when the theme in use is light).
+ * R_FALSE goes back to the theme used before.
+ */
 function Raccessibility_set_high_contrast(int $enabled): void {}
 
 function Raccessibility_get_high_contrast(): int {}
 
+/**
+ * R_TRUE: the focus ring is always shown (not only after the keyboard was used), and thicker.
+ */
 function Raccessibility_set_focus_always_visible(int $enabled): void {}
 
 function Raccessibility_get_focus_always_visible(): int {}
 
+/**
+ * Reduced motion, for the whole application: R_TRUE and nothing
+ * moves by itself. Changes are immediate (no spring, no slide, no bounce,
+ * no transition), and the effects (raven_shader.h) stand still; they still
+ * follow the pointer. Same as Rset_animations_enabled(R_FALSE).
+ */
 function Raccessibility_set_reduce_motion(int $enabled): void {}
 
 function Raccessibility_get_reduce_motion(): int {}
 
+/**
+ * A filter on the colors of the interface (pictures and viewports keep theirs).
+ */
 function Raccessibility_set_color_filter(int $filter): void {}
 
 function Raccessibility_get_color_filter(): int {}
 
 function Raccessibility_get_system_settings(?RAccessibilitySettings $settings): void {}
 
+/**
+ * Applies the settings of the system (text size, contrast, motion).
+ */
 function Raccessibility_follow_system(): void {}
 
+/**
+ * What the screen reader says of the widget; NULL: what it shows (or the label before it).
+ */
 function Rwidget_set_accessible_name(int $widget, ?string $name): void {}
 
+/**
+ * The name the screen reader uses (given, or found). Valid until the next call.
+ */
 function Rwidget_get_accessible_name(int $widget): ?string {}
 
+/**
+ * A longer explanation, read after the name.
+ */
 function Rwidget_set_accessible_description(int $widget, ?string $description): void {}
 
 function Rwidget_set_accessible_role(int $widget, int $role): void {}
 
+/**
+ * The role the screen reader sees (given, or the one of the type).
+ */
 function Rwidget_get_accessible_role(int $widget): int {}
 
+/**
+ * R_TRUE: hidden from screen readers, with what it contains (decoration).
+ */
 function Rwidget_set_accessible_hidden(int $widget, int $hidden): void {}
 
+/**
+ * The widget is named by another one (a label): its text is the name.
+ */
 function Rwidget_set_accessible_labelled_by(int $widget, int $label): void {}
 
+/**
+ * Explicit screen-reader press action, including for custom widgets.
+ * NULL removes the override. Does not change pointer or keyboard handling.
+ * Disabled widgets (including disabled ancestors) cannot be pressed.
+ */
 function Rwidget_set_accessible_action(int $widget, ?callable $press, mixed $user_data): void {}
 
+/**
+ * Override the checked state: 1 checked, 0 unchecked, -1 restores the
+ * widget's default (not checkable for a custom widget). The application owns
+ * this state; a press callback updates it when appropriate.
+ */
 function Rwidget_set_accessible_checked(int $widget, int $checked): void {}
 
+/**
+ * Has a message read (a save that ended, an error). `assertive`: interrupts what is being read.
+ */
 function Raccessibility_announce(?string $text, int $assertive): void {}
 
+/**
+ * R_TRUE when a screen reader is reading the windows of the application.
+ */
 function Raccessibility_is_screen_reader_active(): int {}

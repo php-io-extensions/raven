@@ -1,9 +1,10 @@
 <?php
 
 /*
- * Reads clang's JSON AST of Raven.h and writes tools/api.json: every function,
- * struct (fields in order), enum (enumerators), callback typedef (parameter
- * names from the header text) and object-like #define of lib/raven/include/raven.
+ * Reads clang's JSON AST of Raven.h and writes tools/api.json: every function
+ * (and the header comment immediately before it), struct (fields in order),
+ * enum (enumerators), callback typedef (parameter names from the header text)
+ * and object-like #define of lib/raven/include/raven.
  *
  *   clang -Ilib/raven/include -Xclang -ast-dump=json -fsyntax-only tools/ast.c | php84 -d memory_limit=-1 tools/extract.php > tools/api.json
  */
@@ -83,6 +84,30 @@ foreach ($ast['inner'] as $node) {
 // Callback typedefs: the AST keeps the types, the header text keeps the parameter names.
 foreach ($headers as $header) {
     $text = file_get_contents("$root/raven/$header");
+    // The /** */ immediately before a RAVEN_API function is its header comment.
+    // Match one comment only: do not let .*? backtrack across an earlier */.
+    if (preg_match_all('/\/\*\*((?:[^*]|\*(?!\/))*)\*\/\s*RAVEN_API\b[^;{]*?\b([A-Za-z_]\w*)\s*\(/s', $text, $cm, PREG_SET_ORDER)) {
+        foreach ($cm as [, $raw, $name]) {
+            if (! isset($api['functions'][$name])) {
+                continue;
+            }
+            $kept = [];
+            foreach (preg_split("/\r?\n/", $raw) as $line) {
+                $line = preg_replace('/^\s*\*\s?/', '', $line) ?? $line;
+                $line = preg_replace('/^\s+/', '', $line) ?? $line;
+                $line = preg_replace('/^@brief\s+/', '', $line) ?? $line;
+                $line = preg_replace('/^@return\s+/', 'Returns ', $line) ?? $line;
+                $line = preg_replace('/^@param\s+\S+\s+/', '', $line) ?? $line;
+                $line = preg_replace('/@(\w+)/', '$1', $line) ?? $line;
+                $kept[] = rtrim($line);
+            }
+            $doc = trim(implode("\n", $kept));
+            if ($doc !== '') {
+                $api['functions'][$name]['doc'] = $doc;
+            }
+        }
+    }
+
     preg_match_all('/typedef\s+([\w\s\*]+?)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*;/', $text, $mm, PREG_SET_ORDER);
     foreach ($mm as [, $ret, $name, $args]) {
         $params = [];

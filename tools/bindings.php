@@ -36,7 +36,7 @@ return [
     ],
 
     // Structs bound by hand in stubs/manual.stub.php: function-pointer tables, Raven-allocated pixels.
-    'manual_structs' => ['RAllocator', 'RBackendVTable', 'RHostPlatformDesc', 'RCapture'],
+    'manual_structs' => ['RAllocator', 'RBackendVTable', 'RHostPlatformDesc', 'RCapture', 'RActionContext'],
 
     // Registrations that are not one slot per (setter, owner).
     'slots' => [

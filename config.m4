@@ -18,6 +18,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/gen/raven_layout.c \
     src/gen/raven_locale.c \
     src/gen/raven_resources.c \
+    src/gen/raven_script.c \
     src/gen/raven_shader.c \
     src/gen/raven_shell.c \
     src/gen/raven_style.c \
@@ -62,16 +63,23 @@ if test "$PHP_RAVEN" != "no"; then
     src/widgets/tree_view.c src/widgets/viewport.c src/widgets/table.c src/widgets/date_picker.c \
     src/widgets/time_picker.c src/widgets/toast.c src/widgets/breadcrumb.c src/widgets/rating.c \
     src/widgets/pagination.c src/widgets/plot.c src/widgets/pdf_view.c \
-    src/widgets/chart.c src/widgets/pdf_document.c src/widgets/pdf_print.c \
+    src/widgets/chart.c src/widgets/map_view.c src/widgets/carousel.c \
+    src/widgets/pdf_document.c src/widgets/pdf_print.c \
+    src/script/rs_common.c src/script/rs_builtins.c src/script/rs_lexer.c \
+    src/script/rs_parser.c src/script/rs_checker.c src/script/rs_compiler.c \
+    src/script/rs_vm.c src/script/rs_batch.c src/script/rs_format.c \
+    src/script/rs_analysis.c src/script/script_raven.c \
     src/xml/xml_attributes.c src/xml/xml_components.c src/xml/xml_dom.c src/xml/xml_schema.c \
     src/xml/xml_loader.c src/xml/xml_watch.c src/xml/xml_parser.c"
 
   raven_defs="-DRAVEN_BACKEND_VULKAN_ENABLED -DRAVEN_WITH_STB_IMAGE -DRAVEN_WITH_SVG"
   case $host_os in
     darwin*)
-      raven_lib="$raven_lib src/platform/cocoa/cocoa_platform.m src/platform/cocoa/cocoa_print.m"
-      raven_defs="$raven_defs -DRAVEN_PLATFORM_COCOA -D_DARWIN_C_SOURCE"
-      raven_frameworks="CoreFoundation AppKit QuartzCore Metal UserNotifications"
+      raven_lib="$raven_lib src/platform/cocoa/cocoa_platform.m src/platform/cocoa/cocoa_print.m \
+        src/render/metal/metal_backend.m src/render/metal/metal_pipeline.m \
+        src/render/metal/metal_texture.m src/render/metal/metal_frame.m"
+      raven_defs="$raven_defs -DRAVEN_PLATFORM_COCOA -DRAVEN_BACKEND_METAL_ENABLED -D_DARWIN_C_SOURCE"
+      raven_frameworks="CoreFoundation Foundation AppKit QuartzCore Metal UserNotifications"
       ;;
     *)
       PKG_CHECK_MODULES([X11], [x11])
@@ -113,6 +121,7 @@ if test "$PHP_RAVEN" != "no"; then
     PHP_ADD_BUILD_DIR([$ext_builddir/lib/raven/$(dirname $raven_src)])
     raven_obj=${raven_bdir}lib/raven/$(echo "$raven_src" | $SED -e 's/\.c$//;s/\.m$//')
     case $raven_src in
+      src/render/metal/*.m) raven_lang="-x objective-c -fobjc-arc -Wno-overlength-strings" ;;
       *.m) raven_lang="-x objective-c -fno-objc-arc" ;;
       *) raven_lang="" ;;
     esac
@@ -124,7 +133,7 @@ if test "$PHP_RAVEN" != "no"; then
     cat >>Makefile.objects<<EOF
 -include $raven_obj.dep
 $raven_obj.lo: ${raven_srcdir}lib/raven/$raven_src
-	$raven_cc $raven_lang $raven_libflags '-DRVN_VERSION_STRING="0.2.3"' -c ${raven_srcdir}lib/raven/$raven_src -o $raven_obj.lo $raven_post -MMD -MF $raven_obj.dep -MT $raven_obj.lo
+	$raven_cc $raven_lang $raven_libflags '-DRVN_VERSION_STRING="0.3.0"' -c ${raven_srcdir}lib/raven/$raven_src -o $raven_obj.lo $raven_post -MMD -MF $raven_obj.dep -MT $raven_obj.lo
 EOF
   done
 

@@ -11,6 +11,17 @@ it('builds struct classes with every C field, zero by default', function (): voi
     expect($named->radius)->toBe(3.0)->and($named->press)->toBe(0.0)->and($named->color2)->toBe([0.0, 0.0, 0.0, 0.0]);
     $props = array_map(fn ($p) => $p->getName(), (new ReflectionClass(RFileDialogDesc::class))->getProperties());
     expect($props)->toBe(['parent', 'title', 'directory', 'file_name', 'filters', 'filter_count', 'default_extension', 'flags']);
+    $touch = new RTouchSettings();
+    expect($touch->min_touch_size)->toBe(0.0);
+    $section = new RTileSection();
+    expect($section->first)->toBe(0)->and($section->text)->toBeNull()->and($section->detail)->toBeNull();
+    $item = new RTileItem();
+    expect($item->note)->toBeNull()->and($item->detail_color)->toBe([0.0, 0.0, 0.0, 0.0]);
+    $info = new RViewportDrawInfo();
+    expect($info->metal_encoder)->toBe(0)
+        ->and($info->metal_command_buffer)->toBe(0)
+        ->and($info->metal_device)->toBe(0);
+    expect(fn () => new RActionContext())->toThrow(Error::class);
 });
 
 it('type-checks constructor arguments into the typed properties', function (): void {
@@ -20,7 +31,8 @@ it('type-checks constructor arguments into the typed properties', function (): v
 it('reads and writes in/out structs', function (): void {
     $defaults = new RTouchSettings();
     Rtouch_get_default_settings($defaults);
-    expect($defaults->slop)->toBeGreaterThan(0.0);
+    expect($defaults->slop)->toBeGreaterThan(0.0)
+        ->and($defaults->min_touch_size)->toBeFloat()->toBeGreaterThanOrEqual(0.0);
     $mine = clone $defaults;
     $mine->slop = 12.5;
     Rtouch_set_settings($mine);

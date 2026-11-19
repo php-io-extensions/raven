@@ -23,22 +23,49 @@ final class RViewportDrawInfo
     public int $command_buffer = 0;
     public int $render_pass = 0;
     public int $color_format = 0;
+    public int $metal_encoder = 0;
+    public int $metal_command_buffer = 0;
+    public int $metal_device = 0;
 
-    public function __construct(int $backend = 0, int $viewport = 0, int $window = 0, int $x = 0, int $y = 0, int $width = 0, int $height = 0, int $clip_x = 0, int $clip_y = 0, int $clip_width = 0, int $clip_height = 0, int $framebuffer_width = 0, int $framebuffer_height = 0, int $frame_index = 0, int $command_buffer = 0, int $render_pass = 0, int $color_format = 0) {}
+    public function __construct(int $backend = 0, int $viewport = 0, int $window = 0, int $x = 0, int $y = 0, int $width = 0, int $height = 0, int $clip_x = 0, int $clip_y = 0, int $clip_width = 0, int $clip_height = 0, int $framebuffer_width = 0, int $framebuffer_height = 0, int $frame_index = 0, int $command_buffer = 0, int $render_pass = 0, int $color_format = 0, int $metal_encoder = 0, int $metal_command_buffer = 0, int $metal_device = 0) {}
 }
 
+/**
+ * Shows a texture. R_INVALID_ID shows nothing.
+ */
 function Rviewport_set_texture(int $viewport, int $texture): void {}
 
+/**
+ * How the texture is fitted in the widget. Default: R_STRETCH_FILL.
+ */
 function Rviewport_set_stretch(int $viewport, int $stretch): void {}
 
+/**
+ * R_TRUE flips the texture vertically (OpenGL framebuffers are bottom-up).
+ */
 function Rviewport_set_flip_y(int $viewport, int $flip): void {}
 
+/**
+ * Creates (or destroys) the native child window of the viewport.
+ * The viewport must already be in a window.
+ * Returns R_TRUE on success.
+ */
 function Rviewport_set_native(int $viewport, int $enabled): int {}
 
+/**
+ * Fills `native` with the handles of the child window.
+ */
 function Rviewport_get_native_handle(int $viewport, ?RNativeWindow $native): int {}
 
+/**
+ * Size of the viewport in pixels after the last layout.
+ */
 function Rviewport_get_pixel_size(int $viewport, ?int &$width, ?int &$height): void {}
 
 function Rviewport_set_resize_callback(int $viewport, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * R_TRUE redraws the window every frame while the viewport is
+ * visible (game view). R_FALSE redraws only on Rwidget_invalidate (default).
+ */
 function Rviewport_set_realtime(int $viewport, int $realtime): void {}

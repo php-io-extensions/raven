@@ -19,6 +19,11 @@ it('checks RGBA buffers against width × height × 4', function (): void {
     Rpdf_document_delete($doc);
 });
 
+it('checks sized script text against the given size', function (): void {
+    expect(fn () => Rscript_load('fn app.x() {}', 100, 't.rvs'))->toThrow(ValueError::class)
+        ->and(fn () => Rscript_check('fn app.x() {}', 100, 't.rvs'))->toThrow(ValueError::class);
+});
+
 it('checks number arrays against their count', function (): void {
     $plot = Rwidget_create(R_WIDGET_PLOT);
     $series = Rplot_add_series($plot, "s");

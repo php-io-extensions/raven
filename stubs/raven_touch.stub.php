@@ -151,8 +151,9 @@ final class RTouchSettings
     public int $trackpad_gestures = 0;
     public int $swipe_navigation = 0;
     public float $swipe_distance = 0.0;
+    public float $min_touch_size = 0.0;
 
-    public function __construct(int $mouse_emulation = 0, float $slop = 0.0, float $long_press = 0.0, int $inertia = 0, float $deceleration = 0.0, int $gestures = 0, int $pen_mouse_emulation = 0, float $pressure_curve = 0.0, float $pressure_threshold = 0.0, int $palm_rejection = 0, int $trackpad_gestures = 0, int $swipe_navigation = 0, float $swipe_distance = 0.0) {}
+    public function __construct(int $mouse_emulation = 0, float $slop = 0.0, float $long_press = 0.0, int $inertia = 0, float $deceleration = 0.0, int $gestures = 0, int $pen_mouse_emulation = 0, float $pressure_curve = 0.0, float $pressure_threshold = 0.0, int $palm_rejection = 0, int $trackpad_gestures = 0, int $swipe_navigation = 0, float $swipe_distance = 0.0, float $min_touch_size = 0.0) {}
 }
 
 final class RTouchEvent
@@ -220,24 +221,48 @@ final class RGestureEvent
     public function __construct(int $phase = 0, int $window = 0, int $target = 0, float $x = 0.0, float $y = 0.0, float $local_x = 0.0, float $local_y = 0.0, float $scale = 0.0, float $scale_delta = 0.0, float $pan_x = 0.0, float $pan_y = 0.0, float $rotation = 0.0, int $kind = 0, int $device = 0, int $fingers = 0, float $total_x = 0.0, float $total_y = 0.0, float $rotation_delta = 0.0, int $cancelled = 0) {}
 }
 
+/**
+ * The settings every window follows, unless it has its own.
+ */
 function Rtouch_get_settings(?RTouchSettings $settings): void {}
 
+/**
+ * Changes them; NULL puts back the defaults.
+ */
 function Rtouch_set_settings(?RTouchSettings $settings): void {}
 
+/**
+ * The defaults, to start from.
+ */
 function Rtouch_get_default_settings(?RTouchSettings $settings): void {}
 
+/**
+ * Settings of one window; NULL: it follows Rtouch_set_settings again.
+ */
 function Rwindow_set_touch_settings(int $window, ?RTouchSettings $settings): void {}
 
+/**
+ * The settings the window follows (its own, or those of the application).
+ */
 function Rwindow_get_touch_settings(int $window, ?RTouchSettings $settings): void {}
 
+/**
+ * What a finger does on the widget and what it contains (default R_TOUCH_MODE_AUTO: as its parent says).
+ */
 function Rwidget_set_touch_mode(int $widget, int $mode): void {}
 
 function Rwidget_get_touch_mode(int $widget): int {}
 
+/**
+ * R_FALSE: two fingers (on the screen or a trackpad) neither zoom nor pan the widget (default R_TRUE).
+ */
 function Rwidget_set_touch_gestures(int $widget, int $enabled): void {}
 
 function Rwidget_get_touch_gestures(int $widget): int {}
 
+/**
+ * R_FALSE: the pen is not a mouse on the widget and what it contains; only its pen callback sees it (default R_TRUE).
+ */
 function Rwidget_set_pen_mouse(int $widget, int $enabled): void {}
 
 function Rwidget_get_pen_mouse(int $widget): int {}
@@ -248,20 +273,55 @@ function Rwidget_set_pen_callback(int $widget, ?callable $callback, mixed $user_
 
 function Rwidget_set_gesture_callback(int $widget, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Fingers on the window now.
+ */
 function Rwindow_get_touch_count(int $window): int {}
 
+/**
+ * R_TRUE while a pen is near the screen over the window.
+ */
 function Rwindow_is_pen_in_range(int $window): int {}
 
+/**
+ * R_TRUE when the pointer last used in the window was a finger (the interface may then be made larger).
+ */
 function Rwindow_is_touch_active(int $window): int {}
 
+/**
+ * A finger: R_TOUCH_DOWN, then R_TOUCH_MOVE..., then R_TOUCH_UP, with the same `id`.
+ */
 function Rwindow_inject_touch(int $window, int $id, int $phase, float $x, float $y): void {}
 
+/**
+ * A pen: `pressure` 0..1 as the pen would give it, `buttons` a bitmask of RPenButton.
+ */
 function Rwindow_inject_pen(int $window, int $phase, float $x, float $y, float $pressure, float $tilt_x, float $tilt_y, int $buttons, int $eraser): void {}
 
+/**
+ * A gesture of a trackpad, as the system recognizes it: R_GESTURE_BEGIN,
+ * R_GESTURE_UPDATE..., then R_GESTURE_END. (x, y) is the pointer, `scale_delta`
+ * and `rotation_delta` (degrees, clockwise) what changed since the previous
+ * event, `pan_x`, `pan_y` how far the fingers moved since then.
+ */
 function Rwindow_inject_trackpad_gesture(int $window, int $kind, int $phase, float $x, float $y, float $scale_delta, float $rotation_delta, float $pan_x, float $pan_y, int $fingers): void {}
 
+/**
+ * Two fingers scrolling on a trackpad: (dx, dy) is how far they moved
+ * (logical units), the content following them. Sent as a precise wheel
+ * (REvent::wheel_precise) at the pointer.
+ */
 function Rwindow_inject_trackpad_scroll(int $window, float $dx, float $dy): void {}
 
+/**
+ * The fingers that scrolled left the trackpad, on a system that
+ * leaves the inertia to the application (Wayland): flicked content keeps
+ * going (Touch.Inertia).
+ */
 function Rwindow_inject_trackpad_scroll_end(int $window): void {}
 
+/**
+ * Advances the inertia of flicked content by `seconds` at once,
+ * and fires a long press that is due, without waiting (tests).
+ */
 function Rwindow_advance_touch(int $window, float $seconds): void {}

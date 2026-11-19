@@ -526,60 +526,170 @@ const R_COLOR_COUNT = UNKNOWN;
  */
 const R_METRIC_COUNT = UNKNOWN;
 
+/**
+ * Changes the look of the application. The theme file in use, if
+ * it names no look of its own, is laid again over the new one; colors
+ * and metrics changed with Rtheme_set_... are lost; what was given to
+ * widgets (Rwidget_set_color...) is kept.
+ *
+ * Rlook_set(R_LOOK_NATIVE_LIGHT);   the look of the platform, light
+ *
+ * Theme files that name no look (no Look attribute) follow it too, so a
+ * part of a window given one (Theme="paper.xml") changes with it.
+ */
 function Rlook_set(int $look): void {}
 
+/**
+ * The look given to Rlook_set (R_LOOK_RAVEN_DARK at start).
+ */
 function Rlook_get(): int {}
 
+/**
+ * deprecated Rlook_set: a built-in theme is a look of Raven.
+ */
 function Rtheme_apply(int $theme): void {}
 
 function Rtheme_set_color(int $role, float $r, float $g, float $b, float $a): void {}
 
 function Rtheme_get_color(int $role, ?float &$r, ?float &$g, ?float &$b, ?float &$a): void {}
 
+/**
+ * Changes a size of the theme in use. It lasts until the look or
+ * the theme is chosen again (Rlook_set, Rtheme_use), but not through a
+ * switch between light and dark made by Rtheme_follow_system.
+ */
 function Rtheme_set_metric(int $metric, float $value): void {}
 
 function Rtheme_get_metric(int $metric): float {}
 
+/**
+ * Material of every widget that was not given one with
+ * Rwidget_set_material. Rtheme_apply sets it: solid for the flat
+ * themes, frosted glass for the glass themes.
+ */
 function Rtheme_set_material(int $material): void {}
 
 function Rtheme_get_material(): int {}
 
+/**
+ * Font used by widgets that have no font of their own.
+ */
 function Rtheme_set_font(int $font): void {}
 
 function Rtheme_get_font(): int {}
 
+/**
+ * Sets the accent color and everything that follows from it: its
+ * hovered and pressed shades, the focus outline, the selection, the links.
+ */
 function Rtheme_set_accent(float $r, float $g, float $b): void {}
 
+/**
+ * Tells whether the theme is a dark one. It decides the tint of
+ * the glass, the colors of the code and which wallpaper the glass themes
+ * use. Rtheme_apply and the theme files set it.
+ */
 function Rtheme_set_dark(int $dark): void {}
 
+/**
+ * R_TRUE when the system is in dark mode, R_FALSE in light mode, -1 when the platform does not tell (desktop today).
+ */
 function Rtheme_get_system_dark(): int {}
 
+/**
+ * Follows the dark or light mode of the system with the Raven look
+ * (R_LOOK_RAVEN_DARK / R_LOOK_RAVEN_LIGHT), now and when it changes.
+ * Off by default. Does nothing where the platform does not tell (desktop today).
+ *
+ * A switch is Rlook_set, except that the sizes given with
+ * Rtheme_set_metric stay. Colors and styles set with Rtheme_set_... are
+ * those of one mode and are lost; to keep colors, sizes and styles of
+ * the application through the switch, put them in a theme that names no
+ * look (Rtheme_load_from_memory, then Rtheme_use): it is laid over the
+ * new look.
+ */
 function Rtheme_follow_system(int $enabled): void {}
 
 function Rtheme_is_dark(): int {}
 
+/**
+ * Image drawn behind the content of the windows that have no
+ * background of their own, or R_INVALID_ID for none (the window color).
+ */
 function Rtheme_set_wallpaper(int $texture): void {}
 
 function Rtheme_get_wallpaper(): int {}
 
+/**
+ * Gives a color to the widgets of a type and / or of a class,
+ * instead of the color of the theme.
+ * Tag of a type of widget ("Button"), or NULL for every type.
+ * A class (Rwidget_set_class, Class="..."), or NULL
+ * for the widgets of the type whatever their classes.
+ *
+ * When several styles give the same value to a widget, the one with a
+ * type and a class wins over the one with a class, which wins over the
+ * one with a type; between equals, the last one set wins.
+ */
 function Rtheme_set_style_color(?string $widget, ?string $style_class, int $role, float $r, float $g, float $b, float $a): void {}
 
 function Rtheme_set_style_metric(?string $widget, ?string $style_class, int $metric, float $value): void {}
 
+/**
+ * R_MATERIAL_DEFAULT removes the material of the style.
+ */
 function Rtheme_set_style_material(?string $widget, ?string $style_class, int $material): void {}
 
+/**
+ * Removes every style of the theme. Rtheme_apply and Rtheme_use do it too.
+ */
 function Rtheme_clear_styles(): void {}
 
+/**
+ * Reads a theme file and keeps the theme under its name (the Name
+ * attribute, else the name of the file). It does not change the theme in
+ * use unless a theme of that name is the one in use.
+ *
+ * The file is watched like the interface files (Rxml_set_live_reload):
+ * saving it updates every widget that uses the theme.
+ * Returns The name of the theme, valid until Rshutdown, or NULL after
+ * reporting an error.
+ */
 function Rtheme_load(?string $path): ?string {}
 
+/**
+ * Same, from a text. `size` may be 0 for a null-terminated text.
+ */
 function Rtheme_load_from_memory(?string $xml, int $size): ?string {}
 
+/**
+ * Makes a named theme the theme of the application: a theme
+ * given by Rtheme_load (laid over the look in use when it names no
+ * look), or the name of a look ("WindowsLight", "RavenDark"; the old
+ * "Dark", "Light", "GlassDark"... too), which is then Rlook_set.
+ * Values changed with Rtheme_set_... are lost.
+ * Returns R_FALSE, after reporting an error, when no theme has that name.
+ */
 function Rtheme_use(?string $name): int {}
 
+/**
+ * Name of the theme in use ("Dark" at start).
+ */
 function Rtheme_get_name(): ?string {}
 
+/**
+ * Number of named themes, the four built-in ones included.
+ */
 function Rtheme_get_count(): int {}
 
+/**
+ * Name of the index-th one, or NULL.
+ */
 function Rtheme_get_name_at(int $index): ?string {}
 
+/**
+ * Writes the theme in use, with every change made since it was
+ * applied, as a theme file.
+ * Name given to the theme in the file; NULL keeps the current one.
+ */
 function Rtheme_save(?string $path, ?string $name): int {}

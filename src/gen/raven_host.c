@@ -61,6 +61,67 @@ ZEND_FUNCTION(Rhost_window_set_size)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rhost_window_set_insets)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_object *safe_area = NULL;
+	RInsets c_safe_area;
+	RInsets *p_safe_area = NULL;
+	zend_long keyboard_height;
+	int c_keyboard_height;
+	raven_arena arena = {0};
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(window)
+		Z_PARAM_OBJ_OF_CLASS_OR_NULL(safe_area, raven_ce_RInsets)
+		Z_PARAM_LONG(keyboard_height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(keyboard_height, 3, &c_keyboard_height)) {
+		RETURN_THROWS();
+	}
+
+	if (safe_area) {
+		if (!raven_struct_from_object(&raven_struct_RInsets, safe_area, &c_safe_area, &arena, 2)) {
+			raven_arena_free(&arena);
+			RETURN_THROWS();
+		}
+		p_safe_area = &c_safe_area;
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	Rhost_window_set_insets(c_window, p_safe_area, c_keyboard_height);
+	raven_leave();
+	raven_arena_free(&arena);
+}
+
+ZEND_FUNCTION(Rhost_set_system_dark)
+{
+	zend_long dark;
+	int c_dark;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(dark)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(dark, 1, &c_dark)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rhost_set_system_dark(c_dark);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rhost_inject_mouse_move)
 {
 	zend_long window;

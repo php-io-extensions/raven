@@ -795,11 +795,12 @@ raven_arena *raven_slot_arena(raven_slot *slot)
 }
 
 /* ------------------------------------------------------------------------------------------------
- * RPainter, RAllocator: classes PHP cannot construct, wrapping a C pointer
+ * RPainter, RAllocator, RActionContext: classes PHP cannot construct, wrapping a C pointer
  * --------------------------------------------------------------------------------------------- */
 
 zend_class_entry *raven_ce_RPainter;
 zend_class_entry *raven_ce_RAllocator;
+zend_class_entry *raven_ce_RActionContext;
 
 typedef struct raven_pointer_object {
 	void *ptr;
@@ -857,6 +858,26 @@ const RAllocator *raven_allocator_get(zend_object *obj)
 	return raven_pointer_from(obj)->ptr;
 }
 
+void raven_action_context_new(RActionContext *context, zval *out)
+{
+	object_init_ex(out, raven_ce_RActionContext);
+	raven_pointer_from(Z_OBJ_P(out))->ptr = context;
+}
+
+void raven_action_context_end(zval *obj)
+{
+	raven_pointer_from(Z_OBJ_P(obj))->ptr = NULL;
+}
+
+RActionContext *raven_action_context_get(zend_object *obj, uint32_t arg_num)
+{
+	RActionContext *p = raven_pointer_from(obj)->ptr;
+	if (!p) {
+		zend_argument_value_error(arg_num, "is an action context whose callback has returned");
+	}
+	return p;
+}
+
 /* ------------------------------------------------------------------------------------------------
  * Module hooks
  * --------------------------------------------------------------------------------------------- */
@@ -871,12 +892,14 @@ void raven_runtime_minit(void)
 	raven_pointer_handlers.clone_obj = NULL; /* the engine refuses clone */
 }
 
-void raven_runtime_pointer_classes(zend_class_entry *painter, zend_class_entry *allocator)
+void raven_runtime_pointer_classes(zend_class_entry *painter, zend_class_entry *allocator, zend_class_entry *action_context)
 {
 	raven_ce_RPainter = painter;
 	raven_ce_RPainter->create_object = raven_pointer_create;
 	raven_ce_RAllocator = allocator;
 	raven_ce_RAllocator->create_object = raven_pointer_create;
+	raven_ce_RActionContext = action_context;
+	raven_ce_RActionContext->create_object = raven_pointer_create;
 }
 
 void raven_runtime_rinit(void)

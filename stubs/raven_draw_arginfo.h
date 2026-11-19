@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 093e92a72a52b9f88a3cf084e67106d568f4f197 */
+ * Stub hash: bbdc7c17dd6706bc4c049d7044680b9b7e1fcafe */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcustom_set_paint_callback, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, widget, IS_LONG, 0)

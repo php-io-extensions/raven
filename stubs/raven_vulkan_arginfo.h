@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 9d962cbd88fe0833cc0ddfa592bcce7893991531 */
+ * Stub hash: 88c745303765318557efc67d356510fb74eac622 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rvulkan_get_required_instance_extensions, 0, 1, IS_ARRAY, 0)
 	ZEND_ARG_TYPE_INFO(1, count, IS_LONG, 1)

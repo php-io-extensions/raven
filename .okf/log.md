@@ -1,5 +1,13 @@
 # Log
 
+## 2026-11-19
+
+* **Synced**: Raven 0.3.0, main `c34466db536219f5ed0e026c4286a1ce27887b57` vendored unchanged. 1,375 `RAVEN_API` functions, 1,370 bound (1,354 generated, 16 manual), 37 classes, 22 headers (`raven_script.h`). Carousel, MapView, Raven Script, tile-view sections, `Raction_bind_with_parameters` / `RActionContext`, app lifecycle, window back, `RTouchSettings.min_touch_size`, Metal fields on `RViewportDrawInfo`. `config.m4` compiles script/carousel/map_view on every platform; Metal `.m` only on Darwin with `-fobjc-arc`. Slot keys take the first `const char*` so parameterized actions key by name. Extract no longer glues a file-level `/**` onto the first function. Suite 66 passed (561 assertions).
+
+## 2026-11-17
+
+* **Synced**: Raven main `4eaba42d35eb716f3b42da5b5f5d775837a8e533` vendored (library still reports 0.2.3). Pull request #218: a Label with a tooltip takes the hover so the tooltip shows (`Rwidget_set_tooltip`, XML `Tooltip="..."` goes through that setter). No new functions: 1,283 `RAVEN_API`, 1,278 bound (1,262 generated, 16 manual), 35 classes. Header comments are copied into the stubs; `Rwidget_set_tooltip` carries the new label-hover sentence. Suite 59 passed (469 assertions).
+
 ## 2026-11-16
 
 * **Synced**: Raven main `0f0da68197c8def4f4ffab93bae53bccb6a199c8` vendored, copied unchanged from a clone of upstream. It is `dfac083` plus the two Vulkan fixes above, merged upstream as pull requests #215 and #216, so `lib/raven/` is plain upstream again and the exception in AGENTS.md rule 3 is gone. Re-extracted: API unchanged, bound 1,262, manual 16, not bound 5, pending 0.

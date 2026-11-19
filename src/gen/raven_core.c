@@ -275,6 +275,65 @@ ZEND_FUNCTION(Rget_time)
 	RETURN_DOUBLE((double)ret);
 }
 
+ZEND_FUNCTION(Rset_app_event_callback)
+{
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, 0);
+	zend_string *key = raven_slot_key("Rset_app_event_callback", 0);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rset_app_event_callback(ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RAppEventCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Ris_app_paused)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Ris_app_paused();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rinject_app_event)
+{
+	zend_long event;
+	int c_event;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(event)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(event, 1, &c_event)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rinject_app_event((RAppEvent)c_event);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rset_ui_scale)
 {
 	double scale;
@@ -655,6 +714,295 @@ ZEND_FUNCTION(Raction_set_default_handler)
 		RETURN_THROWS();
 	}
 	Raction_set_default_handler(ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RActionCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Raction_bind_with_parameters)
+{
+	zend_string *name = NULL;
+	zend_string *signature = NULL;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_STR_OR_NULL(name)
+		Z_PARAM_STR_OR_NULL(signature)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, 0);
+	zend_string *key = raven_slot_key_str("Raction_bind_with_parameters", name ? ZSTR_VAL(name) : NULL);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Raction_bind_with_parameters(name ? ZSTR_VAL(name) : NULL, signature ? ZSTR_VAL(signature) : NULL, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RActionParametersCallback_0 : NULL, slot);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Raction_get_sender)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	Rid ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Raction_get_sender((const RActionContext *)c_context);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Raction_get_name)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Raction_get_name((const RActionContext *)c_context);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Raction_get_argument_count)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Raction_get_argument_count((const RActionContext *)c_context);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Raction_get_number)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	zend_long index;
+	int c_index;
+	double ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(index, 2, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Raction_get_number((const RActionContext *)c_context, c_index);
+	raven_leave();
+	RETURN_DOUBLE((double)ret);
+}
+
+ZEND_FUNCTION(Raction_get_string)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	zend_long index;
+	int c_index;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(index, 2, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Raction_get_string((const RActionContext *)c_context, c_index);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Raction_get_bool)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	zend_long index;
+	int c_index;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(index, 2, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Raction_get_bool((const RActionContext *)c_context, c_index);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Raction_return_number)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	double value;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+		Z_PARAM_DOUBLE(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Raction_return_number(c_context, value);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Raction_return_string)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	zend_string *value = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+		Z_PARAM_STR_OR_NULL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Raction_return_string(c_context, value ? ZSTR_VAL(value) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Raction_return_bool)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	zend_long value;
+	int c_value;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+		Z_PARAM_LONG(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(value, 2, &c_value)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Raction_return_bool(c_context, c_value);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Raction_fail)
+{
+	zend_object *context;
+	RActionContext *c_context;
+	zend_string *message = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_OBJ_OF_CLASS(context, raven_ce_RActionContext)
+		Z_PARAM_STR_OR_NULL(message)
+	ZEND_PARSE_PARAMETERS_END();
+
+	c_context = raven_action_context_get(context, 1);
+	if (!c_context) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Raction_fail(c_context, message ? ZSTR_VAL(message) : NULL);
 	raven_leave();
 }
 

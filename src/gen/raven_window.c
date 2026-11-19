@@ -399,6 +399,86 @@ ZEND_FUNCTION(Rwindow_clear_focus)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rwindow_set_back_callback)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(window)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_window);
+	zend_string *key = raven_slot_key("Rwindow_set_back_callback", 1, (unsigned long)c_window);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rwindow_set_back_callback(c_window, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RBackCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rwindow_set_back_enabled)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(window)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(enabled, 2, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rwindow_set_back_enabled(c_window, c_enabled);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rwindow_wants_back)
+{
+	zend_long window;
+	uint32_t c_window;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(window)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rwindow_wants_back(c_window);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
 ZEND_FUNCTION(Rwindow_set_min_size)
 {
 	zend_long window;
@@ -1871,6 +1951,28 @@ ZEND_FUNCTION(Rwindow_inject_drop)
 	ret = Rwindow_inject_drop(c_window, (float)x, (float)y, c_paths, c_path_count, text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
 	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rwindow_inject_back)
+{
+	zend_long window;
+	uint32_t c_window;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(window)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rwindow_inject_back(c_window);
+	raven_leave();
 	RETURN_LONG((zend_long)ret);
 }
 

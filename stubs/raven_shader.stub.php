@@ -85,8 +85,17 @@ final class RShaderLook
     public function __construct(array $color = [0.0, 0.0, 0.0, 0.0], array $color2 = [0.0, 0.0, 0.0, 0.0], array $params = [0.0, 0.0, 0.0, 0.0], float $radius = 0.0, int $texture = 0, int $animate = 0, int $pointer = 0, float $hover = 0.0, float $press = 0.0) {}
 }
 
+/**
+ * A shader from SPIR-V code (a fragment shader written with
+ * raven_effect.glsl, as in a .spv file): `size` bytes, copied. R_INVALID_ID
+ * when the code is not SPIR-V; a backend that refuses it reports an error
+ * and the effect is drawn as a rectangle.
+ */
 function Rshader_create(string $spirv, int $size, int $flags): int {}
 
+/**
+ * The same, from a .spv file (UTF-8 path, relative to the current folder).
+ */
 function Rshader_create_from_file(?string $path, int $flags): int {}
 
 function Rshader_destroy(int $shader): void {}
@@ -95,20 +104,45 @@ function Rshader_is_valid(int $shader): int {}
 
 function Rshader_get_flags(int $shader): int {}
 
+/**
+ * A built-in effect, created the first time it is asked for.
+ */
 function Reffect_get(int $effect): int {}
 
+/**
+ * A built-in effect by its name ("aurora", "shimmer", "neon", "ripple", "plasma", "grain", "spotlight", "mesh"), or R_INVALID_ID.
+ */
 function Reffect_find(?string $name): int {}
 
 function Reffect_get_name(int $effect): ?string {}
 
+/**
+ * Its colors and parameters when nothing else is given (Rshader_look_init uses them).
+ */
 function Reffect_get_defaults(int $effect, ?RShaderLook $look): void {}
 
+/**
+ * White to white, no parameter, no texture, square corners, animated when the shader is.
+ */
 function Rshader_look_init(?RShaderLook $look): void {}
 
+/**
+ * Fills a look with the defaults of the shader when it is a built-in effect (else Rshader_look_init).
+ */
 function Rshader_look_defaults(int $shader, ?RShaderLook $look): void {}
 
+/**
+ * From a paint callback: draws the effect over a rectangle of the
+ * widget (logical units, from its top left corner).
+ */
 function Rdraw_shader(RPainter $painter, int $shader, float $x, float $y, float $width, float $height, ?RShaderLook $look): void {}
 
+/**
+ * The background of a border becomes an effect (its Background,
+ * if any, is drawn under it; its child over it). R_INVALID_ID removes it.
+ * XML: Effect="aurora" or Effect="file.spv", EffectColor, EffectColor2,
+ * EffectParams="a,b,c,d", EffectAnimate, EffectBackdrop (for a file).
+ */
 function Rborder_set_effect(int $border, int $shader, ?RShaderLook $look): void {}
 
 function Rborder_get_effect(int $border): int {}

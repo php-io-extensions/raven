@@ -187,4 +187,11 @@ final class RBackendInitInfo
     public function __construct(?string $app_name = null, int $enable_validation = 0, int $vsync = 0, int $window_system = 0, int $native_display = 0) {}
 }
 
+/**
+ * Tells Raven that the device of the backend was lost. Thread-safe:
+ * call it from the backend (render thread) when the API reports it. At the
+ * next frame Raven calls Shutdown and Init again, then remakes the
+ * surfaces, the textures and the shaders (see Rset_device_reset_callback).
+ * Until then RenderFrame may simply return.
+ */
 function Rbackend_device_lost(): void {}

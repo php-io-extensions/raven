@@ -78,28 +78,65 @@ final class RXmlAttributeInfo
     public function __construct(?string $name = null, int $type = 0, ?string $choices = null, ?string $group = null, ?string $description = null) {}
 }
 
+/**
+ * Creates a window from a document whose root element is <Window>.
+ * UTF-8 text. It does not need to be null-terminated.
+ * Size of the text in bytes.
+ * Returns The window, or R_INVALID_ID. Parse errors are reported with
+ * their line and column through the error callback (R_ERROR_XML).
+ */
 function Rwindow_create_from_xml(?string $xml, int $size): int {}
 
 function Rwindow_create_from_xml_file(?string $path): int {}
 
+/**
+ * Creates a widget tree from a document whose root element is a
+ * widget. The caller owns the returned widget until it is added to a parent.
+ */
 function Rwidget_create_from_xml(?string $xml, int $size): int {}
 
 function Rwidget_create_from_xml_file(?string $path): int {}
 
+/**
+ * A folder looked into after the one of the document (see above),
+ * and the first one for the documents given from memory. NULL or "": none.
+ */
 function Rxml_set_base_path(?string $path): void {}
 
+/**
+ * Turns auto-loading on or off (see above). It is on by default;
+ * the environment variable RAVEN_AUTO_LOAD=0 turns it off without
+ * rebuilding. Turned off, the register functions are the only way in;
+ * the places where paths are looked for stay the same.
+ */
 function Rxml_set_auto_load(int $enabled): void {}
 
 function Rxml_get_auto_load(): int {}
 
+/**
+ * Turns live reload on or off. It is on by default; the
+ * environment variable RAVEN_LIVE_RELOAD=0 turns it off without
+ * rebuilding. When off, files are never looked at again.
+ */
 function Rxml_set_live_reload(int $enabled): void {}
 
 function Rxml_get_live_reload(): int {}
 
 function Rxml_set_reload_callback(?callable $callback, mixed $user_data): void {}
 
+/**
+ * Looks at the files now, without waiting for the next look
+ * (there are five per second), even when live reload is off.
+ * Returns The number of files found changed.
+ */
 function Rxml_check_files(): int {}
 
+/**
+ * Reads the <Widget Name="..."> declarations of a document (its
+ * root, or the children of a <Widgets> root) so that the tags they
+ * declare can be used in the documents loaded afterwards.
+ * Returns The number of tags declared.
+ */
 function Rxml_register_widgets(?string $xml, int $size): int {}
 
 function Rxml_register_widgets_from_file(?string $path): int {}
@@ -108,50 +145,106 @@ function Rxml_unregister_widget(?string $name): void {}
 
 function Rxml_is_widget_registered(?string $name): int {}
 
+/**
+ * The declared tags, for tools that list them.
+ */
 function Rxml_get_registered_widget_count(): int {}
 
 function Rxml_get_registered_widget_name(int $index): ?string {}
 
+/**
+ * Registers a tag (or replaces what it was registered with).
+ * Returns R_FALSE when the name is the one of a widget of Raven, or when too many tags are registered (64).
+ */
 function Rxml_register_tag(?string $tag, ?callable $create, ?callable $set_attribute, mixed $user_data): int {}
 
 function Rxml_unregister_tag(?string $tag): void {}
 
 function Rxml_is_tag_registered(?string $tag): int {}
 
+/**
+ * The path of a file named in a document: as the attributes
+ * Source of Raven read it, looked for where files are looked for (see
+ * Rxml_set_base_path): the folder of the document being loaded (while it
+ * loads) and its subfolders, the base path, the current folder, PATH.
+ * When no place holds it, the path it would have next to the document
+ * (else in the base path). For the attributes of the tags made by code
+ * that name files.
+ * Returns The path; valid until the next call.
+ */
 function Rxml_resolve_path(?string $path): ?string {}
 
+/**
+ * Sets a property from text, with the names and value syntax of the
+ * XML attributes. Handy for scripting and data-driven tools.
+ * Returns R_TRUE when the attribute exists for this widget and the value is valid.
+ */
 function Rwidget_set_attribute(int $widget, ?string $name, ?string $value): int {}
 
+/**
+ * A new document with one element.
+ */
 function Rxml_document_create(?string $root_tag): int {}
 
+/**
+ * Reads a text into a document. Comments are kept.
+ * When not NULL, a mistake in the text is described there
+ * and nothing is reported; when NULL it goes to the error callback.
+ * Returns The document, or R_INVALID_ID.
+ */
 function Rxml_document_parse(?string $xml, int $size, ?RXmlError $error): int {}
 
+/**
+ * Reads a file. The paths written in it are relative to its folder.
+ */
 function Rxml_document_load(?string $path): int {}
 
+/**
+ * Releases a document and its nodes. What was built from it lives on.
+ */
 function Rxml_document_destroy(int $document): void {}
 
 function Rxml_document_is_valid(int $document): int {}
 
 function Rxml_document_get_root(int $document): int {}
 
+/**
+ * Writes the document as text, one element per line, indented
+ * with tabs. Rxml_node_get_line then says where each node was written.
+ * Returns The text, valid until the next call for this document or its destruction.
+ */
 function Rxml_document_to_string(int $document): ?string {}
 
 function Rxml_document_save(int $document, ?string $path): int {}
 
+/**
+ * Builds the widgets the document describes, as
+ * Rwidget_create_from_xml does. When the root is a <Window>, builds what
+ * the window would show (R_INVALID_ID when it is empty).
+ */
 function Rxml_document_create_widget(int $document): int {}
 
+/**
+ * Builds the window the document describes, as Rwindow_create_from_xml does.
+ */
 function Rxml_document_create_window(int $document): int {}
 
 function Rxml_node_is_valid(int $node): int {}
 
 function Rxml_node_get_document(int $node): int {}
 
+/**
+ * Returns The tag of an element, "" for a comment.
+ */
 function Rxml_node_get_tag(int $node): ?string {}
 
 function Rxml_node_set_tag(int $node, ?string $tag): void {}
 
 function Rxml_node_is_comment(int $node): int {}
 
+/**
+ * The text inside an element (<Label>this</Label>), or the text of a comment.
+ */
 function Rxml_node_get_text(int $node): ?string {}
 
 function Rxml_node_set_text(int $node, ?string $text): void {}
@@ -162,20 +255,48 @@ function Rxml_node_get_child_count(int $node): int {}
 
 function Rxml_node_get_child(int $node, int $index): int {}
 
+/**
+ * Returns The place of a node among the children of its parent; 0 for the root.
+ */
 function Rxml_node_get_index(int $node): int {}
 
+/**
+ * Where among the children; -1 for the end.
+ * Returns The new node; R_INVALID_ID (R_ERROR_XML) when it would be nested
+ * deeper than a document can be: 256 levels under the root, as
+ * when a text is read. The same holds for the functions below.
+ */
 function Rxml_node_add_child(int $parent, ?string $tag, int $index): int {}
 
 function Rxml_node_add_comment(int $parent, ?string $text, int $index): int {}
 
+/**
+ * Reads a piece of XML (one element and what it contains) and
+ * adds it: what a palette, a paste or a template inserts.
+ */
 function Rxml_node_add_xml(int $parent, ?string $xml, int $size, int $index): int {}
 
+/**
+ * Removes a node and what it contains. The root stays.
+ */
 function Rxml_node_remove(int $node): void {}
 
+/**
+ * Moves a node, with what it contains, under another parent of
+ * the same document or elsewhere under its own.
+ * Where among the children of the new parent, counted once the node has left its place; -1 for the end.
+ * Returns R_FALSE when it cannot be done (the root, a parent that is inside the node, or a place too deep).
+ */
 function Rxml_node_move(int $node, int $new_parent, int $index): int {}
 
+/**
+ * Copies a node and what it contains, right after it. Returns the copy.
+ */
 function Rxml_node_duplicate(int $node): int {}
 
+/**
+ * The node as text. Valid until the next call for this document.
+ */
 function Rxml_node_to_string(int $node): ?string {}
 
 function Rxml_node_get_attribute_count(int $node): int {}
@@ -184,24 +305,59 @@ function Rxml_node_get_attribute_name(int $node, int $index): ?string {}
 
 function Rxml_node_get_attribute_value(int $node, int $index): ?string {}
 
+/**
+ * Returns The value of an attribute (names are compared without case), or NULL when the node does not have it.
+ */
 function Rxml_node_get_attribute(int $node, ?string $name): ?string {}
 
+/**
+ * Sets an attribute, added after the others when it is new. A NULL value removes it.
+ */
 function Rxml_node_set_attribute(int $node, ?string $name, ?string $value): void {}
 
+/**
+ * Returns The line of the node, starting at 1, in the text the document
+ * was read from or last written to; 0 for a node added since.
+ */
 function Rxml_node_get_line(int $node): int {}
 
+/**
+ * Returns The widget (the window, for a <Window>) the node became the
+ * last time the document was built, or R_INVALID_ID: never built,
+ * destroyed since, or not a widget (an <Item>, a comment). A tag declared
+ * with <Widget> gives the widget it stands for.
+ */
 function Rxml_node_get_widget(int $node): int {}
 
+/**
+ * Returns The node a widget was built from, or R_INVALID_ID: not built
+ * from a document, or the document is gone. The widgets inside a tag
+ * declared with <Widget> all come from the node where the tag is used.
+ */
 function Rwidget_get_xml_node(int $widget): int {}
 
+/**
+ * The tags of the library, <Window> included. Those declared with <Widget> are listed by Rxml_get_registered_widget_name.
+ */
 function Rxml_get_tag_count(): int {}
 
 function Rxml_get_tag_name(int $index): ?string {}
 
+/**
+ * Returns One line about a tag, "" when there is nothing to say.
+ */
 function Rxml_get_tag_description(?string $tag): ?string {}
 
+/**
+ * Returns 0: no child widget; 1: a single one; 2: any number. Declared and unknown tags give 2.
+ */
 function Rxml_get_tag_children(?string $tag): int {}
 
+/**
+ * The attributes of a tag: its own first, then those every widget
+ * has, then those of its place in its parent. For a tag declared with
+ * <Widget>, its own are its parameters.
+ */
 function Rxml_get_attribute_count(?string $tag): int {}
 
 function Rxml_get_attribute_info(?string $tag, int $index, ?RXmlAttributeInfo $info): int {}

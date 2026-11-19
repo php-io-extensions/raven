@@ -2,7 +2,7 @@
 
 <h1>ext-raven</h1>
 
-<h3>Raven main (0f0da68) bound 1:1 into PHP 8.4+, with the toolkit compiled in</h3>
+<h3>Raven 0.3.0 bound 1:1 into PHP 8.4+, with the toolkit compiled in</h3>
 
 
 [![CI](https://img.shields.io/github/actions/workflow/status/php-io-extensions/raven/ci.yml?style=flat-square&label=CI)](https://github.com/php-io-extensions/raven/actions/workflows/ci.yml)
@@ -18,7 +18,7 @@ An editor, a tool or a control panel needs windows, buttons, lists, trees, text 
 
 <b>Raven</b> is that toolkit. Oscar Soirey's library is a retained-mode GUI in C: windows hold widget trees, panels place their children, controls report changes through callbacks, interfaces can be written in XML, and a Vulkan renderer draws them on native Cocoa, X11 or Wayland windows. Its layout and painting run on worker and render threads while the application stays on one UI thread.
 
-<b>The only problem?</b> PHP can't reach it. This extension binds every function of `Raven.h` one to one under the C names, with Raven compiled into the module from an unchanged copy of upstream main (`0f0da68`; `Rget_version()` is still `0.2.3`), so there is nothing to install from the system but libX11 on Linux. Structs are typed classes, callbacks are PHP callables that always run on the PHP thread, sizes and ranges are checked before Raven sees them, and Raven's errors come back through its own `RError` codes and error callback. No defaults, no composites, no opinions: what Raven documents is what you call.
+<b>The only problem?</b> PHP can't reach it. This extension binds every function of `Raven.h` one to one under the C names, with Raven compiled into the module from an unchanged copy of upstream 0.3.0 (`c34466d`), so there is nothing to install from the system but libX11 on Linux. Structs are typed classes, callbacks are PHP callables that always run on the PHP thread, sizes and ranges are checked before Raven sees them, and Raven's errors come back through its own `RError` codes and error callback. No defaults, no composites, no opinions: what Raven documents is what you call.
 
 ## Basic usage
 
@@ -107,14 +107,14 @@ raven
 
 raven support => enabled
 Version => 0.11.x
-Raven version => 0.2.3
-Raven commit => 0f0da68197c8def4f4ffab93bae53bccb6a199c8
+Raven version => 0.3.0
+Raven commit => c34466db536219f5ed0e026c4286a1ce27887b57
 Vulkan-Headers commit => b379292b2ab6df5771ba9870d53cf8b2c9295daf
 ```
 
 ## API
 
-All 1,283 functions of `Raven.h` but five raw-memory ones (`Rmemory_alloc`, `Rmemory_realloc`, `Rmemory_free`, `Rpixels_alloc`, `Rpixels_free`): 1,278 functions, 35 classes, every enumerator and public `#define` as a constant. The stubs in [`stubs/`](stubs) are the reference, one file per Raven header; Raven's own headers in [`lib/raven/include/raven/`](lib/raven/include/raven) document what each call does.
+All 1,375 functions of `Raven.h` but five raw-memory ones (`Rmemory_alloc`, `Rmemory_realloc`, `Rmemory_free`, `Rpixels_alloc`, `Rpixels_free`): 1,370 functions, 37 classes, every enumerator and public `#define` as a constant. The stubs in [`stubs/`](stubs) are the reference, one file per Raven header, with that header's comments on the functions; Raven's own headers in [`lib/raven/include/raven/`](lib/raven/include/raven) document what each call does. 0.3.0 adds Carousel, MapView, Raven Script, tile-view sections, action parameters (`RActionContext`), and app lifecycle / back handling. A Label with a tooltip takes the hover so the tooltip can show (`Rwidget_set_tooltip`, and `Tooltip="..."` in XML).
 
 ### Translations
 
@@ -133,6 +133,7 @@ All 1,283 functions of `Raven.h` but five raw-memory ones (`Rmemory_alloc`, `Rme
 | callback + `void* user_data` | `?callable` + `mixed`; the callable gets the C arguments with `user_data` in its C place |
 | `void*` user handle (`Rwidget_set_user_handle` …) | `mixed`, held per widget, window, tree item or node |
 | `RPainter*` | `RPainter`, valid until its paint callback returns |
+| `RActionContext*` | `RActionContext`, valid until its parameterized-action callback returns |
 | Vulkan handles, native window fields | `int` addresses |
 | returned pixels / file contents | `?string`, Raven's memory released before return |
 

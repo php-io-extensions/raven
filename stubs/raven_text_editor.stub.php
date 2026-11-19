@@ -198,32 +198,63 @@ final class RLanguageDesc
     public function __construct(?string $name = null, ?string $extensions = null, ?string $keywords = null, ?string $types = null, ?string $constants = null, ?string $line_comment = null, ?string $block_comment_start = null, ?string $block_comment_end = null, ?string $string_quotes = null, ?string $multiline_strings = null, ?string $directive = null, ?string $annotation = null, int $flags = 0, ?string $script_language = null) {}
 }
 
+/**
+ * Initial content, or NULL.
+ */
 function Rtext_editor_create(?string $text): int {}
 
+/**
+ * Replaces the whole text. The history of undo is cleared; the changed callback is not called.
+ */
 function Rtext_editor_set_text(int $editor, ?string $text): void {}
 
+/**
+ * Returns The whole text, lines separated by '\n'. Valid until the next call or the next edit.
+ */
 function Rtext_editor_get_text(int $editor): ?string {}
 
+/**
+ * Returns The number of bytes of Rtext_editor_get_text.
+ */
 function Rtext_editor_get_length(int $editor): int {}
 
 function Rtext_editor_get_line_count(int $editor): int {}
 
+/**
+ * Returns One line, without its line break. Valid until the next edit. NULL when `line` is out of range.
+ */
 function Rtext_editor_get_line(int $editor, int $line): ?string {}
 
+/**
+ * Types a text at the cursor, replacing the selection, as the user
+ * would: it can be undone and the changed callback is called.
+ */
 function Rtext_editor_insert_text(int $editor, ?string $text): void {}
 
 function Rtext_editor_set_cursor(int $editor, int $line, int $column): void {}
 
 function Rtext_editor_get_cursor(int $editor, ?int &$line, ?int &$column): void {}
 
+/**
+ * Selects from one position to another; the cursor is on the second.
+ */
 function Rtext_editor_select(int $editor, int $from_line, int $from_column, int $to_line, int $to_column): void {}
 
 function Rtext_editor_select_all(int $editor): void {}
 
+/**
+ * Start and end of the selection, in the order of the text. Returns R_FALSE when nothing is selected.
+ */
 function Rtext_editor_get_selection(int $editor, ?int &$from_line, ?int &$from_column, ?int &$to_line, ?int &$to_column): int {}
 
+/**
+ * Returns The selected text, "" when there is none. Valid until the next call or the next edit.
+ */
 function Rtext_editor_get_selected_text(int $editor): ?string {}
 
+/**
+ * Scrolls so that a line is visible.
+ */
 function Rtext_editor_scroll_to_line(int $editor, int $line): void {}
 
 function Rtext_editor_undo(int $editor): void {}
@@ -234,66 +265,168 @@ function Rtext_editor_can_undo(int $editor): int {}
 
 function Rtext_editor_can_redo(int $editor): int {}
 
+/**
+ * A read-only editor can still be scrolled, selected and copied.
+ */
 function Rtext_editor_set_read_only(int $editor, int $read_only): void {}
 
+/**
+ * Long lines continue on the next row instead of scrolling sideways. Off by default.
+ */
 function Rtext_editor_set_word_wrap(int $editor, int $enabled): void {}
 
+/**
+ * Shows the line numbers in a margin. Off by default.
+ */
 function Rtext_editor_set_line_numbers(int $editor, int $enabled): void {}
 
+/**
+ * Width of a tab, in spaces (4 by default).
+ */
 function Rtext_editor_set_tab_size(int $editor, int $spaces): void {}
 
+/**
+ * R_TRUE makes the Tab key insert spaces instead of a tab character. Off by default.
+ */
 function Rtext_editor_set_tab_inserts_spaces(int $editor, int $enabled): void {}
 
+/**
+ * The same as Rtext_editor_set_language with "XML", "C" or NULL.
+ */
 function Rtext_editor_set_syntax(int $editor, int $syntax): void {}
 
+/**
+ * R_INVALID_ID uses the font of the theme (or the fixed-width
+ * font, with a language).
+ * 0 uses the font size of the theme.
+ */
 function Rtext_editor_set_font(int $editor, int $font, float $size): void {}
 
+/**
+ * Text shown, dimmed, while the editor is empty.
+ */
 function Rtext_editor_set_placeholder(int $editor, ?string $text): void {}
 
+/**
+ * Zoom of the text: a factor of its font size, 1 = 100 % (0.5 .. 4).
+ * The user zooms with Ctrl + wheel (around the pointer), Ctrl + '+',
+ * Ctrl + '-' and Ctrl + 0 (back to 100 %), keypad included. Set by the
+ * program, the top of the view stays and the zoom callback is not called.
+ * XML: Zoom="1.25".
+ */
 function Rtext_editor_set_zoom(int $editor, float $zoom): void {}
 
 function Rtext_editor_get_zoom(int $editor): float {}
 
+/**
+ * R_FALSE: Ctrl + wheel and the keys do not zoom (the wheel scrolls). On by default. XML: Zoomable="false".
+ */
 function Rtext_editor_set_zoomable(int $editor, int $zoomable): void {}
 
 function Rtext_editor_set_zoom_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Declares a language, or replaces the one that has this name: to
+ * add words to a built-in language, read it with Rlanguage_get, change
+ * what you want and register it again. The strings are copied.
+ */
 function Rlanguage_register(?RLanguageDesc $desc): int {}
 
+/**
+ * Reads the description of a language. The strings belong to the library. Returns R_FALSE when it is unknown.
+ */
 function Rlanguage_get(?string $name, ?RLanguageDesc $desc): int {}
 
 function Rlanguage_get_count(): int {}
 
 function Rlanguage_get_name(int $index): ?string {}
 
+/**
+ * Returns The name of the language of a file, from its extension, or NULL.
+ */
 function Rlanguage_for_file(?string $path): ?string {}
 
+/**
+ * Gives the editor a language, by name ("C++", "Python"...), by
+ * another usual name ("cpp", "js") or by the extension of its files
+ * ("rs"). NULL or "" removes it. An editor with a language uses the
+ * fixed-width font unless it was given a font.
+ */
 function Rtext_editor_set_language(int $editor, ?string $name): void {}
 
+/**
+ * Returns The name of the language of the editor, or "".
+ */
 function Rtext_editor_get_language(int $editor): ?string {}
 
+/**
+ * R_TRUE makes the editor an editor of Markdown (the "Markdown"
+ * language; Markdown="true" in XML): the text stays as it is written,
+ * and what it formats shows while typing, strong text in bold,
+ * emphasized text in italic, titles in bold, code, links and marks in
+ * their colors. A label with Rlabel_set_markdown shows the same text
+ * formatted. R_FALSE removes the language.
+ */
 function Rtext_editor_set_markdown(int $editor, int $enabled): void {}
 
 function Rtext_editor_get_markdown(int $editor): int {}
 
+/**
+ * What the language of the editor makes of the character at a
+ * position: the colors come from it. R_TOKEN_TEXT without a language.
+ */
 function Rtext_editor_get_token(int $editor, int $line, int $column): int {}
 
+/**
+ * R_FALSE stops the editor from proposing words by itself; Ctrl+Space still does. On by default.
+ */
 function Rtext_editor_set_completion(int $editor, int $enabled): void {}
 
+/**
+ * Proposes words for what is before the cursor, as Ctrl+Space does.
+ */
 function Rtext_editor_show_completions(int $editor): void {}
 
 function Rtext_editor_is_completing(int $editor): int {}
 
 function Rtext_editor_set_completion_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Adds a proposal. Only from a completion callback. Proposals that
+ * do not start with the prefix are left out; the others keep the order
+ * they were added in.
+ * A few words shown beside it ("function", "int"), or NULL.
+ */
 function Rtext_editor_add_completion(int $editor, ?string $text, ?string $detail): void {}
 
+/**
+ * Adds a proposal that writes another text than the one it shows
+ * and is matched on: "Threshold", listed and filtered as such, that
+ * writes "Threshold(" when chosen. Only from a completion callback.
+ * What replaces the word being typed; NULL or "" is `text`.
+ */
 function Rtext_editor_add_completion_insert(int $editor, ?string $text, ?string $detail, ?string $insert): void {}
 
+/**
+ * R_FALSE leaves the words of the language and the names of the
+ * text out of the proposals: only the completion callback's are listed
+ * (a language server that knows better). On by default.
+ */
 function Rtext_editor_set_completion_words(int $editor, int $enabled): void {}
 
+/**
+ * R_FALSE stops the editor from closing brackets and quotes and
+ * from indenting after them. On by default; it only acts with a language.
+ */
 function Rtext_editor_set_auto_pairs(int $editor, int $enabled): void {}
 
+/**
+ * Underlines a part of a line and attaches a message to it, shown
+ * when the pointer rests there: an error of a compiler, a warning.
+ * Markers follow their line when text is added or removed above it, and
+ * go away when their own line is edited.
+ * -1 for the end of the line.
+ */
 function Rtext_editor_add_marker(int $editor, int $line, int $from_column, int $to_column, int $kind, ?string $message): void {}
 
 function Rtext_editor_clear_markers(int $editor): void {}
@@ -302,10 +435,18 @@ function Rtext_editor_get_marker_count(int $editor): int {}
 
 function Rtext_editor_set_hover_callback(int $editor, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Color of a kind of token in the theme in use, instead of the
+ * one Raven picks for dark and for light themes. Theme files set them
+ * with <Syntax Keyword="#FF7AB2" String="..."/>.
+ */
 function Rtheme_set_token_color(int $token, float $r, float $g, float $b, float $a): void {}
 
 function Rtheme_get_token_color(int $token, ?float &$r, ?float &$g, ?float &$b, ?float &$a): void {}
 
+/**
+ * Back to the colors Raven picks.
+ */
 function Rtheme_clear_token_colors(): void {}
 
 function Rtext_editor_set_changed_callback(int $editor, ?callable $callback, mixed $user_data): void {}

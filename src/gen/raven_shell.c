@@ -756,6 +756,44 @@ ZEND_FUNCTION(Rdock_area_set_float_mode)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rdock_area_set_float_window)
+{
+	zend_long area;
+	uint32_t c_area;
+	zend_long flags;
+	uint32_t c_flags;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(area)
+		Z_PARAM_LONG(flags)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(area, 1, &c_area)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(flags, 2, &c_flags)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_area);
+	zend_string *key = raven_slot_key("Rdock_area_set_float_window", 1, (unsigned long)c_area);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdock_area_set_float_window(c_area, c_flags, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RDockFloatWindowCallback_0 : NULL, slot);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rdock_area_float_panel)
 {
 	zend_long area;

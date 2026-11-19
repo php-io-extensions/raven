@@ -1193,12 +1193,24 @@ final class RDropEvent
     public function __construct(int $phase = 0, int $window = 0, float $x = 0.0, float $y = 0.0, float $local_x = 0.0, float $local_y = 0.0, ?array $paths = null, int $path_count = 0, ?string $text = null, ?string $drag_type = null, int $drag_source = 0) {}
 }
 
+/**
+ * Opens a top-level window.
+ * Client size in logical units.
+ * Bitmask of RWindowFlags.
+ */
 function Rwindow_create(?string $title, int $width, int $height, int $flags): int {}
 
+/**
+ * Closes a window and deletes its content widgets.
+ */
 function Rwindow_destroy(int $window): void {}
 
 function Rwindow_is_valid(int $window): int {}
 
+/**
+ * Sets the root widget of the window. The window takes ownership of
+ * the widget; the previous content is deleted.
+ */
 function Rwindow_set_content(int $window, int $widget): void {}
 
 function Rwindow_get_content(int $window): int {}
@@ -1211,13 +1223,47 @@ function Rwindow_set_size(int $window, int $width, int $height): void {}
 
 function Rwindow_get_size(int $window, ?int &$width, ?int &$height): void {}
 
+/**
+ * The part of the window the system covers (status bar, notch,
+ * home indicator, navigation bar), in logical units. The content of the
+ * window is laid out inside it already. All 0 on desktop.
+ */
 function Rwindow_get_safe_area(int $window, ?RInsets $insets): void {}
 
+/**
+ * The part of the window the on-screen keyboard covers (only
+ * `bottom` is set), in logical units; 0 when it is hidden or there is
+ * none (desktop). The content is laid out above it already, and the
+ * field that has the focus is scrolled into view above it, by the
+ * ScrollBoxes that hold it, when the keyboard comes or changes height,
+ * when the window turns, and when another field takes the focus.
+ */
 function Rwindow_get_keyboard_area(int $window, ?RInsets $insets): void {}
 
+/**
+ * Called when the on-screen keyboard appears, changes height or goes away (mobile). NULL removes it.
+ */
 function Rwindow_set_keyboard_callback(int $window, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * No widget of the window has the keyboard focus any more: on mobile, the on-screen keyboard goes away.
+ */
 function Rwindow_clear_focus(int $window): void {}
+
+function Rwindow_set_back_callback(int $window, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * R_TRUE while the application has somewhere to go back to (a page
+ * under the one shown). Android 13 and later ask for Back only while the
+ * window wants it (predictive back): at the root page the system handles
+ * Back itself and animates back to the home screen. Default R_FALSE.
+ */
+function Rwindow_set_back_enabled(int $window, int $enabled): void {}
+
+/**
+ * Returns R_TRUE while Back would be taken: a popup or dialog is open, or Rwindow_set_back_enabled said so.
+ */
+function Rwindow_wants_back(int $window): int {}
 
 function Rwindow_set_min_size(int $window, int $width, int $height): void {}
 
@@ -1225,14 +1271,28 @@ function Rwindow_set_position(int $window, int $x, int $y): void {}
 
 function Rwindow_get_position(int $window, ?int &$x, ?int &$y): void {}
 
+/**
+ * Size of the drawable area in pixels.
+ */
 function Rwindow_get_framebuffer_size(int $window, ?int &$width, ?int &$height): void {}
 
+/**
+ * Returns Pixels per logical unit (monitor scale x global UI scale).
+ */
 function Rwindow_get_scale(int $window): float {}
 
 function Rwindow_show(int $window): void {}
 
 function Rwindow_hide(int $window): void {}
 
+/**
+ * Shows the window in front of the others with the keyboard, and
+ * makes the application the active one. Rwindow_show alone does not take
+ * the keyboard from another application (a prompt that appears while the
+ * user types elsewhere); this is for a window the user just asked for (a
+ * card opened from a tray icon). Where the system has no such request,
+ * the same as Rwindow_show.
+ */
 function Rwindow_focus(int $window): void {}
 
 function Rwindow_maximize(int $window): void {}
@@ -1245,80 +1305,223 @@ function Rwindow_is_maximized(int $window): int {}
 
 function Rwindow_is_minimized(int $window): int {}
 
+/**
+ * Returns R_TRUE while the window is the one the user is working in.
+ */
 function Rwindow_is_active(int $window): int {}
 
+/**
+ * Asks to close the window, as the close button of its title bar
+ * does: the close callback is asked first and may refuse.
+ */
 function Rwindow_close(int $window): void {}
 
+/**
+ * Custom headers. Call these from a mouse-down handler, while the left
+ * button is held: the window follows the pointer until the button is
+ * released (the widget does not receive the release). A
+ * R_WIDGET_HEADER_BAR and the widgets given to Rwidget_set_window_drag do
+ * it by themselves.
+ */
 function Rwindow_begin_move(int $window): void {}
 
 function Rwindow_begin_resize(int $window, int $edge): void {}
 
+/**
+ * Icon of the window (title bar, task bar), from tightly packed
+ * RGBA8 pixels; NULL goes back to the default: on Windows the first icon
+ * of the executable, when it has one. Windows and X11.
+ */
 function Rwindow_set_icon(int $window, string $rgba, int $width, int $height): void {}
 
 function Rwindow_set_clear_color(int $window, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Image drawn behind the content, scaled to cover the window:
+ * what the glass of a glass theme looks through. R_INVALID_ID removes it.
+ */
 function Rwindow_set_background(int $window, int $texture): void {}
 
+/**
+ * Chooses what shows behind a window created with
+ * R_WINDOW_TRANSPARENT (see RBackdrop). With anything but
+ * R_BACKDROP_NONE the window is not cleared with its color and the
+ * wallpaper of the theme is not drawn: only what the widgets draw hides
+ * the screen. In XML: <Window Backdrop="Blur">.
+ * Returns R_TRUE when the window system does it; R_FALSE (the window
+ * then stays as it was) without R_WINDOW_TRANSPARENT, or when it cannot.
+ */
 function Rwindow_set_backdrop(int $window, int $backdrop): int {}
 
 function Rwindow_get_backdrop(int $window): int {}
 
+/**
+ * Gives the window a theme of its own, by name ("Dark",
+ * "WindowsLight", or a theme of Rtheme_load): everything inside it (its
+ * content, its island, its menus, lists and dialogs, its background) is
+ * drawn with that theme, while the other windows keep the one of the
+ * application (Rtheme_use). A widget given Rwidget_set_theme keeps its own.
+ * In XML: <Window Theme="...">.
+ * NULL or "": the theme of the application again.
+ * Returns R_FALSE, after reporting an error, when no theme has that name.
+ */
 function Rwindow_set_theme(int $window, ?string $name): int {}
 
+/**
+ * Returns Name of the theme the window is drawn with (the one of the application when it has none of its own).
+ */
 function Rwindow_get_theme(int $window): ?string {}
 
+/**
+ * Returns R_TRUE when the window has a theme of its own (Rwindow_set_theme).
+ */
 function Rwindow_has_own_theme(int $window): int {}
 
+/**
+ * Opacity of the whole window, its frame included, from 0 to 1:
+ * a window that fades, a tool that lets what is under it show.
+ * Returns R_FALSE when the window system cannot do it.
+ */
 function Rwindow_set_opacity(int $window, float $opacity): int {}
 
 function Rwindow_get_opacity(int $window): float {}
 
+/**
+ * Keeps the window above the other windows (splash screens, tools).
+ * Returns R_FALSE when the window system cannot do it.
+ */
 function Rwindow_set_topmost(int $window, int $topmost): int {}
 
+/**
+ * Gives the window an owner (a tool window or an inspector of the
+ * main window): it stays above its owner, has no button of its own in the
+ * taskbar, is minimized and restored with it (where the window system
+ * does it: Windows, X11), and is destroyed with it (everywhere: Raven
+ * destroys the windows a window owns before the window). R_INVALID_ID
+ * gives the window back its independence.
+ * Returns R_FALSE when the window system cannot keep the window with its
+ * owner (it is still destroyed with it), or when the owner is not valid
+ * or is owned by the window (nothing is changed then).
+ */
 function Rwindow_set_owner(int $window, int $owner): int {}
 
+/**
+ * Returns The owner of the window (Rwindow_set_owner), or R_INVALID_ID.
+ */
 function Rwindow_get_owner(int $window): int {}
 
+/**
+ * Picture in picture: the window becomes a small floating window
+ * that stays above the other windows, on every desktop (every space of
+ * macOS, over the applications in full screen too), in a corner of the
+ * work area of its monitor. It loses its title bar where the system
+ * allows: the empty parts of its content move it, its edges resize it,
+ * and its size keeps the proportions it was given. Leaving it gives back
+ * the size, place, frame and state the window had.
+ *
+ * Raven does not add a button to leave it: the content shows one, with
+ * the built-in action "window.picture_in_picture" (it goes in and out).
+ * Returns R_FALSE when the window system cannot keep a window above the
+ * others (Wayland): the window is left as it is.
+ */
 function Rwindow_set_picture_in_picture(int $window, int $enabled): int {}
 
 function Rwindow_is_picture_in_picture(int $window): int {}
 
+/**
+ * Size (logical units) and corner of the window in picture in
+ * picture, for the next time it goes in (now, when it is in). 0, 0 (the
+ * default): 320 wide, with the proportions the content has when it goes
+ * in. The proportions of width / height are kept while the user resizes.
+ */
 function Rwindow_set_picture_in_picture_layout(int $window, int $width, int $height, int $corner): void {}
 
+/**
+ * Centers the window on the work area of its monitor (no task bar).
+ */
 function Rwindow_center(int $window): void {}
 
+/**
+ * Shows (R_TRUE) or hides (R_FALSE) the inspector of the window: a
+ * window beside it that lists its widgets as a tree, says what the
+ * selected one is (type, name, classes, place and size in the window,
+ * desired size, constraints, slot, visibility, state, style, action,
+ * children) and what the last frame cost (layout, paint and render
+ * times, widgets, instances, draw calls). The selected widget is
+ * outlined in the window, with its type and size. "Pick" selects the
+ * next widget clicked in the window (that click goes to the inspector
+ * only). It follows the window as it changes; closing it hides it, and
+ * it goes with the window. Nothing opens it but this function.
+ */
 function Rwindow_set_inspector(int $window, int $shown): void {}
 
 function Rwindow_is_inspector_shown(int $window): int {}
 
+/**
+ * Returns The window of the inspector of a window (to place it), or R_INVALID_ID when it is hidden.
+ */
 function Rwindow_get_inspector(int $window): int {}
 
+/**
+ * Returns R_TRUE for a window created with R_WINDOW_SPLASH_SCREEN (IsSplashScreen in XML).
+ */
 function Rwindow_is_splash_screen(int $window): int {}
 
+/**
+ * Asks for a new frame even if no widget changed. Thread-safe.
+ */
 function Rwindow_request_redraw(int $window): void {}
 
+/**
+ * R_TRUE redraws the window every frame (games, live viewports).
+ */
 function Rwindow_set_continuous_redraw(int $window, int $enabled): void {}
 
 function Rwindow_set_close_callback(int $window, ?callable $callback, mixed $user_data): void {}
 
 function Rwindow_set_resize_callback(int $window, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Takes what is dropped on the window from other applications,
+ * where no widget takes it (Rwidget_set_drop_callback). NULL removes it.
+ */
 function Rwindow_set_drop_callback(int $window, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * During R_DROP_ENTER / R_DROP_MOVE only: choose Raven's highlight
+ * in target-local logical units (window-local for a window callback).
+ * Clipped to the target; zero width or height hides it without refusing
+ * the drop. Each callback starts with the default highlight again.
+ * Dimensions must be finite and nonnegative; coordinates must be finite.
+ */
 function Rdrop_set_highlight_rect(float $x, float $y, float $width, float $height): void {}
 
 function Rwindow_set_user_handle(int $window, mixed $handle): void {}
 
 function Rwindow_get_user_handle(int $window): mixed {}
 
+/**
+ * Fills `native` with the OS handles of the window.
+ */
 function Rwindow_get_native_handle(int $window, ?RNativeWindow $native): int {}
 
+/**
+ * Widget that has the keyboard focus in the window, or R_INVALID_ID.
+ */
 function Rwindow_get_focused_widget(int $window): int {}
 
+/**
+ * Deepest widget under the cursor, or R_INVALID_ID.
+ */
 function Rwindow_get_hovered_widget(int $window): int {}
 
 function Rwindow_get_mouse_position(int $window, ?float &$x, ?float &$y): void {}
 
+/**
+ * Inject input as if it came from the OS. Positions are in logical units.
+ * Useful for automated tests, replays and when Raven is driven by a host
+ * application.
+ */
 function Rwindow_inject_mouse_move(int $window, float $x, float $y): void {}
 
 function Rwindow_inject_mouse_button(int $window, int $button, int $pressed): void {}
@@ -1329,50 +1532,135 @@ function Rwindow_inject_key(int $window, int $key, int $pressed, int $modifiers)
 
 function Rwindow_inject_text(int $window, ?string $text): void {}
 
+/**
+ * A drag from another application moves over the window
+ * (`inside` R_TRUE) or leaves it.
+ * Returns R_TRUE when a drop at this position would be accepted.
+ */
 function Rwindow_inject_drag(int $window, float $x, float $y, int $inside): int {}
 
+/**
+ * Drops files and / or text at a position. Returns R_TRUE when a target took them.
+ */
 function Rwindow_inject_drop(int $window, float $x, float $y, array $paths, int $path_count, ?string $text): int {}
 
+/**
+ * Back, as the system sends it (Rwindow_set_back_callback). Returns R_TRUE when something took it.
+ */
+function Rwindow_inject_back(int $window): int {}
+
+/**
+ * R_TRUE while the key is held down in the window (cleared when the window loses the keyboard).
+ */
 function Rwindow_is_key_down(int $window, int $key): int {}
 
+/**
+ * R_TRUE while the mouse button is held down over (or captured by) the window.
+ */
 function Rwindow_is_mouse_button_down(int $window, int $button): int {}
 
+/**
+ * Modifiers (RModifier) of the last input event.
+ */
 function Rwindow_get_modifiers(int $window): int {}
 
+/**
+ * R_TRUE while the pointer is over the client area.
+ */
 function Rwindow_is_mouse_inside(int $window): int {}
 
+/**
+ * R_TRUE when the keyboard focus is in a text input, spin box or text editor.
+ */
 function Rwindow_wants_text_input(int $window): int {}
 
+/**
+ * The kind of the focused text input; R_FALSE when there is none.
+ */
 function Rwindow_get_text_input_info(int $window, ?RTextInputInfo $info): int {}
 
+/**
+ * Its text (UTF-8), valid until it changes; NULL when there is none.
+ */
 function Rwindow_get_text_input_text(int $window): ?string {}
 
+/**
+ * Its selection: start == end is the caret. R_FALSE when there is none.
+ */
 function Rwindow_get_text_input_selection(int $window, ?int &$start, ?int &$end): int {}
 
+/**
+ * Selects bytes [start, end) of it (end before start puts the caret at end).
+ */
 function Rwindow_set_text_input_selection(int $window, int $start, int $end): int {}
 
+/**
+ * Replaces bytes [start, end) of it with `text` and puts the caret
+ * after it, as typing would (the changed callback runs; MaxLength
+ * applies). R_FALSE when there is none or it is read-only.
+ */
 function Rwindow_replace_text_input(int $window, int $start, int $end, ?string $text): int {}
 
+/**
+ * R_TRUE while a menu, list or dialog is open over the window.
+ */
 function Rwindow_has_popup(int $window): int {}
 
+/**
+ * Last painted caret in window pixels (x, y, width, height), including scrolling and scale.
+ * Call after Rdraw_frame. Independent of the blink phase. Returns R_FALSE and zeros the
+ * outputs when there is no visible editable caret, the window is inactive, or focus changed
+ * since painting. Any output pointer may be NULL.
+ */
 function Rwindow_get_text_input_rect(int $window, ?int &$x, ?int &$y, ?int &$width, ?int &$height): int {}
 
+/**
+ * Returns Number of open in-window popups (menus, combo lists, pickers), bottom to top.
+ */
 function Rwindow_get_popup_count(int $window): int {}
 
+/**
+ * Returns Root widget of popup `index`, whose rect is in window coordinates; R_INVALID_ID out of range.
+ */
 function Rwindow_get_popup(int $window, int $index): int {}
 
+/**
+ * R_FALSE: Tab no longer moves the keyboard focus (the application uses it as a shortcut). Default R_TRUE.
+ */
 function Rwindow_set_tab_navigation(int $window, int $enabled): void {}
 
 function Rwindow_set_event_hook(int $window, ?callable $hook, mixed $user_data): void {}
 
+/**
+ * Starts dragging `data` from `source` (call it while a mouse button
+ * is held, typically from a mouse-move event once the pointer has moved
+ * a few units). Until the button is released, the widgets with a drop
+ * callback (Rwidget_set_drop_callback) under the pointer receive
+ * R_DROP_ENTER / MOVE / LEAVE and, on release, R_DROP_DROPPED, with
+ * `drag_type` set and `text` = `data`. Returning R_FALSE from the callback
+ * refuses the drop there. Escape cancels. `label` follows the pointer.
+ * Returns R_FALSE when the widget is not in a window.
+ */
 function Rdrag_begin(int $source, ?string $type, ?string $data, ?string $label): int {}
 
+/**
+ * R_TRUE while a drag started by Rdrag_begin is in progress in the window.
+ */
 function Rdrag_is_active(int $window): int {}
 
+/**
+ * Type of the drag in progress, or NULL.
+ */
 function Rdrag_get_type(int $window): ?string {}
 
+/**
+ * Data of the drag in progress, or NULL.
+ */
 function Rdrag_get_data(int $window): ?string {}
 
+/**
+ * Ends the drag in progress without dropping (the target receives R_DROP_LEAVE).
+ */
 function Rdrag_cancel(int $window): void {}
 
 function Rwindow_register_shortcut(int $window, int $key, int $modifiers, ?string $action): void {}

@@ -39,34 +39,88 @@ final class RSpring
 
 function Rcustom_set_paint_callback(int $widget, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Reports the desired size of the widget. Without it the widget asks for 0 x 0.
+ */
 function Rcustom_set_measure_callback(int $widget, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Filled rectangle with rounded corners (radius 0 = sharp).
+ */
 function Rdraw_rect(RPainter $painter, float $x, float $y, float $width, float $height, float $radius, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Soft shadow or glow: a rounded rectangle blurred by `blur` logical units.
+ * Offset the rectangle for a drop shadow, or draw it under a shape for a glow.
+ * Nonpositive width, height or blur draws nothing. Uses the same primitive as Border shadows.
+ */
 function Rdraw_shadow(RPainter $painter, float $x, float $y, float $width, float $height, float $radius, float $blur, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Outline of a rounded rectangle, drawn inside its bounds.
+ */
 function Rdraw_rect_outline(RPainter $painter, float $x, float $y, float $width, float $height, float $radius, float $thickness, float $r, float $g, float $b, float $a): void {}
 
 function Rdraw_circle(RPainter $painter, float $center_x, float $center_y, float $radius, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Anti-aliased line with round caps.
+ */
 function Rdraw_line(RPainter $painter, float $x0, float $y0, float $x1, float $y1, float $thickness, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Anti-aliased cubic Bezier curve from (x0, y0) to (x1, y1), pulled by two control points.
+ */
 function Rdraw_curve(RPainter $painter, float $x0, float $y0, float $cx0, float $cy0, float $cx1, float $cy1, float $x1, float $y1, float $thickness, float $r, float $g, float $b, float $a): void {}
 
 function Rdraw_triangle(RPainter $painter, float $x0, float $y0, float $x1, float $y1, float $x2, float $y2, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Texture stretched to a rectangle and multiplied by a tint color.
+ */
 function Rdraw_image(RPainter $painter, int $texture, float $x, float $y, float $width, float $height, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Draws UTF-8 text; (x, y) is the top-left corner of the first line.
+ * R_INVALID_ID uses the theme font.
+ * 0 uses R_METRIC_FONT_SIZE.
+ */
 function Rdraw_text(RPainter $painter, int $font, float $size, float $x, float $y, ?string $text, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Rounded rectangle of glass. It shows what was drawn before it,
+ * frosted and bent along its rim, under a tint: (r, g, b) is the color of
+ * the tint and `a` its strength (0 = clear glass, 1 = opaque color).
+ * Works with any theme. Needs a backend that implements glass (the Vulkan
+ * backend does).
+ */
 function Rdraw_glass(RPainter $painter, float $x, float $y, float $width, float $height, float $radius, float $r, float $g, float $b, float $a): void {}
 
+/**
+ * Animates a value from the paint callback of a custom widget.
+ * Moves the spring toward `target` by the time elapsed since the last
+ * frame and returns its value. While it moves, the window keeps drawing
+ * frames by itself. The first call puts the spring on its target.
+ *
+ * static RSpring size;                                  (zeroed)
+ * float s = Rdraw_spring(painter, &size, hovered ? 1.0f : 0.0f, R_MOTION_BOUNCY);
+ * Rdraw_circle(painter, cx, cy, 20.0f + 8.0f * s, ...);
+ */
 function Rdraw_spring(RPainter $painter, ?RSpring $spring, float $target, int $motion): float {}
 
+/**
+ * Pushes a spring away from its target (units per second): it bounces back.
+ */
 function Rspring_kick(?RSpring $spring, float $velocity): void {}
 
+/**
+ * Puts a spring at rest on a value, without animation.
+ */
 function Rspring_set(?RSpring $spring, float $value): void {}
 
+/**
+ * Restricts the following draws to a rectangle, intersected with the current one.
+ */
 function Rdraw_push_clip_rect(RPainter $painter, float $x, float $y, float $width, float $height): void {}
 
 function Rdraw_pop_clip_rect(RPainter $painter): void {}

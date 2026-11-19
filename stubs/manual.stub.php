@@ -61,6 +61,16 @@ final class RAllocator
     private function __construct() {}
 }
 
+/**
+ * An action bound with parameters: valid until that function returns.
+ * @strict-properties
+ * @not-serializable
+ */
+final class RActionContext
+{
+    private function __construct() {}
+}
+
 /** Filled by RenderFrame: RGBA8 pixels, width × height × 4 bytes. */
 final class RCapture
 {
