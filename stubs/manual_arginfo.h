@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: d2bda101b259992d5cc631210283b3975bbaf18d */
+ * Stub hash: 819edc72e8b7e789cabdc3e5b3ed3ec20daa7893 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rinit, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, backend, IS_LONG, 0)
@@ -56,6 +56,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_decode, 0, 4, IS_STRING, 
 	ZEND_ARG_TYPE_INFO(0, data_size, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(1, width, IS_LONG, 1)
 	ZEND_ARG_TYPE_INFO(1, height, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_encode_png, 0, 4, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, rgba, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, size, IS_LONG, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rvulkan_set_queue_lock_callbacks, 0, 3, IS_VOID, 0)
@@ -127,6 +134,7 @@ ZEND_FUNCTION(Rfile_read);
 ZEND_FUNCTION(Rpdf_document_save_memory);
 ZEND_FUNCTION(Rwindow_capture);
 ZEND_FUNCTION(Rimage_decode);
+ZEND_FUNCTION(Rimage_encode_png);
 ZEND_FUNCTION(Rvulkan_set_queue_lock_callbacks);
 ZEND_FUNCTION(Rviewport_set_draw_callback);
 ZEND_FUNCTION(Rbackend_register);
@@ -151,6 +159,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rpdf_document_save_memory, arginfo_Rpdf_document_save_memory)
 	ZEND_FE(Rwindow_capture, arginfo_Rwindow_capture)
 	ZEND_FE(Rimage_decode, arginfo_Rimage_decode)
+	ZEND_FE(Rimage_encode_png, arginfo_Rimage_encode_png)
 	ZEND_FE(Rvulkan_set_queue_lock_callbacks, arginfo_Rvulkan_set_queue_lock_callbacks)
 	ZEND_FE(Rviewport_set_draw_callback, arginfo_Rviewport_set_draw_callback)
 	ZEND_FE(Rbackend_register, arginfo_Rbackend_register)

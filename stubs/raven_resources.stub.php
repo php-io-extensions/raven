@@ -160,6 +160,13 @@ function Rtexture_create_from_pixels(string $rgba, int $width, int $height): int
 function Rtexture_update(int $texture, string $rgba, int $width, int $height): void {}
 
 /**
+ * Writes tightly packed RGBA8 pixels to a PNG file: a screenshot
+ * of Rwindow_capture, a picture made by the application. Thread-safe.
+ * Returns R_FALSE when the file cannot be written.
+ */
+function Rimage_save_png(?string $path, string $rgba, int $width, int $height): int {}
+
+/**
  * Returns R_TRUE once an asynchronous texture is decoded (or failed).
  */
 function Rtexture_is_ready(int $texture): int {}

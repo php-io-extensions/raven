@@ -7,6 +7,7 @@
 #include "php.h"
 #include "zend_exceptions.h"
 #include "Raven.h"
+#include <string.h>
 #include "../runtime.h"
 #include "structs.h"
 #include "callbacks.h"
@@ -1877,6 +1878,40 @@ ZEND_FUNCTION(Rwindow_inject_text)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rwindow_inject_composition)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_string *text = NULL;
+	zend_long selection_start;
+	int c_selection_start;
+	zend_long selection_end;
+	int c_selection_end;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(window)
+		Z_PARAM_STR_OR_NULL(text)
+		Z_PARAM_LONG(selection_start)
+		Z_PARAM_LONG(selection_end)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(selection_start, 3, &c_selection_start)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(selection_end, 4, &c_selection_end)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rwindow_inject_composition(c_window, text ? ZSTR_VAL(text) : NULL, c_selection_start, c_selection_end);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rwindow_inject_drag)
 {
 	zend_long window;
@@ -2261,6 +2296,39 @@ ZEND_FUNCTION(Rwindow_replace_text_input)
 	ret = Rwindow_replace_text_input(c_window, c_start, c_end, text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
 	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rwindow_get_text_composition)
+{
+	zend_long window;
+	uint32_t c_window;
+	zval *selection_start;
+	int c_selection_start = 0;
+	zval *selection_end;
+	int c_selection_end = 0;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(window)
+		Z_PARAM_ZVAL(selection_start)
+		Z_PARAM_ZVAL(selection_end)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rwindow_get_text_composition(c_window, &c_selection_start, &c_selection_end);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(selection_start, (zend_long)c_selection_start);
+	ZEND_TRY_ASSIGN_REF_LONG(selection_end, (zend_long)c_selection_end);
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
 }
 
 ZEND_FUNCTION(Rwindow_has_popup)

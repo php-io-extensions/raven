@@ -7,6 +7,7 @@
 #include "php.h"
 #include "zend_exceptions.h"
 #include "Raven.h"
+#include <string.h>
 #include "../runtime.h"
 #include "structs.h"
 #include "callbacks.h"
@@ -327,6 +328,40 @@ ZEND_FUNCTION(Rhost_inject_text)
 		RETURN_THROWS();
 	}
 	Rhost_inject_text(c_window, c_codepoint);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rhost_inject_composition)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_string *text = NULL;
+	zend_long selection_start;
+	int c_selection_start;
+	zend_long selection_end;
+	int c_selection_end;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(window)
+		Z_PARAM_STR_OR_NULL(text)
+		Z_PARAM_LONG(selection_start)
+		Z_PARAM_LONG(selection_end)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(selection_start, 3, &c_selection_start)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(selection_end, 4, &c_selection_end)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rhost_inject_composition(c_window, text ? ZSTR_VAL(text) : NULL, c_selection_start, c_selection_end);
 	raven_leave();
 }
 

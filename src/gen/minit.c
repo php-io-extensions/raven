@@ -28,6 +28,7 @@ void raven_gen_raven_accessibility_minit(int module_number);
 void raven_gen_raven_vulkan_minit(int module_number);
 void raven_gen_raven_backend_minit(int module_number);
 void raven_gen_raven_host_minit(int module_number);
+void raven_gen_raven_testing_minit(int module_number);
 
 void raven_gen_minit(int module_number)
 {
@@ -53,4 +54,5 @@ void raven_gen_minit(int module_number)
 	raven_gen_raven_vulkan_minit(module_number);
 	raven_gen_raven_backend_minit(module_number);
 	raven_gen_raven_host_minit(module_number);
+	raven_gen_raven_testing_minit(module_number);
 }

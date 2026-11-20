@@ -313,3 +313,88 @@ it('injects app lifecycle events and a window back', function (): void {
     Rwindow_set_back_enabled($window, R_FALSE);
     expect(Rwindow_wants_back($window))->toBe(R_FALSE);
 });
+
+it('encodes RGBA pixels as PNG in memory and on disk', function (): void {
+    $rgba = str_repeat("\xff\x00\x00\xff", 4);
+    $png = Rimage_encode_png($rgba, 2, 2, $size);
+    expect($png)->toBeString()
+        ->and(str_starts_with($png, "\x89PNG\r\n\x1a\n"))->toBeTrue()
+        ->and($size)->toBe(strlen($png));
+    $pixels = Rimage_decode($png, strlen($png), $w, $h);
+    expect([$w, $h])->toBe([2, 2])->and(strlen($pixels))->toBe(16);
+
+    $path = tempnam(sys_get_temp_dir(), 'raven-png-');
+    expect(Rimage_save_png($path, $rgba, 2, 2))->toBe(R_TRUE)
+        ->and(is_file($path))->toBeTrue()
+        ->and(str_starts_with((string) file_get_contents($path), "\x89PNG\r\n\x1a\n"))->toBeTrue();
+    unlink($path);
+});
+
+it('injects IME composition into a focused text input', function (): void {
+    $window = raven_window();
+    $input = Rwidget_create(R_WIDGET_TEXT_INPUT);
+    Rwindow_set_content($window, $input);
+    raven_frames();
+    Rwidget_focus($input);
+    Rwindow_inject_composition($window, 'ni', 2, 2);
+    $text = Rwindow_get_text_composition($window, $start, $end);
+    expect($text)->toBe('ni')->and([$start, $end])->toBe([2, 2])
+        ->and(Rtext_input_get_text($input))->toBe('');
+    Rhost_inject_composition($window, 'n', 1, 1);
+    expect(Rwindow_get_text_composition($window, $start, $end))->toBe('ni');
+    Rwindow_inject_composition($window, 'n', 1, 1);
+    expect(Rwindow_get_text_composition($window, $start, $end))->toBe('n');
+    Rwindow_inject_text($window, '你');
+    expect(Rtext_input_get_text($input))->toBe('你')
+        ->and(Rwindow_get_text_composition($window, $start, $end))->toBeNull();
+});
+
+it('drives a layout with Rtest find, click, type and golden pixel compare', function (): void {
+    $window = raven_window(400, 240);
+    $xml = '<VBox Name="root" Padding="12" Spacing="8"><Button Name="ok" Text="OK"/><Checkbox Name="on" Text="On"/><TextInput Name="user"/></VBox>';
+    Rwindow_set_content($window, Rwidget_create_from_xml($xml, strlen($xml)));
+    Rtest_set_deterministic(R_TRUE);
+    expect(Rtest_is_deterministic())->toBe(R_TRUE)
+        ->and(Rtest_get_platform_tag())->toBe('null');
+    expect(Rtest_pump(2))->toBe(R_TRUE);
+
+    $ok = Rtest_find($window, 'ok');
+    $on = Rtest_find($window, 'on');
+    $user = Rtest_find($window, 'user');
+    expect($ok)->not->toBe(R_INVALID_ID)
+        ->and(Rtest_get_text($ok))->toBe('OK')
+        ->and(Rtest_is_shown($ok))->toBe(R_TRUE)
+        ->and(Rtest_is_checked($on))->toBe(R_FALSE);
+
+    $clicks = [];
+    Rbutton_set_clicked_callback($ok, function (int $id, mixed $ud) use (&$clicks): void {
+        $clicks[] = [$id, $ud];
+    }, 'ok');
+    expect(Rtest_click($ok))->toBe(R_TRUE)->and($clicks)->toBe([[$ok, 'ok']]);
+    expect(Rtest_hover($ok))->toBe(R_TRUE);
+    expect(Rtest_click($on))->toBe(R_TRUE)->and(Rtest_is_checked($on))->toBe(R_TRUE);
+    expect(Rtest_type_text($user, 'ada'))->toBe(R_TRUE)->and(Rtest_get_text($user))->toBe('ada');
+    expect(Rtest_key($user, R_KEY_BACKSPACE, 0))->toBe(R_TRUE);
+    expect(Rtest_get_text($user))->toBe('ad');
+    expect(Rtest_settle(1.0))->toBe(R_TRUE);
+
+    $same = str_repeat("\x10\x20\x30\xff", 4);
+    $other = str_repeat("\xff\x00\x00\xff", 4);
+    $diff = null;
+    expect(Rtest_compare_pixels($same, $same, 2, 2, 0, $max, $diff))->toBe(0)
+        ->and($max)->toBe(0)
+        ->and(strlen($diff))->toBe(16);
+    expect(Rtest_compare_pixels($same, $other, 2, 2, 0, $max, $diff))->toBe(4)
+        ->and($max)->toBeGreaterThan(0)
+        ->and(ord($diff[0]))->toBe(255);
+
+    $result = new RGoldenResult();
+    $missing = sys_get_temp_dir().'/raven-golden-missing-'.getmypid().'.png';
+    $actual = preg_replace('/\.png$/', '.actual.png', $missing);
+    expect(Rtest_expect_golden($window, $missing, null, $result))->toBe(R_FALSE)
+        ->and($result->status)->toBe(R_GOLDEN_MISSING);
+    if (is_file($actual)) {
+        unlink($actual);
+    }
+    Rtest_set_deterministic(R_FALSE);
+});

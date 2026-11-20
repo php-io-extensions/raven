@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 7e5d7fa04adb8149a7082650d3409508cab07e7f */
+ * Stub hash: a6ef6383d4e3d7cf3f4c93ca6903572dacc75122 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_create, 0, 4, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 1)
@@ -268,6 +268,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_inject_text, 0, 2, IS_VO
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_inject_composition, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, selection_start, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, selection_end, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_inject_drag, 0, 4, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
@@ -326,6 +333,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_replace_text_input, 0, 4
 	ZEND_ARG_TYPE_INFO(0, start, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, end, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_get_text_composition, 0, 3, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, selection_start, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, selection_end, IS_LONG, 1)
 ZEND_END_ARG_INFO()
 
 #define arginfo_Rwindow_has_popup arginfo_Rwindow_is_valid
@@ -510,6 +523,7 @@ ZEND_FUNCTION(Rwindow_inject_mouse_button);
 ZEND_FUNCTION(Rwindow_inject_mouse_wheel);
 ZEND_FUNCTION(Rwindow_inject_key);
 ZEND_FUNCTION(Rwindow_inject_text);
+ZEND_FUNCTION(Rwindow_inject_composition);
 ZEND_FUNCTION(Rwindow_inject_drag);
 ZEND_FUNCTION(Rwindow_inject_drop);
 ZEND_FUNCTION(Rwindow_inject_back);
@@ -523,6 +537,7 @@ ZEND_FUNCTION(Rwindow_get_text_input_text);
 ZEND_FUNCTION(Rwindow_get_text_input_selection);
 ZEND_FUNCTION(Rwindow_set_text_input_selection);
 ZEND_FUNCTION(Rwindow_replace_text_input);
+ZEND_FUNCTION(Rwindow_get_text_composition);
 ZEND_FUNCTION(Rwindow_has_popup);
 ZEND_FUNCTION(Rwindow_get_text_input_rect);
 ZEND_FUNCTION(Rwindow_get_popup_count);
@@ -614,6 +629,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_inject_mouse_wheel, arginfo_Rwindow_inject_mouse_wheel)
 	ZEND_FE(Rwindow_inject_key, arginfo_Rwindow_inject_key)
 	ZEND_FE(Rwindow_inject_text, arginfo_Rwindow_inject_text)
+	ZEND_FE(Rwindow_inject_composition, arginfo_Rwindow_inject_composition)
 	ZEND_FE(Rwindow_inject_drag, arginfo_Rwindow_inject_drag)
 	ZEND_FE(Rwindow_inject_drop, arginfo_Rwindow_inject_drop)
 	ZEND_FE(Rwindow_inject_back, arginfo_Rwindow_inject_back)
@@ -627,6 +643,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rwindow_get_text_input_selection, arginfo_Rwindow_get_text_input_selection)
 	ZEND_FE(Rwindow_set_text_input_selection, arginfo_Rwindow_set_text_input_selection)
 	ZEND_FE(Rwindow_replace_text_input, arginfo_Rwindow_replace_text_input)
+	ZEND_FE(Rwindow_get_text_composition, arginfo_Rwindow_get_text_composition)
 	ZEND_FE(Rwindow_has_popup, arginfo_Rwindow_has_popup)
 	ZEND_FE(Rwindow_get_text_input_rect, arginfo_Rwindow_get_text_input_rect)
 	ZEND_FE(Rwindow_get_popup_count, arginfo_Rwindow_get_popup_count)

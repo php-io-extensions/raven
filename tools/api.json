@@ -21,7 +21,8 @@
         "raven_accessibility.h",
         "raven_vulkan.h",
         "raven_backend.h",
-        "raven_host.h"
+        "raven_host.h",
+        "raven_testing.h"
     ],
     "functions": {
         "Rinit": {
@@ -1828,6 +1829,29 @@
                 }
             ]
         },
+        "Rwindow_inject_composition": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "selection_start",
+                    "type": "int"
+                },
+                {
+                    "name": "selection_end",
+                    "type": "int"
+                }
+            ],
+            "doc": "The text an input method is composing (preedit: Chinese,\nJapanese, Korean, dead keys), as the platforms send it. The focused\nTextInput, SpinBox or TextEditor shows it at its caret, underlined, in\nplace of its selection, but it is not in its text and no changed\ncallback runs. [selection_start, selection_end) are bytes of `text`:\nthe part the input method works on (underlined thicker), or the caret\nwhen they are equal; -1 is the end of `text`. NULL or \"\" ends the\ncomposition without typing anything (cancel). The committed text comes\nthrough Rwindow_inject_text, which ends the composition too, and so\ndoes a change of focus. Ignored when the focus takes no text."
+        },
         "Rwindow_inject_drag": {
             "header": "raven_window.h",
             "ret": "int",
@@ -2043,6 +2067,25 @@
             ],
             "doc": "Replaces bytes [start, end) of it with `text` and puts the caret\nafter it, as typing would (the changed callback runs; MaxLength\napplies). R_FALSE when there is none or it is read-only."
         },
+        "Rwindow_get_text_composition": {
+            "header": "raven_window.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "selection_start",
+                    "type": "int *"
+                },
+                {
+                    "name": "selection_end",
+                    "type": "int *"
+                }
+            ],
+            "doc": "The composition of the input method in progress (UTF-8, valid\nuntil it changes) and its selection in bytes; NULL when there is none.\nAny output pointer may be NULL."
+        },
         "Rwindow_has_popup": {
             "header": "raven_window.h",
             "ret": "int",
@@ -2079,7 +2122,7 @@
                     "type": "int *"
                 }
             ],
-            "doc": "Last painted caret in window pixels (x, y, width, height), including scrolling and scale.\nCall after Rdraw_frame. Independent of the blink phase. Returns R_FALSE and zeros the\noutputs when there is no visible editable caret, the window is inactive, or focus changed\nsince painting. Any output pointer may be NULL."
+            "doc": "Last painted caret in window pixels (x, y, width, height), including scrolling and scale.\nCall after Rdraw_frame. Independent of the blink phase. Returns R_FALSE and zeros the\noutputs when there is no visible editable caret, the window is inactive, or focus changed\nsince painting. Any output pointer may be NULL. While an input method\ncomposes, it is the caret inside the composition: where its candidate\nwindow goes."
         },
         "Rwindow_get_popup_count": {
             "header": "raven_window.h",
@@ -3285,6 +3328,52 @@
                 }
             ],
             "doc": "Releases pixels returned by Raven (Rimage_decode, Rwindow_capture). Thread-safe."
+        },
+        "Rimage_encode_png": {
+            "header": "raven_resources.h",
+            "ret": "uint8_t *",
+            "params": [
+                {
+                    "name": "rgba",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t *"
+                }
+            ],
+            "doc": "Encodes tightly packed RGBA8 pixels (what Rwindow_capture\nreturns) as a PNG file in memory. Thread-safe.\nReceives the number of bytes.\nReturns The bytes of the file, to release with Rpixels_free; NULL when\nthere are no pixels."
+        },
+        "Rimage_save_png": {
+            "header": "raven_resources.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "rgba",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                }
+            ],
+            "doc": "Writes tightly packed RGBA8 pixels to a PNG file: a screenshot\nof Rwindow_capture, a picture made by the application. Thread-safe.\nReturns R_FALSE when the file cannot be written."
         },
         "Rtexture_is_ready": {
             "header": "raven_resources.h",
@@ -21177,6 +21266,29 @@
             ],
             "doc": "One typed Unicode code point."
         },
+        "Rhost_inject_composition": {
+            "header": "raven_host.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "selection_start",
+                    "type": "int"
+                },
+                {
+                    "name": "selection_end",
+                    "type": "int"
+                }
+            ],
+            "doc": "The input method of the application's system composes `text`\n(preedit), with its selection in bytes (see Rwindow_inject_composition).\nNULL or \"\" cancels it; the committed text then comes through\nRhost_inject_text. Rwindow_get_text_input_rect tells where to put the\ncandidate window."
+        },
         "Rhost_inject_focus": {
             "header": "raven_host.h",
             "ret": "void",
@@ -21202,6 +21314,377 @@
                 }
             ],
             "doc": "The user asked to close the window (its close callback decides)."
+        },
+        "Rtest_set_deterministic": {
+            "header": "raven_testing.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_TRUE makes what is drawn depend only on what the test does:\nevery frame advances the animations by 1/60 s (Rset_animation_time_step),\nand the carets of the text fields stay lit instead of blinking. R_FALSE\ngives the clock back (time step 0)."
+        },
+        "Rtest_is_deterministic": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": []
+        },
+        "Rtest_get_platform_tag": {
+            "header": "raven_testing.h",
+            "ret": "const char *",
+            "params": [],
+            "doc": "Returns What the goldens of this run are made with, \"OS-backend\":\n\"macos-metal\", \"linux-vulkan\", \"windows-vulkan\", \"web-webgl\"... and\n\"null\" with the null backend."
+        },
+        "Rtest_find": {
+            "header": "raven_testing.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "scope",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Finds a widget by name (Rwidget_set_name, Name=\"\" in XML). The\npath may have several names separated by '/': \"settings/ok\" is the\nwidget named \"ok\" inside the one named \"settings\". In a window, the\nopen popups (menus, dialogs) are searched first, top first, then the\ncontent.\nA window or a widget.\nReturns R_INVALID_ID when nothing has that name (no error is reported)."
+        },
+        "Rtest_click": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Moves the mouse to the middle of the widget, presses and releases the left button."
+        },
+        "Rtest_double_click": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Two clicks in a row on the middle of the widget, seen as a double click."
+        },
+        "Rtest_right_click": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "A click of the right button on the middle of the widget (a context menu)."
+        },
+        "Rtest_click_at": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "button",
+                    "type": "RMouseButton"
+                },
+                {
+                    "name": "clicks",
+                    "type": "int"
+                },
+                {
+                    "name": "modifiers",
+                    "type": "Ruint"
+                }
+            ],
+            "doc": "Clicks at a position of a widget or a window.\n1 for a click, 2 for a double click, 3 for a triple click.\nRModifier held during the clicks (R_MOD_SHIFT...)."
+        },
+        "Rtest_hover": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Moves the mouse over the middle of the widget, without clicking."
+        },
+        "Rtest_hover_at": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ],
+            "doc": "Moves the mouse to a position of a widget or a window."
+        },
+        "Rtest_drag": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "dx",
+                    "type": "float"
+                },
+                {
+                    "name": "dy",
+                    "type": "float"
+                }
+            ],
+            "doc": "Presses the left button on the middle of the widget, moves by\n(dx, dy) in several steps, and releases: a slider, a splitter, a\nwindow dragged by a widget."
+        },
+        "Rtest_drag_to": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "from",
+                    "type": "Rid"
+                },
+                {
+                    "name": "to",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Drags from the middle of one widget to the middle of another (drag and drop)."
+        },
+        "Rtest_scroll": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "wheel_x",
+                    "type": "float"
+                },
+                {
+                    "name": "wheel_y",
+                    "type": "float"
+                }
+            ],
+            "doc": "Turns the mouse wheel over the middle of the widget: `wheel_y`\nnotches (positive: toward the top, as a wheel turned away from the\nuser), `wheel_x` notches sideways."
+        },
+        "Rtest_key": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "key",
+                    "type": "RKey"
+                },
+                {
+                    "name": "modifiers",
+                    "type": "Ruint"
+                }
+            ],
+            "doc": "Presses and releases a key, with RModifier held. A widget\ntarget gets the keyboard focus first; a window sends the key to what\nhas the focus."
+        },
+        "Rtest_type_text": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Types UTF-8 text as a keyboard would. A widget target gets the\nkeyboard focus first. '\\n', '\\t' and '\\b' are sent as the keys Enter,\nTab and Backspace."
+        },
+        "Rtest_tap": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "A finger touches the middle of the widget and leaves at once."
+        },
+        "Rtest_swipe": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "dx",
+                    "type": "float"
+                },
+                {
+                    "name": "dy",
+                    "type": "float"
+                },
+                {
+                    "name": "seconds",
+                    "type": "double"
+                }
+            ],
+            "doc": "A finger put on the middle of the widget moves by (dx, dy) in\n`seconds`, and leaves: a fast swipe flicks a list, which then coasts\n(Rtest_settle lets it stop)."
+        },
+        "Rtest_pump": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "frames",
+                    "type": "int"
+                }
+            ],
+            "doc": "Produces `frames` frames (Rdraw_frame). return R_FALSE once the application quits."
+        },
+        "Rtest_is_idle": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns R_TRUE when nothing waits for a frame: no posted task, no layout\nto do, nothing to paint, no animation, no layout spring, no inertia.\nWindows that redraw all the time (Rwindow_set_continuous_redraw, a\nrealtime viewport) and the timers are not counted."
+        },
+        "Rtest_settle": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "max_seconds",
+                    "type": "double"
+                }
+            ],
+            "doc": "Produces frames until Rtest_is_idle, each advancing the\nanimations by the time step (1/60 s unless Rset_animation_time_step\ngives another), for at most `max_seconds` of that time.\nReturns R_FALSE when it was still moving at the end."
+        },
+        "Rtest_get_text": {
+            "header": "raven_testing.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns What the user reads in the widget: the text of a field, else\nits label (as screen readers say it: the text of a Label, a Button, a\nCheckbox...). \"\" when it has none. Valid until the next call."
+        },
+        "Rtest_is_shown": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns R_TRUE when the widget can be seen: in a window, Visible with\nall that holds it, on the page a Switcher or a TabView shows, and laid\nout with a size."
+        },
+        "Rtest_is_checked": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns R_TRUE for a checked Checkbox, Switch, RadioButton, toggle Button or menu item."
+        },
+        "Rtest_expect_golden": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "golden_path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "options",
+                    "type": "const RGoldenOptions *"
+                },
+                {
+                    "name": "result",
+                    "type": "RGoldenResult *"
+                }
+            ],
+            "doc": "Captures a window, or the rectangle of one widget, and compares\nit with the PNG file `golden_path` (see the top of this file).\nA window or a widget.\nNULL for the defaults.\nReceives the details; may be NULL.\nReturns R_TRUE when the capture matches (or the golden was written\nbecause RAVEN_UPDATE_GOLDENS=1)."
+        },
+        "Rtest_compare_pixels": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "actual",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "expected",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                },
+                {
+                    "name": "channel_tolerance",
+                    "type": "int"
+                },
+                {
+                    "name": "max_channel_difference",
+                    "type": "int *"
+                },
+                {
+                    "name": "diff_rgba",
+                    "type": "uint8_t *"
+                }
+            ],
+            "doc": "Compares two RGBA8 images of the same size as Rtest_expect_golden\ndoes, without files.\nWhen not NULL, receives width * height * 4 bytes: the\nexpected image faded, with the different pixels in red.\nReturns The number of pixels farther apart than `channel_tolerance`;\n-1 when an image is missing."
         }
     },
     "structs": {
@@ -22519,6 +23002,60 @@
                     "type": "void *"
                 }
             ]
+        },
+        "RGoldenOptions": {
+            "header": "raven_testing.h",
+            "fields": [
+                {
+                    "name": "channel_tolerance",
+                    "type": "int"
+                },
+                {
+                    "name": "max_diff_ratio",
+                    "type": "float"
+                },
+                {
+                    "name": "per_platform",
+                    "type": "int"
+                },
+                {
+                    "name": "output_directory",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "RGoldenResult": {
+            "header": "raven_testing.h",
+            "fields": [
+                {
+                    "name": "status",
+                    "type": "RGoldenStatus"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                },
+                {
+                    "name": "differing_pixels",
+                    "type": "int"
+                },
+                {
+                    "name": "max_channel_difference",
+                    "type": "int"
+                },
+                {
+                    "name": "golden_path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "message",
+                    "type": "const char *"
+                }
+            ]
         }
     },
     "enums": {
@@ -23587,6 +24124,17 @@
             "constants": [
                 "R_TEXTURE_RGBA8",
                 "R_TEXTURE_ALPHA8"
+            ]
+        },
+        "RGoldenStatus": {
+            "header": "raven_testing.h",
+            "constants": [
+                "R_GOLDEN_MATCH",
+                "R_GOLDEN_UPDATED",
+                "R_GOLDEN_MISMATCH",
+                "R_GOLDEN_SIZE_MISMATCH",
+                "R_GOLDEN_MISSING",
+                "R_GOLDEN_FAILED"
             ]
         }
     },

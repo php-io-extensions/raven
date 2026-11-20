@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: ca753020f19a0bde785387ca551bf82279bab98e */
+ * Stub hash: 12e411ad4ce64e59198284e1669bb403676f133d */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rfont_create, 0, 2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 1)
@@ -78,6 +78,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtexture_update, 0, 4, IS_VOID, 
 	ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_save_png, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, rgba, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtexture_is_ready, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, texture, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -119,6 +126,7 @@ ZEND_FUNCTION(Rtexture_create_from_file);
 ZEND_FUNCTION(Rtexture_create_from_file_async);
 ZEND_FUNCTION(Rtexture_create_from_pixels);
 ZEND_FUNCTION(Rtexture_update);
+ZEND_FUNCTION(Rimage_save_png);
 ZEND_FUNCTION(Rtexture_is_ready);
 ZEND_FUNCTION(Rtexture_wait);
 ZEND_FUNCTION(Rtexture_destroy);
@@ -145,6 +153,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtexture_create_from_file_async, arginfo_Rtexture_create_from_file_async)
 	ZEND_FE(Rtexture_create_from_pixels, arginfo_Rtexture_create_from_pixels)
 	ZEND_FE(Rtexture_update, arginfo_Rtexture_update)
+	ZEND_FE(Rimage_save_png, arginfo_Rimage_save_png)
 	ZEND_FE(Rtexture_is_ready, arginfo_Rtexture_is_ready)
 	ZEND_FE(Rtexture_wait, arginfo_Rtexture_wait)
 	ZEND_FE(Rtexture_destroy, arginfo_Rtexture_destroy)

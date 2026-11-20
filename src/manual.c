@@ -480,6 +480,41 @@ ZEND_FUNCTION(Rimage_decode)
 	raven_return_pixels(r, c_width, c_height, return_value);
 }
 
+ZEND_FUNCTION(Rimage_encode_png)
+{
+	zend_string *rgba;
+	zend_long width, height;
+	int c_width, c_height;
+	zval *size;
+	size_t c_size = 0;
+	uint8_t *r;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_STR(rgba)
+		Z_PARAM_LONG(width)
+		Z_PARAM_LONG(height)
+		Z_PARAM_ZVAL(size)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(width, 2, &c_width) || !raven_arg_int(height, 3, &c_height)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_bytes(rgba, 1, c_width < 0 ? 0 : (uint64_t)c_width, c_height < 0 ? 0 : (uint64_t)c_height, 4, "width x height RGBA pixels")) {
+		RETURN_THROWS();
+	}
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rimage_encode_png((const uint8_t *)ZSTR_VAL(rgba), c_width, c_height, &c_size);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(size, (zend_long)c_size);
+	if (!r) {
+		RETURN_NULL();
+	}
+	RETVAL_STRINGL((const char *)r, c_size);
+	Rpixels_free(r);
+}
+
 /* ------------------------------------------------------------------------------------------------
  * Render-thread callbacks: the queue lock pair and viewport drawing
  * --------------------------------------------------------------------------------------------- */

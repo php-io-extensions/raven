@@ -31,6 +31,8 @@ function Rwindow_capture(int $window, ?int &$width, ?int &$height): ?string {}
 
 function Rimage_decode(string $data, int $data_size, ?int &$width, ?int &$height): ?string {}
 
+function Rimage_encode_png(string $rgba, int $width, int $height, ?int &$size): ?string {}
+
 /** fn(mixed $user_data): void, both */
 function Rvulkan_set_queue_lock_callbacks(?callable $lock, ?callable $unlock, mixed $user_data): void {}
 

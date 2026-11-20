@@ -4,11 +4,11 @@ okf_version: "0.2"
 
 # ext-raven
 
-1:1 PHP bindings of Raven 0.3.0 (`c34466d`, vendored, unchanged), a retained-mode GUI toolkit in C with a Vulkan renderer (Metal on Apple). Version 0.11.0. Linux, macOS. PHP 8.4 NTS + ZTS.
+1:1 PHP bindings of Raven main `610b8eb` (library 0.3.0, vendored, unchanged), a retained-mode GUI toolkit in C with a Vulkan renderer (Metal on Apple). Version 0.11.0. Linux, macOS. PHP 8.4 NTS + ZTS.
 
 # API
 
-* [Bindings](api/bindings.md) — 1,370 functions, 37 classes, every enumerator and define; translations; what is not bound.
+* [Bindings](api/bindings.md) — 1,400 functions, 39 classes, every enumerator and define; translations; what is not bound.
 
 # Architecture
 

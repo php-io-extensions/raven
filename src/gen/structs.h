@@ -67,5 +67,9 @@ extern zend_class_entry *raven_ce_RTextureDesc;
 extern const raven_struct raven_struct_RTextureDesc;
 extern zend_class_entry *raven_ce_RBackendInitInfo;
 extern const raven_struct raven_struct_RBackendInitInfo;
+extern zend_class_entry *raven_ce_RGoldenOptions;
+extern const raven_struct raven_struct_RGoldenOptions;
+extern zend_class_entry *raven_ce_RGoldenResult;
+extern const raven_struct raven_struct_RGoldenResult;
 
 #endif

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: b1f50561c40347a117f75d77c57d6bf6fefcb747 */
+ * Stub hash: afcfbe3e7cf666b707bf0926412f04d1d43caf6c */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rhost_platform_is_active, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -61,6 +61,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rhost_inject_text, 0, 2, IS_VOID
 	ZEND_ARG_TYPE_INFO(0, codepoint, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rhost_inject_composition, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, selection_start, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, selection_end, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rhost_inject_focus, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, focused, IS_LONG, 0)
@@ -78,6 +85,7 @@ ZEND_FUNCTION(Rhost_inject_mouse_wheel);
 ZEND_FUNCTION(Rhost_inject_mouse_leave);
 ZEND_FUNCTION(Rhost_inject_key);
 ZEND_FUNCTION(Rhost_inject_text);
+ZEND_FUNCTION(Rhost_inject_composition);
 ZEND_FUNCTION(Rhost_inject_focus);
 ZEND_FUNCTION(Rhost_inject_close);
 
@@ -92,6 +100,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rhost_inject_mouse_leave, arginfo_Rhost_inject_mouse_leave)
 	ZEND_FE(Rhost_inject_key, arginfo_Rhost_inject_key)
 	ZEND_FE(Rhost_inject_text, arginfo_Rhost_inject_text)
+	ZEND_FE(Rhost_inject_composition, arginfo_Rhost_inject_composition)
 	ZEND_FE(Rhost_inject_focus, arginfo_Rhost_inject_focus)
 	ZEND_FE(Rhost_inject_close, arginfo_Rhost_inject_close)
 	ZEND_FE_END

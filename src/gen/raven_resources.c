@@ -7,6 +7,7 @@
 #include "php.h"
 #include "zend_exceptions.h"
 #include "Raven.h"
+#include <string.h>
 #include "../runtime.h"
 #include "structs.h"
 #include "callbacks.h"
@@ -458,6 +459,42 @@ ZEND_FUNCTION(Rtexture_update)
 	}
 	Rtexture_update(c_texture, (const uint8_t *)ZSTR_VAL(rgba), c_width, c_height);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Rimage_save_png)
+{
+	zend_string *path = NULL;
+	zend_string *rgba;
+	zend_long width;
+	int c_width;
+	zend_long height;
+	int c_height;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_STR_OR_NULL(path)
+		Z_PARAM_STR(rgba)
+		Z_PARAM_LONG(width)
+		Z_PARAM_LONG(height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(width, 3, &c_width)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(height, 4, &c_height)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_arg_bytes(rgba, 2, c_width < 0 ? 0 : (uint64_t)c_width, c_height < 0 ? 0 : (uint64_t)c_height, 4, "width x height RGBA pixels")) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_save_png(path ? ZSTR_VAL(path) : NULL, (const uint8_t *)ZSTR_VAL(rgba), c_width, c_height);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rtexture_is_ready)

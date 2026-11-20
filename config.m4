@@ -22,6 +22,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/gen/raven_shader.c \
     src/gen/raven_shell.c \
     src/gen/raven_style.c \
+    src/gen/raven_testing.c \
     src/gen/raven_text_editor.c \
     src/gen/raven_tools.c \
     src/gen/raven_touch.c \
@@ -34,13 +35,14 @@ if test "$PHP_RAVEN" != "no"; then
   dnl Raven as its CMakeLists.txt builds it for this platform: Vulkan backend on,
   dnl stb_image and nanosvg on, the web pages (web/) off. lib/raven is never edited.
   raven_lib=" \
-    src/core/accessibility.c src/core/context.c src/core/error.c src/core/file.c src/core/fs.c \
+    src/core/accessibility.c src/core/accessibility_touch.c src/core/context.c src/core/deflate.c \
+    src/core/error.c src/core/file.c src/core/fs.c \
     src/core/fs_watch.c src/core/handle.c src/core/heap.c src/core/jobs.c src/core/lfmap.c \
     src/core/locale.c src/core/memory.c src/core/thread_posix.c src/core/utf8.c \
-    src/platform/platform.c src/platform/notify.c src/platform/taskbar.c src/platform/tray.c \
+    src/platform/platform.c src/platform/preedit.c src/platform/notify.c src/platform/taskbar.c src/platform/tray.c \
     src/platform/null/null_platform.c src/platform/host/host_platform.c \
     src/render/draw.c src/render/font.c src/render/font_system.c src/render/bidi.c \
-    src/render/font_raster.c src/render/image_decode.c src/render/svg_decode.c src/render/renderer.c \
+    src/render/font_raster.c src/render/image_decode.c src/render/image_encode.c src/render/svg_decode.c src/render/renderer.c \
     src/render/texture.c src/render/shader.c src/render/device.c src/render/null/null_backend.c \
     src/render/vulkan/vk_backend.c src/render/vulkan/vk_device.c src/render/vulkan/vk_frame.c \
     src/render/vulkan/vk_glass.c src/render/vulkan/vk_loader.c src/render/vulkan/vk_pipeline.c \
@@ -49,7 +51,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/widget/actions.c src/widget/anim.c src/widget/events.c src/widget/touch.c src/widget/layout.c \
     src/widget/direction.c src/widget/paint.c src/widget/registry.c src/widget/style.c src/widget/theme.c \
     src/widget/look.c src/widgets/platform_looks.c src/widget/widget.c src/widget/window.c \
-    src/widget/inspector.c \
+    src/widget/inspector.c src/widget/testing.c \
     src/widgets/common.c src/widgets/textedit.c src/widgets/background_blur.c src/widgets/border.c \
     src/widgets/box_panel.c src/widgets/canvas.c src/widgets/expander.c src/widgets/grid.c \
     src/widgets/overlay.c src/widgets/scroll_box.c src/widgets/size_box.c src/widgets/splitter.c \

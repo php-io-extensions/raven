@@ -29,6 +29,7 @@ return [
         'Rpdf_document_save_memory' => 'returns Raven memory released with Rmemory_free',
         'Rwindow_capture' => 'returns pixels released with Rpixels_free',
         'Rimage_decode' => 'returns pixels released with Rpixels_free',
+        'Rimage_encode_png' => 'returns PNG bytes released with Rpixels_free',
         'Rvulkan_set_queue_lock_callbacks' => 'two callables on the render thread',
         'Rviewport_set_draw_callback' => 'runs on the render thread',
         'Rbackend_register' => 'custom backend: a table of callables on the render thread',

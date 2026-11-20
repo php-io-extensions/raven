@@ -51,6 +51,15 @@ function Rhost_inject_key(int $window, int $key, int $pressed, int $modifiers, i
 function Rhost_inject_text(int $window, int $codepoint): void {}
 
 /**
+ * The input method of the application's system composes `text`
+ * (preedit), with its selection in bytes (see Rwindow_inject_composition).
+ * NULL or "" cancels it; the committed text then comes through
+ * Rhost_inject_text. Rwindow_get_text_input_rect tells where to put the
+ * candidate window.
+ */
+function Rhost_inject_composition(int $window, ?string $text, int $selection_start, int $selection_end): void {}
+
+/**
  * The window gained or lost the keyboard. Losing it closes popups and drops captures.
  */
 function Rhost_inject_focus(int $window, int $focused): void {}

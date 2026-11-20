@@ -40,6 +40,8 @@ zend_class_entry *raven_ce_RDrawCommand;
 zend_class_entry *raven_ce_RDrawData;
 zend_class_entry *raven_ce_RTextureDesc;
 zend_class_entry *raven_ce_RBackendInitInfo;
+zend_class_entry *raven_ce_RGoldenOptions;
+zend_class_entry *raven_ce_RGoldenResult;
 
 static const raven_field raven_fields_RInitDesc[] = {
 	{"backend", offsetof(RInitDesc, backend), RAVEN_F_INT, 0, NULL},
@@ -455,3 +457,24 @@ static const raven_field raven_fields_RBackendInitInfo[] = {
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RBackendInitInfo = {"RBackendInitInfo", sizeof(RBackendInitInfo), &raven_ce_RBackendInitInfo, raven_fields_RBackendInitInfo};
+
+static const raven_field raven_fields_RGoldenOptions[] = {
+	{"channel_tolerance", offsetof(RGoldenOptions, channel_tolerance), RAVEN_F_INT, 0, NULL},
+	{"max_diff_ratio", offsetof(RGoldenOptions, max_diff_ratio), RAVEN_F_FLOAT, 0, NULL},
+	{"per_platform", offsetof(RGoldenOptions, per_platform), RAVEN_F_INT, 0, NULL},
+	{"output_directory", offsetof(RGoldenOptions, output_directory), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RGoldenOptions = {"RGoldenOptions", sizeof(RGoldenOptions), &raven_ce_RGoldenOptions, raven_fields_RGoldenOptions};
+
+static const raven_field raven_fields_RGoldenResult[] = {
+	{"status", offsetof(RGoldenResult, status), RAVEN_F_INT, 0, NULL},
+	{"width", offsetof(RGoldenResult, width), RAVEN_F_INT, 0, NULL},
+	{"height", offsetof(RGoldenResult, height), RAVEN_F_INT, 0, NULL},
+	{"differing_pixels", offsetof(RGoldenResult, differing_pixels), RAVEN_F_INT, 0, NULL},
+	{"max_channel_difference", offsetof(RGoldenResult, max_channel_difference), RAVEN_F_INT, 0, NULL},
+	{"golden_path", offsetof(RGoldenResult, golden_path), RAVEN_F_CSTR, 0, NULL},
+	{"message", offsetof(RGoldenResult, message), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RGoldenResult = {"RGoldenResult", sizeof(RGoldenResult), &raven_ce_RGoldenResult, raven_fields_RGoldenResult};

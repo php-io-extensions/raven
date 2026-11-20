@@ -1,5 +1,9 @@
 # Log
 
+## 2026-11-20
+
+* **Synced**: Raven main `610b8eba3adfe5aa1476a5cad692ed6e57c97b45` vendored unchanged (library still reports 0.3.0). 1,405 `RAVEN_API` functions, 1,400 bound (1,383 generated, 17 manual), 39 classes, 23 headers (`raven_testing.h`). UI test automation (find, click, type, settle, golden images), IME composition (`Rwindow_inject_composition`, `Rwindow_get_text_composition`, `Rhost_inject_composition`), PNG encode/save (`Rimage_encode_png` manual, `Rimage_save_png` generated). `config.m4` compiles `deflate.c`, `image_encode.c`, `preedit.c`, `testing.c`, `accessibility_touch.c`. Two consecutive `const uint8_t*` RGBA buffers are sized by the following `width`/`height`; a `uint8_t*` RGBA out-buffer is written back as `?string`. Suite 70 passed (619 assertions). Crash sweep 1,400 functions: no crash; the three headless file dialogs timed out as before; ten `RActionContext` getters fail the sweep's `new` (private constructor).
+
 ## 2026-11-19
 
 * **Synced**: Raven 0.3.0, main `c34466db536219f5ed0e026c4286a1ce27887b57` vendored unchanged. 1,375 `RAVEN_API` functions, 1,370 bound (1,354 generated, 16 manual), 37 classes, 22 headers (`raven_script.h`). Carousel, MapView, Raven Script, tile-view sections, `Raction_bind_with_parameters` / `RActionContext`, app lifecycle, window back, `RTouchSettings.min_touch_size`, Metal fields on `RViewportDrawInfo`. `config.m4` compiles script/carousel/map_view on every platform; Metal `.m` only on Darwin with `-fobjc-arc`. Slot keys take the first `const char*` so parameterized actions key by name. Extract no longer glues a file-level `/**` onto the first function. Suite 66 passed (561 assertions).

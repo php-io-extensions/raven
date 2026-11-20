@@ -22,6 +22,15 @@ it('builds struct classes with every C field, zero by default', function (): voi
         ->and($info->metal_command_buffer)->toBe(0)
         ->and($info->metal_device)->toBe(0);
     expect(fn () => new RActionContext())->toThrow(Error::class);
+    $golden = new RGoldenOptions();
+    expect($golden->channel_tolerance)->toBe(0)
+        ->and($golden->max_diff_ratio)->toBe(0.0)
+        ->and($golden->per_platform)->toBe(0)
+        ->and($golden->output_directory)->toBeNull();
+    $result = new RGoldenResult();
+    expect($result->status)->toBe(0)
+        ->and($result->golden_path)->toBeNull()
+        ->and($result->message)->toBeNull();
 });
 
 it('type-checks constructor arguments into the typed properties', function (): void {
