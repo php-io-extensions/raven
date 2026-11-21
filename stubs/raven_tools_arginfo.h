@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 56b78ee61ddc37c9e457ed103726a74f6136ba4d */
+ * Stub hash: 40db0028c5dd599e5fe270e0d19306185d6e0283 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcolor_picker_create, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -924,6 +924,145 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rblock_editor_set_view, 0, 4, IS
 	ZEND_ARG_TYPE_INFO(0, zoom, IS_DOUBLE, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_count_changes, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, left, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, right, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, flags, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rdiff_view_create arginfo_Rcolor_picker_create
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_texts, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, left, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, right, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_names, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, left_name, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, right_name, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_load_files, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, left_path, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, right_path, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_patch, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, patch, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_mode, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, mode, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_get_mode, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_context, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, lines, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rdiff_view_get_context arginfo_Rdiff_view_get_mode
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_flags, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, flags, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rdiff_view_get_flags arginfo_Rdiff_view_get_mode
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_word_diff, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_line_numbers, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, visible, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_language, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rdiff_view_get_change_count arginfo_Rdiff_view_get_mode
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_get_change, 0, 6, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, change, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, left_line, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, left_count, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, right_line, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, right_count, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_go_to_change, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, change, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rdiff_view_get_current_change arginfo_Rdiff_view_get_mode
+
+#define arginfo_Rdiff_view_next_change arginfo_Rdiff_view_get_mode
+
+#define arginfo_Rdiff_view_prev_change arginfo_Rdiff_view_get_mode
+
+#define arginfo_Rdiff_view_get_row_count arginfo_Rdiff_view_get_mode
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_get_row, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, left_line, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, right_line, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_get_row_text, 0, 3, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, side, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_expand, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rdiff_view_get_first_visible_row arginfo_Rdiff_view_get_mode
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_scroll_to_row, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_add_annotation, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, side, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, line, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_clear_annotations, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_get_selected_text, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_view_set_line_clicked_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, diff_view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_FUNCTION(Rcolor_picker_create);
 ZEND_FUNCTION(Rcolor_picker_set_color);
 ZEND_FUNCTION(Rcolor_picker_get_color);
@@ -1123,6 +1262,37 @@ ZEND_FUNCTION(Rblock_editor_get_selected);
 ZEND_FUNCTION(Rblock_editor_select);
 ZEND_FUNCTION(Rblock_editor_get_view);
 ZEND_FUNCTION(Rblock_editor_set_view);
+ZEND_FUNCTION(Rdiff_count_changes);
+ZEND_FUNCTION(Rdiff_view_create);
+ZEND_FUNCTION(Rdiff_view_set_texts);
+ZEND_FUNCTION(Rdiff_view_set_names);
+ZEND_FUNCTION(Rdiff_view_load_files);
+ZEND_FUNCTION(Rdiff_view_set_patch);
+ZEND_FUNCTION(Rdiff_view_set_mode);
+ZEND_FUNCTION(Rdiff_view_get_mode);
+ZEND_FUNCTION(Rdiff_view_set_context);
+ZEND_FUNCTION(Rdiff_view_get_context);
+ZEND_FUNCTION(Rdiff_view_set_flags);
+ZEND_FUNCTION(Rdiff_view_get_flags);
+ZEND_FUNCTION(Rdiff_view_set_word_diff);
+ZEND_FUNCTION(Rdiff_view_set_line_numbers);
+ZEND_FUNCTION(Rdiff_view_set_language);
+ZEND_FUNCTION(Rdiff_view_get_change_count);
+ZEND_FUNCTION(Rdiff_view_get_change);
+ZEND_FUNCTION(Rdiff_view_go_to_change);
+ZEND_FUNCTION(Rdiff_view_get_current_change);
+ZEND_FUNCTION(Rdiff_view_next_change);
+ZEND_FUNCTION(Rdiff_view_prev_change);
+ZEND_FUNCTION(Rdiff_view_get_row_count);
+ZEND_FUNCTION(Rdiff_view_get_row);
+ZEND_FUNCTION(Rdiff_view_get_row_text);
+ZEND_FUNCTION(Rdiff_view_expand);
+ZEND_FUNCTION(Rdiff_view_get_first_visible_row);
+ZEND_FUNCTION(Rdiff_view_scroll_to_row);
+ZEND_FUNCTION(Rdiff_view_add_annotation);
+ZEND_FUNCTION(Rdiff_view_clear_annotations);
+ZEND_FUNCTION(Rdiff_view_get_selected_text);
+ZEND_FUNCTION(Rdiff_view_set_line_clicked_callback);
 
 static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rcolor_picker_create, arginfo_Rcolor_picker_create)
@@ -1324,6 +1494,37 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rblock_editor_select, arginfo_Rblock_editor_select)
 	ZEND_FE(Rblock_editor_get_view, arginfo_Rblock_editor_get_view)
 	ZEND_FE(Rblock_editor_set_view, arginfo_Rblock_editor_set_view)
+	ZEND_FE(Rdiff_count_changes, arginfo_Rdiff_count_changes)
+	ZEND_FE(Rdiff_view_create, arginfo_Rdiff_view_create)
+	ZEND_FE(Rdiff_view_set_texts, arginfo_Rdiff_view_set_texts)
+	ZEND_FE(Rdiff_view_set_names, arginfo_Rdiff_view_set_names)
+	ZEND_FE(Rdiff_view_load_files, arginfo_Rdiff_view_load_files)
+	ZEND_FE(Rdiff_view_set_patch, arginfo_Rdiff_view_set_patch)
+	ZEND_FE(Rdiff_view_set_mode, arginfo_Rdiff_view_set_mode)
+	ZEND_FE(Rdiff_view_get_mode, arginfo_Rdiff_view_get_mode)
+	ZEND_FE(Rdiff_view_set_context, arginfo_Rdiff_view_set_context)
+	ZEND_FE(Rdiff_view_get_context, arginfo_Rdiff_view_get_context)
+	ZEND_FE(Rdiff_view_set_flags, arginfo_Rdiff_view_set_flags)
+	ZEND_FE(Rdiff_view_get_flags, arginfo_Rdiff_view_get_flags)
+	ZEND_FE(Rdiff_view_set_word_diff, arginfo_Rdiff_view_set_word_diff)
+	ZEND_FE(Rdiff_view_set_line_numbers, arginfo_Rdiff_view_set_line_numbers)
+	ZEND_FE(Rdiff_view_set_language, arginfo_Rdiff_view_set_language)
+	ZEND_FE(Rdiff_view_get_change_count, arginfo_Rdiff_view_get_change_count)
+	ZEND_FE(Rdiff_view_get_change, arginfo_Rdiff_view_get_change)
+	ZEND_FE(Rdiff_view_go_to_change, arginfo_Rdiff_view_go_to_change)
+	ZEND_FE(Rdiff_view_get_current_change, arginfo_Rdiff_view_get_current_change)
+	ZEND_FE(Rdiff_view_next_change, arginfo_Rdiff_view_next_change)
+	ZEND_FE(Rdiff_view_prev_change, arginfo_Rdiff_view_prev_change)
+	ZEND_FE(Rdiff_view_get_row_count, arginfo_Rdiff_view_get_row_count)
+	ZEND_FE(Rdiff_view_get_row, arginfo_Rdiff_view_get_row)
+	ZEND_FE(Rdiff_view_get_row_text, arginfo_Rdiff_view_get_row_text)
+	ZEND_FE(Rdiff_view_expand, arginfo_Rdiff_view_expand)
+	ZEND_FE(Rdiff_view_get_first_visible_row, arginfo_Rdiff_view_get_first_visible_row)
+	ZEND_FE(Rdiff_view_scroll_to_row, arginfo_Rdiff_view_scroll_to_row)
+	ZEND_FE(Rdiff_view_add_annotation, arginfo_Rdiff_view_add_annotation)
+	ZEND_FE(Rdiff_view_clear_annotations, arginfo_Rdiff_view_clear_annotations)
+	ZEND_FE(Rdiff_view_get_selected_text, arginfo_Rdiff_view_get_selected_text)
+	ZEND_FE(Rdiff_view_set_line_clicked_callback, arginfo_Rdiff_view_set_line_clicked_callback)
 	ZEND_FE_END
 };
 
@@ -1347,4 +1548,19 @@ static void register_raven_tools_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_BLOCK_NEXT", R_BLOCK_NEXT, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_BLOCK_BODY", R_BLOCK_BODY, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_BLOCK_INPUT", R_BLOCK_INPUT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_VIEW_UNIFIED", R_DIFF_VIEW_UNIFIED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_VIEW_SPLIT", R_DIFF_VIEW_SPLIT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_LEFT", R_DIFF_LEFT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_RIGHT", R_DIFF_RIGHT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_SAME", R_DIFF_ROW_SAME, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_REMOVED", R_DIFF_ROW_REMOVED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_ADDED", R_DIFF_ROW_ADDED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_CHANGED", R_DIFF_ROW_CHANGED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_FOLD", R_DIFF_ROW_FOLD, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_HUNK", R_DIFF_ROW_HUNK, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_FILE", R_DIFF_ROW_FILE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_ROW_NOTE", R_DIFF_ROW_NOTE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_IGNORE_TRAILING_SPACE", R_DIFF_IGNORE_TRAILING_SPACE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_IGNORE_SPACE", R_DIFF_IGNORE_SPACE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_DIFF_IGNORE_CASE", R_DIFF_IGNORE_CASE, CONST_PERSISTENT);
 }

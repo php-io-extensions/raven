@@ -192,6 +192,15 @@ final class Gen
         if ($t === 'const char *') {
             return ['CSTR', 0, null, '?string', 'null'];
         }
+        // Bytes whose length is the next size_t field (RDataItem, RHostServiceRequest).
+        if ($t === 'const void *') {
+            $idx = array_search($f, $fields, true);
+            if ($idx !== false && isset($fields[$idx + 1]) && $this->norm($fields[$idx + 1]['type']) === 'size_t') {
+                return ['BYTES', $idx + 2, null, '?string', 'null'];
+            }
+
+            return null;
+        }
         if (in_array($t, ['void *', 'uintptr_t', 'intptr_t'], true) || isset($this->callbacks[$t])) {
             return ['ADDR', 0, null, 'int', '0'];
         }
@@ -501,10 +510,18 @@ final class Gen
                     }
                 }
                 if ($wName !== null) {
+                    $strideName = null;
+                    if (isset($params[$j + 2]) && $this->norm($params[$j + 2]['type']) === 'int' && $params[$j + 2]['name'] === 'stride') {
+                        $strideName = $params[$j + 2]['name'];
+                    }
                     $decls[] = "\tzend_string *$pn;";
                     $parse[] = "\t\tZ_PARAM_STR($pn)";
                     $stubParams[] = "string \$$pn";
-                    $checks[] = "\tif (!raven_arg_bytes($pn, $argNum, c_$wName < 0 ? 0 : (uint64_t)c_$wName, c_$hName < 0 ? 0 : (uint64_t)c_$hName, 4, \"width x height RGBA pixels\")) {\n\t\tRETURN_THROWS();\n\t}";
+                    if ($strideName !== null) {
+                        $checks[] = "\t{\n\t\tuint64_t {$pn}_row = 0, {$pn}_need = 0;\n\t\tif (c_$strideName < 0) {\n\t\t\tzend_argument_value_error($argNum, \"stride must be greater than or equal to 0\");\n\t\t\tRETURN_THROWS();\n\t\t}\n\t\t{$pn}_row = c_$strideName == 0 ? (c_$wName < 0 ? 0 : (uint64_t)c_$wName * 4u) : (uint64_t)c_$strideName;\n\t\tif (c_$hName > 0 && __builtin_mul_overflow({$pn}_row, (uint64_t)c_$hName, &{$pn}_need)) {\n\t\t\tzend_argument_value_error($argNum, \"must hold stride x height bytes, whose size overflows\");\n\t\t\tRETURN_THROWS();\n\t\t}\n\t\tif (!raven_arg_length($pn, $argNum, (size_t){$pn}_need)) {\n\t\t\tRETURN_THROWS();\n\t\t}\n\t}";
+                    } else {
+                        $checks[] = "\tif (!raven_arg_bytes($pn, $argNum, c_$wName < 0 ? 0 : (uint64_t)c_$wName, c_$hName < 0 ? 0 : (uint64_t)c_$hName, 4, \"width x height RGBA pixels\")) {\n\t\tRETURN_THROWS();\n\t}";
+                    }
                     $args[$i] = "(const uint8_t *)ZSTR_VAL($pn)";
                     continue;
                 }
@@ -870,7 +887,12 @@ final class Gen
                 $set[] = "\traven_action_context_new($pn, &args[$k]);";
                 $after[] = "\traven_action_context_end(&args[$k]);";
             } elseif (preg_match('/^const (\w+) \*$/', $pt, $m) && $this->isStruct($m[1])) {
-                $set[] = "\tif ($pn) {\n\t\traven_struct_new(&raven_struct_{$m[1]}, $pn, &args[$k]);\n\t} else {\n\t\tZVAL_NULL(&args[$k]);\n\t}";
+                $next = $cb['params'][$k + 1] ?? null;
+                if ($next && $this->norm($next['type']) === 'int' && $next['name'] === 'count') {
+                    $set[] = "\tif ($pn && count > 0) {\n\t\tarray_init_size(&args[$k], (uint32_t)count);\n\t\tfor (int i_{$pn} = 0; i_{$pn} < count; i_{$pn}++) {\n\t\t\tzval e_{$pn};\n\t\t\traven_struct_new(&raven_struct_{$m[1]}, &{$pn}[i_{$pn}], &e_{$pn});\n\t\t\tadd_next_index_zval(&args[$k], &e_{$pn});\n\t\t}\n\t} else if ($pn) {\n\t\tarray_init(&args[$k]);\n\t} else {\n\t\tZVAL_NULL(&args[$k]);\n\t}";
+                } else {
+                    $set[] = "\tif ($pn) {\n\t\traven_struct_new(&raven_struct_{$m[1]}, $pn, &args[$k]);\n\t} else {\n\t\tZVAL_NULL(&args[$k]);\n\t}";
+                }
             } elseif (preg_match('/^(\w+) \*$/', $pt, $m) && $this->isStruct($m[1])) {
                 // Filled by the callable: its strings stay alive in the slot until the next call.
                 $set[] = "\traven_struct_new(&raven_struct_{$m[1]}, $pn, &args[$k]);";

@@ -40,6 +40,8 @@ it('checks encode-png buffers against width × height × 4', function (): void {
         Rimage_encode_png(str_repeat("\0", 15), 2, 2, $size);
     })->toThrow(ValueError::class);
     expect(fn () => Rimage_save_png('/tmp/x.png', str_repeat("\0", 15), 2, 2))->toThrow(ValueError::class);
+    expect(fn () => Rclipboard_set_image(str_repeat("\0", 15), 2, 2, 0))->toThrow(ValueError::class);
+    expect(fn () => Rclipboard_set_data([new RDataItem(data: 'ab', size: 3)], 1))->toThrow(ValueError::class);
     expect(function (): void {
         $max = null;
         $diff = null;

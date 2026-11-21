@@ -20,7 +20,13 @@ it('initialises headless on the null backend and reports it', function (): void 
         ->and(R_ERROR_SCRIPT)->toBeInt()
         ->and(R_APP_WILL_PAUSE)->toBe(0x0B80)
         ->and(R_WIDGET_MAP_VIEW)->toBeInt()
-        ->and(R_WIDGET_CAROUSEL)->toBe(R_WIDGET_MAP_VIEW + 1);
+        ->and(R_WIDGET_CAROUSEL)->toBe(R_WIDGET_MAP_VIEW + 1)
+        ->and(R_WIDGET_SYSTEM_WEB_VIEW)->toBe(R_WIDGET_CAROUSEL + 1)
+        ->and(R_WIDGET_DIFF_VIEW)->toBe(R_WIDGET_SYSTEM_WEB_VIEW + 1)
+        ->and(R_PERMISSION_CAMERA)->toBe(0x0C00)
+        ->and(R_DEVICE_UNSUPPORTED)->toBeInt()
+        ->and(R_TABLE_COLUMN_CHECK)->toBeInt()
+        ->and(R_TABLE_COLUMN_PROGRESS)->toBe(R_TABLE_COLUMN_CHECK + 1);
 });
 
 it('shuts down and initialises again', function (): void {

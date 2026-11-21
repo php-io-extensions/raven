@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: bcba8bd3dcb652cb8e46f71ae9727d8a6444a5e9 */
+ * Stub hash: 62f62b7e05e461a630bbd516cf886b712a3cc997 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtest_set_deterministic, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
@@ -113,6 +113,24 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtest_compare_pixels, 0, 7, IS_L
 	ZEND_ARG_TYPE_INFO(1, diff_rgba, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtest_dump_tree, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, target, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtest_save_tree, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, target, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtest_save_png arginfo_Rtest_save_tree
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtest_run_script, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, script, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, source_name, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtest_get_script_error arginfo_Rtest_get_platform_tag
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RGoldenOptions___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel_tolerance, IS_LONG, 0, "0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, max_diff_ratio, IS_DOUBLE, 0, "0.0")
@@ -155,6 +173,11 @@ ZEND_FUNCTION(Rtest_is_shown);
 ZEND_FUNCTION(Rtest_is_checked);
 ZEND_FUNCTION(Rtest_expect_golden);
 ZEND_FUNCTION(Rtest_compare_pixels);
+ZEND_FUNCTION(Rtest_dump_tree);
+ZEND_FUNCTION(Rtest_save_tree);
+ZEND_FUNCTION(Rtest_save_png);
+ZEND_FUNCTION(Rtest_run_script);
+ZEND_FUNCTION(Rtest_get_script_error);
 ZEND_METHOD(RGoldenOptions, __construct);
 ZEND_METHOD(RGoldenResult, __construct);
 
@@ -184,6 +207,11 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtest_is_checked, arginfo_Rtest_is_checked)
 	ZEND_FE(Rtest_expect_golden, arginfo_Rtest_expect_golden)
 	ZEND_FE(Rtest_compare_pixels, arginfo_Rtest_compare_pixels)
+	ZEND_FE(Rtest_dump_tree, arginfo_Rtest_dump_tree)
+	ZEND_FE(Rtest_save_tree, arginfo_Rtest_save_tree)
+	ZEND_FE(Rtest_save_png, arginfo_Rtest_save_png)
+	ZEND_FE(Rtest_run_script, arginfo_Rtest_run_script)
+	ZEND_FE(Rtest_get_script_error, arginfo_Rtest_get_script_error)
 	ZEND_FE_END
 };
 

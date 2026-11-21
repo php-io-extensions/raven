@@ -18,6 +18,7 @@ void raven_gen_raven_text_editor_minit(int module_number);
 void raven_gen_raven_shell_minit(int module_number);
 void raven_gen_raven_tools_minit(int module_number);
 void raven_gen_raven_dialogs_minit(int module_number);
+void raven_gen_raven_device_minit(int module_number);
 void raven_gen_raven_viewport_minit(int module_number);
 void raven_gen_raven_draw_minit(int module_number);
 void raven_gen_raven_shader_minit(int module_number);
@@ -44,6 +45,7 @@ void raven_gen_minit(int module_number)
 	raven_gen_raven_shell_minit(module_number);
 	raven_gen_raven_tools_minit(module_number);
 	raven_gen_raven_dialogs_minit(module_number);
+	raven_gen_raven_device_minit(module_number);
 	raven_gen_raven_viewport_minit(module_number);
 	raven_gen_raven_draw_minit(module_number);
 	raven_gen_raven_shader_minit(module_number);

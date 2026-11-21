@@ -106,7 +106,8 @@ function Rfont_measure_text(int $font, float $size, ?string $text, ?float &$widt
 
 /**
  * Creates a texture from the content of an image file (PNG, JPEG,
- * BMP, TGA, GIF, PSD, SVG). Decoding happens on the calling thread.
+ * BMP, TGA, GIF, PSD, SVG). Decoding happens on the calling thread. An
+ * animated GIF or APNG keeps its frames: an Image showing it plays them.
  * Returns R_INVALID_ID on failure.
  */
 function Rtexture_create(?string $data, int $data_size): int {}
@@ -133,8 +134,24 @@ function Rtexture_create_async(?string $data, int $data_size): int {}
  * does not. Rtexture_create, Rtexture_create_from_file and the asynchronous
  * ones read SVG files this way. Paths, fills, strokes and gradients are
  * drawn; text, filters and masks are not.
+ *
+ * currentColor: an SVG painted only in currentColor (fill="currentColor",
+ * stroke="currentColor") is drawn in white, keeping its shape and its
+ * opacity, and the widgets that show it (Image, the icons of menu items,
+ * tabs, tree items, dock panels, tiles, nodes) tint it with the color of
+ * their text at draw time: it follows the theme, hover, pressed and
+ * disabled without being drawn again. Rdraw_image draws it in its tint
+ * color. In an SVG that also uses other colors, currentColor is black.
+ * See Rtexture_uses_current_color.
  */
 function Rtexture_create_from_svg(?string $svg, int $svg_size, float $scale): int {}
+
+/**
+ * R_TRUE when the texture is an SVG painted only in currentColor:
+ * white where it is painted, tinted with the color of the text by the
+ * widgets that show it (see Rtexture_create_from_svg).
+ */
+function Rtexture_uses_current_color(int $texture): int {}
 
 /**
  * Pixels of the texture per logical unit: the scale of an SVG, 1 otherwise.
@@ -149,6 +166,18 @@ function Rtexture_create_from_file(?string $path): int {}
 function Rtexture_create_from_file_async(?string $path): int {}
 
 /**
+ * Downloads an http:// or https:// image and decodes it on a worker
+ * thread, as an Image whose Source is a URL does. The handle is usable at
+ * once: widgets showing it draw nothing until it is ready (Rtexture_is_ready;
+ * a texture that could not be downloaded is ready with a size of 0, and the
+ * failure is reported as a warning). Desktops download with WinHTTP or
+ * `curl`; iOS and Android through their platform. Android needs the INTERNET
+ * permission in the manifest; iOS refuses http:// unless Info.plist allows
+ * it (App Transport Security). Up to 32 MiB.
+ */
+function Rtexture_create_from_url_async(?string $url): int {}
+
+/**
  * Creates a texture from tightly packed RGBA8 pixels (straight alpha). Its filter is R_FILTER_LINEAR.
  */
 function Rtexture_create_from_pixels(string $rgba, int $width, int $height): int {}
@@ -158,6 +187,15 @@ function Rtexture_create_from_pixels(string $rgba, int $width, int $height): int
  * show frames produced on the CPU or read back from another renderer.
  */
 function Rtexture_update(int $texture, string $rgba, int $width, int $height): void {}
+
+/**
+ * Reads what an image file in memory holds without keeping its
+ * pixels: its size, its frames (1 for a still image, more for an animated
+ * GIF or APNG) and how many times it plays (0: forever). Thread-safe.
+ * Each pointer may be NULL.
+ * Returns R_FALSE when the data is not an image Raven can read.
+ */
+function Rimage_decode_info(string $data, int $data_size, ?int &$width, ?int &$height, ?int &$frame_count, ?int &$loop_count): int {}
 
 /**
  * Writes tightly packed RGBA8 pixels to a PNG file: a screenshot
@@ -188,3 +226,27 @@ function Rtexture_get_size(int $texture, ?int &$width, ?int &$height): void {}
  * R_FILTER_LINEAR.
  */
 function Rtexture_set_filter(int $texture, int $filter): void {}
+
+/**
+ * An icon shipped with Raven, by its name: "search", "settings",
+ * "close"... (Ricon_get_name lists them; "raven:search" works too, as in
+ * XML: Source="raven:search"). The icons are the ones of Lucide (ISC
+ * License), 24 x 24 logical units, drawn with lines in currentColor: the
+ * widgets that show them tint them with the color of their text, so they
+ * follow the theme and the states (Rtexture_create_from_svg). Drawn at
+ * the density they are shown with, sharp on every screen.
+ * Returns A texture owned by Raven, made on first use and then shared
+ * (do not destroy it; if it was, the next call makes it again);
+ * R_INVALID_ID, with an error, when there is no icon of that name.
+ */
+function Ricon_get(?string $name): int {}
+
+/**
+ * Returns The number of icons shipped with Raven.
+ */
+function Ricon_get_count(): int {}
+
+/**
+ * Returns The name of an icon, from 0 to Ricon_get_count() - 1, in alphabetical order; NULL out of range.
+ */
+function Ricon_get_name(int $index): ?string {}

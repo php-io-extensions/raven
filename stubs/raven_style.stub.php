@@ -384,6 +384,48 @@ const R_COLOR_CODE = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_COLOR_SEARCH_MATCH
+ */
+const R_COLOR_SEARCH_MATCH = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_COLOR_SEARCH_CURRENT
+ */
+const R_COLOR_SEARCH_CURRENT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_COLOR_SPELLING
+ */
+const R_COLOR_SPELLING = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_COLOR_DIFF_ADDED
+ */
+const R_COLOR_DIFF_ADDED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_COLOR_DIFF_REMOVED
+ */
+const R_COLOR_DIFF_REMOVED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_COLOR_DIFF_ADDED_WORD
+ */
+const R_COLOR_DIFF_ADDED_WORD = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_COLOR_DIFF_REMOVED_WORD
+ */
+const R_COLOR_DIFF_REMOVED_WORD = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_COLOR_LAST_
  */
 const R_COLOR_LAST_ = UNKNOWN;

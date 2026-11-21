@@ -29,6 +29,11 @@ ZEND_METHOD(RFrameStats, __construct)
 	raven_struct_construct(&raven_struct_RFrameStats, Z_OBJ_P(ZEND_THIS), execute_data);
 }
 
+ZEND_METHOD(RDataItem, __construct)
+{
+	raven_struct_construct(&raven_struct_RDataItem, Z_OBJ_P(ZEND_THIS), execute_data);
+}
+
 ZEND_FUNCTION(Ris_initialized)
 {
 	int ret;
@@ -1110,6 +1115,136 @@ ZEND_FUNCTION(Rclipboard_get_text)
 	RETURN_STRING(ret);
 }
 
+ZEND_FUNCTION(Rclipboard_has_text)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rclipboard_has_text();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rclipboard_set_data)
+{
+	HashTable *items;
+	RDataItem *c_items = NULL;
+	zend_long count;
+	int c_count;
+	raven_arena arena = {0};
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ARRAY_HT(items)
+		Z_PARAM_LONG(count)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(count, 2, &c_count)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_arg_structs(items, 1, c_count, &raven_struct_RDataItem, (void **)&c_items, &arena)) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	ret = Rclipboard_set_data(c_items, c_count);
+	raven_leave();
+	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rclipboard_has_data)
+{
+	zend_string *mime = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(mime)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rclipboard_has_data(mime ? ZSTR_VAL(mime) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rclipboard_set_image)
+{
+	zend_string *rgba;
+	zend_long width;
+	int c_width;
+	zend_long height;
+	int c_height;
+	zend_long stride;
+	int c_stride;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_STR(rgba)
+		Z_PARAM_LONG(width)
+		Z_PARAM_LONG(height)
+		Z_PARAM_LONG(stride)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(width, 2, &c_width)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(height, 3, &c_height)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(stride, 4, &c_stride)) {
+		RETURN_THROWS();
+	}
+
+	{
+		uint64_t rgba_row = 0, rgba_need = 0;
+		if (c_stride < 0) {
+			zend_argument_value_error(1, "stride must be greater than or equal to 0");
+			RETURN_THROWS();
+		}
+		rgba_row = c_stride == 0 ? (c_width < 0 ? 0 : (uint64_t)c_width * 4u) : (uint64_t)c_stride;
+		if (c_height > 0 && __builtin_mul_overflow(rgba_row, (uint64_t)c_height, &rgba_need)) {
+			zend_argument_value_error(1, "must hold stride x height bytes, whose size overflows");
+			RETURN_THROWS();
+		}
+		if (!raven_arg_length(rgba, 1, (size_t)rgba_need)) {
+			RETURN_THROWS();
+		}
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rclipboard_set_image((const uint8_t *)ZSTR_VAL(rgba), c_width, c_height, c_stride);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rclipboard_has_image)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rclipboard_has_image();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
 ZEND_FUNCTION(Rerror_get_last)
 {
 	zval *detail;
@@ -1257,4 +1392,5 @@ void raven_gen_raven_core_minit(int module_number)
 	raven_ce_RInitDesc = register_class_RInitDesc();
 	raven_ce_RMemoryStats = register_class_RMemoryStats();
 	raven_ce_RFrameStats = register_class_RFrameStats();
+	raven_ce_RDataItem = register_class_RDataItem();
 }

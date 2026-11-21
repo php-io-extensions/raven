@@ -1086,6 +1086,310 @@ ZEND_FUNCTION(Rimage_set_corner_radius)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rimage_is_animated)
+{
+	zend_long image;
+	uint32_t c_image;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_is_animated(c_image);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rimage_get_frame_count)
+{
+	zend_long image;
+	uint32_t c_image;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_get_frame_count(c_image);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rimage_get_duration)
+{
+	zend_long image;
+	uint32_t c_image;
+	double ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_get_duration(c_image);
+	raven_leave();
+	RETURN_DOUBLE((double)ret);
+}
+
+ZEND_FUNCTION(Rimage_get_frame_delay)
+{
+	zend_long image;
+	uint32_t c_image;
+	zend_long frame;
+	int c_frame;
+	double ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(image)
+		Z_PARAM_LONG(frame)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(frame, 2, &c_frame)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_get_frame_delay(c_image, c_frame);
+	raven_leave();
+	RETURN_DOUBLE((double)ret);
+}
+
+ZEND_FUNCTION(Rimage_play)
+{
+	zend_long image;
+	uint32_t c_image;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rimage_play(c_image);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rimage_pause)
+{
+	zend_long image;
+	uint32_t c_image;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rimage_pause(c_image);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rimage_stop)
+{
+	zend_long image;
+	uint32_t c_image;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rimage_stop(c_image);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rimage_is_playing)
+{
+	zend_long image;
+	uint32_t c_image;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_is_playing(c_image);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rimage_set_frame)
+{
+	zend_long image;
+	uint32_t c_image;
+	zend_long frame;
+	int c_frame;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(image)
+		Z_PARAM_LONG(frame)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(frame, 2, &c_frame)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rimage_set_frame(c_image, c_frame);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rimage_get_frame)
+{
+	zend_long image;
+	uint32_t c_image;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_get_frame(c_image);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rimage_set_loop_count)
+{
+	zend_long image;
+	uint32_t c_image;
+	zend_long count;
+	int c_count;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(image)
+		Z_PARAM_LONG(count)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(count, 2, &c_count)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rimage_set_loop_count(c_image, c_count);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rimage_get_loop_count)
+{
+	zend_long image;
+	uint32_t c_image;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(image)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_get_loop_count(c_image);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rimage_set_finished_callback)
+{
+	zend_long image;
+	uint32_t c_image;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(image)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(image, 1, &c_image)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_image);
+	zend_string *key = raven_slot_key("Rimage_set_finished_callback", 1, (unsigned long)c_image);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rimage_set_finished_callback(c_image, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RImageFinishedCallback_0 : NULL, slot);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rtext_input_set_text)
 {
 	zend_long text_input;
@@ -1454,6 +1758,288 @@ ZEND_FUNCTION(Rtext_input_set_committed_callback)
 		RETURN_THROWS();
 	}
 	Rtext_input_set_committed_callback(c_text_input, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTextChangedCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_input_set_spell_check)
+{
+	zend_long text_input;
+	uint32_t c_text_input;
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(text_input)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(text_input, 1, &c_text_input)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(enabled, 2, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_input_set_spell_check(c_text_input, c_enabled);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_input_get_spell_check)
+{
+	zend_long text_input;
+	uint32_t c_text_input;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(text_input)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(text_input, 1, &c_text_input)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_input_get_spell_check(c_text_input);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_input_set_spell_language)
+{
+	zend_long text_input;
+	uint32_t c_text_input;
+	zend_string *language = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(text_input)
+		Z_PARAM_STR_OR_NULL(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(text_input, 1, &c_text_input)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_input_set_spell_language(c_text_input, language ? ZSTR_VAL(language) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rspell_is_supported)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_is_supported();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rspell_get_language_count)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_get_language_count();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rspell_get_language_at)
+{
+	zend_long index;
+	int c_index;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(index, 1, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_get_language_at(c_index);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rspell_set_language)
+{
+	zend_string *language = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_set_language(language ? ZSTR_VAL(language) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rspell_get_language)
+{
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_get_language();
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rspell_check)
+{
+	zend_string *text = NULL;
+	zend_string *language = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(text)
+		Z_PARAM_STR_OR_NULL(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_check(text ? ZSTR_VAL(text) : NULL, language ? ZSTR_VAL(language) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rspell_get_misspelling)
+{
+	zend_long index;
+	int c_index;
+	zval *start;
+	int c_start = 0;
+	zval *end;
+	int c_end = 0;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(index)
+		Z_PARAM_ZVAL(start)
+		Z_PARAM_ZVAL(end)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(index, 1, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_get_misspelling(c_index, &c_start, &c_end);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(start, (zend_long)c_start);
+	ZEND_TRY_ASSIGN_REF_LONG(end, (zend_long)c_end);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rspell_suggest)
+{
+	zend_string *word = NULL;
+	zend_string *language = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(word)
+		Z_PARAM_STR_OR_NULL(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_suggest(word ? ZSTR_VAL(word) : NULL, language ? ZSTR_VAL(language) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rspell_get_suggestion)
+{
+	zend_long index;
+	int c_index;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(index, 1, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rspell_get_suggestion(c_index);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rspell_learn)
+{
+	zend_string *word = NULL;
+	zend_string *language = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(word)
+		Z_PARAM_STR_OR_NULL(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rspell_learn(word ? ZSTR_VAL(word) : NULL, language ? ZSTR_VAL(language) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rspell_ignore)
+{
+	zend_string *word = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(word)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rspell_ignore(word ? ZSTR_VAL(word) : NULL);
 	raven_leave();
 }
 
@@ -1860,6 +2446,229 @@ ZEND_FUNCTION(Rcombo_box_set_changed_callback)
 	}
 	Rcombo_box_set_changed_callback(c_combo_box, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RComboBoxChangedCallback_0 : NULL, slot);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Rcombo_box_set_editable)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	zend_long editable;
+	int c_editable;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(combo_box)
+		Z_PARAM_LONG(editable)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(editable, 2, &c_editable)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rcombo_box_set_editable(c_combo_box, c_editable);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rcombo_box_is_editable)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(combo_box)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rcombo_box_is_editable(c_combo_box);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rcombo_box_set_searchable)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	zend_long searchable;
+	int c_searchable;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(combo_box)
+		Z_PARAM_LONG(searchable)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(searchable, 2, &c_searchable)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rcombo_box_set_searchable(c_combo_box, c_searchable);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rcombo_box_is_searchable)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(combo_box)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rcombo_box_is_searchable(c_combo_box);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rcombo_box_get_text)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(combo_box)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rcombo_box_get_text(c_combo_box);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rcombo_box_set_text)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	zend_string *text = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(combo_box)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rcombo_box_set_text(c_combo_box, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rcombo_box_set_text_changed_callback)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(combo_box)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_combo_box);
+	zend_string *key = raven_slot_key("Rcombo_box_set_text_changed_callback", 1, (unsigned long)c_combo_box);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rcombo_box_set_text_changed_callback(c_combo_box, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RComboBoxTextCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rcombo_box_set_open)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	zend_long open;
+	int c_open;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(combo_box)
+		Z_PARAM_LONG(open)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(open, 2, &c_open)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rcombo_box_set_open(c_combo_box, c_open);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rcombo_box_is_open)
+{
+	zend_long combo_box;
+	uint32_t c_combo_box;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(combo_box)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(combo_box, 1, &c_combo_box)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rcombo_box_is_open(c_combo_box);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rseparator_set_orientation)
@@ -4241,6 +5050,38 @@ ZEND_FUNCTION(Rtile_view_set_drag_data_callback)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rtile_view_set_drag_out_callback)
+{
+	zend_long tile_view;
+	uint32_t c_tile_view;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(tile_view)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(tile_view, 1, &c_tile_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_tile_view);
+	zend_string *key = raven_slot_key("Rtile_view_set_drag_out_callback", 1, (unsigned long)c_tile_view);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtile_view_set_drag_out_callback(c_tile_view, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTileEventCallback_0 : NULL, slot);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rtile_view_set_selection_changed_callback)
 {
 	zend_long tile_view;
@@ -4907,6 +5748,54 @@ ZEND_FUNCTION(Rtable_set_multi_select)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rtable_set_selection_mode)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long mode;
+	int c_mode;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(mode)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(mode, 2, &c_mode)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_set_selection_mode(c_table, (RTableSelectionMode)c_mode);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_get_selection_mode)
+{
+	zend_long table;
+	uint32_t c_table;
+	RTableSelectionMode ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(table)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_get_selection_mode(c_table);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
 ZEND_FUNCTION(Rtable_set_row_selected)
 {
 	zend_long table;
@@ -4965,6 +5854,64 @@ ZEND_FUNCTION(Rtable_is_row_selected)
 	ret = Rtable_is_row_selected(c_table, c_row);
 	raven_leave();
 	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_select_range)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long first;
+	int c_first;
+	zend_long last;
+	int c_last;
+	zend_long selected;
+	int c_selected;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(first)
+		Z_PARAM_LONG(last)
+		Z_PARAM_LONG(selected)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(first, 2, &c_first)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(last, 3, &c_last)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(selected, 4, &c_selected)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_select_range(c_table, c_first, c_last, c_selected);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_select_all)
+{
+	zend_long table;
+	uint32_t c_table;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(table)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_select_all(c_table);
+	raven_leave();
 }
 
 ZEND_FUNCTION(Rtable_clear_selection)
@@ -5037,6 +5984,64 @@ ZEND_FUNCTION(Rtable_get_selection)
 	RETURN_LONG((zend_long)ret);
 }
 
+ZEND_FUNCTION(Rtable_get_selection_range_count)
+{
+	zend_long table;
+	uint32_t c_table;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(table)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_get_selection_range_count(c_table);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_get_selection_range)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long index;
+	int c_index;
+	zval *first;
+	int c_first = 0;
+	zval *last;
+	int c_last = 0;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(index)
+		Z_PARAM_ZVAL(first)
+		Z_PARAM_ZVAL(last)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(index, 2, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_get_selection_range(c_table, c_index, &c_first, &c_last);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(first, (zend_long)c_first);
+	ZEND_TRY_ASSIGN_REF_LONG(last, (zend_long)c_last);
+	RETURN_LONG((zend_long)ret);
+}
+
 ZEND_FUNCTION(Rtable_set_selected)
 {
 	zend_long table;
@@ -5081,6 +6086,28 @@ ZEND_FUNCTION(Rtable_get_selected)
 		RETURN_THROWS();
 	}
 	ret = Rtable_get_selected(c_table);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_get_current_row)
+{
+	zend_long table;
+	uint32_t c_table;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(table)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_get_current_row(c_table);
 	raven_leave();
 	RETURN_LONG((zend_long)ret);
 }
@@ -5358,6 +6385,362 @@ ZEND_FUNCTION(Rtable_set_sort_callback)
 		RETURN_THROWS();
 	}
 	Rtable_set_sort_callback(c_table, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTableSortCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_set_column_editable)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long column;
+	int c_column;
+	zend_long editable;
+	int c_editable;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(column)
+		Z_PARAM_LONG(editable)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 2, &c_column)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(editable, 3, &c_editable)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_set_column_editable(c_table, c_column, c_editable);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_is_column_editable)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long column;
+	int c_column;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 2, &c_column)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_is_column_editable(c_table, c_column);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_set_cell_edited_callback)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(table)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_table);
+	zend_string *key = raven_slot_key("Rtable_set_cell_edited_callback", 1, (unsigned long)c_table);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_set_cell_edited_callback(c_table, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTableCellEditedCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_edit_cell)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long row;
+	int c_row;
+	zend_long column;
+	int c_column;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(row)
+		Z_PARAM_LONG(column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(row, 2, &c_row)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 3, &c_column)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_edit_cell(c_table, c_row, c_column);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_is_editing)
+{
+	zend_long table;
+	uint32_t c_table;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(table)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_is_editing(c_table);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_end_edit)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long commit;
+	int c_commit;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(commit)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(commit, 2, &c_commit)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_end_edit(c_table, c_commit);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_set_frozen_columns)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long count;
+	int c_count;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(count)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(count, 2, &c_count)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_set_frozen_columns(c_table, c_count);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_get_frozen_columns)
+{
+	zend_long table;
+	uint32_t c_table;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(table)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_get_frozen_columns(c_table);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_set_column_kind)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long column;
+	int c_column;
+	zend_long kind;
+	int c_kind;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(column)
+		Z_PARAM_LONG(kind)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 2, &c_column)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(kind, 3, &c_kind)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_set_column_kind(c_table, c_column, (RTableColumnKind)c_kind);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtable_get_column_kind)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long column;
+	int c_column;
+	RTableColumnKind ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 2, &c_column)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_get_column_kind(c_table, c_column);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_is_cell_checked)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long row;
+	int c_row;
+	zend_long column;
+	int c_column;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(row)
+		Z_PARAM_LONG(column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(row, 2, &c_row)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 3, &c_column)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtable_is_cell_checked(c_table, c_row, c_column);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtable_set_cell_checked)
+{
+	zend_long table;
+	uint32_t c_table;
+	zend_long row;
+	int c_row;
+	zend_long column;
+	int c_column;
+	zend_long checked;
+	int c_checked;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(table)
+		Z_PARAM_LONG(row)
+		Z_PARAM_LONG(column)
+		Z_PARAM_LONG(checked)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(table, 1, &c_table)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(row, 2, &c_row)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 3, &c_column)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(checked, 4, &c_checked)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtable_set_cell_checked(c_table, c_row, c_column, c_checked);
 	raven_leave();
 }
 
@@ -5640,6 +7023,97 @@ ZEND_FUNCTION(Rdate_picker_set_changed_callback)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rdate_picker_set_time_zone)
+{
+	zend_long date_picker;
+	uint32_t c_date_picker;
+	zend_string *zone = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(date_picker)
+		Z_PARAM_STR_OR_NULL(zone)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(date_picker, 1, &c_date_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdate_picker_set_time_zone(c_date_picker, zone ? ZSTR_VAL(zone) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdate_picker_get_time_zone)
+{
+	zend_long date_picker;
+	uint32_t c_date_picker;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(date_picker)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(date_picker, 1, &c_date_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdate_picker_get_time_zone(c_date_picker);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rdate_picker_set_instant)
+{
+	zend_long date_picker;
+	uint32_t c_date_picker;
+	double utc;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(date_picker)
+		Z_PARAM_DOUBLE(utc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(date_picker, 1, &c_date_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdate_picker_set_instant(c_date_picker, utc);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdate_picker_get_instant)
+{
+	zend_long date_picker;
+	uint32_t c_date_picker;
+	double ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(date_picker)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(date_picker, 1, &c_date_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdate_picker_get_instant(c_date_picker);
+	raven_leave();
+	RETURN_DOUBLE((double)ret);
+}
+
 ZEND_FUNCTION(Rtime_picker_set_time)
 {
 	zend_long time_picker;
@@ -5792,6 +7266,266 @@ ZEND_FUNCTION(Rtime_picker_set_changed_callback)
 	}
 	Rtime_picker_set_changed_callback(c_time_picker, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTimeChangedCallback_0 : NULL, slot);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Rtime_picker_set_clock)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	zend_long clock;
+	int c_clock;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(time_picker)
+		Z_PARAM_LONG(clock)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(clock, 2, &c_clock)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtime_picker_set_clock(c_time_picker, (RClock)c_clock);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtime_picker_get_clock)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	RClock ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(time_picker)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtime_picker_get_clock(c_time_picker);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtime_picker_get_text)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(time_picker)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtime_picker_get_text(c_time_picker);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rtime_picker_set_time_zone)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	zend_string *zone = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(time_picker)
+		Z_PARAM_STR_OR_NULL(zone)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtime_picker_set_time_zone(c_time_picker, zone ? ZSTR_VAL(zone) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtime_picker_get_time_zone)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(time_picker)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtime_picker_get_time_zone(c_time_picker);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rtime_picker_set_time_zone_visible)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	zend_long visible;
+	int c_visible;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(time_picker)
+		Z_PARAM_LONG(visible)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(visible, 2, &c_visible)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtime_picker_set_time_zone_visible(c_time_picker, c_visible);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtime_picker_set_date)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	zend_long year;
+	int c_year;
+	zend_long month;
+	int c_month;
+	zend_long day;
+	int c_day;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(time_picker)
+		Z_PARAM_LONG(year)
+		Z_PARAM_LONG(month)
+		Z_PARAM_LONG(day)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(year, 2, &c_year)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(month, 3, &c_month)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(day, 4, &c_day)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtime_picker_set_date(c_time_picker, c_year, c_month, c_day);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtime_picker_get_date)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	zval *year;
+	int c_year = 0;
+	zval *month;
+	int c_month = 0;
+	zval *day;
+	int c_day = 0;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(time_picker)
+		Z_PARAM_ZVAL(year)
+		Z_PARAM_ZVAL(month)
+		Z_PARAM_ZVAL(day)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtime_picker_get_date(c_time_picker, &c_year, &c_month, &c_day);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(year, (zend_long)c_year);
+	ZEND_TRY_ASSIGN_REF_LONG(month, (zend_long)c_month);
+	ZEND_TRY_ASSIGN_REF_LONG(day, (zend_long)c_day);
+}
+
+ZEND_FUNCTION(Rtime_picker_set_instant)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	double utc;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(time_picker)
+		Z_PARAM_DOUBLE(utc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtime_picker_set_instant(c_time_picker, utc);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtime_picker_get_instant)
+{
+	zend_long time_picker;
+	uint32_t c_time_picker;
+	double ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(time_picker)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(time_picker, 1, &c_time_picker)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtime_picker_get_instant(c_time_picker);
+	raven_leave();
+	RETURN_DOUBLE((double)ret);
 }
 
 ZEND_FUNCTION(Rtoast_show)
@@ -11355,6 +13089,443 @@ ZEND_FUNCTION(Rmap_view_get_attribution)
 		RETURN_NULL();
 	}
 	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_is_supported)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_is_supported();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_create)
+{
+	Rid ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_create();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_load_url)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_string *url = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(view)
+		Z_PARAM_STR_OR_NULL(url)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_load_url(c_view, url ? ZSTR_VAL(url) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_load_file)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_string *path = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(view)
+		Z_PARAM_STR_OR_NULL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_load_file(c_view, path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_load_html)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_string *html = NULL;
+	zend_string *base_url = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(view)
+		Z_PARAM_STR_OR_NULL(html)
+		Z_PARAM_STR_OR_NULL(base_url)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_load_html(c_view, html ? ZSTR_VAL(html) : NULL, base_url ? ZSTR_VAL(base_url) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_reload)
+{
+	zend_long view;
+	uint32_t c_view;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_reload(c_view);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_stop)
+{
+	zend_long view;
+	uint32_t c_view;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_stop(c_view);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_go_back)
+{
+	zend_long view;
+	uint32_t c_view;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_go_back(c_view);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_go_forward)
+{
+	zend_long view;
+	uint32_t c_view;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_go_forward(c_view);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_can_go_back)
+{
+	zend_long view;
+	uint32_t c_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_can_go_back(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_can_go_forward)
+{
+	zend_long view;
+	uint32_t c_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_can_go_forward(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_get_url)
+{
+	zend_long view;
+	uint32_t c_view;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_get_url(c_view);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_get_title)
+{
+	zend_long view;
+	uint32_t c_view;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_get_title(c_view);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_is_loading)
+{
+	zend_long view;
+	uint32_t c_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_is_loading(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_get_error)
+{
+	zend_long view;
+	uint32_t c_view;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_get_error(c_view);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rsystem_web_view_run_javascript)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_string *script = NULL;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(view)
+		Z_PARAM_STR_OR_NULL(script)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_view);
+	zend_string *key = raven_slot_key_str("Rsystem_web_view_run_javascript", script ? ZSTR_VAL(script) : NULL);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_run_javascript(c_view, script ? ZSTR_VAL(script) : NULL, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RSystemWebViewResultCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_set_message_callback)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(view)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_view);
+	zend_string *key = raven_slot_key("Rsystem_web_view_set_message_callback", 1, (unsigned long)c_view);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_set_message_callback(c_view, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RSystemWebViewMessageCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_set_event_callback)
+{
+	zend_long view;
+	uint32_t c_view;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(view)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_view);
+	zend_string *key = raven_slot_key("Rsystem_web_view_set_event_callback", 1, (unsigned long)c_view);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rsystem_web_view_set_event_callback(c_view, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RSystemWebViewEventCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rsystem_web_view_get_native_handle)
+{
+	zend_long view;
+	uint32_t c_view;
+	void *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(view, 1, &c_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rsystem_web_view_get_native_handle(c_view);
+	raven_leave();
+	RETURN_LONG((zend_long)(uintptr_t)ret);
 }
 
 ZEND_FUNCTION(Rpdf_document_create)

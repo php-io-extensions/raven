@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 819edc72e8b7e789cabdc3e5b3ed3ec20daa7893 */
+ * Stub hash: 9c1c398b49c1ef6918b6c79f4a79751a49efc017 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rinit, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, backend, IS_LONG, 0)
@@ -45,6 +45,21 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_save_memory, 0, 2,
 	ZEND_ARG_TYPE_INFO(1, size, IS_LONG, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rclipboard_get_data, 0, 2, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, mime, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(1, size, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdiff_unified, 0, 7, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, left, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, right, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, left_name, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, right_name, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, context, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, flags, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, size, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rwindow_capture, 0, 3, IS_STRING, 1)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(1, width, IS_LONG, 1)
@@ -54,6 +69,20 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_decode, 0, 4, IS_STRING, 1)
 	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data_size, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, width, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, height, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_decode_frame, 0, 6, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, data_size, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, frame, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, width, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, height, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, delay, IS_DOUBLE, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rclipboard_get_image, 0, 2, IS_STRING, 1)
 	ZEND_ARG_TYPE_INFO(1, width, IS_LONG, 1)
 	ZEND_ARG_TYPE_INFO(1, height, IS_LONG, 1)
 ZEND_END_ARG_INFO()
@@ -120,6 +149,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RHostPlatformDesc___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, clipboard_get, Closure, 1, "null")
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, wake, Closure, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, user_data, IS_MIXED, 0, "null")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, permission_status, Closure, 1, "null")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, permission_request, Closure, 1, "null")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, service_request, Closure, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, has_camera, IS_LONG, 0, "0")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, open_url, Closure, 1, "null")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, haptic, Closure, 1, "null")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, download, Closure, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_FUNCTION(Rinit);
@@ -132,8 +168,12 @@ ZEND_FUNCTION(Rparallel_for);
 ZEND_FUNCTION(Rtask_run_async);
 ZEND_FUNCTION(Rfile_read);
 ZEND_FUNCTION(Rpdf_document_save_memory);
+ZEND_FUNCTION(Rclipboard_get_data);
+ZEND_FUNCTION(Rdiff_unified);
 ZEND_FUNCTION(Rwindow_capture);
 ZEND_FUNCTION(Rimage_decode);
+ZEND_FUNCTION(Rimage_decode_frame);
+ZEND_FUNCTION(Rclipboard_get_image);
 ZEND_FUNCTION(Rimage_encode_png);
 ZEND_FUNCTION(Rvulkan_set_queue_lock_callbacks);
 ZEND_FUNCTION(Rviewport_set_draw_callback);
@@ -157,8 +197,12 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtask_run_async, arginfo_Rtask_run_async)
 	ZEND_FE(Rfile_read, arginfo_Rfile_read)
 	ZEND_FE(Rpdf_document_save_memory, arginfo_Rpdf_document_save_memory)
+	ZEND_FE(Rclipboard_get_data, arginfo_Rclipboard_get_data)
+	ZEND_FE(Rdiff_unified, arginfo_Rdiff_unified)
 	ZEND_FE(Rwindow_capture, arginfo_Rwindow_capture)
 	ZEND_FE(Rimage_decode, arginfo_Rimage_decode)
+	ZEND_FE(Rimage_decode_frame, arginfo_Rimage_decode_frame)
+	ZEND_FE(Rclipboard_get_image, arginfo_Rclipboard_get_image)
 	ZEND_FE(Rimage_encode_png, arginfo_Rimage_encode_png)
 	ZEND_FE(Rvulkan_set_queue_lock_callbacks, arginfo_Rvulkan_set_queue_lock_callbacks)
 	ZEND_FE(Rviewport_set_draw_callback, arginfo_Rviewport_set_draw_callback)
@@ -395,6 +439,54 @@ static zend_class_entry *register_class_RHostPlatformDesc(void)
 	zend_string *property_user_data_name = zend_string_init("user_data", sizeof("user_data") - 1, 1);
 	zend_declare_typed_property(class_entry, property_user_data_name, &property_user_data_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ANY));
 	zend_string_release(property_user_data_name);
+
+	zval property_permission_status_default_value;
+	ZVAL_NULL(&property_permission_status_default_value);
+	zend_string *property_permission_status_name = zend_string_init("permission_status", sizeof("permission_status") - 1, 1);
+	zend_string *property_permission_status_class_Closure = zend_string_init("Closure", sizeof("Closure")-1, 1);
+	zend_declare_typed_property(class_entry, property_permission_status_name, &property_permission_status_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_permission_status_class_Closure, 0, MAY_BE_NULL));
+	zend_string_release(property_permission_status_name);
+
+	zval property_permission_request_default_value;
+	ZVAL_NULL(&property_permission_request_default_value);
+	zend_string *property_permission_request_name = zend_string_init("permission_request", sizeof("permission_request") - 1, 1);
+	zend_string *property_permission_request_class_Closure = zend_string_init("Closure", sizeof("Closure")-1, 1);
+	zend_declare_typed_property(class_entry, property_permission_request_name, &property_permission_request_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_permission_request_class_Closure, 0, MAY_BE_NULL));
+	zend_string_release(property_permission_request_name);
+
+	zval property_service_request_default_value;
+	ZVAL_NULL(&property_service_request_default_value);
+	zend_string *property_service_request_name = zend_string_init("service_request", sizeof("service_request") - 1, 1);
+	zend_string *property_service_request_class_Closure = zend_string_init("Closure", sizeof("Closure")-1, 1);
+	zend_declare_typed_property(class_entry, property_service_request_name, &property_service_request_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_service_request_class_Closure, 0, MAY_BE_NULL));
+	zend_string_release(property_service_request_name);
+
+	zval property_has_camera_default_value;
+	ZVAL_LONG(&property_has_camera_default_value, 0);
+	zend_string *property_has_camera_name = zend_string_init("has_camera", sizeof("has_camera") - 1, 1);
+	zend_declare_typed_property(class_entry, property_has_camera_name, &property_has_camera_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_has_camera_name);
+
+	zval property_open_url_default_value;
+	ZVAL_NULL(&property_open_url_default_value);
+	zend_string *property_open_url_name = zend_string_init("open_url", sizeof("open_url") - 1, 1);
+	zend_string *property_open_url_class_Closure = zend_string_init("Closure", sizeof("Closure")-1, 1);
+	zend_declare_typed_property(class_entry, property_open_url_name, &property_open_url_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_open_url_class_Closure, 0, MAY_BE_NULL));
+	zend_string_release(property_open_url_name);
+
+	zval property_haptic_default_value;
+	ZVAL_NULL(&property_haptic_default_value);
+	zend_string *property_haptic_name = zend_string_init("haptic", sizeof("haptic") - 1, 1);
+	zend_string *property_haptic_class_Closure = zend_string_init("Closure", sizeof("Closure")-1, 1);
+	zend_declare_typed_property(class_entry, property_haptic_name, &property_haptic_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_haptic_class_Closure, 0, MAY_BE_NULL));
+	zend_string_release(property_haptic_name);
+
+	zval property_download_default_value;
+	ZVAL_NULL(&property_download_default_value);
+	zend_string *property_download_name = zend_string_init("download", sizeof("download") - 1, 1);
+	zend_string *property_download_class_Closure = zend_string_init("Closure", sizeof("Closure")-1, 1);
+	zend_declare_typed_property(class_entry, property_download_name, &property_download_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_download_class_Closure, 0, MAY_BE_NULL));
+	zend_string_release(property_download_name);
 
 	return class_entry;
 }

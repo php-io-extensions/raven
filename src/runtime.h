@@ -26,6 +26,7 @@ enum {
 	RAVEN_F_STRUCT,  /* nested struct: object of its class */
 	RAVEN_F_STRS,    /* const char* const* with a count field: array of strings */
 	RAVEN_F_STRUCTS, /* const T* with a count field: array of T */
+	RAVEN_F_BYTES,   /* const void* with a following size_t field: ?string */
 };
 
 typedef struct raven_struct raven_struct;

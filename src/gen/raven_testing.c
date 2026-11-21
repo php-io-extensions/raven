@@ -694,6 +694,115 @@ ZEND_FUNCTION(Rtest_compare_pixels)
 	RETURN_LONG((zend_long)ret);
 }
 
+ZEND_FUNCTION(Rtest_dump_tree)
+{
+	zend_long target;
+	uint32_t c_target;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(target)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(target, 1, &c_target)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtest_dump_tree(c_target);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rtest_save_tree)
+{
+	zend_long target;
+	uint32_t c_target;
+	zend_string *path = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(target)
+		Z_PARAM_STR_OR_NULL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(target, 1, &c_target)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtest_save_tree(c_target, path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtest_save_png)
+{
+	zend_long target;
+	uint32_t c_target;
+	zend_string *path = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(target)
+		Z_PARAM_STR_OR_NULL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(target, 1, &c_target)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtest_save_png(c_target, path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtest_run_script)
+{
+	zend_string *script = NULL;
+	zend_string *source_name = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(script)
+		Z_PARAM_STR_OR_NULL(source_name)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtest_run_script(script ? ZSTR_VAL(script) : NULL, source_name ? ZSTR_VAL(source_name) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtest_get_script_error)
+{
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtest_get_script_error();
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
 void raven_gen_raven_testing_minit(int module_number)
 {
 	register_raven_testing_symbols(module_number);

@@ -333,6 +333,28 @@ ZEND_FUNCTION(Rtexture_create_from_svg)
 	RETURN_LONG((zend_long)ret);
 }
 
+ZEND_FUNCTION(Rtexture_uses_current_color)
+{
+	zend_long texture;
+	uint32_t c_texture;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(texture)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(texture, 1, &c_texture)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtexture_uses_current_color(c_texture);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
 ZEND_FUNCTION(Rtexture_get_density)
 {
 	zend_long texture;
@@ -385,6 +407,23 @@ ZEND_FUNCTION(Rtexture_create_from_file_async)
 		RETURN_THROWS();
 	}
 	ret = Rtexture_create_from_file_async(path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtexture_create_from_url_async)
+{
+	zend_string *url = NULL;
+	Rid ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(url)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtexture_create_from_url_async(url ? ZSTR_VAL(url) : NULL);
 	raven_leave();
 	RETURN_LONG((zend_long)ret);
 }
@@ -459,6 +498,50 @@ ZEND_FUNCTION(Rtexture_update)
 	}
 	Rtexture_update(c_texture, (const uint8_t *)ZSTR_VAL(rgba), c_width, c_height);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Rimage_decode_info)
+{
+	zend_string *data;
+	zend_long data_size;
+	size_t c_data_size;
+	zval *width;
+	int c_width = 0;
+	zval *height;
+	int c_height = 0;
+	zval *frame_count;
+	int c_frame_count = 0;
+	zval *loop_count;
+	int c_loop_count = 0;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_STR(data)
+		Z_PARAM_LONG(data_size)
+		Z_PARAM_ZVAL(width)
+		Z_PARAM_ZVAL(height)
+		Z_PARAM_ZVAL(frame_count)
+		Z_PARAM_ZVAL(loop_count)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_size(data_size, 2, &c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_arg_length(data, 1, c_data_size)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rimage_decode_info((const void *)ZSTR_VAL(data), c_data_size, &c_width, &c_height, &c_frame_count, &c_loop_count);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(width, (zend_long)c_width);
+	ZEND_TRY_ASSIGN_REF_LONG(height, (zend_long)c_height);
+	ZEND_TRY_ASSIGN_REF_LONG(frame_count, (zend_long)c_frame_count);
+	ZEND_TRY_ASSIGN_REF_LONG(loop_count, (zend_long)c_loop_count);
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rimage_save_png)
@@ -633,6 +716,62 @@ ZEND_FUNCTION(Rtexture_set_filter)
 	}
 	Rtexture_set_filter(c_texture, (RFilterType)c_filter);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Ricon_get)
+{
+	zend_string *name = NULL;
+	Rid ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(name)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Ricon_get(name ? ZSTR_VAL(name) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Ricon_get_count)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Ricon_get_count();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Ricon_get_name)
+{
+	zend_long index;
+	int c_index;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(index, 1, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Ricon_get_name(c_index);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
 }
 
 void raven_gen_raven_resources_minit(int module_number)

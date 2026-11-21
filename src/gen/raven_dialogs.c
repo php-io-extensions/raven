@@ -14,6 +14,16 @@
 
 #include "../../stubs/raven_dialogs_arginfo.h"
 
+ZEND_METHOD(RNotificationAction, __construct)
+{
+	raven_struct_construct(&raven_struct_RNotificationAction, Z_OBJ_P(ZEND_THIS), execute_data);
+}
+
+ZEND_METHOD(RNotificationDesc, __construct)
+{
+	raven_struct_construct(&raven_struct_RNotificationDesc, Z_OBJ_P(ZEND_THIS), execute_data);
+}
+
 ZEND_METHOD(RFileFilter, __construct)
 {
 	raven_struct_construct(&raven_struct_RFileFilter, Z_OBJ_P(ZEND_THIS), execute_data);
@@ -1051,10 +1061,144 @@ ZEND_FUNCTION(Rnotification_set_clicked_callback)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rnotification_show_desc)
+{
+	zend_object *desc = NULL;
+	RNotificationDesc c_desc;
+	RNotificationDesc *p_desc = NULL;
+	raven_arena arena = {0};
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJ_OF_CLASS_OR_NULL(desc, raven_ce_RNotificationDesc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (desc) {
+		if (!raven_struct_from_object(&raven_struct_RNotificationDesc, desc, &c_desc, &arena, 1)) {
+			raven_arena_free(&arena);
+			RETURN_THROWS();
+		}
+		p_desc = &c_desc;
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	ret = Rnotification_show_desc(p_desc);
+	raven_leave();
+	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rnotification_close)
+{
+	zend_string *tag = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(tag)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnotification_close(tag ? ZSTR_VAL(tag) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnotification_set_callback)
+{
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, 0);
+	zend_string *key = raven_slot_key("Rnotification_set_callback", 0);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnotification_set_callback(ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RNotificationCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnotification_set_bring_to_front)
+{
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(enabled, 1, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnotification_set_bring_to_front(c_enabled);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnotification_set_fallback_toast)
+{
+	zend_long toast;
+	uint32_t c_toast;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(toast)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(toast, 1, &c_toast)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rnotification_set_fallback_toast(c_toast);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rnotification_supports)
+{
+	zend_long feature;
+	int c_feature;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(feature)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(feature, 1, &c_feature)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rnotification_supports((RNotificationFeature)c_feature);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
 void raven_gen_raven_dialogs_minit(int module_number)
 {
 	register_raven_dialogs_symbols(module_number);
 	zend_register_functions(NULL, ext_functions, NULL, MODULE_PERSISTENT);
+	raven_ce_RNotificationAction = register_class_RNotificationAction();
+	raven_ce_RNotificationDesc = register_class_RNotificationDesc();
 	raven_ce_RFileFilter = register_class_RFileFilter();
 	raven_ce_RFileDialogDesc = register_class_RFileDialogDesc();
 }

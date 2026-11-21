@@ -260,6 +260,15 @@ final class RFrameStats
     public function __construct(float $layout_ms = 0.0, float $paint_ms = 0.0, float $render_ms = 0.0, int $widget_count = 0, int $instance_count = 0, int $draw_call_count = 0, int $backdrop_count = 0, int $paint_job_count = 0, int $frame_index = 0) {}
 }
 
+final class RDataItem
+{
+    public ?string $mime = null;
+    public ?string $data = null;
+    public int $size = 0;
+
+    public function __construct(?string $mime = null, ?string $data = null, int $size = 0) {}
+}
+
 function Ris_initialized(): int {}
 
 /**
@@ -516,7 +525,9 @@ function Raction_is_builtin(?string $name): int {}
 /**
  * Opens an address with the program the user has for it: a web
  * page in the browser, a mailto: in the mail program, a file in its
- * application. Returns at once.
+ * application. Returns at once. On iOS and Android the system opens it
+ * (a web page, a tel:, a mailto:; not a file: share it with Rshare_show),
+ * and Raven must be initialized and this be called on the UI thread.
  * Returns R_FALSE when the OS could not be asked (nothing tells whether
  * a program then really opened it).
  */
@@ -528,15 +539,54 @@ function Rclipboard_set_text(?string $text): void {}
  * Copies one content in two formats: `html` for the programs that
  * paste formatting (word processors, chat, mail) and `text` for the
  * others (editors, terminals). Each program takes the format it prefers.
- * Where the window system has no clipboard formats (Win32 and macOS for
- * now), or `html` is NULL, it is Rclipboard_set_text(text).
+ * Where the window system has no clipboard formats, or `html` is NULL,
+ * it is Rclipboard_set_text(text).
  */
 function Rclipboard_set_html(?string $text, ?string $html): void {}
 
 /**
  * Returns The clipboard text, or "" when empty. Valid until the next call.
+ * On iOS a read that does not follow a paste of the user (the Paste of a
+ * menu, a button, Command-V) shows the system's question "Allow Paste?",
+ * and on Android 12+ the system says that the application pasted: read it
+ * when the user pastes, not to look at it. Android lets only the
+ * application in front read it.
  */
 function Rclipboard_get_text(): ?string {}
+
+/**
+ * Returns R_TRUE when the clipboard holds text, without reading it (no
+ * question of the system on iOS): to enable a Paste button.
+ */
+function Rclipboard_has_text(): int {}
+
+/**
+ * Replaces what the clipboard holds with one content in several
+ * formats (RDataItem): each program pastes the one it prefers.
+ * Returns R_TRUE when every format was put on the clipboard; R_FALSE when
+ * some could not be (a window system that only takes text: X11 and
+ * Wayland for now, where the text/plain item, if any, still is).
+ */
+function Rclipboard_set_data(array $items, int $count): int {}
+
+/**
+ * Returns R_TRUE when the clipboard holds this format (Rclipboard_set_data), or one Raven converts to it.
+ */
+function Rclipboard_has_data(?string $mime): int {}
+
+/**
+ * Copies a picture: RGBA8 pixels, straight alpha, rows `stride`
+ * bytes apart (0: width * 4). It goes on the clipboard as image/png
+ * (and as the bitmaps of the system), so that image editors, documents
+ * and mail paste it.
+ * Returns R_FALSE when it could not be put there.
+ */
+function Rclipboard_set_image(string $rgba, int $width, int $height, int $stride): int {}
+
+/**
+ * Returns R_TRUE when the clipboard holds a picture Rclipboard_get_image can read.
+ */
+function Rclipboard_has_image(): int {}
 
 /**
  * Retrieves and clears the last recorded error.

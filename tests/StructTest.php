@@ -31,6 +31,16 @@ it('builds struct classes with every C field, zero by default', function (): voi
     expect($result->status)->toBe(0)
         ->and($result->golden_path)->toBeNull()
         ->and($result->message)->toBeNull();
+    $item = new RDataItem();
+    expect($item->mime)->toBeNull()->and($item->data)->toBeNull()->and($item->size)->toBe(0);
+    $picked = new RPickedFile();
+    expect($picked->path)->toBeNull()->and($picked->width)->toBe(0);
+    $share = new RShareDesc();
+    expect($share->text)->toBeNull()->and($share->anchor)->toBe(0);
+    $req = new RHostServiceRequest();
+    expect($req->id)->toBe(0)->and($req->data)->toBeNull()->and($req->size)->toBe(0);
+    $action = new RNotificationAction();
+    expect($action->id)->toBeNull()->and($action->label)->toBeNull();
 });
 
 it('type-checks constructor arguments into the typed properties', function (): void {

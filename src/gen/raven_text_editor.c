@@ -393,6 +393,462 @@ ZEND_FUNCTION(Rtext_editor_scroll_to_line)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rtext_editor_add_cursor)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long line;
+	int c_line;
+	zend_long column;
+	int c_column;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(line)
+		Z_PARAM_LONG(column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(line, 2, &c_line)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(column, 3, &c_column)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_add_cursor(c_editor, c_line, c_column);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_add_selection)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long from_line;
+	int c_from_line;
+	zend_long from_column;
+	int c_from_column;
+	zend_long to_line;
+	int c_to_line;
+	zend_long to_column;
+	int c_to_column;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(from_line)
+		Z_PARAM_LONG(from_column)
+		Z_PARAM_LONG(to_line)
+		Z_PARAM_LONG(to_column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(from_line, 2, &c_from_line)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(from_column, 3, &c_from_column)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(to_line, 4, &c_to_line)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(to_column, 5, &c_to_column)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_add_selection(c_editor, c_from_line, c_from_column, c_to_line, c_to_column);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_get_cursor_count)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_cursor_count(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_get_cursor_at)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long index;
+	int c_index;
+	zval *line;
+	int c_line = 0;
+	zval *column;
+	int c_column = 0;
+	zval *anchor_line;
+	int c_anchor_line = 0;
+	zval *anchor_column;
+	int c_anchor_column = 0;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(index)
+		Z_PARAM_ZVAL(line)
+		Z_PARAM_ZVAL(column)
+		Z_PARAM_ZVAL(anchor_line)
+		Z_PARAM_ZVAL(anchor_column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(index, 2, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_cursor_at(c_editor, c_index, &c_line, &c_column, &c_anchor_line, &c_anchor_column);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(line, (zend_long)c_line);
+	ZEND_TRY_ASSIGN_REF_LONG(column, (zend_long)c_column);
+	ZEND_TRY_ASSIGN_REF_LONG(anchor_line, (zend_long)c_anchor_line);
+	ZEND_TRY_ASSIGN_REF_LONG(anchor_column, (zend_long)c_anchor_column);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_get_main_cursor)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_main_cursor(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_clear_cursors)
+{
+	zend_long editor;
+	uint32_t c_editor;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_clear_cursors(c_editor);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_add_next_occurrence)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_add_next_occurrence(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_select_all_occurrences)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_select_all_occurrences(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_fold)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long line;
+	int c_line;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(line)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(line, 2, &c_line)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_fold(c_editor, c_line);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_unfold)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long line;
+	int c_line;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(line)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(line, 2, &c_line)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_unfold(c_editor, c_line);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_fold_all)
+{
+	zend_long editor;
+	uint32_t c_editor;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_fold_all(c_editor);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_unfold_all)
+{
+	zend_long editor;
+	uint32_t c_editor;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_unfold_all(c_editor);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_is_folded)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long line;
+	int c_line;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(line)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(line, 2, &c_line)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_is_folded(c_editor, c_line);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_is_line_hidden)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long line;
+	int c_line;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(line)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(line, 2, &c_line)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_is_line_hidden(c_editor, c_line);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_get_fold_end)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long line;
+	int c_line;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(line)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(line, 2, &c_line)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_fold_end(c_editor, c_line);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_set_folding)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(enabled, 2, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_set_folding(c_editor, c_enabled);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_get_folding)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_folding(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
 ZEND_FUNCTION(Rtext_editor_undo)
 {
 	zend_long editor;
@@ -1004,6 +1460,76 @@ ZEND_FUNCTION(Rtext_editor_get_markdown)
 	RETURN_LONG((zend_long)ret);
 }
 
+ZEND_FUNCTION(Rtext_editor_set_spell_check)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(enabled, 2, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_set_spell_check(c_editor, c_enabled);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_get_spell_check)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_spell_check(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_set_spell_language)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_string *language = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_STR_OR_NULL(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_set_spell_language(c_editor, language ? ZSTR_VAL(language) : NULL);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rtext_editor_get_token)
 {
 	zend_long editor;
@@ -1357,6 +1883,379 @@ ZEND_FUNCTION(Rtext_editor_set_hover_callback)
 		RETURN_THROWS();
 	}
 	Rtext_editor_set_hover_callback(c_editor, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RTextEditorHoverCallback_0 : NULL, slot);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_set_search)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_string *query = NULL;
+	zend_long flags;
+	uint32_t c_flags;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_STR_OR_NULL(query)
+		Z_PARAM_LONG(flags)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(flags, 3, &c_flags)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_set_search(c_editor, query ? ZSTR_VAL(query) : NULL, c_flags);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_get_search)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_search(c_editor);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_get_search_flags)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	Ruint ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_search_flags(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_find_next)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_find_next(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_find_previous)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_find_previous(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_get_match_count)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_match_count(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_get_match_index)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_match_index(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_get_match)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long index;
+	int c_index;
+	zval *line;
+	int c_line = 0;
+	zval *from_column;
+	int c_from_column = 0;
+	zval *to_column;
+	int c_to_column = 0;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(index)
+		Z_PARAM_ZVAL(line)
+		Z_PARAM_ZVAL(from_column)
+		Z_PARAM_ZVAL(to_column)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(index, 2, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_get_match(c_editor, c_index, &c_line, &c_from_column, &c_to_column);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(line, (zend_long)c_line);
+	ZEND_TRY_ASSIGN_REF_LONG(from_column, (zend_long)c_from_column);
+	ZEND_TRY_ASSIGN_REF_LONG(to_column, (zend_long)c_to_column);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_select_match)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long index;
+	int c_index;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(index, 2, &c_index)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_select_match(c_editor, c_index);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_replace)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_string *replacement = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_STR_OR_NULL(replacement)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_replace(c_editor, replacement ? ZSTR_VAL(replacement) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_replace_all)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_string *replacement = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_STR_OR_NULL(replacement)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_replace_all(c_editor, replacement ? ZSTR_VAL(replacement) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_show_find)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long replace;
+	int c_replace;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(replace)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(replace, 2, &c_replace)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_show_find(c_editor, c_replace);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_hide_find)
+{
+	zend_long editor;
+	uint32_t c_editor;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_hide_find(c_editor);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtext_editor_is_find_shown)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(editor)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtext_editor_is_find_shown(c_editor);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtext_editor_set_find_bar)
+{
+	zend_long editor;
+	uint32_t c_editor;
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(editor)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(editor, 1, &c_editor)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(enabled, 2, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtext_editor_set_find_bar(c_editor, c_enabled);
 	raven_leave();
 }
 

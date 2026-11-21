@@ -14,6 +14,11 @@
 
 #include "../../stubs/raven_host_arginfo.h"
 
+ZEND_METHOD(RHostServiceRequest, __construct)
+{
+	raven_struct_construct(&raven_struct_RHostServiceRequest, Z_OBJ_P(ZEND_THIS), execute_data);
+}
+
 ZEND_FUNCTION(Rhost_platform_is_active)
 {
 	int ret;
@@ -411,8 +416,78 @@ ZEND_FUNCTION(Rhost_inject_close)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rhost_permission_answer)
+{
+	zend_long permission;
+	int c_permission;
+	zend_long status;
+	int c_status;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(permission)
+		Z_PARAM_LONG(status)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(permission, 1, &c_permission)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(status, 2, &c_status)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rhost_permission_answer((RPermission)c_permission, (RPermissionStatus)c_status);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rhost_service_complete)
+{
+	zend_long request;
+	uint32_t c_request;
+	zend_long result;
+	int c_result;
+	HashTable *files;
+	RPickedFile *c_files = NULL;
+	zend_long count;
+	int c_count;
+	raven_arena arena = {0};
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(request)
+		Z_PARAM_LONG(result)
+		Z_PARAM_ARRAY_HT(files)
+		Z_PARAM_LONG(count)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(request, 1, &c_request)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(result, 2, &c_result)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(count, 4, &c_count)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_arg_structs(files, 3, c_count, &raven_struct_RPickedFile, (void **)&c_files, &arena)) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	Rhost_service_complete(c_request, (RDeviceResult)c_result, c_files, c_count);
+	raven_leave();
+	raven_arena_free(&arena);
+}
+
 void raven_gen_raven_host_minit(int module_number)
 {
-	(void)module_number;
+	register_raven_host_symbols(module_number);
 	zend_register_functions(NULL, ext_functions, NULL, MODULE_PERSISTENT);
+	raven_ce_RHostServiceRequest = register_class_RHostServiceRequest();
 }

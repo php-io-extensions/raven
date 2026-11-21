@@ -381,6 +381,69 @@ ZEND_FUNCTION(Rfile_read)
 	Rmemory_free(r);
 }
 
+ZEND_FUNCTION(Rclipboard_get_data)
+{
+	zend_string *mime = NULL;
+	zval *size;
+	size_t c_size = 0;
+	char *r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(mime)
+		Z_PARAM_ZVAL(size)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rclipboard_get_data(mime ? ZSTR_VAL(mime) : NULL, &c_size);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(size, (zend_long)c_size);
+	if (!r) {
+		RETURN_NULL();
+	}
+	RETVAL_STRINGL(r, c_size);
+	Rmemory_free(r);
+}
+
+ZEND_FUNCTION(Rdiff_unified)
+{
+	zend_string *left = NULL, *right = NULL, *left_name = NULL, *right_name = NULL;
+	zend_long context, flags;
+	int c_context;
+	uint32_t c_flags;
+	zval *size;
+	size_t c_size = 0;
+	char *r;
+
+	ZEND_PARSE_PARAMETERS_START(7, 7)
+		Z_PARAM_STR_OR_NULL(left)
+		Z_PARAM_STR_OR_NULL(right)
+		Z_PARAM_STR_OR_NULL(left_name)
+		Z_PARAM_STR_OR_NULL(right_name)
+		Z_PARAM_LONG(context)
+		Z_PARAM_LONG(flags)
+		Z_PARAM_ZVAL(size)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(context, 5, &c_context) || !raven_arg_u32(flags, 6, &c_flags)) {
+		RETURN_THROWS();
+	}
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rdiff_unified(left ? ZSTR_VAL(left) : NULL, right ? ZSTR_VAL(right) : NULL,
+		left_name ? ZSTR_VAL(left_name) : NULL, right_name ? ZSTR_VAL(right_name) : NULL,
+		c_context, c_flags, &c_size);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(size, (zend_long)c_size);
+	if (!r) {
+		RETURN_NULL();
+	}
+	RETVAL_STRINGL(r, c_size);
+	Rmemory_free(r);
+}
+
 ZEND_FUNCTION(Rpdf_document_save_memory)
 {
 	zend_long document;
@@ -474,6 +537,64 @@ ZEND_FUNCTION(Rimage_decode)
 		RETURN_THROWS();
 	}
 	r = Rimage_decode(ZSTR_VAL(data), c_data_size, &c_width, &c_height);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(width, c_width);
+	ZEND_TRY_ASSIGN_REF_LONG(height, c_height);
+	raven_return_pixels(r, c_width, c_height, return_value);
+}
+
+ZEND_FUNCTION(Rimage_decode_frame)
+{
+	zend_string *data;
+	zend_long data_size, frame;
+	size_t c_data_size;
+	int c_frame;
+	zval *width, *height, *delay;
+	int c_width = 0, c_height = 0;
+	double c_delay = 0.0;
+	uint8_t *r;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_STR(data)
+		Z_PARAM_LONG(data_size)
+		Z_PARAM_LONG(frame)
+		Z_PARAM_ZVAL(width)
+		Z_PARAM_ZVAL(height)
+		Z_PARAM_ZVAL(delay)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_size(data_size, 2, &c_data_size) || !raven_arg_int(frame, 3, &c_frame)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_length(data, 1, c_data_size)) {
+		RETURN_THROWS();
+	}
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rimage_decode_frame(ZSTR_VAL(data), c_data_size, c_frame, &c_width, &c_height, &c_delay);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(width, c_width);
+	ZEND_TRY_ASSIGN_REF_LONG(height, c_height);
+	ZEND_TRY_ASSIGN_REF_DOUBLE(delay, c_delay);
+	raven_return_pixels(r, c_width, c_height, return_value);
+}
+
+ZEND_FUNCTION(Rclipboard_get_image)
+{
+	zval *width, *height;
+	int c_width = 0, c_height = 0;
+	uint8_t *r;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(width)
+		Z_PARAM_ZVAL(height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	r = Rclipboard_get_image(&c_width, &c_height);
 	raven_leave();
 	ZEND_TRY_ASSIGN_REF_LONG(width, c_width);
 	ZEND_TRY_ASSIGN_REF_LONG(height, c_height);
@@ -646,7 +767,12 @@ enum {
 	RB_COUNT
 };
 
-enum { RH_SET_CURSOR = 0, RH_CLIPBOARD_SET, RH_CLIPBOARD_GET, RH_WAKE, RH_COUNT };
+enum {
+	RH_SET_CURSOR = 0, RH_CLIPBOARD_SET, RH_CLIPBOARD_GET, RH_WAKE,
+	RH_PERMISSION_STATUS, RH_PERMISSION_REQUEST, RH_SERVICE_REQUEST,
+	RH_OPEN_URL, RH_HAPTIC, RH_DOWNLOAD,
+	RH_COUNT
+};
 
 typedef struct raven_table {
 	zval fn[RB_COUNT];
@@ -981,8 +1107,37 @@ typedef struct raven_host_call {
 	Rid window;
 	RCursor cursor;
 	const char *text;
+	const char *url;
 	const char *result;
+	void *bytes;
+	size_t size;
+	RPermission permission;
+	RPermissionStatus status;
+	RHaptic haptic;
+	int ok;
+	const RHostServiceRequest *request;
 } raven_host_call;
+
+static raven_table *raven_host_table_from_object(zend_object *obj)
+{
+	/* Closures in C order, skipping user_data (4) and has_camera (8). */
+	static const uint32_t prop[RH_COUNT] = {0, 1, 2, 3, 5, 6, 7, 9, 10, 11};
+	raven_table *t = ecalloc(1, sizeof(*t));
+	for (uint32_t i = 0; i < RH_COUNT; i++) {
+		zval *v = OBJ_PROP_NUM(obj, prop[i]);
+		ZVAL_DEREF(v);
+		ZVAL_UNDEF(&t->fn[i]);
+		if (Z_TYPE_P(v) == IS_OBJECT) {
+			ZVAL_COPY(&t->fn[i], v);
+			zend_is_callable_ex(&t->fn[i], NULL, 0, NULL, &t->fcc[i], NULL);
+		}
+	}
+	zval *ud = OBJ_PROP_NUM(obj, 4);
+	ZVAL_DEREF(ud);
+	ZVAL_COPY(&t->user_data, ud);
+	zend_hash_init(&t->formats, 8, NULL, NULL, 0);
+	return t;
+}
 
 static void raven_host_run(void *p)
 {
@@ -1005,6 +1160,28 @@ static void raven_host_run(void *p)
 				ZVAL_NULL(&args[argc++]);
 			}
 			break;
+		case RH_PERMISSION_STATUS:
+		case RH_PERMISSION_REQUEST:
+			ZVAL_LONG(&args[argc++], c->permission);
+			break;
+		case RH_SERVICE_REQUEST:
+			if (c->request) {
+				raven_struct_new(&raven_struct_RHostServiceRequest, c->request, &args[argc++]);
+			} else {
+				ZVAL_NULL(&args[argc++]);
+			}
+			break;
+		case RH_OPEN_URL:
+		case RH_DOWNLOAD:
+			if (c->url) {
+				ZVAL_STRING(&args[argc++], c->url);
+			} else {
+				ZVAL_NULL(&args[argc++]);
+			}
+			break;
+		case RH_HAPTIC:
+			ZVAL_LONG(&args[argc++], c->haptic);
+			break;
 		default:
 			break;
 	}
@@ -1020,6 +1197,24 @@ static void raven_host_run(void *p)
 				c->result = ZSTR_VAL(t->ret_str);
 			} else if (Z_TYPE(rv) != IS_NULL) {
 				zend_type_error("RHostPlatformDesc::$clipboard_get must return ?string, %s returned", zend_zval_value_name(&rv));
+			}
+		} else if (c->member == RH_PERMISSION_STATUS) {
+			c->status = (RPermissionStatus)raven_return_long(&rv, "RHostPlatformDesc::$permission_status");
+		} else if (c->member == RH_OPEN_URL) {
+			c->ok = (int)raven_return_long(&rv, "RHostPlatformDesc::$open_url");
+		} else if (c->member == RH_HAPTIC) {
+			c->ok = (int)raven_return_long(&rv, "RHostPlatformDesc::$haptic");
+		} else if (c->member == RH_DOWNLOAD) {
+			if (Z_TYPE(rv) == IS_STRING) {
+				c->size = Z_STRLEN(rv);
+				c->bytes = Rmemory_alloc(c->size ? c->size : 1);
+				if (c->bytes) {
+					memcpy(c->bytes, Z_STRVAL(rv), c->size);
+				} else {
+					c->size = 0;
+				}
+			} else if (Z_TYPE(rv) != IS_NULL) {
+				zend_type_error("RHostPlatformDesc::$download must return ?string, %s returned", zend_zval_value_name(&rv));
 			}
 		}
 		zval_ptr_dtor(&rv);
@@ -1078,6 +1273,70 @@ static void rh_wake(void *user_data)
 	}
 }
 
+static RPermissionStatus rh_permission_status(RPermission permission, void *user_data)
+{
+	(void)user_data;
+	raven_host_call c = {.member = RH_PERMISSION_STATUS, .permission = permission, .status = R_PERMISSION_UNSUPPORTED};
+	if (raven_on_owner_thread()) {
+		raven_host_run(&c);
+	}
+	return c.status;
+}
+
+static void rh_permission_request(RPermission permission, void *user_data)
+{
+	(void)user_data;
+	raven_host_call c = {.member = RH_PERMISSION_REQUEST, .permission = permission};
+	if (raven_on_owner_thread()) {
+		raven_host_run(&c);
+	}
+}
+
+static void rh_service_request(const RHostServiceRequest *request, void *user_data)
+{
+	(void)user_data;
+	raven_host_call c = {.member = RH_SERVICE_REQUEST, .request = request};
+	if (raven_on_owner_thread()) {
+		raven_host_run(&c);
+	}
+}
+
+static int rh_open_url(const char *url, void *user_data)
+{
+	(void)user_data;
+	raven_host_call c = {.member = RH_OPEN_URL, .url = url};
+	if (raven_on_owner_thread()) {
+		raven_host_run(&c);
+	}
+	return c.ok;
+}
+
+static int rh_haptic(RHaptic haptic, void *user_data)
+{
+	(void)user_data;
+	raven_host_call c = {.member = RH_HAPTIC, .haptic = haptic};
+	if (raven_on_owner_thread()) {
+		raven_host_run(&c);
+	}
+	return c.ok;
+}
+
+static void *rh_download(const char *url, size_t *size, void *user_data)
+{
+	(void)user_data;
+	raven_host_call c = {.member = RH_DOWNLOAD, .url = url};
+	if (raven_on_owner_thread()) {
+		raven_host_run(&c);
+	} else {
+		/* Worker threads: the PHP callable runs on the owner, as every other callable. */
+		raven_post_sync(raven_host_run, &c, RAVEN_DEADLINE_LONG);
+	}
+	if (size) {
+		*size = c.size;
+	}
+	return c.bytes;
+}
+
 ZEND_FUNCTION(Rhost_platform_register)
 {
 	zend_object *desc = NULL;
@@ -1092,15 +1351,22 @@ ZEND_FUNCTION(Rhost_platform_register)
 	raven_table *t = NULL;
 	RHostPlatformDesc c = {0};
 	if (desc) {
-		/* Properties 0 … 3 are the members in C order, 4 is user_data. */
-		t = raven_table_new(desc, 0, RH_COUNT);
-		zval *ud = OBJ_PROP_NUM(desc, 4);
-		ZVAL_DEREF(ud);
-		ZVAL_COPY(&t->user_data, ud);
+		t = raven_host_table_from_object(desc);
+		zval *cam = OBJ_PROP_NUM(desc, 8);
+		ZVAL_DEREF(cam);
+		if (Z_TYPE_P(cam) == IS_LONG) {
+			c.has_camera = Z_LVAL_P(cam) ? 1 : 0;
+		}
 		c.set_cursor = Z_ISUNDEF(t->fn[RH_SET_CURSOR]) ? NULL : rh_set_cursor;
 		c.clipboard_set = Z_ISUNDEF(t->fn[RH_CLIPBOARD_SET]) ? NULL : rh_clipboard_set;
 		c.clipboard_get = Z_ISUNDEF(t->fn[RH_CLIPBOARD_GET]) ? NULL : rh_clipboard_get;
 		c.wake = Z_ISUNDEF(t->fn[RH_WAKE]) ? NULL : rh_wake;
+		c.permission_status = Z_ISUNDEF(t->fn[RH_PERMISSION_STATUS]) ? NULL : rh_permission_status;
+		c.permission_request = Z_ISUNDEF(t->fn[RH_PERMISSION_REQUEST]) ? NULL : rh_permission_request;
+		c.service_request = Z_ISUNDEF(t->fn[RH_SERVICE_REQUEST]) ? NULL : rh_service_request;
+		c.open_url = Z_ISUNDEF(t->fn[RH_OPEN_URL]) ? NULL : rh_open_url;
+		c.haptic = Z_ISUNDEF(t->fn[RH_HAPTIC]) ? NULL : rh_haptic;
+		c.download = Z_ISUNDEF(t->fn[RH_DOWNLOAD]) ? NULL : rh_download;
 		c.user_data = t;
 	}
 	if (!raven_enter()) {

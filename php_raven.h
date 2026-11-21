@@ -6,8 +6,8 @@ extern zend_module_entry raven_module_entry;
 
 #define PHP_RAVEN_VERSION "0.11.0"
 
-/* Raven main 610b8eb (library 0.3.0). Vendored unchanged. */
-#define PHP_RAVEN_UPSTREAM_COMMIT "610b8eba3adfe5aa1476a5cad692ed6e57c97b45"
+/* Raven main c00b3f2 (library 0.3.0). Vendored unchanged. */
+#define PHP_RAVEN_UPSTREAM_COMMIT "c00b3f2e83f65274b6ed7ccd5f3558ecc4e50452"
 
 /* Khronos Vulkan-Headers tag v1.3.290, the tag Raven's CMake fetches when no Vulkan SDK is found. */
 #define PHP_RAVEN_VULKAN_HEADERS_COMMIT "b379292b2ab6df5771ba9870d53cf8b2c9295daf"
