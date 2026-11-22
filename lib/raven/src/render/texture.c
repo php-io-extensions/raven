@@ -246,8 +246,8 @@ static void rvn_texture_job_run(void* arg) {
 	}
 	if (job->data) {
 		job->svg = rvn_svg_detect(job->data, job->size);
-		job->pixels = rvn_image_decode_anim(job->data, job->size, job->svg_scale, &job->width, &job->height, &job->density, &job->current_color,
-			job->redraw ? NULL : &job->anim);
+		job->pixels = rvn_image_decode_anim(job->data, job->size, job->svg_scale, &job->width, &job->height, &job->density,
+			&job->current_color, job->redraw ? NULL : &job->anim);
 	}
 	rvn_free(job->data);
 	job->data = NULL;
@@ -442,8 +442,8 @@ Rid Rtexture_create_from_file(const char* path) {
 	int width = 0, height = 0;
 	float density = 1.0f;
 	uint8_t* pixels;
-	int svg, current_color = R_FALSE;
 	rvn_anim_t* anim = NULL;
+	int svg, current_color = R_FALSE;
 	RVN_API_GUARD(R_INVALID_ID);
 	data = rvn_read_file(path, &size);
 	if (!data) {

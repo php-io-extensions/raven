@@ -5,7 +5,7 @@ description: How tools/ turns Raven's headers into stubs and C, and where a bind
 resource: tools/generate.php
 tags: [raven, generator]
 status: draft
-generated: { by: cursor-grok/4.6, at: 2026-11-21T03:00:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-22T02:30:00Z }
 sources:
   - id: extract
     resource: tools/extract.php

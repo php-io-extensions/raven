@@ -28,11 +28,11 @@ typedef struct rvn_ptray_t rvn_ptray_t;
 /** A native window. Each platform defines its own structure. */
 typedef struct rvn_pwindow_t rvn_pwindow_t;
 
-/** A web view of the system (web_view_create). Each platform defines its own structure. */
-typedef struct rvn_pweb_view_t rvn_pweb_view_t;
-
 /** A request of a service of the device (file_open, camera_take_photo...): see below. */
 typedef struct rvn_service_request_t rvn_service_request_t;
+
+/** A web view of the system (web_view_create). Each platform defines its own structure. */
+typedef struct rvn_pweb_view_t rvn_pweb_view_t;
 
 /** What a web view of the system tells the core (rvn_web_view_event). */
 typedef enum rvn_pweb_event_type_t {
@@ -287,11 +287,11 @@ typedef struct rvn_pevent_t {
 	int wheel_stop;
 	/** RVN_PEVENT_APP: an RAppEvent. */
 	int app_event;
-	/** RVN_PEVENT_DRAG_END: an RDragOperation. */
-	int operation;
 	/** RVN_PEVENT_COMPOSITION: the text being composed and its selection (bytes). */
 	const char* composition;
 	int composition_start, composition_end;
+	/** RVN_PEVENT_DRAG_END: an RDragOperation. */
+	int operation;
 } rvn_pevent_t;
 
 typedef void (*rvn_pevent_handler_t)(const rvn_pevent_t* event);

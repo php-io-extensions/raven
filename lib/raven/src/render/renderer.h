@@ -223,8 +223,9 @@ uint8_t* rvn_anim_decode_frame(const rvn_anim_t* anim, int index);
  * APNG (`anim`, may be NULL; then the pixels are its first frame). The
  * animation keeps a copy of the file.
  */
-uint8_t* rvn_image_decode_anim(const uint8_t* data, size_t size, float svg_scale, int* width, int* height, float* density, int* current_color, rvn_anim_t** anim);
-/** Downloads and decodes an HTTP(S) image asynchronously. Internal resource helper. */
+uint8_t* rvn_image_decode_anim(const uint8_t* data, size_t size, float svg_scale, int* width, int* height, float* density,
+	int* current_color, rvn_anim_t** anim);
+
 
 /* ---------------------------------------------------------------------------
  *  Renderer (render/renderer.c)

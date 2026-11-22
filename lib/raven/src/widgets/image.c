@@ -28,6 +28,7 @@ typedef struct rvn_image_t {
 	int tint_text;
 	/** R_TRUE once a tint was given: an SVG in currentColor is then drawn in it, not in the text color. */
 	int tint_set;
+
 	/* ---- playback of an animated texture ---- */
 	/** Plays when its texture is set (XML Animate). */
 	int autoplay;

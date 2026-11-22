@@ -66,7 +66,8 @@ static uint8_t* rvn_bitmap_decode(const uint8_t* data, size_t size, int* width, 
 
 #endif
 
-uint8_t* rvn_image_decode_anim(const uint8_t* data, size_t size, float svg_scale, int* width, int* height, float* density, int* current_color, rvn_anim_t** anim) {
+uint8_t* rvn_image_decode_anim(const uint8_t* data, size_t size, float svg_scale, int* width, int* height, float* density,
+	int* current_color, rvn_anim_t** anim) {
 	if (density) *density = 1.0f;
 	if (current_color) *current_color = R_FALSE;
 	if (anim) *anim = NULL;

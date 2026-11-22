@@ -34,7 +34,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/gen/raven_xml.c"
 
   dnl Raven as its CMakeLists.txt builds it for this platform: Vulkan backend on,
-  dnl stb_image and nanosvg on, the web pages (web/) off. lib/raven is upstream plus merge-lost restorations at c00b3f2.
+  dnl stb_image and nanosvg on, the web pages (web/) off. lib/raven is never edited.
   raven_lib=" \
     src/core/accessibility.c src/core/accessibility_touch.c src/core/context.c src/core/deflate.c \
     src/core/diff.c src/core/error.c src/core/file.c src/core/fs.c \
