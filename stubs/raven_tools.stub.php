@@ -112,6 +112,96 @@ const R_BLOCK_BODY = UNKNOWN;
  */
 const R_BLOCK_INPUT = UNKNOWN;
 
+/**
+ * @var int
+ * @cvalue R_DIFF_VIEW_UNIFIED
+ */
+const R_DIFF_VIEW_UNIFIED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_VIEW_SPLIT
+ */
+const R_DIFF_VIEW_SPLIT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_LEFT
+ */
+const R_DIFF_LEFT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_RIGHT
+ */
+const R_DIFF_RIGHT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_SAME
+ */
+const R_DIFF_ROW_SAME = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_REMOVED
+ */
+const R_DIFF_ROW_REMOVED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_ADDED
+ */
+const R_DIFF_ROW_ADDED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_CHANGED
+ */
+const R_DIFF_ROW_CHANGED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_FOLD
+ */
+const R_DIFF_ROW_FOLD = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_HUNK
+ */
+const R_DIFF_ROW_HUNK = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_FILE
+ */
+const R_DIFF_ROW_FILE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_ROW_NOTE
+ */
+const R_DIFF_ROW_NOTE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_IGNORE_TRAILING_SPACE
+ */
+const R_DIFF_IGNORE_TRAILING_SPACE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_IGNORE_SPACE
+ */
+const R_DIFF_IGNORE_SPACE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DIFF_IGNORE_CASE
+ */
+const R_DIFF_IGNORE_CASE = UNKNOWN;
+
 function Rcolor_picker_create(): int {}
 
 /**
@@ -914,3 +1004,149 @@ function Rblock_editor_select(int $editor, int $block, int $add): void {}
 function Rblock_editor_get_view(int $editor, ?float &$x, ?float &$y, ?float &$zoom): void {}
 
 function Rblock_editor_set_view(int $editor, float $x, float $y, float $zoom): void {}
+
+/**
+ * The number of changes (runs of lines removed and / or added) between two texts. Any thread.
+ */
+function Rdiff_count_changes(?string $left, ?string $right, int $flags): int {}
+
+function Rdiff_view_create(): int {}
+
+/**
+ * The two texts to compare (NULL: empty). Lines end with "\n" or "\r\n".
+ */
+function Rdiff_view_set_texts(int $diff_view, ?string $left, ?string $right): void {}
+
+/**
+ * Names shown over the two sides (file names, "Before" / "After"); NULL: none. Their extension chooses the colors of the code.
+ */
+function Rdiff_view_set_names(int $diff_view, ?string $left_name, ?string $right_name): void {}
+
+/**
+ * Compares two files. Their paths become the names unless names
+ * were given. return R_FALSE when a file cannot be read (it is compared
+ * as empty).
+ */
+function Rdiff_view_load_files(int $diff_view, ?string $left_path, ?string $right_path): int {}
+
+/**
+ * Shows a patch (unified diff: the output of `git diff`, `diff -u`)
+ * instead of two texts: each file with its name, each hunk with its header.
+ * Returns R_FALSE when the text holds no hunk (nothing is shown).
+ */
+function Rdiff_view_set_patch(int $diff_view, ?string $patch): int {}
+
+function Rdiff_view_set_mode(int $diff_view, int $mode): void {}
+
+function Rdiff_view_get_mode(int $diff_view): int {}
+
+/**
+ * Unchanged lines shown around each change (3 by default); the
+ * others are folded. A negative number shows every line.
+ */
+function Rdiff_view_set_context(int $diff_view, int $lines): void {}
+
+function Rdiff_view_get_context(int $diff_view): int {}
+
+/**
+ * How lines are compared: RDiffFlags (0 by default). Not used by a patch.
+ */
+function Rdiff_view_set_flags(int $diff_view, int $flags): void {}
+
+function Rdiff_view_get_flags(int $diff_view): int {}
+
+/**
+ * Marks the words that changed inside a changed line (default R_TRUE).
+ */
+function Rdiff_view_set_word_diff(int $diff_view, int $enabled): void {}
+
+/**
+ * Shows the numbers of the lines (default R_TRUE).
+ */
+function Rdiff_view_set_line_numbers(int $diff_view, int $visible): void {}
+
+/**
+ * Colors the code as the text editor does: a language name of
+ * Rlanguage_register ("C", "Python", "JSON"...), "None" for plain text,
+ * NULL (default) to guess it from the extension of the names.
+ */
+function Rdiff_view_set_language(int $diff_view, ?string $language): void {}
+
+/**
+ * The number of changes: runs of lines removed and / or added.
+ */
+function Rdiff_view_get_change_count(int $diff_view): int {}
+
+/**
+ * Where a change is: its first line and its number of lines on
+ * each side (a count of 0: nothing on that side; the line is then the one
+ * after which the other side's lines go). return R_FALSE when there is
+ * no such change.
+ */
+function Rdiff_view_get_change(int $diff_view, int $change, ?int &$left_line, ?int &$left_count, ?int &$right_line, ?int &$right_count): int {}
+
+/**
+ * Scrolls to a change (from 0) and marks it as the current one.
+ */
+function Rdiff_view_go_to_change(int $diff_view, int $change): void {}
+
+/**
+ * The current change, -1 before the first one is gone to.
+ */
+function Rdiff_view_get_current_change(int $diff_view): int {}
+
+/**
+ * Goes to the next / previous change. return Its index, -1 when there is none.
+ */
+function Rdiff_view_next_change(int $diff_view): int {}
+
+function Rdiff_view_prev_change(int $diff_view): int {}
+
+/**
+ * The rows shown, folds, hunk headers and notes included.
+ */
+function Rdiff_view_get_row_count(int $diff_view): int {}
+
+/**
+ * What a row shows, and the numbers of its lines (0 for a side it
+ * has no line of). A fold gives the first line it hides on each side.
+ */
+function Rdiff_view_get_row(int $diff_view, int $row, ?int &$left_line, ?int &$right_line): int {}
+
+/**
+ * The text of a row on one side (in unified mode the side does not
+ * matter for a line); a fold, a hunk, a file or a note give their label.
+ * Valid until the next call. "" when there is none.
+ */
+function Rdiff_view_get_row_text(int $diff_view, int $row, int $side): ?string {}
+
+/**
+ * Shows the lines of a fold. return R_FALSE when the row is not a fold.
+ */
+function Rdiff_view_expand(int $diff_view, int $row): int {}
+
+/**
+ * The first row at the top of the view; Rdiff_view_scroll_to_row brings one there.
+ */
+function Rdiff_view_get_first_visible_row(int $diff_view): int {}
+
+function Rdiff_view_scroll_to_row(int $diff_view, int $row): void {}
+
+/**
+ * Attaches a short note to a line (a review comment, an error): a
+ * mark in the gutter and the text in a row under the line, which is never
+ * folded away. Several notes may go to one line.
+ */
+function Rdiff_view_add_annotation(int $diff_view, int $side, int $line, ?string $text): void {}
+
+function Rdiff_view_clear_annotations(int $diff_view): void {}
+
+/**
+ * The text selected by the user ("" when none), one line after another.
+ */
+function Rdiff_view_get_selected_text(int $diff_view): ?string {}
+
+/**
+ * Called when a line or its number is clicked (the action of the widget is fired too).
+ */
+function Rdiff_view_set_line_clicked_callback(int $diff_view, ?callable $callback, mixed $user_data): void {}

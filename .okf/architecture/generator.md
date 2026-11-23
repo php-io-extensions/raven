@@ -5,7 +5,7 @@ description: How tools/ turns Raven's headers into stubs and C, and where a bind
 resource: tools/generate.php
 tags: [raven, generator]
 status: draft
-generated: { by: cursor-grok/4.6, at: 2026-11-19T02:30:00Z }
+generated: { by: cursor-grok/4.6, at: 2026-11-22T02:30:00Z }
 sources:
   - id: extract
     resource: tools/extract.php
@@ -26,4 +26,4 @@ sources:
 
 Every binding is its own written-out `ZEND_FUNCTION`; structs convert through field tables walked by `src/runtime.c`. The C return is `ret`, so it cannot collide with a parameter named `r` (`Rchart_add_band`). Never edit `src/gen/`, `stubs/raven_*.stub.php` or `*_arginfo.h` by hand.
 
-Generated slot keys: the setter's name plus the `Rid` arguments before its first callback (or the first `const char*` name, for actions and XML tags — `Raction_bind_with_parameters` keys by `name`, not `signature`). `bindings.php` `slots` overrides it: `Rtask_post` once, `Rtimer_create` keyed by the returned timer, `Rdialog_open` and `Rpopup_open` by their content. `const uint8_t*` RGBA pixels are sized by the next two `int` parameters (`width`/`height`, or `pixels_width`/`pixels_height`). `const float*` is an array sized by a following `count`, or by the two preceding `int`s (`Rchart_set_grid`: `rows` × `columns`). Opaque `RActionContext*` is wrapped like `RPainter*`.
+Generated slot keys: the setter's name plus the `Rid` arguments before its first callback (or the first `const char*` name, for actions and XML tags — `Raction_bind_with_parameters` keys by `name`, not `signature`). `bindings.php` `slots` overrides it: `Rtask_post` once, `Rtimer_create` keyed by the returned timer, `Rdialog_open` and `Rpopup_open` by their content. `const uint8_t*` RGBA pixels are sized by the next two `int` parameters (`width`/`height`, or `pixels_width`/`pixels_height`), skipping intervening `const uint8_t*` of the same kind (`Rtest_compare_pixels`: actual, expected, width, height); a following `int stride` (`Rclipboard_set_image`) sizes the buffer as `stride × height` (stride 0 means `width × 4`). A `uint8_t*` RGBA out-buffer sized by `width`/`height` is written back as `?string`. `const float*` is an array sized by a following `count`, or by the two preceding `int`s (`Rchart_set_grid`: `rows` × `columns`). A struct field `const void*` whose next field is `size_t` is `?string` (`RAVEN_F_BYTES`). A callback `const T*` followed by `int count` is an array of `T` (`RDeviceCallback`). Opaque `RActionContext*` is wrapped like `RPainter*`. `Rimage_encode_png`, `Rimage_decode_frame`, `Rclipboard_get_image`, `Rclipboard_get_data` and `Rdiff_unified` are manual: bytes Raven allocated, released with `Rpixels_free` or `Rmemory_free`.

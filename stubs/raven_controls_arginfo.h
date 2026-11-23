@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: a331117f94c0e3a0514a633ccaeb9623fd358541 */
+ * Stub hash: 22971d4ab3270402384ecd8188586ba7784ff698 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rlabel_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
@@ -206,6 +206,51 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_set_corner_radius, 0, 2, 
 	ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_is_animated, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, image, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rimage_get_frame_count arginfo_Rimage_is_animated
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_get_duration, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, image, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_get_frame_delay, 0, 2, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, image, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, frame, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_play, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, image, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rimage_pause arginfo_Rimage_play
+
+#define arginfo_Rimage_stop arginfo_Rimage_play
+
+#define arginfo_Rimage_is_playing arginfo_Rimage_is_animated
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_set_frame, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, image, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, frame, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rimage_get_frame arginfo_Rimage_is_animated
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_set_loop_count, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, image, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rimage_get_loop_count arginfo_Rimage_is_animated
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rimage_set_finished_callback, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, image, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_set_text, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, text_input, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
@@ -263,6 +308,61 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_set_changed_callback
 ZEND_END_ARG_INFO()
 
 #define arginfo_Rtext_input_set_committed_callback arginfo_Rtext_input_set_changed_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_set_spell_check, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, text_input, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_input_get_spell_check arginfo_Rtext_input_is_password
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_input_set_spell_language, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, text_input, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_is_supported, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rspell_get_language_count arginfo_Rspell_is_supported
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_get_language_at, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_set_language, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_get_language, 0, 0, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_check, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_get_misspelling, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, start, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, end, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_suggest, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, word, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rspell_get_suggestion arginfo_Rspell_get_language_at
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_learn, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, word, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspell_ignore, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, word, IS_STRING, 1)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rspin_box_set_range, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, spin_box, IS_LONG, 0)
@@ -341,6 +441,38 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcombo_box_set_changed_callback,
 	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcombo_box_set_editable, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, combo_box, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, editable, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcombo_box_is_editable arginfo_Rcombo_box_get_item_count
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcombo_box_set_searchable, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, combo_box, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, searchable, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcombo_box_is_searchable arginfo_Rcombo_box_get_item_count
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcombo_box_get_text, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, combo_box, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcombo_box_set_text, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, combo_box, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcombo_box_set_text_changed_callback arginfo_Rcombo_box_set_changed_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcombo_box_set_open, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, combo_box, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, open, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rcombo_box_is_open arginfo_Rcombo_box_get_item_count
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rseparator_set_orientation, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, separator, IS_LONG, 0)
@@ -723,6 +855,8 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rtile_view_set_drag_data_callback arginfo_Rtile_view_set_section_toggled_callback
 
+#define arginfo_Rtile_view_set_drag_out_callback arginfo_Rtile_view_set_section_toggled_callback
+
 #define arginfo_Rtile_view_set_selection_changed_callback arginfo_Rtile_view_set_section_toggled_callback
 
 #define arginfo_Rtile_view_set_activated_callback arginfo_Rtile_view_set_section_toggled_callback
@@ -838,6 +972,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_multi_select, 0, 2, I
 	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_selection_mode, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, mode, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtable_get_selection_mode arginfo_Rtable_get_column_count
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_row_selected, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
@@ -849,6 +990,15 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_is_row_selected, 0, 2, IS
 	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_select_range, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, first, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, last, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, selected, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtable_select_all arginfo_Rtable_clear_columns
+
 #define arginfo_Rtable_clear_selection arginfo_Rtable_clear_columns
 
 #define arginfo_Rtable_get_selection_count arginfo_Rtable_get_column_count
@@ -858,9 +1008,20 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_get_selection, 0, 2, IS_L
 	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+#define arginfo_Rtable_get_selection_range_count arginfo_Rtable_get_column_count
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_get_selection_range, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, first, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, last, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
 #define arginfo_Rtable_set_selected arginfo_Rtable_remove_row
 
 #define arginfo_Rtable_get_selected arginfo_Rtable_get_column_count
+
+#define arginfo_Rtable_get_current_row arginfo_Rtable_get_column_count
 
 #define arginfo_Rtable_scroll_to_row arginfo_Rtable_remove_row
 
@@ -891,6 +1052,56 @@ ZEND_END_ARG_INFO()
 #define arginfo_Rtable_set_activated_callback arginfo_Rtable_set_cell_color_callback
 
 #define arginfo_Rtable_set_sort_callback arginfo_Rtable_set_cell_color_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_column_editable, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, editable, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_is_column_editable, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtable_set_cell_edited_callback arginfo_Rtable_set_cell_color_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_edit_cell, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtable_is_editing arginfo_Rtable_get_column_count
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_end_edit, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, commit, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_frozen_columns, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtable_get_frozen_columns arginfo_Rtable_get_column_count
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_column_kind, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, kind, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtable_get_column_kind arginfo_Rtable_is_column_editable
+
+#define arginfo_Rtable_is_cell_checked arginfo_Rtable_edit_cell
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtable_set_cell_checked, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, table, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, row, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, checked, IS_LONG, 0)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdate_picker_set_date, 0, 4, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, date_picker, IS_LONG, 0)
@@ -945,6 +1156,22 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdate_picker_set_changed_callbac
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdate_picker_set_time_zone, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, date_picker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, zone, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rdate_picker_get_time_zone arginfo_Rdate_picker_get_text
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdate_picker_set_instant, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, date_picker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, utc, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdate_picker_get_instant, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, date_picker, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_set_time, 0, 4, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, hour, IS_LONG, 0)
@@ -973,6 +1200,51 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_set_changed_callbac
 	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_set_clock, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, clock, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_get_clock, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_get_text, 0, 1, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_set_time_zone, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, zone, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtime_picker_get_time_zone arginfo_Rtime_picker_get_text
+
+#define arginfo_Rtime_picker_set_time_zone_visible arginfo_Rtime_picker_set_seconds_visible
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_set_date, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, year, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, month, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, day, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_get_date, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, year, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, month, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, day, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_set_instant, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, utc, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtime_picker_get_instant, 0, 1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, time_picker, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtoast_show, 0, 3, IS_VOID, 0)
@@ -1654,8 +1926,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rchart_set_marker arginfo_Rchart_set_legend
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_is_available, 0, 0, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rpdf_is_available arginfo_Rspell_is_supported
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_load_file, 0, 3, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
@@ -1725,7 +1996,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_set_page_changed_callb
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_Rcarousel_create arginfo_Rpdf_is_available
+#define arginfo_Rcarousel_create arginfo_Rspell_is_supported
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rcarousel_set_page, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, carousel, IS_LONG, 0)
@@ -1790,7 +2061,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_view_print, 0, 2, IS_LONG, 
 	ZEND_ARG_OBJ_INFO(0, desc, RPdfPrintDesc, 1)
 ZEND_END_ARG_INFO()
 
-#define arginfo_Rmap_view_create arginfo_Rpdf_is_available
+#define arginfo_Rmap_view_create arginfo_Rspell_is_supported
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rmap_view_set_center, 0, 3, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, map, IS_LONG, 0)
@@ -1967,7 +2238,60 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rmap_view_get_attribution arginfo_Rmap_view_get_tile_path
 
-#define arginfo_Rpdf_document_create arginfo_Rpdf_is_available
+#define arginfo_Rsystem_web_view_is_supported arginfo_Rspell_is_supported
+
+#define arginfo_Rsystem_web_view_create arginfo_Rspell_is_supported
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rsystem_web_view_load_url, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, url, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rsystem_web_view_load_file, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rsystem_web_view_load_html, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, html, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, base_url, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rsystem_web_view_reload arginfo_Rpdf_view_close
+
+#define arginfo_Rsystem_web_view_stop arginfo_Rpdf_view_close
+
+#define arginfo_Rsystem_web_view_go_back arginfo_Rpdf_view_close
+
+#define arginfo_Rsystem_web_view_go_forward arginfo_Rpdf_view_close
+
+#define arginfo_Rsystem_web_view_can_go_back arginfo_Rpdf_view_get_status
+
+#define arginfo_Rsystem_web_view_can_go_forward arginfo_Rpdf_view_get_status
+
+#define arginfo_Rsystem_web_view_get_url arginfo_Rpdf_view_get_title
+
+#define arginfo_Rsystem_web_view_get_title arginfo_Rpdf_view_get_title
+
+#define arginfo_Rsystem_web_view_is_loading arginfo_Rpdf_view_get_status
+
+#define arginfo_Rsystem_web_view_get_error arginfo_Rpdf_view_get_title
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rsystem_web_view_run_javascript, 0, 4, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, view, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, script, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, callback, IS_CALLABLE, 1)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_MIXED, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rsystem_web_view_set_message_callback arginfo_Rpdf_view_set_page_changed_callback
+
+#define arginfo_Rsystem_web_view_set_event_callback arginfo_Rpdf_view_set_page_changed_callback
+
+#define arginfo_Rsystem_web_view_get_native_handle arginfo_Rpdf_view_get_status
+
+#define arginfo_Rpdf_document_create arginfo_Rspell_is_supported
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rpdf_document_delete, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, document, IS_LONG, 0)
@@ -2193,6 +2517,19 @@ ZEND_FUNCTION(Rimage_set_tint_text);
 ZEND_FUNCTION(Rimage_set_stretch);
 ZEND_FUNCTION(Rimage_set_region);
 ZEND_FUNCTION(Rimage_set_corner_radius);
+ZEND_FUNCTION(Rimage_is_animated);
+ZEND_FUNCTION(Rimage_get_frame_count);
+ZEND_FUNCTION(Rimage_get_duration);
+ZEND_FUNCTION(Rimage_get_frame_delay);
+ZEND_FUNCTION(Rimage_play);
+ZEND_FUNCTION(Rimage_pause);
+ZEND_FUNCTION(Rimage_stop);
+ZEND_FUNCTION(Rimage_is_playing);
+ZEND_FUNCTION(Rimage_set_frame);
+ZEND_FUNCTION(Rimage_get_frame);
+ZEND_FUNCTION(Rimage_set_loop_count);
+ZEND_FUNCTION(Rimage_get_loop_count);
+ZEND_FUNCTION(Rimage_set_finished_callback);
 ZEND_FUNCTION(Rtext_input_set_text);
 ZEND_FUNCTION(Rtext_input_get_text);
 ZEND_FUNCTION(Rtext_input_set_placeholder);
@@ -2208,6 +2545,20 @@ ZEND_FUNCTION(Rtext_input_set_return_key);
 ZEND_FUNCTION(Rtext_input_get_return_key);
 ZEND_FUNCTION(Rtext_input_set_changed_callback);
 ZEND_FUNCTION(Rtext_input_set_committed_callback);
+ZEND_FUNCTION(Rtext_input_set_spell_check);
+ZEND_FUNCTION(Rtext_input_get_spell_check);
+ZEND_FUNCTION(Rtext_input_set_spell_language);
+ZEND_FUNCTION(Rspell_is_supported);
+ZEND_FUNCTION(Rspell_get_language_count);
+ZEND_FUNCTION(Rspell_get_language_at);
+ZEND_FUNCTION(Rspell_set_language);
+ZEND_FUNCTION(Rspell_get_language);
+ZEND_FUNCTION(Rspell_check);
+ZEND_FUNCTION(Rspell_get_misspelling);
+ZEND_FUNCTION(Rspell_suggest);
+ZEND_FUNCTION(Rspell_get_suggestion);
+ZEND_FUNCTION(Rspell_learn);
+ZEND_FUNCTION(Rspell_ignore);
 ZEND_FUNCTION(Rspin_box_set_range);
 ZEND_FUNCTION(Rspin_box_set_value);
 ZEND_FUNCTION(Rspin_box_get_value);
@@ -2224,6 +2575,15 @@ ZEND_FUNCTION(Rcombo_box_get_item_text);
 ZEND_FUNCTION(Rcombo_box_set_selected);
 ZEND_FUNCTION(Rcombo_box_get_selected);
 ZEND_FUNCTION(Rcombo_box_set_changed_callback);
+ZEND_FUNCTION(Rcombo_box_set_editable);
+ZEND_FUNCTION(Rcombo_box_is_editable);
+ZEND_FUNCTION(Rcombo_box_set_searchable);
+ZEND_FUNCTION(Rcombo_box_is_searchable);
+ZEND_FUNCTION(Rcombo_box_get_text);
+ZEND_FUNCTION(Rcombo_box_set_text);
+ZEND_FUNCTION(Rcombo_box_set_text_changed_callback);
+ZEND_FUNCTION(Rcombo_box_set_open);
+ZEND_FUNCTION(Rcombo_box_is_open);
 ZEND_FUNCTION(Rseparator_set_orientation);
 ZEND_FUNCTION(Rlist_view_add_item);
 ZEND_FUNCTION(Rlist_view_set_item_text);
@@ -2315,6 +2675,7 @@ ZEND_FUNCTION(Rtile_view_get_item_at);
 ZEND_FUNCTION(Rtile_view_set_drop_highlight);
 ZEND_FUNCTION(Rtile_view_set_drag_type);
 ZEND_FUNCTION(Rtile_view_set_drag_data_callback);
+ZEND_FUNCTION(Rtile_view_set_drag_out_callback);
 ZEND_FUNCTION(Rtile_view_set_selection_changed_callback);
 ZEND_FUNCTION(Rtile_view_set_activated_callback);
 ZEND_FUNCTION(Rtile_view_set_context_callback);
@@ -2338,13 +2699,20 @@ ZEND_FUNCTION(Rtable_set_virtual_rows);
 ZEND_FUNCTION(Rtable_set_cell_color_callback);
 ZEND_FUNCTION(Rtable_set_cell_text_color);
 ZEND_FUNCTION(Rtable_set_multi_select);
+ZEND_FUNCTION(Rtable_set_selection_mode);
+ZEND_FUNCTION(Rtable_get_selection_mode);
 ZEND_FUNCTION(Rtable_set_row_selected);
 ZEND_FUNCTION(Rtable_is_row_selected);
+ZEND_FUNCTION(Rtable_select_range);
+ZEND_FUNCTION(Rtable_select_all);
 ZEND_FUNCTION(Rtable_clear_selection);
 ZEND_FUNCTION(Rtable_get_selection_count);
 ZEND_FUNCTION(Rtable_get_selection);
+ZEND_FUNCTION(Rtable_get_selection_range_count);
+ZEND_FUNCTION(Rtable_get_selection_range);
 ZEND_FUNCTION(Rtable_set_selected);
 ZEND_FUNCTION(Rtable_get_selected);
+ZEND_FUNCTION(Rtable_get_current_row);
 ZEND_FUNCTION(Rtable_scroll_to_row);
 ZEND_FUNCTION(Rtable_sort);
 ZEND_FUNCTION(Rtable_get_sort_column);
@@ -2355,6 +2723,18 @@ ZEND_FUNCTION(Rtable_set_striped);
 ZEND_FUNCTION(Rtable_set_selection_changed_callback);
 ZEND_FUNCTION(Rtable_set_activated_callback);
 ZEND_FUNCTION(Rtable_set_sort_callback);
+ZEND_FUNCTION(Rtable_set_column_editable);
+ZEND_FUNCTION(Rtable_is_column_editable);
+ZEND_FUNCTION(Rtable_set_cell_edited_callback);
+ZEND_FUNCTION(Rtable_edit_cell);
+ZEND_FUNCTION(Rtable_is_editing);
+ZEND_FUNCTION(Rtable_end_edit);
+ZEND_FUNCTION(Rtable_set_frozen_columns);
+ZEND_FUNCTION(Rtable_get_frozen_columns);
+ZEND_FUNCTION(Rtable_set_column_kind);
+ZEND_FUNCTION(Rtable_get_column_kind);
+ZEND_FUNCTION(Rtable_is_cell_checked);
+ZEND_FUNCTION(Rtable_set_cell_checked);
 ZEND_FUNCTION(Rdate_picker_set_date);
 ZEND_FUNCTION(Rdate_picker_get_date);
 ZEND_FUNCTION(Rdate_picker_set_range);
@@ -2364,11 +2744,25 @@ ZEND_FUNCTION(Rdate_picker_get_text);
 ZEND_FUNCTION(Rdate_picker_set_open);
 ZEND_FUNCTION(Rdate_picker_is_open);
 ZEND_FUNCTION(Rdate_picker_set_changed_callback);
+ZEND_FUNCTION(Rdate_picker_set_time_zone);
+ZEND_FUNCTION(Rdate_picker_get_time_zone);
+ZEND_FUNCTION(Rdate_picker_set_instant);
+ZEND_FUNCTION(Rdate_picker_get_instant);
 ZEND_FUNCTION(Rtime_picker_set_time);
 ZEND_FUNCTION(Rtime_picker_get_time);
 ZEND_FUNCTION(Rtime_picker_set_seconds_visible);
 ZEND_FUNCTION(Rtime_picker_set_minute_step);
 ZEND_FUNCTION(Rtime_picker_set_changed_callback);
+ZEND_FUNCTION(Rtime_picker_set_clock);
+ZEND_FUNCTION(Rtime_picker_get_clock);
+ZEND_FUNCTION(Rtime_picker_get_text);
+ZEND_FUNCTION(Rtime_picker_set_time_zone);
+ZEND_FUNCTION(Rtime_picker_get_time_zone);
+ZEND_FUNCTION(Rtime_picker_set_time_zone_visible);
+ZEND_FUNCTION(Rtime_picker_set_date);
+ZEND_FUNCTION(Rtime_picker_get_date);
+ZEND_FUNCTION(Rtime_picker_set_instant);
+ZEND_FUNCTION(Rtime_picker_get_instant);
 ZEND_FUNCTION(Rtoast_show);
 ZEND_FUNCTION(Rtoast_show_kind);
 ZEND_FUNCTION(Rtoast_hide);
@@ -2573,6 +2967,25 @@ ZEND_FUNCTION(Rmap_view_set_marker_clicked_callback);
 ZEND_FUNCTION(Rmap_view_set_view_changed_callback);
 ZEND_FUNCTION(Rmap_view_set_attribution);
 ZEND_FUNCTION(Rmap_view_get_attribution);
+ZEND_FUNCTION(Rsystem_web_view_is_supported);
+ZEND_FUNCTION(Rsystem_web_view_create);
+ZEND_FUNCTION(Rsystem_web_view_load_url);
+ZEND_FUNCTION(Rsystem_web_view_load_file);
+ZEND_FUNCTION(Rsystem_web_view_load_html);
+ZEND_FUNCTION(Rsystem_web_view_reload);
+ZEND_FUNCTION(Rsystem_web_view_stop);
+ZEND_FUNCTION(Rsystem_web_view_go_back);
+ZEND_FUNCTION(Rsystem_web_view_go_forward);
+ZEND_FUNCTION(Rsystem_web_view_can_go_back);
+ZEND_FUNCTION(Rsystem_web_view_can_go_forward);
+ZEND_FUNCTION(Rsystem_web_view_get_url);
+ZEND_FUNCTION(Rsystem_web_view_get_title);
+ZEND_FUNCTION(Rsystem_web_view_is_loading);
+ZEND_FUNCTION(Rsystem_web_view_get_error);
+ZEND_FUNCTION(Rsystem_web_view_run_javascript);
+ZEND_FUNCTION(Rsystem_web_view_set_message_callback);
+ZEND_FUNCTION(Rsystem_web_view_set_event_callback);
+ZEND_FUNCTION(Rsystem_web_view_get_native_handle);
 ZEND_FUNCTION(Rpdf_document_create);
 ZEND_FUNCTION(Rpdf_document_delete);
 ZEND_FUNCTION(Rpdf_document_set_title);
@@ -2647,6 +3060,19 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rimage_set_stretch, arginfo_Rimage_set_stretch)
 	ZEND_FE(Rimage_set_region, arginfo_Rimage_set_region)
 	ZEND_FE(Rimage_set_corner_radius, arginfo_Rimage_set_corner_radius)
+	ZEND_FE(Rimage_is_animated, arginfo_Rimage_is_animated)
+	ZEND_FE(Rimage_get_frame_count, arginfo_Rimage_get_frame_count)
+	ZEND_FE(Rimage_get_duration, arginfo_Rimage_get_duration)
+	ZEND_FE(Rimage_get_frame_delay, arginfo_Rimage_get_frame_delay)
+	ZEND_FE(Rimage_play, arginfo_Rimage_play)
+	ZEND_FE(Rimage_pause, arginfo_Rimage_pause)
+	ZEND_FE(Rimage_stop, arginfo_Rimage_stop)
+	ZEND_FE(Rimage_is_playing, arginfo_Rimage_is_playing)
+	ZEND_FE(Rimage_set_frame, arginfo_Rimage_set_frame)
+	ZEND_FE(Rimage_get_frame, arginfo_Rimage_get_frame)
+	ZEND_FE(Rimage_set_loop_count, arginfo_Rimage_set_loop_count)
+	ZEND_FE(Rimage_get_loop_count, arginfo_Rimage_get_loop_count)
+	ZEND_FE(Rimage_set_finished_callback, arginfo_Rimage_set_finished_callback)
 	ZEND_FE(Rtext_input_set_text, arginfo_Rtext_input_set_text)
 	ZEND_FE(Rtext_input_get_text, arginfo_Rtext_input_get_text)
 	ZEND_FE(Rtext_input_set_placeholder, arginfo_Rtext_input_set_placeholder)
@@ -2662,6 +3088,20 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtext_input_get_return_key, arginfo_Rtext_input_get_return_key)
 	ZEND_FE(Rtext_input_set_changed_callback, arginfo_Rtext_input_set_changed_callback)
 	ZEND_FE(Rtext_input_set_committed_callback, arginfo_Rtext_input_set_committed_callback)
+	ZEND_FE(Rtext_input_set_spell_check, arginfo_Rtext_input_set_spell_check)
+	ZEND_FE(Rtext_input_get_spell_check, arginfo_Rtext_input_get_spell_check)
+	ZEND_FE(Rtext_input_set_spell_language, arginfo_Rtext_input_set_spell_language)
+	ZEND_FE(Rspell_is_supported, arginfo_Rspell_is_supported)
+	ZEND_FE(Rspell_get_language_count, arginfo_Rspell_get_language_count)
+	ZEND_FE(Rspell_get_language_at, arginfo_Rspell_get_language_at)
+	ZEND_FE(Rspell_set_language, arginfo_Rspell_set_language)
+	ZEND_FE(Rspell_get_language, arginfo_Rspell_get_language)
+	ZEND_FE(Rspell_check, arginfo_Rspell_check)
+	ZEND_FE(Rspell_get_misspelling, arginfo_Rspell_get_misspelling)
+	ZEND_FE(Rspell_suggest, arginfo_Rspell_suggest)
+	ZEND_FE(Rspell_get_suggestion, arginfo_Rspell_get_suggestion)
+	ZEND_FE(Rspell_learn, arginfo_Rspell_learn)
+	ZEND_FE(Rspell_ignore, arginfo_Rspell_ignore)
 	ZEND_FE(Rspin_box_set_range, arginfo_Rspin_box_set_range)
 	ZEND_FE(Rspin_box_set_value, arginfo_Rspin_box_set_value)
 	ZEND_FE(Rspin_box_get_value, arginfo_Rspin_box_get_value)
@@ -2678,6 +3118,15 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rcombo_box_set_selected, arginfo_Rcombo_box_set_selected)
 	ZEND_FE(Rcombo_box_get_selected, arginfo_Rcombo_box_get_selected)
 	ZEND_FE(Rcombo_box_set_changed_callback, arginfo_Rcombo_box_set_changed_callback)
+	ZEND_FE(Rcombo_box_set_editable, arginfo_Rcombo_box_set_editable)
+	ZEND_FE(Rcombo_box_is_editable, arginfo_Rcombo_box_is_editable)
+	ZEND_FE(Rcombo_box_set_searchable, arginfo_Rcombo_box_set_searchable)
+	ZEND_FE(Rcombo_box_is_searchable, arginfo_Rcombo_box_is_searchable)
+	ZEND_FE(Rcombo_box_get_text, arginfo_Rcombo_box_get_text)
+	ZEND_FE(Rcombo_box_set_text, arginfo_Rcombo_box_set_text)
+	ZEND_FE(Rcombo_box_set_text_changed_callback, arginfo_Rcombo_box_set_text_changed_callback)
+	ZEND_FE(Rcombo_box_set_open, arginfo_Rcombo_box_set_open)
+	ZEND_FE(Rcombo_box_is_open, arginfo_Rcombo_box_is_open)
 	ZEND_FE(Rseparator_set_orientation, arginfo_Rseparator_set_orientation)
 	ZEND_FE(Rlist_view_add_item, arginfo_Rlist_view_add_item)
 	ZEND_FE(Rlist_view_set_item_text, arginfo_Rlist_view_set_item_text)
@@ -2769,6 +3218,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtile_view_set_drop_highlight, arginfo_Rtile_view_set_drop_highlight)
 	ZEND_FE(Rtile_view_set_drag_type, arginfo_Rtile_view_set_drag_type)
 	ZEND_FE(Rtile_view_set_drag_data_callback, arginfo_Rtile_view_set_drag_data_callback)
+	ZEND_FE(Rtile_view_set_drag_out_callback, arginfo_Rtile_view_set_drag_out_callback)
 	ZEND_FE(Rtile_view_set_selection_changed_callback, arginfo_Rtile_view_set_selection_changed_callback)
 	ZEND_FE(Rtile_view_set_activated_callback, arginfo_Rtile_view_set_activated_callback)
 	ZEND_FE(Rtile_view_set_context_callback, arginfo_Rtile_view_set_context_callback)
@@ -2792,13 +3242,20 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtable_set_cell_color_callback, arginfo_Rtable_set_cell_color_callback)
 	ZEND_FE(Rtable_set_cell_text_color, arginfo_Rtable_set_cell_text_color)
 	ZEND_FE(Rtable_set_multi_select, arginfo_Rtable_set_multi_select)
+	ZEND_FE(Rtable_set_selection_mode, arginfo_Rtable_set_selection_mode)
+	ZEND_FE(Rtable_get_selection_mode, arginfo_Rtable_get_selection_mode)
 	ZEND_FE(Rtable_set_row_selected, arginfo_Rtable_set_row_selected)
 	ZEND_FE(Rtable_is_row_selected, arginfo_Rtable_is_row_selected)
+	ZEND_FE(Rtable_select_range, arginfo_Rtable_select_range)
+	ZEND_FE(Rtable_select_all, arginfo_Rtable_select_all)
 	ZEND_FE(Rtable_clear_selection, arginfo_Rtable_clear_selection)
 	ZEND_FE(Rtable_get_selection_count, arginfo_Rtable_get_selection_count)
 	ZEND_FE(Rtable_get_selection, arginfo_Rtable_get_selection)
+	ZEND_FE(Rtable_get_selection_range_count, arginfo_Rtable_get_selection_range_count)
+	ZEND_FE(Rtable_get_selection_range, arginfo_Rtable_get_selection_range)
 	ZEND_FE(Rtable_set_selected, arginfo_Rtable_set_selected)
 	ZEND_FE(Rtable_get_selected, arginfo_Rtable_get_selected)
+	ZEND_FE(Rtable_get_current_row, arginfo_Rtable_get_current_row)
 	ZEND_FE(Rtable_scroll_to_row, arginfo_Rtable_scroll_to_row)
 	ZEND_FE(Rtable_sort, arginfo_Rtable_sort)
 	ZEND_FE(Rtable_get_sort_column, arginfo_Rtable_get_sort_column)
@@ -2809,6 +3266,18 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtable_set_selection_changed_callback, arginfo_Rtable_set_selection_changed_callback)
 	ZEND_FE(Rtable_set_activated_callback, arginfo_Rtable_set_activated_callback)
 	ZEND_FE(Rtable_set_sort_callback, arginfo_Rtable_set_sort_callback)
+	ZEND_FE(Rtable_set_column_editable, arginfo_Rtable_set_column_editable)
+	ZEND_FE(Rtable_is_column_editable, arginfo_Rtable_is_column_editable)
+	ZEND_FE(Rtable_set_cell_edited_callback, arginfo_Rtable_set_cell_edited_callback)
+	ZEND_FE(Rtable_edit_cell, arginfo_Rtable_edit_cell)
+	ZEND_FE(Rtable_is_editing, arginfo_Rtable_is_editing)
+	ZEND_FE(Rtable_end_edit, arginfo_Rtable_end_edit)
+	ZEND_FE(Rtable_set_frozen_columns, arginfo_Rtable_set_frozen_columns)
+	ZEND_FE(Rtable_get_frozen_columns, arginfo_Rtable_get_frozen_columns)
+	ZEND_FE(Rtable_set_column_kind, arginfo_Rtable_set_column_kind)
+	ZEND_FE(Rtable_get_column_kind, arginfo_Rtable_get_column_kind)
+	ZEND_FE(Rtable_is_cell_checked, arginfo_Rtable_is_cell_checked)
+	ZEND_FE(Rtable_set_cell_checked, arginfo_Rtable_set_cell_checked)
 	ZEND_FE(Rdate_picker_set_date, arginfo_Rdate_picker_set_date)
 	ZEND_FE(Rdate_picker_get_date, arginfo_Rdate_picker_get_date)
 	ZEND_FE(Rdate_picker_set_range, arginfo_Rdate_picker_set_range)
@@ -2818,11 +3287,25 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rdate_picker_set_open, arginfo_Rdate_picker_set_open)
 	ZEND_FE(Rdate_picker_is_open, arginfo_Rdate_picker_is_open)
 	ZEND_FE(Rdate_picker_set_changed_callback, arginfo_Rdate_picker_set_changed_callback)
+	ZEND_FE(Rdate_picker_set_time_zone, arginfo_Rdate_picker_set_time_zone)
+	ZEND_FE(Rdate_picker_get_time_zone, arginfo_Rdate_picker_get_time_zone)
+	ZEND_FE(Rdate_picker_set_instant, arginfo_Rdate_picker_set_instant)
+	ZEND_FE(Rdate_picker_get_instant, arginfo_Rdate_picker_get_instant)
 	ZEND_FE(Rtime_picker_set_time, arginfo_Rtime_picker_set_time)
 	ZEND_FE(Rtime_picker_get_time, arginfo_Rtime_picker_get_time)
 	ZEND_FE(Rtime_picker_set_seconds_visible, arginfo_Rtime_picker_set_seconds_visible)
 	ZEND_FE(Rtime_picker_set_minute_step, arginfo_Rtime_picker_set_minute_step)
 	ZEND_FE(Rtime_picker_set_changed_callback, arginfo_Rtime_picker_set_changed_callback)
+	ZEND_FE(Rtime_picker_set_clock, arginfo_Rtime_picker_set_clock)
+	ZEND_FE(Rtime_picker_get_clock, arginfo_Rtime_picker_get_clock)
+	ZEND_FE(Rtime_picker_get_text, arginfo_Rtime_picker_get_text)
+	ZEND_FE(Rtime_picker_set_time_zone, arginfo_Rtime_picker_set_time_zone)
+	ZEND_FE(Rtime_picker_get_time_zone, arginfo_Rtime_picker_get_time_zone)
+	ZEND_FE(Rtime_picker_set_time_zone_visible, arginfo_Rtime_picker_set_time_zone_visible)
+	ZEND_FE(Rtime_picker_set_date, arginfo_Rtime_picker_set_date)
+	ZEND_FE(Rtime_picker_get_date, arginfo_Rtime_picker_get_date)
+	ZEND_FE(Rtime_picker_set_instant, arginfo_Rtime_picker_set_instant)
+	ZEND_FE(Rtime_picker_get_instant, arginfo_Rtime_picker_get_instant)
 	ZEND_FE(Rtoast_show, arginfo_Rtoast_show)
 	ZEND_FE(Rtoast_show_kind, arginfo_Rtoast_show_kind)
 	ZEND_FE(Rtoast_hide, arginfo_Rtoast_hide)
@@ -3027,6 +3510,25 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rmap_view_set_view_changed_callback, arginfo_Rmap_view_set_view_changed_callback)
 	ZEND_FE(Rmap_view_set_attribution, arginfo_Rmap_view_set_attribution)
 	ZEND_FE(Rmap_view_get_attribution, arginfo_Rmap_view_get_attribution)
+	ZEND_FE(Rsystem_web_view_is_supported, arginfo_Rsystem_web_view_is_supported)
+	ZEND_FE(Rsystem_web_view_create, arginfo_Rsystem_web_view_create)
+	ZEND_FE(Rsystem_web_view_load_url, arginfo_Rsystem_web_view_load_url)
+	ZEND_FE(Rsystem_web_view_load_file, arginfo_Rsystem_web_view_load_file)
+	ZEND_FE(Rsystem_web_view_load_html, arginfo_Rsystem_web_view_load_html)
+	ZEND_FE(Rsystem_web_view_reload, arginfo_Rsystem_web_view_reload)
+	ZEND_FE(Rsystem_web_view_stop, arginfo_Rsystem_web_view_stop)
+	ZEND_FE(Rsystem_web_view_go_back, arginfo_Rsystem_web_view_go_back)
+	ZEND_FE(Rsystem_web_view_go_forward, arginfo_Rsystem_web_view_go_forward)
+	ZEND_FE(Rsystem_web_view_can_go_back, arginfo_Rsystem_web_view_can_go_back)
+	ZEND_FE(Rsystem_web_view_can_go_forward, arginfo_Rsystem_web_view_can_go_forward)
+	ZEND_FE(Rsystem_web_view_get_url, arginfo_Rsystem_web_view_get_url)
+	ZEND_FE(Rsystem_web_view_get_title, arginfo_Rsystem_web_view_get_title)
+	ZEND_FE(Rsystem_web_view_is_loading, arginfo_Rsystem_web_view_is_loading)
+	ZEND_FE(Rsystem_web_view_get_error, arginfo_Rsystem_web_view_get_error)
+	ZEND_FE(Rsystem_web_view_run_javascript, arginfo_Rsystem_web_view_run_javascript)
+	ZEND_FE(Rsystem_web_view_set_message_callback, arginfo_Rsystem_web_view_set_message_callback)
+	ZEND_FE(Rsystem_web_view_set_event_callback, arginfo_Rsystem_web_view_set_event_callback)
+	ZEND_FE(Rsystem_web_view_get_native_handle, arginfo_Rsystem_web_view_get_native_handle)
 	ZEND_FE(Rpdf_document_create, arginfo_Rpdf_document_create)
 	ZEND_FE(Rpdf_document_delete, arginfo_Rpdf_document_delete)
 	ZEND_FE(Rpdf_document_set_title, arginfo_Rpdf_document_set_title)
@@ -3149,6 +3651,17 @@ static void register_raven_controls_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_CHART_GAUGE", R_CHART_GAUGE, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_CHART_HEATMAP", R_CHART_HEATMAP, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_CHART_SPARKLINE", R_CHART_SPARKLINE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_SYSTEM_WEB_VIEW_NAVIGATED", R_SYSTEM_WEB_VIEW_NAVIGATED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_SYSTEM_WEB_VIEW_TITLE", R_SYSTEM_WEB_VIEW_TITLE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_SYSTEM_WEB_VIEW_LOADING", R_SYSTEM_WEB_VIEW_LOADING, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_SYSTEM_WEB_VIEW_LOADED", R_SYSTEM_WEB_VIEW_LOADED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_SYSTEM_WEB_VIEW_FAILED", R_SYSTEM_WEB_VIEW_FAILED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TABLE_SELECTION_SINGLE", R_TABLE_SELECTION_SINGLE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TABLE_SELECTION_MULTIPLE", R_TABLE_SELECTION_MULTIPLE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TABLE_SELECTION_NONE", R_TABLE_SELECTION_NONE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TABLE_COLUMN_TEXT", R_TABLE_COLUMN_TEXT, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TABLE_COLUMN_CHECK", R_TABLE_COLUMN_CHECK, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_TABLE_COLUMN_PROGRESS", R_TABLE_COLUMN_PROGRESS, CONST_PERSISTENT);
 }
 
 static zend_class_entry *register_class_RPdfPrintDesc(void)

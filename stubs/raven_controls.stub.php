@@ -460,6 +460,72 @@ const R_CHART_HEATMAP = UNKNOWN;
  */
 const R_CHART_SPARKLINE = UNKNOWN;
 
+/**
+ * @var int
+ * @cvalue R_SYSTEM_WEB_VIEW_NAVIGATED
+ */
+const R_SYSTEM_WEB_VIEW_NAVIGATED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_SYSTEM_WEB_VIEW_TITLE
+ */
+const R_SYSTEM_WEB_VIEW_TITLE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_SYSTEM_WEB_VIEW_LOADING
+ */
+const R_SYSTEM_WEB_VIEW_LOADING = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_SYSTEM_WEB_VIEW_LOADED
+ */
+const R_SYSTEM_WEB_VIEW_LOADED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_SYSTEM_WEB_VIEW_FAILED
+ */
+const R_SYSTEM_WEB_VIEW_FAILED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TABLE_SELECTION_SINGLE
+ */
+const R_TABLE_SELECTION_SINGLE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TABLE_SELECTION_MULTIPLE
+ */
+const R_TABLE_SELECTION_MULTIPLE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TABLE_SELECTION_NONE
+ */
+const R_TABLE_SELECTION_NONE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TABLE_COLUMN_TEXT
+ */
+const R_TABLE_COLUMN_TEXT = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TABLE_COLUMN_CHECK
+ */
+const R_TABLE_COLUMN_CHECK = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_TABLE_COLUMN_PROGRESS
+ */
+const R_TABLE_COLUMN_PROGRESS = UNKNOWN;
+
 final class RPdfPrintDesc
 {
     public int $window = 0;
@@ -645,6 +711,11 @@ function Rprogress_bar_get_value(int $progress_bar): float {}
 
 function Rimage_set_texture(int $image, int $texture): void {}
 
+/**
+ * Color the image is multiplied by (white by default). An SVG in
+ * currentColor (Ricon_get, Rtexture_create_from_svg) is drawn in the color of
+ * the text around it until a tint is given; then in the tint. XML: Tint.
+ */
 function Rimage_set_tint_color(int $image, float $r, float $g, float $b, float $a): void {}
 
 /**
@@ -660,6 +731,66 @@ function Rimage_set_stretch(int $image, int $stretch): void {}
 function Rimage_set_region(int $image, float $min_u, float $min_v, float $max_u, float $max_v): void {}
 
 function Rimage_set_corner_radius(int $image, float $radius): void {}
+
+/**
+ * R_TRUE when the texture of the image is an animated GIF or APNG (two frames or more).
+ */
+function Rimage_is_animated(int $image): int {}
+
+/**
+ * Returns The frames of its animation; 1 for a still image, 0 without a texture.
+ */
+function Rimage_get_frame_count(int $image): int {}
+
+/**
+ * Returns The seconds one play of its animation lasts (0 for a still image).
+ */
+function Rimage_get_duration(int $image): float {}
+
+/**
+ * Returns The seconds a frame of its animation is shown (0 for a frame that does not exist).
+ */
+function Rimage_get_frame_delay(int $image, int $frame): float {}
+
+/**
+ * Plays the animation from the frame it is on (from the first
+ * again when it had finished). An Image plays as soon as it is given an
+ * animated texture, unless XML says Animate="false".
+ */
+function Rimage_play(int $image): void {}
+
+/**
+ * Stops the animation on the frame it is on.
+ */
+function Rimage_pause(int $image): void {}
+
+/**
+ * Stops the animation and shows its first frame.
+ */
+function Rimage_stop(int $image): void {}
+
+function Rimage_is_playing(int $image): int {}
+
+/**
+ * Shows a frame (from 0), playing on from it if it plays.
+ */
+function Rimage_set_frame(int $image, int $frame): void {}
+
+function Rimage_get_frame(int $image): int {}
+
+/**
+ * How many times the animation plays before it stops on its last
+ * frame: 0 forever, -1 what the file says (the default). XML: Loop
+ * (a number; also Forever, Once).
+ */
+function Rimage_set_loop_count(int $image, int $count): void {}
+
+/**
+ * Returns The plays of the animation (0: forever), the file's unless it was set.
+ */
+function Rimage_get_loop_count(int $image): int {}
+
+function Rimage_set_finished_callback(int $image, ?callable $callback, mixed $user_data): void {}
 
 function Rtext_input_set_text(int $text_input, ?string $text): void {}
 
@@ -708,6 +839,76 @@ function Rtext_input_set_changed_callback(int $text_input, ?callable $callback, 
  * Called when Enter is pressed. This also fires the action of the widget.
  */
 function Rtext_input_set_committed_callback(int $text_input, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * Underlines the misspelled words with a wavy line (R_COLOR_SPELLING);
+ * a right click on one offers corrections (see SPELL CHECKING). Off by
+ * default. A password is never checked.
+ */
+function Rtext_input_set_spell_check(int $text_input, int $enabled): void {}
+
+function Rtext_input_get_spell_check(int $text_input): int {}
+
+/**
+ * Language of the spell checking ("en_US", "fr"...). NULL: the default (Rspell_set_language).
+ */
+function Rtext_input_set_spell_language(int $text_input, ?string $language): void {}
+
+/**
+ * R_TRUE when the system has a spell checker that Raven can use.
+ */
+function Rspell_is_supported(): int {}
+
+/**
+ * The languages the checker has dictionaries for.
+ */
+function Rspell_get_language_count(): int {}
+
+function Rspell_get_language_at(int $index): ?string {}
+
+/**
+ * The language used when a widget or a call gives none. NULL
+ * follows the locale again.
+ * Returns R_FALSE when the checker has no dictionary for it (the default
+ * of the system is then used).
+ */
+function Rspell_set_language(?string $language): int {}
+
+/**
+ * The code of the language used by default, as the checker names it; "" when there is no checker.
+ */
+function Rspell_get_language(): ?string {}
+
+/**
+ * Checks a text. `language` NULL: the default.
+ * Returns The number of misspelled words, read with Rspell_get_misspelling.
+ */
+function Rspell_check(?string $text, ?string $language): int {}
+
+/**
+ * A misspelled word found by the last Rspell_check: bytes [start, end) of its text.
+ */
+function Rspell_get_misspelling(int $index, ?int &$start, ?int &$end): int {}
+
+/**
+ * Returns The number of corrections for a word (best first), read with Rspell_get_suggestion.
+ */
+function Rspell_suggest(?string $word, ?string $language): int {}
+
+/**
+ * A correction found by the last Rspell_suggest; valid until the next call.
+ */
+function Rspell_get_suggestion(int $index): ?string {}
+
+/**
+ * Adds a word to the dictionary of the user, which the system keeps (with Hunspell alone: for the session).
+ */
+function Rspell_learn(?string $word, ?string $language): void {}
+
+/**
+ * The word is no longer a misspelling, in every language, until the application quits.
+ */
+function Rspell_ignore(?string $word): void {}
 
 function Rspin_box_set_range(int $spin_box, float $minimum, float $maximum): void {}
 
@@ -759,6 +960,47 @@ function Rcombo_box_set_selected(int $combo_box, int $index): void {}
 function Rcombo_box_get_selected(int $combo_box): int {}
 
 function Rcombo_box_set_changed_callback(int $combo_box, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * R_TRUE: the combo box is a text field with its list: the user
+ * may type a text that is not one of the items (Editable="true"). The text
+ * is Rcombo_box_get_text; choosing an item puts its text there. A typed
+ * text equal to an item selects it, any other selects nothing (-1).
+ */
+function Rcombo_box_set_editable(int $combo_box, int $editable): void {}
+
+function Rcombo_box_is_editable(int $combo_box): int {}
+
+/**
+ * R_TRUE: typing in the combo box filters its list (Searchable="true"):
+ * the items that contain what was typed, without regard to case or
+ * accents ("zoe" finds "Zoë", "sao" finds "São Paulo"), or a row saying that nothing
+ * matches. Up and Down move in the list, Enter chooses, Escape closes it.
+ * A searchable combo box that is not editable comes back to the item
+ * chosen when nothing is.
+ */
+function Rcombo_box_set_searchable(int $combo_box, int $searchable): void {}
+
+function Rcombo_box_is_searchable(int $combo_box): int {}
+
+/**
+ * The text shown: what was typed in an editable combo box, else the text of the selected item ("" for none).
+ */
+function Rcombo_box_get_text(int $combo_box): ?string {}
+
+/**
+ * Editable combo box: sets the text of the field (the item equal to it is selected); otherwise selects the item with this text.
+ */
+function Rcombo_box_set_text(int $combo_box, ?string $text): void {}
+
+function Rcombo_box_set_text_changed_callback(int $combo_box, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * Opens (R_TRUE) or closes the list.
+ */
+function Rcombo_box_set_open(int $combo_box, int $open): void {}
+
+function Rcombo_box_is_open(int $combo_box): int {}
 
 /**
  * R_HORIZONTAL draws a horizontal line (default).
@@ -860,6 +1102,7 @@ function Rtree_view_set_activated_callback(int $tree_view, ?callable $callback, 
 
 /**
  * Icon drawn before the text of the item (a region u0,v0,u1,v1 of the texture). R_INVALID_ID removes it.
+ * An SVG in currentColor (Ricon_get) takes the color of the text. XML: Icon on an Item.
  */
 function Rtree_item_set_icon(int $item, int $texture, float $u0, float $v0, float $u1, float $v1): void {}
 
@@ -976,6 +1219,7 @@ function Rmenu_item_set_checked(int $item, int $checked): void {}
  * Icon drawn before the text of a menu item (after the check mark column).
  * R_INVALID_ID removes it. u0, v0, u1, v1 : region of the texture.
  * R_TRUE: the texture is a mask drawn in the text color (monochrome icons).
+ * An SVG in currentColor (Ricon_get) always is. XML: Icon.
  */
 function Rmenu_item_set_icon(int $item, int $texture, float $u0, float $v0, float $u1, float $v1, int $tint): void {}
 
@@ -1087,6 +1331,17 @@ function Rtile_view_set_drag_type(int $tile_view, ?string $type): void {}
 
 function Rtile_view_set_drag_data_callback(int $tile_view, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * Tiles can be dragged out of the window, to other applications:
+ * when the user starts dragging the selected tiles (`index` is the one
+ * under the pointer), the callback gives their data by calling
+ * Rdrag_begin_external (the pictures, the files they stand for...), and
+ * Rdrag_set_image. With a drag type too (Rtile_view_set_drag_type), the
+ * drag first goes to the drop targets of the window and only leaves it
+ * with the pointer. NULL: the tiles stay in the application (default).
+ */
+function Rtile_view_set_drag_out_callback(int $tile_view, ?callable $callback, mixed $user_data): void {}
+
 function Rtile_view_set_selection_changed_callback(int $tile_view, ?callable $callback, mixed $user_data): void {}
 
 function Rtile_view_set_activated_callback(int $tile_view, ?callable $callback, mixed $user_data): void {}
@@ -1162,13 +1417,33 @@ function Rtable_set_cell_color_callback(int $table, ?callable $callback, mixed $
 function Rtable_set_cell_text_color(int $table, int $row, int $column, float $r, float $g, float $b, float $a): void {}
 
 /**
- * Opt into Ctrl/Cmd toggles and Shift ranges; single selection is the default.
+ * Opt into Ctrl/Cmd toggles and Shift ranges; single selection is the default. Same as Rtable_set_selection_mode(MULTIPLE or SINGLE).
  */
 function Rtable_set_multi_select(int $table, int $enabled): void {}
+
+/**
+ * Single (default), multiple or no selection (SelectionMode="Multiple" in XML).
+ * Going to single keeps the selected row, going to none clears the selection.
+ */
+function Rtable_set_selection_mode(int $table, int $mode): void {}
+
+function Rtable_get_selection_mode(int $table): int {}
 
 function Rtable_set_row_selected(int $table, int $row, int $selected): void {}
 
 function Rtable_is_row_selected(int $table, int $row): int {}
+
+/**
+ * Selects (`selected` R_TRUE) or deselects the rows first..last, both
+ * included, keeping the others: multiple selection only (in single
+ * selection, selecting a range selects `last`).
+ */
+function Rtable_select_range(int $table, int $first, int $last, int $selected): void {}
+
+/**
+ * Multiple selection: selects every row (Ctrl/Cmd+A). Nothing in the other modes.
+ */
+function Rtable_select_all(int $table): void {}
 
 function Rtable_clear_selection(int $table): void {}
 
@@ -1180,11 +1455,35 @@ function Rtable_get_selection_count(int $table): int {}
 function Rtable_get_selection(int $table, int $index): int {}
 
 /**
+ * The selection as runs of consecutive rows, top to bottom: the
+ * fast way to go through a large selection (select all of a million rows
+ * is one range).
+ */
+function Rtable_get_selection_range_count(int $table): int {}
+
+/**
+ * The rows first..last (both included) of a range of the selection. return R_FALSE outside the ranges.
+ */
+function Rtable_get_selection_range(int $table, int $index, ?int &$first, ?int &$last): int {}
+
+/**
  * Replaces the selection with one row. -1 selects nothing, including in multi-select mode.
  */
 function Rtable_set_selected(int $table, int $row): void {}
 
+/**
+ * The selected row (-1: none). In multiple selection, the one
+ * selected last, or else the first one; the selection changed callback
+ * receives it.
+ */
 function Rtable_get_selected(int $table): int {}
+
+/**
+ * The row the keyboard is on: the selected row in single
+ * selection; in multiple selection the row last clicked or reached with
+ * the arrows, which Space toggles (it may be unselected). -1: none.
+ */
+function Rtable_get_current_row(int $table): int {}
 
 function Rtable_scroll_to_row(int $table, int $row): void {}
 
@@ -1214,6 +1513,61 @@ function Rtable_set_selection_changed_callback(int $table, ?callable $callback, 
 function Rtable_set_activated_callback(int $table, ?callable $callback, mixed $user_data): void {}
 
 function Rtable_set_sort_callback(int $table, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * R_TRUE: the cells of the column are edited in place by the user (default R_FALSE).
+ */
+function Rtable_set_column_editable(int $table, int $column, int $editable): void {}
+
+function Rtable_is_column_editable(int $table, int $column): int {}
+
+function Rtable_set_cell_edited_callback(int $table, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * Opens the editor on a cell, its text selected, as F2 does (the
+ * row is selected and scrolled into view). Any column can be edited this
+ * way, editable or not. return R_TRUE when the editor is open.
+ */
+function Rtable_edit_cell(int $table, int $row, int $column): int {}
+
+function Rtable_is_editing(int $table): int {}
+
+/**
+ * Closes the editor: `commit` R_TRUE keeps the text (through the
+ * cell edited callback), R_FALSE forgets it. return R_FALSE when the text
+ * was refused (the editor then stays open), R_TRUE otherwise.
+ */
+function Rtable_end_edit(int $table, int $commit): int {}
+
+/**
+ * The first `count` columns stay in place when the table scrolls
+ * sideways; a thin shadow marks where the others pass under them. 0 (the
+ * default): every column scrolls.
+ */
+function Rtable_set_frozen_columns(int $table, int $count): void {}
+
+function Rtable_get_frozen_columns(int $table): int {}
+
+/**
+ * Text (default), check box or progress bar: how the cells of the
+ * column are drawn from their texts. A check column is made editable (the
+ * user toggles it; Rtable_set_column_editable(R_FALSE) after this shows it
+ * only) and centered. For anything else, a cell color callback and the
+ * texts are what the table offers: it draws no other widget in its cells.
+ */
+function Rtable_set_column_kind(int $table, int $column, int $kind): void {}
+
+function Rtable_get_column_kind(int $table, int $column): int {}
+
+/**
+ * A cell of a check column: R_TRUE when its text is "1", "true" or "yes". Any cell can be asked.
+ */
+function Rtable_is_cell_checked(int $table, int $row, int $column): int {}
+
+/**
+ * Stored rows: writes "1" or "0" in the cell (no callback is called).
+ */
+function Rtable_set_cell_checked(int $table, int $row, int $column, int $checked): void {}
 
 /**
  * Sets the date (today when the picker is created). An invalid date is refused.
@@ -1253,6 +1607,23 @@ function Rdate_picker_is_open(int $date_picker): int {}
 
 function Rdate_picker_set_changed_callback(int $date_picker, ?callable $callback, mixed $user_data): void {}
 
+/**
+ * The time zone of the date, for the instants below; NULL or "" (default): the zone of the system. TimeZone="..." in XML.
+ */
+function Rdate_picker_set_time_zone(int $date_picker, ?string $zone): void {}
+
+function Rdate_picker_get_time_zone(int $date_picker): ?string {}
+
+/**
+ * Shows the date an instant (seconds since 1970, UTC) has in the zone of the picker.
+ */
+function Rdate_picker_set_instant(int $date_picker, float $utc): void {}
+
+/**
+ * The first instant of the date in the zone: its midnight (or, where the clocks skip midnight, the time they go to).
+ */
+function Rdate_picker_get_instant(int $date_picker): float {}
+
 function Rtime_picker_set_time(int $time_picker, int $hour, int $minute, int $second): void {}
 
 function Rtime_picker_get_time(int $time_picker, ?int &$hour, ?int &$minute, ?int &$second): void {}
@@ -1265,6 +1636,54 @@ function Rtime_picker_set_seconds_visible(int $time_picker, int $visible): void 
 function Rtime_picker_set_minute_step(int $time_picker, int $step): void {}
 
 function Rtime_picker_set_changed_callback(int $time_picker, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * 12 or 24 hours for this picker; R_CLOCK_AUTO (default): the clock of the locale. Clock="Auto|12|24" in XML.
+ */
+function Rtime_picker_set_clock(int $time_picker, int $clock): void {}
+
+function Rtime_picker_get_clock(int $time_picker): int {}
+
+/**
+ * The time as the field shows it: "3:05 PM", "15:05", with the zone when it is shown (valid until the next call).
+ */
+function Rtime_picker_get_text(int $time_picker): ?string {}
+
+/**
+ * The time zone of the time ("America/New_York", see
+ * Rtimezone_is_valid); NULL or "" (default): the zone of the system. An
+ * unknown zone is refused. TimeZone="..." in XML.
+ */
+function Rtime_picker_set_time_zone(int $time_picker, ?string $zone): void {}
+
+/**
+ * The zone set, "" for none.
+ */
+function Rtime_picker_get_time_zone(int $time_picker): ?string {}
+
+/**
+ * Writes the zone after the time ("EST", "CET", "UTC+3"). ShowTimeZone="true" in XML.
+ */
+function Rtime_picker_set_time_zone_visible(int $time_picker, int $visible): void {}
+
+/**
+ * The day of the time, for its zone (month 1 to 12); year 0: today (default). Date="YYYY-MM-DD" in XML.
+ */
+function Rtime_picker_set_date(int $time_picker, int $year, int $month, int $day): void {}
+
+function Rtime_picker_get_date(int $time_picker, ?int &$year, ?int &$month, ?int &$day): void {}
+
+/**
+ * Shows an instant (seconds since 1970, UTC) in the zone of the picker: its day and its time.
+ */
+function Rtime_picker_set_instant(int $time_picker, float $utc): void {}
+
+/**
+ * The instant the day and the time are in the zone. A time the
+ * clocks skipped is moved forward, a time they repeated is the first
+ * (see Rtimezone_from_local).
+ */
+function Rtime_picker_get_instant(int $time_picker): float {}
 
 /**
  * Shows a message for `seconds` (0 or less: until Rtoast_hide), with the kind and button set now.
@@ -2064,6 +2483,82 @@ function Rmap_view_set_view_changed_callback(int $map, ?callable $callback, mixe
 function Rmap_view_set_attribution(int $map, ?string $text): void {}
 
 function Rmap_view_get_attribution(int $map): ?string {}
+
+/**
+ * Returns R_TRUE when web views show pages here (the system has an engine Raven can embed, and Raven runs with a window system).
+ */
+function Rsystem_web_view_is_supported(): int {}
+
+function Rsystem_web_view_create(): int {}
+
+/**
+ * Goes to an address ("https://...", "file:///...", "about:blank"). A file: address may read the files of its folder.
+ */
+function Rsystem_web_view_load_url(int $view, ?string $url): void {}
+
+/**
+ * Shows a file of the computer (an .html file, and what it refers to in its folder).
+ */
+function Rsystem_web_view_load_file(int $view, ?string $path): void {}
+
+/**
+ * Shows HTML given as text.
+ * Where the relative addresses of the text are looked
+ * for ("file:///Users/me/app/pages/", "https://example.org/"), or NULL.
+ */
+function Rsystem_web_view_load_html(int $view, ?string $html, ?string $base_url): void {}
+
+function Rsystem_web_view_reload(int $view): void {}
+
+function Rsystem_web_view_stop(int $view): void {}
+
+function Rsystem_web_view_go_back(int $view): void {}
+
+function Rsystem_web_view_go_forward(int $view): void {}
+
+function Rsystem_web_view_can_go_back(int $view): int {}
+
+function Rsystem_web_view_can_go_forward(int $view): int {}
+
+/**
+ * Returns The address of the page shown (the one asked for, where unsupported). Valid until it changes.
+ */
+function Rsystem_web_view_get_url(int $view): ?string {}
+
+/**
+ * Returns The title of the page, "" when it has none. Valid until it changes.
+ */
+function Rsystem_web_view_get_title(int $view): ?string {}
+
+function Rsystem_web_view_is_loading(int $view): int {}
+
+/**
+ * Returns Why the last page could not be shown, or "" when all is well.
+ */
+function Rsystem_web_view_get_error(int $view): ?string {}
+
+/**
+ * Runs JavaScript in the page; the value of its last statement is
+ * the result. If it is a promise, the result is what the promise
+ * resolves to. The callback (may be NULL) always comes later, never
+ * during this call.
+ */
+function Rsystem_web_view_run_javascript(int $view, ?string $script, ?callable $callback, mixed $user_data): void {}
+
+function Rsystem_web_view_set_message_callback(int $view, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * Called when something happens in the page. The action of the
+ * widget (Rwidget_set_action, OnChanged in XML) is fired as well each
+ * time the address changes.
+ */
+function Rsystem_web_view_set_event_callback(int $view, ?callable $callback, mixed $user_data): void {}
+
+/**
+ * The view of the system, to go further than these functions:
+ * a WKWebView* on macOS and iOS. NULL where unsupported.
+ */
+function Rsystem_web_view_get_native_handle(int $view): int {}
 
 function Rpdf_document_create(): int {}
 

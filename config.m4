@@ -12,6 +12,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/gen/raven_backend.c \
     src/gen/raven_controls.c \
     src/gen/raven_core.c \
+    src/gen/raven_device.c \
     src/gen/raven_dialogs.c \
     src/gen/raven_draw.c \
     src/gen/raven_host.c \
@@ -22,6 +23,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/gen/raven_shader.c \
     src/gen/raven_shell.c \
     src/gen/raven_style.c \
+    src/gen/raven_testing.c \
     src/gen/raven_text_editor.c \
     src/gen/raven_tools.c \
     src/gen/raven_touch.c \
@@ -34,22 +36,24 @@ if test "$PHP_RAVEN" != "no"; then
   dnl Raven as its CMakeLists.txt builds it for this platform: Vulkan backend on,
   dnl stb_image and nanosvg on, the web pages (web/) off. lib/raven is never edited.
   raven_lib=" \
-    src/core/accessibility.c src/core/context.c src/core/error.c src/core/file.c src/core/fs.c \
+    src/core/accessibility.c src/core/accessibility_touch.c src/core/context.c src/core/deflate.c \
+    src/core/diff.c src/core/error.c src/core/file.c src/core/fs.c \
     src/core/fs_watch.c src/core/handle.c src/core/heap.c src/core/jobs.c src/core/lfmap.c \
-    src/core/locale.c src/core/memory.c src/core/thread_posix.c src/core/utf8.c \
-    src/platform/platform.c src/platform/notify.c src/platform/taskbar.c src/platform/tray.c \
+    src/core/locale.c src/core/memory.c src/core/thread_posix.c src/core/timezone.c src/core/transfer.c src/core/utf8.c \
+    src/platform/platform.c src/platform/preedit.c src/platform/web_input.c src/platform/notify.c src/platform/services.c \
+    src/platform/spell.c src/platform/taskbar.c src/platform/tray.c \
     src/platform/null/null_platform.c src/platform/host/host_platform.c \
     src/render/draw.c src/render/font.c src/render/font_system.c src/render/bidi.c \
-    src/render/font_raster.c src/render/image_decode.c src/render/svg_decode.c src/render/renderer.c \
+    src/render/font_raster.c src/render/icons.c src/render/image_decode.c src/render/anim_decode.c src/render/image_encode.c src/render/svg_decode.c src/render/renderer.c \
     src/render/texture.c src/render/shader.c src/render/device.c src/render/null/null_backend.c \
     src/render/vulkan/vk_backend.c src/render/vulkan/vk_device.c src/render/vulkan/vk_frame.c \
     src/render/vulkan/vk_glass.c src/render/vulkan/vk_loader.c src/render/vulkan/vk_pipeline.c \
     src/render/vulkan/vk_public.c src/render/vulkan/vk_surface.c src/render/vulkan/vk_texture.c \
-    src/resources/default_font.c src/resources/mono_font.c \
+    src/resources/default_font.c src/resources/mono_font.c src/resources/icons.c \
     src/widget/actions.c src/widget/anim.c src/widget/events.c src/widget/touch.c src/widget/layout.c \
     src/widget/direction.c src/widget/paint.c src/widget/registry.c src/widget/style.c src/widget/theme.c \
     src/widget/look.c src/widgets/platform_looks.c src/widget/widget.c src/widget/window.c \
-    src/widget/inspector.c \
+    src/widget/inspector.c src/widget/testing.c src/widget/headless.c \
     src/widgets/common.c src/widgets/textedit.c src/widgets/background_blur.c src/widgets/border.c \
     src/widgets/box_panel.c src/widgets/canvas.c src/widgets/expander.c src/widgets/grid.c \
     src/widgets/overlay.c src/widgets/scroll_box.c src/widgets/size_box.c src/widgets/splitter.c \
@@ -64,6 +68,7 @@ if test "$PHP_RAVEN" != "no"; then
     src/widgets/time_picker.c src/widgets/toast.c src/widgets/breadcrumb.c src/widgets/rating.c \
     src/widgets/pagination.c src/widgets/plot.c src/widgets/pdf_view.c \
     src/widgets/chart.c src/widgets/map_view.c src/widgets/carousel.c \
+    src/widgets/diff_view.c src/widgets/system_web_view.c src/widgets/spelling.c \
     src/widgets/pdf_document.c src/widgets/pdf_print.c \
     src/script/rs_common.c src/script/rs_builtins.c src/script/rs_lexer.c \
     src/script/rs_parser.c src/script/rs_checker.c src/script/rs_compiler.c \
@@ -76,6 +81,7 @@ if test "$PHP_RAVEN" != "no"; then
   case $host_os in
     darwin*)
       raven_lib="$raven_lib src/platform/cocoa/cocoa_platform.m src/platform/cocoa/cocoa_print.m \
+        src/platform/cocoa/cocoa_spell.m src/platform/apple/webkit_web_view.m \
         src/render/metal/metal_backend.m src/render/metal/metal_pipeline.m \
         src/render/metal/metal_texture.m src/render/metal/metal_frame.m"
       raven_defs="$raven_defs -DRAVEN_PLATFORM_COCOA -DRAVEN_BACKEND_METAL_ENABLED -D_DARWIN_C_SOURCE"
@@ -84,7 +90,8 @@ if test "$PHP_RAVEN" != "no"; then
     *)
       PKG_CHECK_MODULES([X11], [x11])
       raven_lib="$raven_lib src/platform/x11/x11_platform.c src/platform/atspi.c src/platform/x11/x11_keys.c \
-        src/platform/x11/x11_xi2.c src/platform/sni.c src/platform/wayland/wayland_platform.c"
+        src/platform/x11/x11_xi2.c src/platform/sni.c src/platform/wayland/wayland_platform.c \
+        src/platform/spell_unix.c"
       raven_defs="$raven_defs -DRAVEN_PLATFORM_X11 -DRAVEN_PLATFORM_WAYLAND $X11_CFLAGS"
       raven_frameworks=""
       PHP_EVAL_LIBLINE([$X11_LIBS], [RAVEN_SHARED_LIBADD])
@@ -121,7 +128,7 @@ if test "$PHP_RAVEN" != "no"; then
     PHP_ADD_BUILD_DIR([$ext_builddir/lib/raven/$(dirname $raven_src)])
     raven_obj=${raven_bdir}lib/raven/$(echo "$raven_src" | $SED -e 's/\.c$//;s/\.m$//')
     case $raven_src in
-      src/render/metal/*.m) raven_lang="-x objective-c -fobjc-arc -Wno-overlength-strings" ;;
+      src/render/metal/*.m|src/platform/apple/*.m) raven_lang="-x objective-c -fobjc-arc -Wno-overlength-strings" ;;
       *.m) raven_lang="-x objective-c -fno-objc-arc" ;;
       *) raven_lang="" ;;
     esac

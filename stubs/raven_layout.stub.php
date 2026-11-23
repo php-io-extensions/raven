@@ -245,7 +245,7 @@ function Rtab_view_find_tab(int $tab_view, int $content): int {}
 function Rtab_view_set_tab_title(int $tab_view, int $content, ?string $title): void {}
 
 /**
- * Icon before the title (documents). R_INVALID_ID removes it; tint: a mask in the text color.
+ * Icon before the title (documents). R_INVALID_ID removes it; tint: a mask in the text color (always, for an SVG in currentColor). XML: Slot.Icon.
  */
 function Rtab_view_set_tab_icon(int $tab_view, int $content, int $texture, float $u0, float $v0, float $u1, float $v1, int $tint): void {}
 

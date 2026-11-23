@@ -12,6 +12,7 @@
 zend_class_entry *raven_ce_RInitDesc;
 zend_class_entry *raven_ce_RMemoryStats;
 zend_class_entry *raven_ce_RFrameStats;
+zend_class_entry *raven_ce_RDataItem;
 zend_class_entry *raven_ce_RInsets;
 zend_class_entry *raven_ce_RTextInputInfo;
 zend_class_entry *raven_ce_RNativeWindow;
@@ -26,8 +27,12 @@ zend_class_entry *raven_ce_RTileItem;
 zend_class_entry *raven_ce_RTileSection;
 zend_class_entry *raven_ce_RLanguageDesc;
 zend_class_entry *raven_ce_RJumpTask;
+zend_class_entry *raven_ce_RNotificationAction;
+zend_class_entry *raven_ce_RNotificationDesc;
 zend_class_entry *raven_ce_RFileFilter;
 zend_class_entry *raven_ce_RFileDialogDesc;
+zend_class_entry *raven_ce_RPickedFile;
+zend_class_entry *raven_ce_RShareDesc;
 zend_class_entry *raven_ce_RViewportDrawInfo;
 zend_class_entry *raven_ce_RSpring;
 zend_class_entry *raven_ce_RShaderLook;
@@ -40,6 +45,9 @@ zend_class_entry *raven_ce_RDrawCommand;
 zend_class_entry *raven_ce_RDrawData;
 zend_class_entry *raven_ce_RTextureDesc;
 zend_class_entry *raven_ce_RBackendInitInfo;
+zend_class_entry *raven_ce_RHostServiceRequest;
+zend_class_entry *raven_ce_RGoldenOptions;
+zend_class_entry *raven_ce_RGoldenResult;
 
 static const raven_field raven_fields_RInitDesc[] = {
 	{"backend", offsetof(RInitDesc, backend), RAVEN_F_INT, 0, NULL},
@@ -77,6 +85,14 @@ static const raven_field raven_fields_RFrameStats[] = {
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RFrameStats = {"RFrameStats", sizeof(RFrameStats), &raven_ce_RFrameStats, raven_fields_RFrameStats};
+
+static const raven_field raven_fields_RDataItem[] = {
+	{"mime", offsetof(RDataItem, mime), RAVEN_F_CSTR, 0, NULL},
+	{"data", offsetof(RDataItem, data), RAVEN_F_BYTES, 3, NULL},
+	{"size", offsetof(RDataItem, size), RAVEN_F_U64, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RDataItem = {"RDataItem", sizeof(RDataItem), &raven_ce_RDataItem, raven_fields_RDataItem};
 
 static const raven_field raven_fields_RInsets[] = {
 	{"top", offsetof(RInsets, top), RAVEN_F_FLOAT, 0, NULL},
@@ -289,6 +305,27 @@ static const raven_field raven_fields_RJumpTask[] = {
 };
 const raven_struct raven_struct_RJumpTask = {"RJumpTask", sizeof(RJumpTask), &raven_ce_RJumpTask, raven_fields_RJumpTask};
 
+static const raven_field raven_fields_RNotificationAction[] = {
+	{"id", offsetof(RNotificationAction, id), RAVEN_F_CSTR, 0, NULL},
+	{"label", offsetof(RNotificationAction, label), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RNotificationAction = {"RNotificationAction", sizeof(RNotificationAction), &raven_ce_RNotificationAction, raven_fields_RNotificationAction};
+
+static const raven_field raven_fields_RNotificationDesc[] = {
+	{"size", offsetof(RNotificationDesc, size), RAVEN_F_U32, 0, NULL},
+	{"tag", offsetof(RNotificationDesc, tag), RAVEN_F_CSTR, 0, NULL},
+	{"title", offsetof(RNotificationDesc, title), RAVEN_F_CSTR, 0, NULL},
+	{"body", offsetof(RNotificationDesc, body), RAVEN_F_CSTR, 0, NULL},
+	{"urgency", offsetof(RNotificationDesc, urgency), RAVEN_F_INT, 0, NULL},
+	{"icon", offsetof(RNotificationDesc, icon), RAVEN_F_CSTR, 0, NULL},
+	{"actions", offsetof(RNotificationDesc, actions), RAVEN_F_STRUCTS, 8, &raven_struct_RNotificationAction},
+	{"action_count", offsetof(RNotificationDesc, action_count), RAVEN_F_INT, 0, NULL},
+	{"window", offsetof(RNotificationDesc, window), RAVEN_F_U32, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RNotificationDesc = {"RNotificationDesc", sizeof(RNotificationDesc), &raven_ce_RNotificationDesc, raven_fields_RNotificationDesc};
+
 static const raven_field raven_fields_RFileFilter[] = {
 	{"name", offsetof(RFileFilter, name), RAVEN_F_CSTR, 0, NULL},
 	{"patterns", offsetof(RFileFilter, patterns), RAVEN_F_CSTR, 0, NULL},
@@ -308,6 +345,27 @@ static const raven_field raven_fields_RFileDialogDesc[] = {
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RFileDialogDesc = {"RFileDialogDesc", sizeof(RFileDialogDesc), &raven_ce_RFileDialogDesc, raven_fields_RFileDialogDesc};
+
+static const raven_field raven_fields_RPickedFile[] = {
+	{"path", offsetof(RPickedFile, path), RAVEN_F_CSTR, 0, NULL},
+	{"name", offsetof(RPickedFile, name), RAVEN_F_CSTR, 0, NULL},
+	{"mime_type", offsetof(RPickedFile, mime_type), RAVEN_F_CSTR, 0, NULL},
+	{"size", offsetof(RPickedFile, size), RAVEN_F_U64, 0, NULL},
+	{"width", offsetof(RPickedFile, width), RAVEN_F_INT, 0, NULL},
+	{"height", offsetof(RPickedFile, height), RAVEN_F_INT, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RPickedFile = {"RPickedFile", sizeof(RPickedFile), &raven_ce_RPickedFile, raven_fields_RPickedFile};
+
+static const raven_field raven_fields_RShareDesc[] = {
+	{"text", offsetof(RShareDesc, text), RAVEN_F_CSTR, 0, NULL},
+	{"path", offsetof(RShareDesc, path), RAVEN_F_CSTR, 0, NULL},
+	{"mime_type", offsetof(RShareDesc, mime_type), RAVEN_F_CSTR, 0, NULL},
+	{"title", offsetof(RShareDesc, title), RAVEN_F_CSTR, 0, NULL},
+	{"anchor", offsetof(RShareDesc, anchor), RAVEN_F_U32, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RShareDesc = {"RShareDesc", sizeof(RShareDesc), &raven_ce_RShareDesc, raven_fields_RShareDesc};
 
 static const raven_field raven_fields_RViewportDrawInfo[] = {
 	{"backend", offsetof(RViewportDrawInfo, backend), RAVEN_F_INT, 0, NULL},
@@ -455,3 +513,49 @@ static const raven_field raven_fields_RBackendInitInfo[] = {
 	{NULL, 0, RAVEN_F_END, 0, NULL},
 };
 const raven_struct raven_struct_RBackendInitInfo = {"RBackendInitInfo", sizeof(RBackendInitInfo), &raven_ce_RBackendInitInfo, raven_fields_RBackendInitInfo};
+
+static const raven_field raven_fields_RHostServiceRequest[] = {
+	{"id", offsetof(RHostServiceRequest, id), RAVEN_F_U32, 0, NULL},
+	{"service", offsetof(RHostServiceRequest, service), RAVEN_F_INT, 0, NULL},
+	{"window", offsetof(RHostServiceRequest, window), RAVEN_F_U32, 0, NULL},
+	{"anchor_x", offsetof(RHostServiceRequest, anchor_x), RAVEN_F_FLOAT, 0, NULL},
+	{"anchor_y", offsetof(RHostServiceRequest, anchor_y), RAVEN_F_FLOAT, 0, NULL},
+	{"anchor_width", offsetof(RHostServiceRequest, anchor_width), RAVEN_F_FLOAT, 0, NULL},
+	{"anchor_height", offsetof(RHostServiceRequest, anchor_height), RAVEN_F_FLOAT, 0, NULL},
+	{"title", offsetof(RHostServiceRequest, title), RAVEN_F_CSTR, 0, NULL},
+	{"filters", offsetof(RHostServiceRequest, filters), RAVEN_F_STRUCTS, 10, &raven_struct_RFileFilter},
+	{"filter_count", offsetof(RHostServiceRequest, filter_count), RAVEN_F_INT, 0, NULL},
+	{"flags", offsetof(RHostServiceRequest, flags), RAVEN_F_U32, 0, NULL},
+	{"file_name", offsetof(RHostServiceRequest, file_name), RAVEN_F_CSTR, 0, NULL},
+	{"default_extension", offsetof(RHostServiceRequest, default_extension), RAVEN_F_CSTR, 0, NULL},
+	{"data", offsetof(RHostServiceRequest, data), RAVEN_F_BYTES, 15, NULL},
+	{"size", offsetof(RHostServiceRequest, size), RAVEN_F_U64, 0, NULL},
+	{"path", offsetof(RHostServiceRequest, path), RAVEN_F_CSTR, 0, NULL},
+	{"max_count", offsetof(RHostServiceRequest, max_count), RAVEN_F_INT, 0, NULL},
+	{"text", offsetof(RHostServiceRequest, text), RAVEN_F_CSTR, 0, NULL},
+	{"mime_type", offsetof(RHostServiceRequest, mime_type), RAVEN_F_CSTR, 0, NULL},
+	{"share_title", offsetof(RHostServiceRequest, share_title), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RHostServiceRequest = {"RHostServiceRequest", sizeof(RHostServiceRequest), &raven_ce_RHostServiceRequest, raven_fields_RHostServiceRequest};
+
+static const raven_field raven_fields_RGoldenOptions[] = {
+	{"channel_tolerance", offsetof(RGoldenOptions, channel_tolerance), RAVEN_F_INT, 0, NULL},
+	{"max_diff_ratio", offsetof(RGoldenOptions, max_diff_ratio), RAVEN_F_FLOAT, 0, NULL},
+	{"per_platform", offsetof(RGoldenOptions, per_platform), RAVEN_F_INT, 0, NULL},
+	{"output_directory", offsetof(RGoldenOptions, output_directory), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RGoldenOptions = {"RGoldenOptions", sizeof(RGoldenOptions), &raven_ce_RGoldenOptions, raven_fields_RGoldenOptions};
+
+static const raven_field raven_fields_RGoldenResult[] = {
+	{"status", offsetof(RGoldenResult, status), RAVEN_F_INT, 0, NULL},
+	{"width", offsetof(RGoldenResult, width), RAVEN_F_INT, 0, NULL},
+	{"height", offsetof(RGoldenResult, height), RAVEN_F_INT, 0, NULL},
+	{"differing_pixels", offsetof(RGoldenResult, differing_pixels), RAVEN_F_INT, 0, NULL},
+	{"max_channel_difference", offsetof(RGoldenResult, max_channel_difference), RAVEN_F_INT, 0, NULL},
+	{"golden_path", offsetof(RGoldenResult, golden_path), RAVEN_F_CSTR, 0, NULL},
+	{"message", offsetof(RGoldenResult, message), RAVEN_F_CSTR, 0, NULL},
+	{NULL, 0, RAVEN_F_END, 0, NULL},
+};
+const raven_struct raven_struct_RGoldenResult = {"RGoldenResult", sizeof(RGoldenResult), &raven_ce_RGoldenResult, raven_fields_RGoldenResult};

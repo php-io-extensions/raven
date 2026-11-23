@@ -7,6 +7,7 @@
 #include "php.h"
 #include "zend_exceptions.h"
 #include "Raven.h"
+#include <string.h>
 #include "../runtime.h"
 #include "structs.h"
 #include "callbacks.h"
@@ -1877,6 +1878,40 @@ ZEND_FUNCTION(Rwindow_inject_text)
 	raven_leave();
 }
 
+ZEND_FUNCTION(Rwindow_inject_composition)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_string *text = NULL;
+	zend_long selection_start;
+	int c_selection_start;
+	zend_long selection_end;
+	int c_selection_end;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(window)
+		Z_PARAM_STR_OR_NULL(text)
+		Z_PARAM_LONG(selection_start)
+		Z_PARAM_LONG(selection_end)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(selection_start, 3, &c_selection_start)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(selection_end, 4, &c_selection_end)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rwindow_inject_composition(c_window, text ? ZSTR_VAL(text) : NULL, c_selection_start, c_selection_end);
+	raven_leave();
+}
+
 ZEND_FUNCTION(Rwindow_inject_drag)
 {
 	zend_long window;
@@ -1951,6 +1986,34 @@ ZEND_FUNCTION(Rwindow_inject_drop)
 	ret = Rwindow_inject_drop(c_window, (float)x, (float)y, c_paths, c_path_count, text ? ZSTR_VAL(text) : NULL);
 	raven_leave();
 	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rwindow_inject_drag_end)
+{
+	zend_long window;
+	uint32_t c_window;
+	zend_long operation;
+	int c_operation;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(window)
+		Z_PARAM_LONG(operation)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(operation, 2, &c_operation)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rwindow_inject_drag_end(c_window, (RDragOperation)c_operation);
+	raven_leave();
 	RETURN_LONG((zend_long)ret);
 }
 
@@ -2263,6 +2326,39 @@ ZEND_FUNCTION(Rwindow_replace_text_input)
 	RETURN_LONG((zend_long)ret);
 }
 
+ZEND_FUNCTION(Rwindow_get_text_composition)
+{
+	zend_long window;
+	uint32_t c_window;
+	zval *selection_start;
+	int c_selection_start = 0;
+	zval *selection_end;
+	int c_selection_end = 0;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(window)
+		Z_PARAM_ZVAL(selection_start)
+		Z_PARAM_ZVAL(selection_end)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(window, 1, &c_window)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rwindow_get_text_composition(c_window, &c_selection_start, &c_selection_end);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(selection_start, (zend_long)c_selection_start);
+	ZEND_TRY_ASSIGN_REF_LONG(selection_end, (zend_long)c_selection_end);
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
 ZEND_FUNCTION(Rwindow_has_popup)
 {
 	zend_long window;
@@ -2549,6 +2645,123 @@ ZEND_FUNCTION(Rdrag_cancel)
 	}
 	Rdrag_cancel(c_window);
 	raven_leave();
+}
+
+ZEND_FUNCTION(Rdrag_begin_external)
+{
+	zend_long source;
+	uint32_t c_source;
+	HashTable *items;
+	RDataItem *c_items = NULL;
+	zend_long count;
+	int c_count;
+	zend_long operations;
+	uint32_t c_operations;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+	raven_arena arena = {0};
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_LONG(source)
+		Z_PARAM_ARRAY_HT(items)
+		Z_PARAM_LONG(count)
+		Z_PARAM_LONG(operations)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(source, 1, &c_source)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(count, 3, &c_count)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(operations, 4, &c_operations)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_arg_structs(items, 2, c_count, &raven_struct_RDataItem, (void **)&c_items, &arena)) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_source);
+	zend_string *key = raven_slot_key("Rdrag_begin_external", 1, (unsigned long)c_source);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		raven_arena_free(&arena);
+		RETURN_THROWS();
+	}
+	ret = Rdrag_begin_external(c_source, c_items, c_count, c_operations, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RDragFinishedCallback_0 : NULL, slot);
+	raven_leave();
+	raven_arena_free(&arena);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdrag_set_image)
+{
+	zend_string *rgba;
+	zend_long width;
+	int c_width;
+	zend_long height;
+	int c_height;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_STR(rgba)
+		Z_PARAM_LONG(width)
+		Z_PARAM_LONG(height)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(width, 2, &c_width)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(height, 3, &c_height)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_arg_bytes(rgba, 1, c_width < 0 ? 0 : (uint64_t)c_width, c_height < 0 ? 0 : (uint64_t)c_height, 4, "width x height RGBA pixels")) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdrag_set_image((const uint8_t *)ZSTR_VAL(rgba), c_width, c_height);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdrag_external_supported)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdrag_external_supported();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdrag_external_is_active)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdrag_external_is_active();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
 }
 
 ZEND_FUNCTION(Rwindow_register_shortcut)

@@ -313,3 +313,200 @@ it('injects app lifecycle events and a window back', function (): void {
     Rwindow_set_back_enabled($window, R_FALSE);
     expect(Rwindow_wants_back($window))->toBe(R_FALSE);
 });
+
+it('encodes RGBA pixels as PNG in memory and on disk', function (): void {
+    $rgba = str_repeat("\xff\x00\x00\xff", 4);
+    $png = Rimage_encode_png($rgba, 2, 2, $size);
+    expect($png)->toBeString()
+        ->and(str_starts_with($png, "\x89PNG\r\n\x1a\n"))->toBeTrue()
+        ->and($size)->toBe(strlen($png));
+    $pixels = Rimage_decode($png, strlen($png), $w, $h);
+    expect([$w, $h])->toBe([2, 2])->and(strlen($pixels))->toBe(16);
+
+    $path = tempnam(sys_get_temp_dir(), 'raven-png-');
+    expect(Rimage_save_png($path, $rgba, 2, 2))->toBe(R_TRUE)
+        ->and(is_file($path))->toBeTrue()
+        ->and(str_starts_with((string) file_get_contents($path), "\x89PNG\r\n\x1a\n"))->toBeTrue();
+    unlink($path);
+});
+
+it('injects IME composition into a focused text input', function (): void {
+    $window = raven_window();
+    $input = Rwidget_create(R_WIDGET_TEXT_INPUT);
+    Rwindow_set_content($window, $input);
+    raven_frames();
+    Rwidget_focus($input);
+    Rwindow_inject_composition($window, 'ni', 2, 2);
+    $text = Rwindow_get_text_composition($window, $start, $end);
+    expect($text)->toBe('ni')->and([$start, $end])->toBe([2, 2])
+        ->and(Rtext_input_get_text($input))->toBe('');
+    Rhost_inject_composition($window, 'n', 1, 1);
+    expect(Rwindow_get_text_composition($window, $start, $end))->toBe('ni');
+    Rwindow_inject_composition($window, 'n', 1, 1);
+    expect(Rwindow_get_text_composition($window, $start, $end))->toBe('n');
+    Rwindow_inject_text($window, '你');
+    expect(Rtext_input_get_text($input))->toBe('你')
+        ->and(Rwindow_get_text_composition($window, $start, $end))->toBeNull();
+});
+
+it('drives a layout with Rtest find, click, type and golden pixel compare', function (): void {
+    $window = raven_window(400, 240);
+    $xml = '<VBox Name="root" Padding="12" Spacing="8"><Button Name="ok" Text="OK"/><Checkbox Name="on" Text="On"/><TextInput Name="user"/></VBox>';
+    Rwindow_set_content($window, Rwidget_create_from_xml($xml, strlen($xml)));
+    Rtest_set_deterministic(R_TRUE);
+    expect(Rtest_is_deterministic())->toBe(R_TRUE)
+        ->and(Rtest_get_platform_tag())->toBe('null');
+    expect(Rtest_pump(2))->toBe(R_TRUE);
+
+    $ok = Rtest_find($window, 'ok');
+    $on = Rtest_find($window, 'on');
+    $user = Rtest_find($window, 'user');
+    expect($ok)->not->toBe(R_INVALID_ID)
+        ->and(Rtest_get_text($ok))->toBe('OK')
+        ->and(Rtest_is_shown($ok))->toBe(R_TRUE)
+        ->and(Rtest_is_checked($on))->toBe(R_FALSE);
+
+    $clicks = [];
+    Rbutton_set_clicked_callback($ok, function (int $id, mixed $ud) use (&$clicks): void {
+        $clicks[] = [$id, $ud];
+    }, 'ok');
+    expect(Rtest_click($ok))->toBe(R_TRUE)->and($clicks)->toBe([[$ok, 'ok']]);
+    expect(Rtest_hover($ok))->toBe(R_TRUE);
+    expect(Rtest_click($on))->toBe(R_TRUE)->and(Rtest_is_checked($on))->toBe(R_TRUE);
+    expect(Rtest_type_text($user, 'ada'))->toBe(R_TRUE)->and(Rtest_get_text($user))->toBe('ada');
+    expect(Rtest_key($user, R_KEY_BACKSPACE, 0))->toBe(R_TRUE);
+    expect(Rtest_get_text($user))->toBe('ad');
+    expect(Rtest_settle(1.0))->toBe(R_TRUE);
+
+    $same = str_repeat("\x10\x20\x30\xff", 4);
+    $other = str_repeat("\xff\x00\x00\xff", 4);
+    $diff = null;
+    expect(Rtest_compare_pixels($same, $same, 2, 2, 0, $max, $diff))->toBe(0)
+        ->and($max)->toBe(0)
+        ->and(strlen($diff))->toBe(16);
+    expect(Rtest_compare_pixels($same, $other, 2, 2, 0, $max, $diff))->toBe(4)
+        ->and($max)->toBeGreaterThan(0)
+        ->and(ord($diff[0]))->toBe(255);
+
+    $result = new RGoldenResult();
+    $missing = sys_get_temp_dir().'/raven-golden-missing-'.getmypid().'.png';
+    $actual = preg_replace('/\.png$/', '.actual.png', $missing);
+    expect(Rtest_expect_golden($window, $missing, null, $result))->toBe(R_FALSE)
+        ->and($result->status)->toBe(R_GOLDEN_MISSING);
+    if (is_file($actual)) {
+        unlink($actual);
+    }
+    Rtest_set_deterministic(R_FALSE);
+});
+
+it('builds a table with checkbox and progress columns and multi-select', function (): void {
+    $window = raven_window(480, 240);
+    $table = Rwidget_create(R_WIDGET_TABLE);
+    Rwindow_set_content($window, $table);
+    expect(Rtable_add_column($table, 'Done', 80.0))->toBe(0)
+        ->and(Rtable_add_column($table, 'Load', 120.0))->toBe(1);
+    Rtable_set_column_kind($table, 0, R_TABLE_COLUMN_CHECK);
+    Rtable_set_column_kind($table, 1, R_TABLE_COLUMN_PROGRESS);
+    Rtable_set_frozen_columns($table, 1);
+    expect(Rtable_get_column_kind($table, 0))->toBe(R_TABLE_COLUMN_CHECK)
+        ->and(Rtable_get_column_kind($table, 1))->toBe(R_TABLE_COLUMN_PROGRESS)
+        ->and(Rtable_get_frozen_columns($table))->toBe(1);
+    Rtable_add_row($table, '1|0.5');
+    Rtable_add_row($table, '0|45%');
+    Rtable_set_cell_checked($table, 1, 0, R_TRUE);
+    Rtable_set_selection_mode($table, R_TABLE_SELECTION_MULTIPLE);
+    Rtable_set_row_selected($table, 0, R_TRUE);
+    Rtable_set_row_selected($table, 1, R_TRUE);
+    raven_frames();
+    expect(Rtable_is_cell_checked($table, 0, 0))->toBe(R_TRUE)
+        ->and(Rtable_is_cell_checked($table, 1, 0))->toBe(R_TRUE)
+        ->and(Rtable_get_selection_mode($table))->toBe(R_TABLE_SELECTION_MULTIPLE)
+        ->and(Rtable_get_selection_count($table))->toBe(2);
+});
+
+it('makes a ComboBox editable and searchable and a SystemWebView hold a URL', function (): void {
+    $window = raven_window(400, 240);
+    $combo = Rwidget_create(R_WIDGET_COMBO_BOX);
+    Rcombo_box_add_item($combo, 'Alpha');
+    Rcombo_box_add_item($combo, 'Beta');
+    Rcombo_box_set_editable($combo, R_TRUE);
+    Rcombo_box_set_searchable($combo, R_TRUE);
+    Rcombo_box_set_text($combo, 'Al');
+    expect(Rcombo_box_is_editable($combo))->toBe(R_TRUE)
+        ->and(Rcombo_box_is_searchable($combo))->toBe(R_TRUE)
+        ->and(Rcombo_box_get_text($combo))->toBe('Al');
+
+    $view = Rsystem_web_view_create();
+    expect(Rwidget_get_type($view))->toBe(R_WIDGET_SYSTEM_WEB_VIEW)
+        ->and(Rsystem_web_view_is_supported())->toBe(R_FALSE);
+    Rsystem_web_view_load_url($view, 'https://example.org/docs');
+    expect(Rsystem_web_view_get_url($view))->toBe('https://example.org/docs');
+    Rwindow_set_content($window, $combo);
+    raven_frames();
+});
+
+it('searches and replaces in a TextEditor and diffs two texts', function (): void {
+    $window = raven_window(400, 240);
+    $editor = Rtext_editor_create("one two one\ntwo");
+    Rwindow_set_content($window, $editor);
+    raven_frames();
+    Rtext_editor_set_search($editor, 'one', 0);
+    expect(Rtext_editor_get_search($editor))->toBe('one')
+        ->and(Rtext_editor_get_match_count($editor))->toBe(2);
+    expect(Rtext_editor_find_next($editor))->toBe(R_TRUE);
+    expect(Rtext_editor_replace($editor, 'uno'))->toBe(R_TRUE);
+    expect(Rtext_editor_replace_all($editor, 'UNO'))->toBe(1);
+
+    $patch = Rdiff_unified("int count = 1;\n", "int count = 2;\n", 'a.c', 'b.c', 3, 0, $size);
+    expect($patch)->toBeString()
+        ->and($size)->toBe(strlen($patch))
+        ->and($patch)->toContain('-int count = 1;')
+        ->and($patch)->toContain('+int count = 2;');
+    expect(Rdiff_count_changes("a\n", "b\n", 0))->toBe(1);
+
+    $diff = Rdiff_view_create();
+    expect(Rwidget_get_type($diff))->toBe(R_WIDGET_DIFF_VIEW);
+    Rdiff_view_set_texts($diff, "int count = 1;\n", "int count = 2;\n");
+    Rdiff_view_set_names($diff, 'a.c', 'b.c');
+    expect(Rdiff_view_get_change_count($diff))->toBe(1);
+});
+
+it('answers desktop device services as unsupported and round-trips a timezone', function (): void {
+    expect(Rcamera_is_available())->toBe(R_FALSE)
+        ->and(Rhaptic_is_supported())->toBe(R_FALSE)
+        ->and(Rpermission_get_status(R_PERMISSION_CAMERA))->toBe(R_PERMISSION_UNSUPPORTED)
+        ->and(Rpermission_to_string(R_PERMISSION_CAMERA))->toBe('camera');
+    $seen = [];
+    Rcamera_take_photo(function (int $result, mixed $files, int $count, mixed $ud) use (&$seen): void {
+        $seen[] = [$result, $files, $count, $ud];
+    }, 'cam');
+    raven_frames(4);
+    expect($seen)->not->toBeEmpty()
+        ->and($seen[0][0])->toBe(R_DEVICE_UNSUPPORTED)
+        ->and($seen[0][3])->toBe('cam');
+
+    expect(Rtimezone_is_valid('UTC'))->toBe(R_TRUE)
+        ->and(Rtimezone_get_system())->toBeString();
+    expect(Rtimezone_to_local('UTC', 0.0, $y, $m, $d, $h, $min, $s))->toBe(R_TRUE)
+        ->and($y)->toBe(1970)
+        ->and($m)->toBe(1)
+        ->and($d)->toBe(1);
+    expect(Rtimezone_from_local('UTC', 1970, 1, 1, 0, 0, 0))->toBe(0.0);
+
+    expect(Rspell_is_supported())->toBeInt();
+    expect(Rspell_check('hello', 'en'))->toBeInt();
+});
+
+it('decodes the first frame of a still PNG and copies RGBA onto the clipboard', function (): void {
+    $rgba = str_repeat("\xff\x00\x00\xff", 4);
+    $png = Rimage_encode_png($rgba, 2, 2, $size);
+    expect(Rimage_decode_info($png, strlen($png), $w, $h, $frames, $loops))->toBe(R_TRUE)
+        ->and([$w, $h, $frames])->toBe([2, 2, 1]);
+    $frame = Rimage_decode_frame($png, strlen($png), 0, $fw, $fh, $delay);
+    expect([$fw, $fh])->toBe([2, 2])->and(strlen($frame))->toBe(16);
+
+    expect(Rclipboard_set_image($rgba, 2, 2, 0))->toBeInt();
+    expect(Rclipboard_has_image())->toBeInt();
+    $item = new RDataItem(mime: 'text/plain', data: 'hi', size: 2);
+    expect(Rclipboard_set_data([$item], 1))->toBeInt();
+});

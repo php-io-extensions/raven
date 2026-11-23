@@ -1120,6 +1120,30 @@ const R_DROP_LEAVE = UNKNOWN;
  */
 const R_DROP_DROPPED = UNKNOWN;
 
+/**
+ * @var int
+ * @cvalue R_DRAG_OPERATION_NONE
+ */
+const R_DRAG_OPERATION_NONE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DRAG_OPERATION_COPY
+ */
+const R_DRAG_OPERATION_COPY = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DRAG_OPERATION_MOVE
+ */
+const R_DRAG_OPERATION_MOVE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_DRAG_OPERATION_LINK
+ */
+const R_DRAG_OPERATION_LINK = UNKNOWN;
+
 final class RInsets
 {
     public float $top = 0.0;
@@ -1533,6 +1557,20 @@ function Rwindow_inject_key(int $window, int $key, int $pressed, int $modifiers)
 function Rwindow_inject_text(int $window, ?string $text): void {}
 
 /**
+ * The text an input method is composing (preedit: Chinese,
+ * Japanese, Korean, dead keys), as the platforms send it. The focused
+ * TextInput, SpinBox or TextEditor shows it at its caret, underlined, in
+ * place of its selection, but it is not in its text and no changed
+ * callback runs. [selection_start, selection_end) are bytes of `text`:
+ * the part the input method works on (underlined thicker), or the caret
+ * when they are equal; -1 is the end of `text`. NULL or "" ends the
+ * composition without typing anything (cancel). The committed text comes
+ * through Rwindow_inject_text, which ends the composition too, and so
+ * does a change of focus. Ignored when the focus takes no text.
+ */
+function Rwindow_inject_composition(int $window, ?string $text, int $selection_start, int $selection_end): void {}
+
+/**
  * A drag from another application moves over the window
  * (`inside` R_TRUE) or leaves it.
  * Returns R_TRUE when a drop at this position would be accepted.
@@ -1543,6 +1581,14 @@ function Rwindow_inject_drag(int $window, float $x, float $y, int $inside): int 
  * Drops files and / or text at a position. Returns R_TRUE when a target took them.
  */
 function Rwindow_inject_drop(int $window, float $x, float $y, array $paths, int $path_count, ?string $text): int {}
+
+/**
+ * The end of the drag out of the window that the window system
+ * holds (Rdrag_begin_external), as it reports it: `operation` is what the
+ * target did (an RDragOperation). Returns R_FALSE when no such drag is in
+ * progress.
+ */
+function Rwindow_inject_drag_end(int $window, int $operation): int {}
 
 /**
  * Back, as the system sends it (Rwindow_set_back_callback). Returns R_TRUE when something took it.
@@ -1602,6 +1648,13 @@ function Rwindow_set_text_input_selection(int $window, int $start, int $end): in
 function Rwindow_replace_text_input(int $window, int $start, int $end, ?string $text): int {}
 
 /**
+ * The composition of the input method in progress (UTF-8, valid
+ * until it changes) and its selection in bytes; NULL when there is none.
+ * Any output pointer may be NULL.
+ */
+function Rwindow_get_text_composition(int $window, ?int &$selection_start, ?int &$selection_end): ?string {}
+
+/**
  * R_TRUE while a menu, list or dialog is open over the window.
  */
 function Rwindow_has_popup(int $window): int {}
@@ -1610,7 +1663,9 @@ function Rwindow_has_popup(int $window): int {}
  * Last painted caret in window pixels (x, y, width, height), including scrolling and scale.
  * Call after Rdraw_frame. Independent of the blink phase. Returns R_FALSE and zeros the
  * outputs when there is no visible editable caret, the window is inactive, or focus changed
- * since painting. Any output pointer may be NULL.
+ * since painting. Any output pointer may be NULL. While an input method
+ * composes, it is the caret inside the composition: where its candidate
+ * window goes.
  */
 function Rwindow_get_text_input_rect(int $window, ?int &$x, ?int &$y, ?int &$width, ?int &$height): int {}
 
@@ -1662,6 +1717,54 @@ function Rdrag_get_data(int $window): ?string {}
  * Ends the drag in progress without dropping (the target receives R_DROP_LEAVE).
  */
 function Rdrag_cancel(int $window): void {}
+
+/**
+ * Lets the user drag data out of the window, to another
+ * application: a picture into a document, files into the file manager,
+ * text into an editor. `items` is one content in several formats
+ * (RDataItem, copied): the target takes the one it prefers.
+ * `operations` is a bitmask of RDragOperation the target may do (0:
+ * R_DRAG_OPERATION_COPY).
+ *
+ * Call it as Rdrag_begin, while the mouse button is held (from a mouse
+ * move once the pointer has moved a few units). The window system then
+ * takes the drag at the next move of the pointer: it shows the picture
+ * that follows the pointer (Rdrag_set_image) and the cursor that tells
+ * what a drop there does; the button released, `callback` (may be NULL)
+ * is told what the target did.
+ *
+ * Called while a drag inside the application (Rdrag_begin) is in progress
+ * in the window of `source`, it gives that drag the data for outside:
+ * the drag stays inside the window, to its drop targets, and becomes a
+ * drag of the window system only when the pointer leaves the window.
+ * Brought back over a window of the application, it still comes to the
+ * drop targets with the type and data given to Rdrag_begin.
+ *
+ * Implemented on macOS and Windows; elsewhere it returns R_FALSE
+ * (Rdrag_external_supported).
+ * Returns R_FALSE when the widget is not in a window or the window
+ * system cannot drag out of its windows.
+ */
+function Rdrag_begin_external(int $source, array $items, int $count, int $operations, ?callable $callback, mixed $user_data): int {}
+
+/**
+ * The picture that follows the pointer during the drag given by
+ * Rdrag_begin_external (RGBA8 pixels, straight alpha, tightly packed,
+ * copied), held by the pointer at its center. Call it right after
+ * Rdrag_begin_external. Without it the system chooses: the picture
+ * dragged, the icons of the files, or a generic one.
+ */
+function Rdrag_set_image(string $rgba, int $width, int $height): void {}
+
+/**
+ * R_TRUE when the window system lets Raven drag data out of its windows (Rdrag_begin_external).
+ */
+function Rdrag_external_supported(): int {}
+
+/**
+ * R_TRUE from Rdrag_begin_external until its callback was called.
+ */
+function Rdrag_external_is_active(): int {}
 
 function Rwindow_register_shortcut(int $window, int $key, int $modifiers, ?string $action): void {}
 

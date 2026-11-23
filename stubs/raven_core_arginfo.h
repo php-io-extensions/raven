@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: c5f1c7f9985e5897fb7b137e363518a011d483be */
+ * Stub hash: 5bcd483c8dac012c70fb487f72c51ca370ffa3c3 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Ris_initialized, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -196,6 +196,26 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rclipboard_get_text arginfo_Rget_version
 
+#define arginfo_Rclipboard_has_text arginfo_Ris_initialized
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rclipboard_set_data, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, items, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rclipboard_has_data, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, mime, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rclipboard_set_image, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, rgba, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, stride, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rclipboard_has_image arginfo_Ris_initialized
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rerror_get_last, 0, 2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(1, detail, IS_STRING, 1)
 	ZEND_ARG_TYPE_INFO(1, severity, IS_LONG, 1)
@@ -245,6 +265,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RFrameStats___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, backdrop_count, IS_LONG, 0, "0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, paint_job_count, IS_LONG, 0, "0")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, frame_index, IS_LONG, 0, "0")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RDataItem___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, mime, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, data, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, size, IS_LONG, 0, "0")
 ZEND_END_ARG_INFO()
 
 ZEND_FUNCTION(Ris_initialized);
@@ -302,6 +328,11 @@ ZEND_FUNCTION(Ropen_url);
 ZEND_FUNCTION(Rclipboard_set_text);
 ZEND_FUNCTION(Rclipboard_set_html);
 ZEND_FUNCTION(Rclipboard_get_text);
+ZEND_FUNCTION(Rclipboard_has_text);
+ZEND_FUNCTION(Rclipboard_set_data);
+ZEND_FUNCTION(Rclipboard_has_data);
+ZEND_FUNCTION(Rclipboard_set_image);
+ZEND_FUNCTION(Rclipboard_has_image);
 ZEND_FUNCTION(Rerror_get_last);
 ZEND_FUNCTION(Rerror_to_string);
 ZEND_FUNCTION(Rseverity_to_string);
@@ -310,6 +341,7 @@ ZEND_FUNCTION(Rwindow_get_frame_stats);
 ZEND_METHOD(RInitDesc, __construct);
 ZEND_METHOD(RMemoryStats, __construct);
 ZEND_METHOD(RFrameStats, __construct);
+ZEND_METHOD(RDataItem, __construct);
 
 static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Ris_initialized, arginfo_Ris_initialized)
@@ -367,6 +399,11 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rclipboard_set_text, arginfo_Rclipboard_set_text)
 	ZEND_FE(Rclipboard_set_html, arginfo_Rclipboard_set_html)
 	ZEND_FE(Rclipboard_get_text, arginfo_Rclipboard_get_text)
+	ZEND_FE(Rclipboard_has_text, arginfo_Rclipboard_has_text)
+	ZEND_FE(Rclipboard_set_data, arginfo_Rclipboard_set_data)
+	ZEND_FE(Rclipboard_has_data, arginfo_Rclipboard_has_data)
+	ZEND_FE(Rclipboard_set_image, arginfo_Rclipboard_set_image)
+	ZEND_FE(Rclipboard_has_image, arginfo_Rclipboard_has_image)
 	ZEND_FE(Rerror_get_last, arginfo_Rerror_get_last)
 	ZEND_FE(Rerror_to_string, arginfo_Rerror_to_string)
 	ZEND_FE(Rseverity_to_string, arginfo_Rseverity_to_string)
@@ -387,6 +424,11 @@ static const zend_function_entry class_RMemoryStats_methods[] = {
 
 static const zend_function_entry class_RFrameStats_methods[] = {
 	ZEND_ME(RFrameStats, __construct, arginfo_class_RFrameStats___construct, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+static const zend_function_entry class_RDataItem_methods[] = {
+	ZEND_ME(RDataItem, __construct, arginfo_class_RDataItem___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -588,6 +630,34 @@ static zend_class_entry *register_class_RFrameStats(void)
 	zend_string *property_frame_index_name = zend_string_init("frame_index", sizeof("frame_index") - 1, 1);
 	zend_declare_typed_property(class_entry, property_frame_index_name, &property_frame_index_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_frame_index_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_RDataItem(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RDataItem", class_RDataItem_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+
+	zval property_mime_default_value;
+	ZVAL_NULL(&property_mime_default_value);
+	zend_string *property_mime_name = zend_string_init("mime", sizeof("mime") - 1, 1);
+	zend_declare_typed_property(class_entry, property_mime_name, &property_mime_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_mime_name);
+
+	zval property_data_default_value;
+	ZVAL_NULL(&property_data_default_value);
+	zend_string *property_data_name = zend_string_init("data", sizeof("data") - 1, 1);
+	zend_declare_typed_property(class_entry, property_data_name, &property_data_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_data_name);
+
+	zval property_size_default_value;
+	ZVAL_LONG(&property_size_default_value, 0);
+	zend_string *property_size_name = zend_string_init("size", sizeof("size") - 1, 1);
+	zend_declare_typed_property(class_entry, property_size_name, &property_size_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_size_name);
 
 	return class_entry;
 }

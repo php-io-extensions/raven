@@ -336,6 +336,18 @@ const R_WIDGET_CAROUSEL = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_WIDGET_SYSTEM_WEB_VIEW
+ */
+const R_WIDGET_SYSTEM_WEB_VIEW = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_WIDGET_DIFF_VIEW
+ */
+const R_WIDGET_DIFF_VIEW = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_WIDGET_LAST_
  */
 const R_WIDGET_LAST_ = UNKNOWN;

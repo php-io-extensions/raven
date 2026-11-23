@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 341b5d18e82ca8f7633ad6dab5aeddc76064fb57 */
+ * Stub hash: 59678c0c077d77e8cb6d5cc2797a937493b6b3ce */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_create, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 1)
@@ -66,6 +66,53 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_scroll_to_line, 0, 
 	ZEND_ARG_TYPE_INFO(0, line, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+#define arginfo_Rtext_editor_add_cursor arginfo_Rtext_editor_set_cursor
+
+#define arginfo_Rtext_editor_add_selection arginfo_Rtext_editor_select
+
+#define arginfo_Rtext_editor_get_cursor_count arginfo_Rtext_editor_get_length
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_get_cursor_at, 0, 6, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, line, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, column, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, anchor_line, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, anchor_column, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_editor_get_main_cursor arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_clear_cursors arginfo_Rtext_editor_select_all
+
+#define arginfo_Rtext_editor_add_next_occurrence arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_select_all_occurrences arginfo_Rtext_editor_get_length
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_fold, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, line, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_editor_unfold arginfo_Rtext_editor_fold
+
+#define arginfo_Rtext_editor_fold_all arginfo_Rtext_editor_select_all
+
+#define arginfo_Rtext_editor_unfold_all arginfo_Rtext_editor_select_all
+
+#define arginfo_Rtext_editor_is_folded arginfo_Rtext_editor_fold
+
+#define arginfo_Rtext_editor_is_line_hidden arginfo_Rtext_editor_fold
+
+#define arginfo_Rtext_editor_get_fold_end arginfo_Rtext_editor_fold
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_set_folding, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_editor_get_folding arginfo_Rtext_editor_get_length
+
 #define arginfo_Rtext_editor_undo arginfo_Rtext_editor_select_all
 
 #define arginfo_Rtext_editor_redo arginfo_Rtext_editor_select_all
@@ -79,19 +126,16 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_set_read_only, 0, 2
 	ZEND_ARG_TYPE_INFO(0, read_only, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_set_word_wrap, 0, 2, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_Rtext_editor_set_word_wrap arginfo_Rtext_editor_set_folding
 
-#define arginfo_Rtext_editor_set_line_numbers arginfo_Rtext_editor_set_word_wrap
+#define arginfo_Rtext_editor_set_line_numbers arginfo_Rtext_editor_set_folding
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_set_tab_size, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, spaces, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_Rtext_editor_set_tab_inserts_spaces arginfo_Rtext_editor_set_word_wrap
+#define arginfo_Rtext_editor_set_tab_inserts_spaces arginfo_Rtext_editor_set_folding
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_set_syntax, 0, 2, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
@@ -153,9 +197,18 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rtext_editor_get_language arginfo_Rtext_editor_get_text
 
-#define arginfo_Rtext_editor_set_markdown arginfo_Rtext_editor_set_word_wrap
+#define arginfo_Rtext_editor_set_markdown arginfo_Rtext_editor_set_folding
 
 #define arginfo_Rtext_editor_get_markdown arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_set_spell_check arginfo_Rtext_editor_set_folding
+
+#define arginfo_Rtext_editor_get_spell_check arginfo_Rtext_editor_get_length
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_set_spell_language, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 1)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_get_token, 0, 3, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
@@ -163,7 +216,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_get_token, 0, 3, IS
 	ZEND_ARG_TYPE_INFO(0, column, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_Rtext_editor_set_completion arginfo_Rtext_editor_set_word_wrap
+#define arginfo_Rtext_editor_set_completion arginfo_Rtext_editor_set_folding
 
 #define arginfo_Rtext_editor_show_completions arginfo_Rtext_editor_select_all
 
@@ -184,9 +237,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_add_completion_inse
 	ZEND_ARG_TYPE_INFO(0, insert, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
-#define arginfo_Rtext_editor_set_completion_words arginfo_Rtext_editor_set_word_wrap
+#define arginfo_Rtext_editor_set_completion_words arginfo_Rtext_editor_set_folding
 
-#define arginfo_Rtext_editor_set_auto_pairs arginfo_Rtext_editor_set_word_wrap
+#define arginfo_Rtext_editor_set_auto_pairs arginfo_Rtext_editor_set_folding
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_add_marker, 0, 6, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
@@ -202,6 +255,55 @@ ZEND_END_ARG_INFO()
 #define arginfo_Rtext_editor_get_marker_count arginfo_Rtext_editor_get_length
 
 #define arginfo_Rtext_editor_set_hover_callback arginfo_Rtext_editor_set_zoom_callback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_set_search, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, query, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO(0, flags, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_editor_get_search arginfo_Rtext_editor_get_text
+
+#define arginfo_Rtext_editor_get_search_flags arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_find_next arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_find_previous arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_get_match_count arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_get_match_index arginfo_Rtext_editor_get_length
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_get_match, 0, 5, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, line, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, from_column, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, to_column, IS_LONG, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_select_match, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_replace, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, replacement, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_editor_replace_all arginfo_Rtext_editor_replace
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtext_editor_show_find, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, editor, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, replace, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rtext_editor_hide_find arginfo_Rtext_editor_select_all
+
+#define arginfo_Rtext_editor_is_find_shown arginfo_Rtext_editor_get_length
+
+#define arginfo_Rtext_editor_set_find_bar arginfo_Rtext_editor_set_folding
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rtheme_set_token_color, 0, 5, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, token, IS_LONG, 0)
@@ -255,6 +357,23 @@ ZEND_FUNCTION(Rtext_editor_select_all);
 ZEND_FUNCTION(Rtext_editor_get_selection);
 ZEND_FUNCTION(Rtext_editor_get_selected_text);
 ZEND_FUNCTION(Rtext_editor_scroll_to_line);
+ZEND_FUNCTION(Rtext_editor_add_cursor);
+ZEND_FUNCTION(Rtext_editor_add_selection);
+ZEND_FUNCTION(Rtext_editor_get_cursor_count);
+ZEND_FUNCTION(Rtext_editor_get_cursor_at);
+ZEND_FUNCTION(Rtext_editor_get_main_cursor);
+ZEND_FUNCTION(Rtext_editor_clear_cursors);
+ZEND_FUNCTION(Rtext_editor_add_next_occurrence);
+ZEND_FUNCTION(Rtext_editor_select_all_occurrences);
+ZEND_FUNCTION(Rtext_editor_fold);
+ZEND_FUNCTION(Rtext_editor_unfold);
+ZEND_FUNCTION(Rtext_editor_fold_all);
+ZEND_FUNCTION(Rtext_editor_unfold_all);
+ZEND_FUNCTION(Rtext_editor_is_folded);
+ZEND_FUNCTION(Rtext_editor_is_line_hidden);
+ZEND_FUNCTION(Rtext_editor_get_fold_end);
+ZEND_FUNCTION(Rtext_editor_set_folding);
+ZEND_FUNCTION(Rtext_editor_get_folding);
 ZEND_FUNCTION(Rtext_editor_undo);
 ZEND_FUNCTION(Rtext_editor_redo);
 ZEND_FUNCTION(Rtext_editor_can_undo);
@@ -280,6 +399,9 @@ ZEND_FUNCTION(Rtext_editor_set_language);
 ZEND_FUNCTION(Rtext_editor_get_language);
 ZEND_FUNCTION(Rtext_editor_set_markdown);
 ZEND_FUNCTION(Rtext_editor_get_markdown);
+ZEND_FUNCTION(Rtext_editor_set_spell_check);
+ZEND_FUNCTION(Rtext_editor_get_spell_check);
+ZEND_FUNCTION(Rtext_editor_set_spell_language);
 ZEND_FUNCTION(Rtext_editor_get_token);
 ZEND_FUNCTION(Rtext_editor_set_completion);
 ZEND_FUNCTION(Rtext_editor_show_completions);
@@ -293,6 +415,21 @@ ZEND_FUNCTION(Rtext_editor_add_marker);
 ZEND_FUNCTION(Rtext_editor_clear_markers);
 ZEND_FUNCTION(Rtext_editor_get_marker_count);
 ZEND_FUNCTION(Rtext_editor_set_hover_callback);
+ZEND_FUNCTION(Rtext_editor_set_search);
+ZEND_FUNCTION(Rtext_editor_get_search);
+ZEND_FUNCTION(Rtext_editor_get_search_flags);
+ZEND_FUNCTION(Rtext_editor_find_next);
+ZEND_FUNCTION(Rtext_editor_find_previous);
+ZEND_FUNCTION(Rtext_editor_get_match_count);
+ZEND_FUNCTION(Rtext_editor_get_match_index);
+ZEND_FUNCTION(Rtext_editor_get_match);
+ZEND_FUNCTION(Rtext_editor_select_match);
+ZEND_FUNCTION(Rtext_editor_replace);
+ZEND_FUNCTION(Rtext_editor_replace_all);
+ZEND_FUNCTION(Rtext_editor_show_find);
+ZEND_FUNCTION(Rtext_editor_hide_find);
+ZEND_FUNCTION(Rtext_editor_is_find_shown);
+ZEND_FUNCTION(Rtext_editor_set_find_bar);
 ZEND_FUNCTION(Rtheme_set_token_color);
 ZEND_FUNCTION(Rtheme_get_token_color);
 ZEND_FUNCTION(Rtheme_clear_token_colors);
@@ -314,6 +451,23 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtext_editor_get_selection, arginfo_Rtext_editor_get_selection)
 	ZEND_FE(Rtext_editor_get_selected_text, arginfo_Rtext_editor_get_selected_text)
 	ZEND_FE(Rtext_editor_scroll_to_line, arginfo_Rtext_editor_scroll_to_line)
+	ZEND_FE(Rtext_editor_add_cursor, arginfo_Rtext_editor_add_cursor)
+	ZEND_FE(Rtext_editor_add_selection, arginfo_Rtext_editor_add_selection)
+	ZEND_FE(Rtext_editor_get_cursor_count, arginfo_Rtext_editor_get_cursor_count)
+	ZEND_FE(Rtext_editor_get_cursor_at, arginfo_Rtext_editor_get_cursor_at)
+	ZEND_FE(Rtext_editor_get_main_cursor, arginfo_Rtext_editor_get_main_cursor)
+	ZEND_FE(Rtext_editor_clear_cursors, arginfo_Rtext_editor_clear_cursors)
+	ZEND_FE(Rtext_editor_add_next_occurrence, arginfo_Rtext_editor_add_next_occurrence)
+	ZEND_FE(Rtext_editor_select_all_occurrences, arginfo_Rtext_editor_select_all_occurrences)
+	ZEND_FE(Rtext_editor_fold, arginfo_Rtext_editor_fold)
+	ZEND_FE(Rtext_editor_unfold, arginfo_Rtext_editor_unfold)
+	ZEND_FE(Rtext_editor_fold_all, arginfo_Rtext_editor_fold_all)
+	ZEND_FE(Rtext_editor_unfold_all, arginfo_Rtext_editor_unfold_all)
+	ZEND_FE(Rtext_editor_is_folded, arginfo_Rtext_editor_is_folded)
+	ZEND_FE(Rtext_editor_is_line_hidden, arginfo_Rtext_editor_is_line_hidden)
+	ZEND_FE(Rtext_editor_get_fold_end, arginfo_Rtext_editor_get_fold_end)
+	ZEND_FE(Rtext_editor_set_folding, arginfo_Rtext_editor_set_folding)
+	ZEND_FE(Rtext_editor_get_folding, arginfo_Rtext_editor_get_folding)
 	ZEND_FE(Rtext_editor_undo, arginfo_Rtext_editor_undo)
 	ZEND_FE(Rtext_editor_redo, arginfo_Rtext_editor_redo)
 	ZEND_FE(Rtext_editor_can_undo, arginfo_Rtext_editor_can_undo)
@@ -339,6 +493,9 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtext_editor_get_language, arginfo_Rtext_editor_get_language)
 	ZEND_FE(Rtext_editor_set_markdown, arginfo_Rtext_editor_set_markdown)
 	ZEND_FE(Rtext_editor_get_markdown, arginfo_Rtext_editor_get_markdown)
+	ZEND_FE(Rtext_editor_set_spell_check, arginfo_Rtext_editor_set_spell_check)
+	ZEND_FE(Rtext_editor_get_spell_check, arginfo_Rtext_editor_get_spell_check)
+	ZEND_FE(Rtext_editor_set_spell_language, arginfo_Rtext_editor_set_spell_language)
 	ZEND_FE(Rtext_editor_get_token, arginfo_Rtext_editor_get_token)
 	ZEND_FE(Rtext_editor_set_completion, arginfo_Rtext_editor_set_completion)
 	ZEND_FE(Rtext_editor_show_completions, arginfo_Rtext_editor_show_completions)
@@ -352,6 +509,21 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rtext_editor_clear_markers, arginfo_Rtext_editor_clear_markers)
 	ZEND_FE(Rtext_editor_get_marker_count, arginfo_Rtext_editor_get_marker_count)
 	ZEND_FE(Rtext_editor_set_hover_callback, arginfo_Rtext_editor_set_hover_callback)
+	ZEND_FE(Rtext_editor_set_search, arginfo_Rtext_editor_set_search)
+	ZEND_FE(Rtext_editor_get_search, arginfo_Rtext_editor_get_search)
+	ZEND_FE(Rtext_editor_get_search_flags, arginfo_Rtext_editor_get_search_flags)
+	ZEND_FE(Rtext_editor_find_next, arginfo_Rtext_editor_find_next)
+	ZEND_FE(Rtext_editor_find_previous, arginfo_Rtext_editor_find_previous)
+	ZEND_FE(Rtext_editor_get_match_count, arginfo_Rtext_editor_get_match_count)
+	ZEND_FE(Rtext_editor_get_match_index, arginfo_Rtext_editor_get_match_index)
+	ZEND_FE(Rtext_editor_get_match, arginfo_Rtext_editor_get_match)
+	ZEND_FE(Rtext_editor_select_match, arginfo_Rtext_editor_select_match)
+	ZEND_FE(Rtext_editor_replace, arginfo_Rtext_editor_replace)
+	ZEND_FE(Rtext_editor_replace_all, arginfo_Rtext_editor_replace_all)
+	ZEND_FE(Rtext_editor_show_find, arginfo_Rtext_editor_show_find)
+	ZEND_FE(Rtext_editor_hide_find, arginfo_Rtext_editor_hide_find)
+	ZEND_FE(Rtext_editor_is_find_shown, arginfo_Rtext_editor_is_find_shown)
+	ZEND_FE(Rtext_editor_set_find_bar, arginfo_Rtext_editor_set_find_bar)
 	ZEND_FE(Rtheme_set_token_color, arginfo_Rtheme_set_token_color)
 	ZEND_FE(Rtheme_get_token_color, arginfo_Rtheme_get_token_color)
 	ZEND_FE(Rtheme_clear_token_colors, arginfo_Rtheme_clear_token_colors)
@@ -392,6 +564,8 @@ static void register_raven_text_editor_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_TOKEN_STRONG", R_TOKEN_STRONG, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_TOKEN_EMPHASIS", R_TOKEN_EMPHASIS, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_TOKEN_LINK", R_TOKEN_LINK, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_SEARCH_MATCH_CASE", R_SEARCH_MATCH_CASE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_SEARCH_WHOLE_WORD", R_SEARCH_WHOLE_WORD, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_MARKER_ERROR", R_MARKER_ERROR, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_MARKER_WARNING", R_MARKER_WARNING, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_MARKER_INFO", R_MARKER_INFO, CONST_PERSISTENT);

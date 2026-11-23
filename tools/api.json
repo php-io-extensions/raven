@@ -12,6 +12,7 @@
         "raven_shell.h",
         "raven_tools.h",
         "raven_dialogs.h",
+        "raven_device.h",
         "raven_viewport.h",
         "raven_draw.h",
         "raven_shader.h",
@@ -21,7 +22,8 @@
         "raven_accessibility.h",
         "raven_vulkan.h",
         "raven_backend.h",
-        "raven_host.h"
+        "raven_host.h",
+        "raven_testing.h"
     ],
     "functions": {
         "Rinit": {
@@ -686,7 +688,7 @@
                     "type": "const char *"
                 }
             ],
-            "doc": "Opens an address with the program the user has for it: a web\npage in the browser, a mailto: in the mail program, a file in its\napplication. Returns at once.\nReturns R_FALSE when the OS could not be asked (nothing tells whether\na program then really opened it)."
+            "doc": "Opens an address with the program the user has for it: a web\npage in the browser, a mailto: in the mail program, a file in its\napplication. Returns at once. On iOS and Android the system opens it\n(a web page, a tel:, a mailto:; not a file: share it with Rshare_show),\nand Raven must be initialized and this be called on the UI thread.\nReturns R_FALSE when the OS could not be asked (nothing tells whether\na program then really opened it)."
         },
         "Rclipboard_set_text": {
             "header": "raven_core.h",
@@ -711,13 +713,104 @@
                     "type": "const char *"
                 }
             ],
-            "doc": "Copies one content in two formats: `html` for the programs that\npaste formatting (word processors, chat, mail) and `text` for the\nothers (editors, terminals). Each program takes the format it prefers.\nWhere the window system has no clipboard formats (Win32 and macOS for\nnow), or `html` is NULL, it is Rclipboard_set_text(text)."
+            "doc": "Copies one content in two formats: `html` for the programs that\npaste formatting (word processors, chat, mail) and `text` for the\nothers (editors, terminals). Each program takes the format it prefers.\nWhere the window system has no clipboard formats, or `html` is NULL,\nit is Rclipboard_set_text(text)."
         },
         "Rclipboard_get_text": {
             "header": "raven_core.h",
             "ret": "const char *",
             "params": [],
-            "doc": "Returns The clipboard text, or \"\" when empty. Valid until the next call."
+            "doc": "Returns The clipboard text, or \"\" when empty. Valid until the next call.\nOn iOS a read that does not follow a paste of the user (the Paste of a\nmenu, a button, Command-V) shows the system's question \"Allow Paste?\",\nand on Android 12+ the system says that the application pasted: read it\nwhen the user pastes, not to look at it. Android lets only the\napplication in front read it."
+        },
+        "Rclipboard_has_text": {
+            "header": "raven_core.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns R_TRUE when the clipboard holds text, without reading it (no\nquestion of the system on iOS): to enable a Paste button."
+        },
+        "Rclipboard_set_data": {
+            "header": "raven_core.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "items",
+                    "type": "const RDataItem *"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                }
+            ],
+            "doc": "Replaces what the clipboard holds with one content in several\nformats (RDataItem): each program pastes the one it prefers.\nReturns R_TRUE when every format was put on the clipboard; R_FALSE when\nsome could not be (a window system that only takes text: X11 and\nWayland for now, where the text/plain item, if any, still is)."
+        },
+        "Rclipboard_has_data": {
+            "header": "raven_core.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "mime",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Returns R_TRUE when the clipboard holds this format (Rclipboard_set_data), or one Raven converts to it."
+        },
+        "Rclipboard_get_data": {
+            "header": "raven_core.h",
+            "ret": "char *",
+            "params": [
+                {
+                    "name": "mime",
+                    "type": "const char *"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t *"
+                }
+            ],
+            "doc": "What the clipboard holds in one format, converted from the\nnative one when needed (a bitmap given as image/png...).\nReturns The bytes, followed by a '\\0' that `size` does not count, to\nrelease with Rmemory_free; NULL when the clipboard does not hold it."
+        },
+        "Rclipboard_set_image": {
+            "header": "raven_core.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "rgba",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                },
+                {
+                    "name": "stride",
+                    "type": "int"
+                }
+            ],
+            "doc": "Copies a picture: RGBA8 pixels, straight alpha, rows `stride`\nbytes apart (0: width * 4). It goes on the clipboard as image/png\n(and as the bitmaps of the system), so that image editors, documents\nand mail paste it.\nReturns R_FALSE when it could not be put there."
+        },
+        "Rclipboard_has_image": {
+            "header": "raven_core.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns R_TRUE when the clipboard holds a picture Rclipboard_get_image can read."
+        },
+        "Rclipboard_get_image": {
+            "header": "raven_core.h",
+            "ret": "uint8_t *",
+            "params": [
+                {
+                    "name": "width",
+                    "type": "int *"
+                },
+                {
+                    "name": "height",
+                    "type": "int *"
+                }
+            ],
+            "doc": "The picture on the clipboard (copied from any program: PNG,\nTIFF, a bitmap...), as tightly packed RGBA8 pixels, straight alpha.\nReturns The pixels, to release with Rpixels_free; NULL when there is\nnone (or no decoder: RAVEN_WITH_STB_IMAGE off)."
         },
         "Rerror_get_last": {
             "header": "raven_core.h",
@@ -1828,6 +1921,29 @@
                 }
             ]
         },
+        "Rwindow_inject_composition": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "selection_start",
+                    "type": "int"
+                },
+                {
+                    "name": "selection_end",
+                    "type": "int"
+                }
+            ],
+            "doc": "The text an input method is composing (preedit: Chinese,\nJapanese, Korean, dead keys), as the platforms send it. The focused\nTextInput, SpinBox or TextEditor shows it at its caret, underlined, in\nplace of its selection, but it is not in its text and no changed\ncallback runs. [selection_start, selection_end) are bytes of `text`:\nthe part the input method works on (underlined thicker), or the caret\nwhen they are equal; -1 is the end of `text`. NULL or \"\" ends the\ncomposition without typing anything (cancel). The committed text comes\nthrough Rwindow_inject_text, which ends the composition too, and so\ndoes a change of focus. Ignored when the focus takes no text."
+        },
         "Rwindow_inject_drag": {
             "header": "raven_window.h",
             "ret": "int",
@@ -1881,6 +1997,21 @@
                 }
             ],
             "doc": "Drops files and / or text at a position. Returns R_TRUE when a target took them."
+        },
+        "Rwindow_inject_drag_end": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "operation",
+                    "type": "RDragOperation"
+                }
+            ],
+            "doc": "The end of the drag out of the window that the window system\nholds (Rdrag_begin_external), as it reports it: `operation` is what the\ntarget did (an RDragOperation). Returns R_FALSE when no such drag is in\nprogress."
         },
         "Rwindow_inject_back": {
             "header": "raven_window.h",
@@ -2043,6 +2174,25 @@
             ],
             "doc": "Replaces bytes [start, end) of it with `text` and puts the caret\nafter it, as typing would (the changed callback runs; MaxLength\napplies). R_FALSE when there is none or it is read-only."
         },
+        "Rwindow_get_text_composition": {
+            "header": "raven_window.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "selection_start",
+                    "type": "int *"
+                },
+                {
+                    "name": "selection_end",
+                    "type": "int *"
+                }
+            ],
+            "doc": "The composition of the input method in progress (UTF-8, valid\nuntil it changes) and its selection in bytes; NULL when there is none.\nAny output pointer may be NULL."
+        },
         "Rwindow_has_popup": {
             "header": "raven_window.h",
             "ret": "int",
@@ -2079,7 +2229,7 @@
                     "type": "int *"
                 }
             ],
-            "doc": "Last painted caret in window pixels (x, y, width, height), including scrolling and scale.\nCall after Rdraw_frame. Independent of the blink phase. Returns R_FALSE and zeros the\noutputs when there is no visible editable caret, the window is inactive, or focus changed\nsince painting. Any output pointer may be NULL."
+            "doc": "Last painted caret in window pixels (x, y, width, height), including scrolling and scale.\nCall after Rdraw_frame. Independent of the blink phase. Returns R_FALSE and zeros the\noutputs when there is no visible editable caret, the window is inactive, or focus changed\nsince painting. Any output pointer may be NULL. While an input method\ncomposes, it is the caret inside the composition: where its candidate\nwindow goes."
         },
         "Rwindow_get_popup_count": {
             "header": "raven_window.h",
@@ -2206,6 +2356,68 @@
                 }
             ],
             "doc": "Ends the drag in progress without dropping (the target receives R_DROP_LEAVE)."
+        },
+        "Rdrag_begin_external": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "source",
+                    "type": "Rid"
+                },
+                {
+                    "name": "items",
+                    "type": "const RDataItem *"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                },
+                {
+                    "name": "operations",
+                    "type": "Ruint"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDragFinishedCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Lets the user drag data out of the window, to another\napplication: a picture into a document, files into the file manager,\ntext into an editor. `items` is one content in several formats\n(RDataItem, copied): the target takes the one it prefers.\n`operations` is a bitmask of RDragOperation the target may do (0:\nR_DRAG_OPERATION_COPY).\n\nCall it as Rdrag_begin, while the mouse button is held (from a mouse\nmove once the pointer has moved a few units). The window system then\ntakes the drag at the next move of the pointer: it shows the picture\nthat follows the pointer (Rdrag_set_image) and the cursor that tells\nwhat a drop there does; the button released, `callback` (may be NULL)\nis told what the target did.\n\nCalled while a drag inside the application (Rdrag_begin) is in progress\nin the window of `source`, it gives that drag the data for outside:\nthe drag stays inside the window, to its drop targets, and becomes a\ndrag of the window system only when the pointer leaves the window.\nBrought back over a window of the application, it still comes to the\ndrop targets with the type and data given to Rdrag_begin.\n\nImplemented on macOS and Windows; elsewhere it returns R_FALSE\n(Rdrag_external_supported).\nReturns R_FALSE when the widget is not in a window or the window\nsystem cannot drag out of its windows."
+        },
+        "Rdrag_set_image": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "rgba",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                }
+            ],
+            "doc": "The picture that follows the pointer during the drag given by\nRdrag_begin_external (RGBA8 pixels, straight alpha, tightly packed,\ncopied), held by the pointer at its center. Call it right after\nRdrag_begin_external. Without it the system chooses: the picture\ndragged, the icons of the files, or a generic one."
+        },
+        "Rdrag_external_supported": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [],
+            "doc": "R_TRUE when the window system lets Raven drag data out of its windows (Rdrag_begin_external)."
+        },
+        "Rdrag_external_is_active": {
+            "header": "raven_window.h",
+            "ret": "int",
+            "params": [],
+            "doc": "R_TRUE from Rdrag_begin_external until its callback was called."
         },
         "Rwindow_register_shortcut": {
             "header": "raven_window.h",
@@ -3142,7 +3354,7 @@
                     "type": "size_t"
                 }
             ],
-            "doc": "Creates a texture from the content of an image file (PNG, JPEG,\nBMP, TGA, GIF, PSD, SVG). Decoding happens on the calling thread.\nReturns R_INVALID_ID on failure."
+            "doc": "Creates a texture from the content of an image file (PNG, JPEG,\nBMP, TGA, GIF, PSD, SVG). Decoding happens on the calling thread. An\nanimated GIF or APNG keeps its frames: an Image showing it plays them.\nReturns R_INVALID_ID on failure."
         },
         "Rtexture_create_async": {
             "header": "raven_resources.h",
@@ -3176,7 +3388,18 @@
                     "type": "float"
                 }
             ],
-            "doc": "Draws an SVG image (an icon) into a texture, at `scale` pixels per\nunit of the SVG. The widgets show it at the size the SVG gives, whatever\nthe scale (Rtexture_get_density).\n\n0 or less: at the size it is shown. It is first drawn at a scale of 2;\nonce painted, it is drawn again (on a worker thread) with as many pixels\nas the screen shows it with: the scale of the monitor of the window, an\nImage that stretches it, a zoom. It follows when the window moves to a\nscreen of another density or the image grows, and comes down when it is\nshown much smaller (sides of at most 4096 pixels). Its width and height\nin pixels (Rtexture_get_size) change then; its size in logical units\ndoes not. Rtexture_create, Rtexture_create_from_file and the asynchronous\nones read SVG files this way. Paths, fills, strokes and gradients are\ndrawn; text, filters and masks are not."
+            "doc": "Draws an SVG image (an icon) into a texture, at `scale` pixels per\nunit of the SVG. The widgets show it at the size the SVG gives, whatever\nthe scale (Rtexture_get_density).\n\n0 or less: at the size it is shown. It is first drawn at a scale of 2;\nonce painted, it is drawn again (on a worker thread) with as many pixels\nas the screen shows it with: the scale of the monitor of the window, an\nImage that stretches it, a zoom. It follows when the window moves to a\nscreen of another density or the image grows, and comes down when it is\nshown much smaller (sides of at most 4096 pixels). Its width and height\nin pixels (Rtexture_get_size) change then; its size in logical units\ndoes not. Rtexture_create, Rtexture_create_from_file and the asynchronous\nones read SVG files this way. Paths, fills, strokes and gradients are\ndrawn; text, filters and masks are not.\n\ncurrentColor: an SVG painted only in currentColor (fill=\"currentColor\",\nstroke=\"currentColor\") is drawn in white, keeping its shape and its\nopacity, and the widgets that show it (Image, the icons of menu items,\ntabs, tree items, dock panels, tiles, nodes) tint it with the color of\ntheir text at draw time: it follows the theme, hover, pressed and\ndisabled without being drawn again. Rdraw_image draws it in its tint\ncolor. In an SVG that also uses other colors, currentColor is black.\nSee Rtexture_uses_current_color."
+        },
+        "Rtexture_uses_current_color": {
+            "header": "raven_resources.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "texture",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "R_TRUE when the texture is an SVG painted only in currentColor:\nwhite where it is painted, tinted with the color of the text by the\nwidgets that show it (see Rtexture_create_from_svg)."
         },
         "Rtexture_get_density": {
             "header": "raven_resources.h",
@@ -3209,6 +3432,17 @@
                 }
             ],
             "doc": "Reads and decodes the file on a worker thread."
+        },
+        "Rtexture_create_from_url_async": {
+            "header": "raven_resources.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "url",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Downloads an http:// or https:// image and decodes it on a worker\nthread, as an Image whose Source is a URL does. The handle is usable at\nonce: widgets showing it draw nothing until it is ready (Rtexture_is_ready;\na texture that could not be downloaded is ready with a size of 0, and the\nfailure is reported as a warning). Desktops download with WinHTTP or\n`curl`; iOS and Android through their platform. Android needs the INTERNET\npermission in the manifest; iOS refuses http:// unless Info.plist allows\nit (App Transport Security). Up to 32 MiB."
         },
         "Rtexture_create_from_pixels": {
             "header": "raven_resources.h",
@@ -3275,6 +3509,68 @@
             ],
             "doc": "Decodes an image file held in memory (PNG, JPEG, BMP, TGA) into\ntightly packed RGBA8 pixels, without making a texture: for pictures\nthat arrive one after the other and go to Rtexture_update. Thread-safe,\nso that the decoding can be done away from the UI thread.\nReturns The pixels, to release with Rpixels_free; NULL when the data\nis not an image Raven can read."
         },
+        "Rimage_decode_info": {
+            "header": "raven_resources.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "data",
+                    "type": "const void *"
+                },
+                {
+                    "name": "data_size",
+                    "type": "size_t"
+                },
+                {
+                    "name": "width",
+                    "type": "int *"
+                },
+                {
+                    "name": "height",
+                    "type": "int *"
+                },
+                {
+                    "name": "frame_count",
+                    "type": "int *"
+                },
+                {
+                    "name": "loop_count",
+                    "type": "int *"
+                }
+            ],
+            "doc": "Reads what an image file in memory holds without keeping its\npixels: its size, its frames (1 for a still image, more for an animated\nGIF or APNG) and how many times it plays (0: forever). Thread-safe.\nEach pointer may be NULL.\nReturns R_FALSE when the data is not an image Raven can read."
+        },
+        "Rimage_decode_frame": {
+            "header": "raven_resources.h",
+            "ret": "uint8_t *",
+            "params": [
+                {
+                    "name": "data",
+                    "type": "const void *"
+                },
+                {
+                    "name": "data_size",
+                    "type": "size_t"
+                },
+                {
+                    "name": "frame",
+                    "type": "int"
+                },
+                {
+                    "name": "width",
+                    "type": "int *"
+                },
+                {
+                    "name": "height",
+                    "type": "int *"
+                },
+                {
+                    "name": "delay",
+                    "type": "double *"
+                }
+            ],
+            "doc": "Decodes one frame of an animated GIF or APNG into tightly packed\nRGBA8 pixels, composed as it is shown (the frames before it drawn and\ndisposed of). Frame 0 of a still image is the image. Thread-safe.\nReceives the seconds the frame is shown (0 for a still image); may be NULL.\nReturns The pixels, to release with Rpixels_free; NULL when the frame does not exist."
+        },
         "Rpixels_free": {
             "header": "raven_resources.h",
             "ret": "void",
@@ -3285,6 +3581,52 @@
                 }
             ],
             "doc": "Releases pixels returned by Raven (Rimage_decode, Rwindow_capture). Thread-safe."
+        },
+        "Rimage_encode_png": {
+            "header": "raven_resources.h",
+            "ret": "uint8_t *",
+            "params": [
+                {
+                    "name": "rgba",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t *"
+                }
+            ],
+            "doc": "Encodes tightly packed RGBA8 pixels (what Rwindow_capture\nreturns) as a PNG file in memory. Thread-safe.\nReceives the number of bytes.\nReturns The bytes of the file, to release with Rpixels_free; NULL when\nthere are no pixels."
+        },
+        "Rimage_save_png": {
+            "header": "raven_resources.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "rgba",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                }
+            ],
+            "doc": "Writes tightly packed RGBA8 pixels to a PNG file: a screenshot\nof Rwindow_capture, a picture made by the application. Thread-safe.\nReturns R_FALSE when the file cannot be written."
         },
         "Rtexture_is_ready": {
             "header": "raven_resources.h",
@@ -3360,6 +3702,34 @@
                 }
             ],
             "doc": "How the texture is smoothed when it is scaled. The textures made\nfrom image files start with R_FILTER_MIPMAP, the others with\nR_FILTER_LINEAR."
+        },
+        "Ricon_get": {
+            "header": "raven_resources.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "name",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "An icon shipped with Raven, by its name: \"search\", \"settings\",\n\"close\"... (Ricon_get_name lists them; \"raven:search\" works too, as in\nXML: Source=\"raven:search\"). The icons are the ones of Lucide (ISC\nLicense), 24 x 24 logical units, drawn with lines in currentColor: the\nwidgets that show them tint them with the color of their text, so they\nfollow the theme and the states (Rtexture_create_from_svg). Drawn at\nthe density they are shown with, sharp on every screen.\nReturns A texture owned by Raven, made on first use and then shared\n(do not destroy it; if it was, the next call makes it again);\nR_INVALID_ID, with an error, when there is no icon of that name."
+        },
+        "Ricon_get_count": {
+            "header": "raven_resources.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns The number of icons shipped with Raven."
+        },
+        "Ricon_get_name": {
+            "header": "raven_resources.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ],
+            "doc": "Returns The name of an icon, from 0 to Ricon_get_count() - 1, in alphabetical order; NULL out of range."
         },
         "Rwidget_create": {
             "header": "raven_widget.h",
@@ -5325,7 +5695,7 @@
                     "type": "int"
                 }
             ],
-            "doc": "Icon before the title (documents). R_INVALID_ID removes it; tint: a mask in the text color."
+            "doc": "Icon before the title (documents). R_INVALID_ID removes it; tint: a mask in the text color (always, for an SVG in currentColor). XML: Slot.Icon."
         },
         "Rtab_view_set_tab_closable": {
             "header": "raven_layout.h",
@@ -5487,6 +5857,470 @@
                 }
             ],
             "doc": "The direction the widget is laid out in: R_DIRECTION_LTR or _RTL."
+        },
+        "Rlocale_load_csv": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Loads a CSV table of translations from a file. Returns the number of keys read, -1 on an error."
+        },
+        "Rlocale_load_csv_from_memory": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "csv",
+                    "type": "const char *"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t"
+                }
+            ],
+            "doc": "Same, from text in memory (UTF-8)."
+        },
+        "Rlocale_clear": {
+            "header": "raven_locale.h",
+            "ret": "void",
+            "params": [],
+            "doc": "Forgets every table."
+        },
+        "Rlocale_set_text": {
+            "header": "raven_locale.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "language",
+                    "type": "const char *"
+                },
+                {
+                    "name": "key",
+                    "type": "const char *"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Adds or replaces one text of one language."
+        },
+        "Rlocale_get_language_count": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Number of languages in the tables, and their codes, in the order of the columns."
+        },
+        "Rlocale_get_language_at": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rlocale_set_language": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "code",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Chooses the language: an exact code (\"pt-BR\"), or its first part\n(\"pt\") when the tables have no such column. Every widget that shows a key\nis updated, and the layout of the windows follows its direction (an\nArabic, Hebrew, Persian or Urdu language is laid out from right to left,\nsee Rset_layout_direction). Returns R_FALSE when no column matches (the\nlanguage is set all the same: the texts fall back)."
+        },
+        "Rlocale_get_language": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": []
+        },
+        "Rlocale_get_system_language": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [],
+            "doc": "The language of the user, from the system (\"fr-FR\", \"en-US\"...)."
+        },
+        "Rlocale_set_fallback_language": {
+            "header": "raven_locale.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "code",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The language whose texts are shown when the current one has none (default: the first column)."
+        },
+        "Rlocale_is_rtl": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [],
+            "doc": "R_TRUE when the language is written from right to left."
+        },
+        "Rlocale_set_changed_callback": {
+            "header": "raven_locale.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "callback",
+                    "type": "RLocaleChangedCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Called after the language or the tables changed (the widgets are already updated)."
+        },
+        "Rtr": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "key",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The text of a key in the current language (see the fallbacks above). Never NULL."
+        },
+        "Rtr_exists": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "key",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "R_TRUE when the key has a text in the current language or the fallback one."
+        },
+        "Rtr_format": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "key",
+                    "type": "const char *"
+                },
+                {
+                    "name": "args",
+                    "type": "const char *const *"
+                },
+                {
+                    "name": "arg_count",
+                    "type": "int"
+                }
+            ],
+            "doc": "The text of a key with its {0} {1} ... replaced by the arguments\n(translators may put them in any order). \"{{\" is a brace."
+        },
+        "Rtr_plural": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "key",
+                    "type": "const char *"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                }
+            ],
+            "doc": "The plural form of a key for a count: the key followed by the CLDR\ncategory of the count in the current language (\".zero\", \".one\", \".two\",\n\".few\", \".many\", \".other\"), else \".other\", else the key itself. {n} is\nreplaced by the count, written in the conventions of the language."
+        },
+        "Rwidget_set_text_key": {
+            "header": "raven_locale.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "attribute",
+                    "type": "const char *"
+                },
+                {
+                    "name": "key",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Makes a widget show a key: an attribute (\"Text\", \"Tooltip\",\n\"Title\", \"Placeholder\"... any attribute that takes a text) is set to the\ntranslation now and every time the language changes. NULL or \"\" stops it.\nSame as Rwidget_set_attribute(widget, attribute, \"key\")."
+        },
+        "Rlocale_format_number": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "double"
+                },
+                {
+                    "name": "decimals",
+                    "type": "int"
+                }
+            ],
+            "doc": "A number written in the conventions of the language: decimal separator and digit grouping (\"1 234,5\" in French)."
+        },
+        "Rlocale_set_clock": {
+            "header": "raven_locale.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "clock",
+                    "type": "RClock"
+                }
+            ],
+            "doc": "Forces the clock of every time shown (a setting of the\napplication): R_CLOCK_12_HOUR, R_CLOCK_24_HOUR, or R_CLOCK_AUTO (default)\nto follow the locale. A TimePicker can still choose its own (Clock=\"24\")."
+        },
+        "Rlocale_get_clock": {
+            "header": "raven_locale.h",
+            "ret": "RClock",
+            "params": []
+        },
+        "Rlocale_uses_12_hour_clock": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [],
+            "doc": "R_TRUE when times are shown on 12 hours with AM and PM. With\nRlocale_set_clock, what it forces; else, when the application chose a\nlanguage (Rlocale_set_language), the usage of that language (from CLDR:\nen-US, en-CA, en-AU, en-IN, hi, ar, ko, zh-TW, fil... use 12 hours, most\nothers 24); else the setting of the user on the system (Windows, macOS,\nthe LC_TIME of Linux), or the usage of the language of the system."
+        },
+        "Rlocale_get_day_period": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "pm",
+                    "type": "int"
+                }
+            ],
+            "doc": "\"AM\" (pm = R_FALSE) or \"PM\" in the language: the keys Raven.AM / Raven.PM when the tables have them. Never NULL."
+        },
+        "Rlocale_format_time": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "hour",
+                    "type": "int"
+                },
+                {
+                    "name": "minute",
+                    "type": "int"
+                },
+                {
+                    "name": "second",
+                    "type": "int"
+                },
+                {
+                    "name": "show_seconds",
+                    "type": "int"
+                }
+            ],
+            "doc": "A time of the day (hour 0 to 23) as the locale writes it: \"3:05 PM\", \"15:05\", \"\uc624\ud6c4 3:05\"."
+        },
+        "Rtimezone_get_system": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [],
+            "doc": "The zone of the system (\"Europe/Paris\"): the TZ variable, the\nlink /etc/localtime, else what the system says; \"UTC\" when it says\nnothing. Valid until the next call."
+        },
+        "Rtimezone_set_directory": {
+            "header": "raven_locale.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The folder of the tz database (the files \"Europe/Paris\"...), or\nthe packed tzdata file of Android, to read instead of the system's: for\na database shipped with the application, or tests. It is then the only\none read. NULL: the system's (or the TZDIR variable). Forgets the zones\nread so far."
+        },
+        "Rtimezone_is_valid": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "R_TRUE when the zone is known. Every function takes a name of\nthe tz database, \"UTC\", a POSIX TZ rule (\"EST5EDT,M3.2.0,M11.1.0\"), or\nNULL / \"\" for the zone of the system."
+        },
+        "Rtimezone_to_local": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                },
+                {
+                    "name": "utc",
+                    "type": "double"
+                },
+                {
+                    "name": "year",
+                    "type": "int *"
+                },
+                {
+                    "name": "month",
+                    "type": "int *"
+                },
+                {
+                    "name": "day",
+                    "type": "int *"
+                },
+                {
+                    "name": "hour",
+                    "type": "int *"
+                },
+                {
+                    "name": "minute",
+                    "type": "int *"
+                },
+                {
+                    "name": "second",
+                    "type": "int *"
+                }
+            ],
+            "doc": "The date and time an instant shows in a zone (month 1 to 12). R_FALSE for an unknown zone."
+        },
+        "Rtimezone_from_local": {
+            "header": "raven_locale.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                },
+                {
+                    "name": "year",
+                    "type": "int"
+                },
+                {
+                    "name": "month",
+                    "type": "int"
+                },
+                {
+                    "name": "day",
+                    "type": "int"
+                },
+                {
+                    "name": "hour",
+                    "type": "int"
+                },
+                {
+                    "name": "minute",
+                    "type": "int"
+                },
+                {
+                    "name": "second",
+                    "type": "int"
+                }
+            ],
+            "doc": "The instant a date and time of a zone is. When the clocks go\nforward, the times they skip do not exist: such a time is moved forward\nby the length of the gap (02:30 becomes 03:30). When they go back, the\ntimes of the hour repeated happen twice: the first is taken (still in\nsummer time). Rtimezone_count_local tells these cases apart."
+        },
+        "Rtimezone_count_local": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                },
+                {
+                    "name": "year",
+                    "type": "int"
+                },
+                {
+                    "name": "month",
+                    "type": "int"
+                },
+                {
+                    "name": "day",
+                    "type": "int"
+                },
+                {
+                    "name": "hour",
+                    "type": "int"
+                },
+                {
+                    "name": "minute",
+                    "type": "int"
+                },
+                {
+                    "name": "second",
+                    "type": "int"
+                }
+            ],
+            "doc": "How many instants show this date and time in the zone: 1, 0 (skipped when the clocks went forward) or 2 (repeated when they went back)."
+        },
+        "Rtimezone_get_offset": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                },
+                {
+                    "name": "utc",
+                    "type": "double"
+                }
+            ],
+            "doc": "Seconds the zone is ahead of UTC at an instant (3600 in Paris in winter, -14400 in New York in summer)."
+        },
+        "Rtimezone_is_daylight_saving": {
+            "header": "raven_locale.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                },
+                {
+                    "name": "utc",
+                    "type": "double"
+                }
+            ],
+            "doc": "R_TRUE when the zone is on summer (daylight saving) time at the instant."
+        },
+        "Rtimezone_get_abbreviation": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                },
+                {
+                    "name": "utc",
+                    "type": "double"
+                }
+            ],
+            "doc": "The abbreviation of the zone at an instant (\"CET\", \"EDT\"; \"+03\" where the database has no name)."
+        },
+        "Rtimezone_get_label": {
+            "header": "raven_locale.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                },
+                {
+                    "name": "utc",
+                    "type": "double"
+                }
+            ],
+            "doc": "The zone at an instant, to show: \"CET, UTC+1\", \"EDT, UTC-4\", \"IST, UTC+5:30\", \"UTC+3\" when it has no name."
         },
         "Rlabel_create": {
             "header": "raven_controls.h",
@@ -6044,7 +6878,8 @@
                     "name": "a",
                     "type": "float"
                 }
-            ]
+            ],
+            "doc": "Color the image is multiplied by (white by default). An SVG in\ncurrentColor (Ricon_get, Rtexture_create_from_svg) is drawn in the color of\nthe text around it until a tint is given; then in the tint. XML: Tint."
         },
         "Rimage_set_tint_text": {
             "header": "raven_controls.h",
@@ -6113,6 +6948,166 @@
                 {
                     "name": "radius",
                     "type": "float"
+                }
+            ]
+        },
+        "Rimage_is_animated": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "R_TRUE when the texture of the image is an animated GIF or APNG (two frames or more)."
+        },
+        "Rimage_get_frame_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The frames of its animation; 1 for a still image, 0 without a texture."
+        },
+        "Rimage_get_duration": {
+            "header": "raven_controls.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The seconds one play of its animation lasts (0 for a still image)."
+        },
+        "Rimage_get_frame_delay": {
+            "header": "raven_controls.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                },
+                {
+                    "name": "frame",
+                    "type": "int"
+                }
+            ],
+            "doc": "Returns The seconds a frame of its animation is shown (0 for a frame that does not exist)."
+        },
+        "Rimage_play": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Plays the animation from the frame it is on (from the first\nagain when it had finished). An Image plays as soon as it is given an\nanimated texture, unless XML says Animate=\"false\"."
+        },
+        "Rimage_pause": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Stops the animation on the frame it is on."
+        },
+        "Rimage_stop": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Stops the animation and shows its first frame."
+        },
+        "Rimage_is_playing": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rimage_set_frame": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                },
+                {
+                    "name": "frame",
+                    "type": "int"
+                }
+            ],
+            "doc": "Shows a frame (from 0), playing on from it if it plays."
+        },
+        "Rimage_get_frame": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rimage_set_loop_count": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                }
+            ],
+            "doc": "How many times the animation plays before it stops on its last\nframe: 0 forever, -1 what the file says (the default). XML: Loop\n(a number; also Forever, Once)."
+        },
+        "Rimage_get_loop_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The plays of the animation (0: forever), the file's unless it was set."
+        },
+        "Rimage_set_finished_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RImageFinishedCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
                 }
             ]
         },
@@ -6315,6 +7310,171 @@
                 }
             ],
             "doc": "Called when Enter is pressed. This also fires the action of the widget."
+        },
+        "Rtext_input_set_spell_check": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "text_input",
+                    "type": "Rid"
+                },
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "Underlines the misspelled words with a wavy line (R_COLOR_SPELLING);\na right click on one offers corrections (see SPELL CHECKING). Off by\ndefault. A password is never checked."
+        },
+        "Rtext_input_get_spell_check": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "text_input",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtext_input_set_spell_language": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "text_input",
+                    "type": "Rid"
+                },
+                {
+                    "name": "language",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Language of the spell checking (\"en_US\", \"fr\"...). NULL: the default (Rspell_set_language)."
+        },
+        "Rspell_is_supported": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [],
+            "doc": "R_TRUE when the system has a spell checker that Raven can use."
+        },
+        "Rspell_get_language_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [],
+            "doc": "The languages the checker has dictionaries for."
+        },
+        "Rspell_get_language_at": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rspell_set_language": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "language",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The language used when a widget or a call gives none. NULL\nfollows the locale again.\nReturns R_FALSE when the checker has no dictionary for it (the default\nof the system is then used)."
+        },
+        "Rspell_get_language": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [],
+            "doc": "The code of the language used by default, as the checker names it; \"\" when there is no checker."
+        },
+        "Rspell_check": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "language",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Checks a text. `language` NULL: the default.\nReturns The number of misspelled words, read with Rspell_get_misspelling."
+        },
+        "Rspell_get_misspelling": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "index",
+                    "type": "int"
+                },
+                {
+                    "name": "start",
+                    "type": "int *"
+                },
+                {
+                    "name": "end",
+                    "type": "int *"
+                }
+            ],
+            "doc": "A misspelled word found by the last Rspell_check: bytes [start, end) of its text."
+        },
+        "Rspell_suggest": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "word",
+                    "type": "const char *"
+                },
+                {
+                    "name": "language",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Returns The number of corrections for a word (best first), read with Rspell_get_suggestion."
+        },
+        "Rspell_get_suggestion": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ],
+            "doc": "A correction found by the last Rspell_suggest; valid until the next call."
+        },
+        "Rspell_learn": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "word",
+                    "type": "const char *"
+                },
+                {
+                    "name": "language",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Adds a word to the dictionary of the user, which the system keeps (with Hunspell alone: for the session)."
+        },
+        "Rspell_ignore": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "word",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The word is no longer a misspelling, in every language, until the application quits."
         },
         "Rspin_box_set_range": {
             "header": "raven_controls.h",
@@ -6542,6 +7702,125 @@
                 {
                     "name": "user_data",
                     "type": "void *"
+                }
+            ]
+        },
+        "Rcombo_box_set_editable": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                },
+                {
+                    "name": "editable",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_TRUE: the combo box is a text field with its list: the user\nmay type a text that is not one of the items (Editable=\"true\"). The text\nis Rcombo_box_get_text; choosing an item puts its text there. A typed\ntext equal to an item selects it, any other selects nothing (-1)."
+        },
+        "Rcombo_box_is_editable": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rcombo_box_set_searchable": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                },
+                {
+                    "name": "searchable",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_TRUE: typing in the combo box filters its list (Searchable=\"true\"):\nthe items that contain what was typed, without regard to case or\naccents (\"zoe\" finds \"Zo\u00eb\", \"sao\" finds \"S\u00e3o Paulo\"), or a row saying that nothing\nmatches. Up and Down move in the list, Enter chooses, Escape closes it.\nA searchable combo box that is not editable comes back to the item\nchosen when nothing is."
+        },
+        "Rcombo_box_is_searchable": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rcombo_box_get_text": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The text shown: what was typed in an editable combo box, else the text of the selected item (\"\" for none)."
+        },
+        "Rcombo_box_set_text": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Editable combo box: sets the text of the field (the item equal to it is selected); otherwise selects the item with this text."
+        },
+        "Rcombo_box_set_text_changed_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RComboBoxTextCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rcombo_box_set_open": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                },
+                {
+                    "name": "open",
+                    "type": "int"
+                }
+            ],
+            "doc": "Opens (R_TRUE) or closes the list."
+        },
+        "Rcombo_box_is_open": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
                 }
             ]
         },
@@ -7030,7 +8309,7 @@
                     "type": "float"
                 }
             ],
-            "doc": "Icon drawn before the text of the item (a region u0,v0,u1,v1 of the texture). R_INVALID_ID removes it."
+            "doc": "Icon drawn before the text of the item (a region u0,v0,u1,v1 of the texture). R_INVALID_ID removes it.\nAn SVG in currentColor (Ricon_get) takes the color of the text. XML: Icon on an Item."
         },
         "Rtree_item_set_text_color": {
             "header": "raven_controls.h",
@@ -7469,7 +8748,7 @@
                     "type": "int"
                 }
             ],
-            "doc": "Icon drawn before the text of a menu item (after the check mark column).\nR_INVALID_ID removes it. u0, v0, u1, v1 : region of the texture.\nR_TRUE: the texture is a mask drawn in the text color (monochrome icons)."
+            "doc": "Icon drawn before the text of a menu item (after the check mark column).\nR_INVALID_ID removes it. u0, v0, u1, v1 : region of the texture.\nR_TRUE: the texture is a mask drawn in the text color (monochrome icons).\nAn SVG in currentColor (Ricon_get) always is. XML: Icon."
         },
         "Rmenu_item_is_checked": {
             "header": "raven_controls.h",
@@ -7921,6 +9200,25 @@
                 }
             ]
         },
+        "Rtile_view_set_drag_out_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "tile_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RTileEventCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Tiles can be dragged out of the window, to other applications:\nwhen the user starts dragging the selected tiles (`index` is the one\nunder the pointer), the callback gives their data by calling\nRdrag_begin_external (the pictures, the files they stand for...), and\nRdrag_set_image. With a drag type too (Rtile_view_set_drag_type), the\ndrag first goes to the drop targets of the window and only leaves it\nwith the pointer. NULL: the tiles stay in the application (default)."
+        },
         "Rtile_view_set_selection_changed_callback": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -8314,7 +9612,32 @@
                     "type": "int"
                 }
             ],
-            "doc": "Opt into Ctrl/Cmd toggles and Shift ranges; single selection is the default."
+            "doc": "Opt into Ctrl/Cmd toggles and Shift ranges; single selection is the default. Same as Rtable_set_selection_mode(MULTIPLE or SINGLE)."
+        },
+        "Rtable_set_selection_mode": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "mode",
+                    "type": "RTableSelectionMode"
+                }
+            ],
+            "doc": "Single (default), multiple or no selection (SelectionMode=\"Multiple\" in XML).\nGoing to single keeps the selected row, going to none clears the selection."
+        },
+        "Rtable_get_selection_mode": {
+            "header": "raven_controls.h",
+            "ret": "RTableSelectionMode",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ]
         },
         "Rtable_set_row_selected": {
             "header": "raven_controls.h",
@@ -8347,6 +9670,40 @@
                     "type": "int"
                 }
             ]
+        },
+        "Rtable_select_range": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "first",
+                    "type": "int"
+                },
+                {
+                    "name": "last",
+                    "type": "int"
+                },
+                {
+                    "name": "selected",
+                    "type": "int"
+                }
+            ],
+            "doc": "Selects (`selected` R_TRUE) or deselects the rows first..last, both\nincluded, keeping the others: multiple selection only (in single\nselection, selecting a range selects `last`)."
+        },
+        "Rtable_select_all": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Multiple selection: selects every row (Ctrl/Cmd+A). Nothing in the other modes."
         },
         "Rtable_clear_selection": {
             "header": "raven_controls.h",
@@ -8383,6 +9740,40 @@
             ],
             "doc": "Selected row at index, top to bottom; -1 outside the selection."
         },
+        "Rtable_get_selection_range_count": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The selection as runs of consecutive rows, top to bottom: the\nfast way to go through a large selection (select all of a million rows\nis one range)."
+        },
+        "Rtable_get_selection_range": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                },
+                {
+                    "name": "first",
+                    "type": "int *"
+                },
+                {
+                    "name": "last",
+                    "type": "int *"
+                }
+            ],
+            "doc": "The rows first..last (both included) of a range of the selection. return R_FALSE outside the ranges."
+        },
         "Rtable_set_selected": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -8406,7 +9797,19 @@
                     "name": "table",
                     "type": "Rid"
                 }
-            ]
+            ],
+            "doc": "The selected row (-1: none). In multiple selection, the one\nselected last, or else the first one; the selection changed callback\nreceives it."
+        },
+        "Rtable_get_current_row": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The row the keyboard is on: the selected row in single\nselection; in multiple selection the row last clicked or reached with\nthe arrows, which Space toggles (it may be unselected). -1: none."
         },
         "Rtable_scroll_to_row": {
             "header": "raven_controls.h",
@@ -8558,6 +9961,201 @@
                     "type": "void *"
                 }
             ]
+        },
+        "Rtable_set_column_editable": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "editable",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_TRUE: the cells of the column are edited in place by the user (default R_FALSE)."
+        },
+        "Rtable_is_column_editable": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rtable_set_cell_edited_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RTableCellEditedCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rtable_edit_cell": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                }
+            ],
+            "doc": "Opens the editor on a cell, its text selected, as F2 does (the\nrow is selected and scrolled into view). Any column can be edited this\nway, editable or not. return R_TRUE when the editor is open."
+        },
+        "Rtable_is_editing": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtable_end_edit": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "commit",
+                    "type": "int"
+                }
+            ],
+            "doc": "Closes the editor: `commit` R_TRUE keeps the text (through the\ncell edited callback), R_FALSE forgets it. return R_FALSE when the text\nwas refused (the editor then stays open), R_TRUE otherwise."
+        },
+        "Rtable_set_frozen_columns": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                }
+            ],
+            "doc": "The first `count` columns stay in place when the table scrolls\nsideways; a thin shadow marks where the others pass under them. 0 (the\ndefault): every column scrolls."
+        },
+        "Rtable_get_frozen_columns": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtable_set_column_kind": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "kind",
+                    "type": "RTableColumnKind"
+                }
+            ],
+            "doc": "Text (default), check box or progress bar: how the cells of the\ncolumn are drawn from their texts. A check column is made editable (the\nuser toggles it; Rtable_set_column_editable(R_FALSE) after this shows it\nonly) and centered. For anything else, a cell color callback and the\ntexts are what the table offers: it draws no other widget in its cells."
+        },
+        "Rtable_get_column_kind": {
+            "header": "raven_controls.h",
+            "ret": "RTableColumnKind",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rtable_is_cell_checked": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                }
+            ],
+            "doc": "A cell of a check column: R_TRUE when its text is \"1\", \"true\" or \"yes\". Any cell can be asked."
+        },
+        "Rtable_set_cell_checked": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "checked",
+                    "type": "int"
+                }
+            ],
+            "doc": "Stored rows: writes \"1\" or \"0\" in the cell (no callback is called)."
         },
         "Rdate_picker_set_date": {
             "header": "raven_controls.h",
@@ -8723,6 +10321,57 @@
                 }
             ]
         },
+        "Rdate_picker_set_time_zone": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "date_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The time zone of the date, for the instants below; NULL or \"\" (default): the zone of the system. TimeZone=\"...\" in XML."
+        },
+        "Rdate_picker_get_time_zone": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "date_picker",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rdate_picker_set_instant": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "date_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "utc",
+                    "type": "double"
+                }
+            ],
+            "doc": "Shows the date an instant (seconds since 1970, UTC) has in the zone of the picker."
+        },
+        "Rdate_picker_get_instant": {
+            "header": "raven_controls.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "date_picker",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The first instant of the date in the zone: its midnight (or, where the clocks skip midnight, the time they go to)."
+        },
         "Rtime_picker_set_time": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -8813,6 +10462,154 @@
                     "type": "void *"
                 }
             ]
+        },
+        "Rtime_picker_set_clock": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "clock",
+                    "type": "RClock"
+                }
+            ],
+            "doc": "12 or 24 hours for this picker; R_CLOCK_AUTO (default): the clock of the locale. Clock=\"Auto|12|24\" in XML."
+        },
+        "Rtime_picker_get_clock": {
+            "header": "raven_controls.h",
+            "ret": "RClock",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtime_picker_get_text": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The time as the field shows it: \"3:05 PM\", \"15:05\", with the zone when it is shown (valid until the next call)."
+        },
+        "Rtime_picker_set_time_zone": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "zone",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The time zone of the time (\"America/New_York\", see\nRtimezone_is_valid); NULL or \"\" (default): the zone of the system. An\nunknown zone is refused. TimeZone=\"...\" in XML."
+        },
+        "Rtime_picker_get_time_zone": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The zone set, \"\" for none."
+        },
+        "Rtime_picker_set_time_zone_visible": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "visible",
+                    "type": "int"
+                }
+            ],
+            "doc": "Writes the zone after the time (\"EST\", \"CET\", \"UTC+3\"). ShowTimeZone=\"true\" in XML."
+        },
+        "Rtime_picker_set_date": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "year",
+                    "type": "int"
+                },
+                {
+                    "name": "month",
+                    "type": "int"
+                },
+                {
+                    "name": "day",
+                    "type": "int"
+                }
+            ],
+            "doc": "The day of the time, for its zone (month 1 to 12); year 0: today (default). Date=\"YYYY-MM-DD\" in XML."
+        },
+        "Rtime_picker_get_date": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "year",
+                    "type": "int *"
+                },
+                {
+                    "name": "month",
+                    "type": "int *"
+                },
+                {
+                    "name": "day",
+                    "type": "int *"
+                }
+            ]
+        },
+        "Rtime_picker_set_instant": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                },
+                {
+                    "name": "utc",
+                    "type": "double"
+                }
+            ],
+            "doc": "Shows an instant (seconds since 1970, UTC) in the zone of the picker: its day and its time."
+        },
+        "Rtime_picker_get_instant": {
+            "header": "raven_controls.h",
+            "ret": "double",
+            "params": [
+                {
+                    "name": "time_picker",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The instant the day and the time are in the zone. A time the\nclocks skipped is moved forward, a time they repeated is the first\n(see Rtimezone_from_local)."
         },
         "Rtoast_show": {
             "header": "raven_controls.h",
@@ -12123,6 +13920,240 @@
                 }
             ]
         },
+        "Rsystem_web_view_is_supported": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns R_TRUE when web views show pages here (the system has an engine Raven can embed, and Raven runs with a window system)."
+        },
+        "Rsystem_web_view_create": {
+            "header": "raven_controls.h",
+            "ret": "Rid",
+            "params": []
+        },
+        "Rsystem_web_view_load_url": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "url",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Goes to an address (\"https://...\", \"file:///...\", \"about:blank\"). A file: address may read the files of its folder."
+        },
+        "Rsystem_web_view_load_file": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Shows a file of the computer (an .html file, and what it refers to in its folder)."
+        },
+        "Rsystem_web_view_load_html": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "html",
+                    "type": "const char *"
+                },
+                {
+                    "name": "base_url",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Shows HTML given as text.\nWhere the relative addresses of the text are looked\nfor (\"file:///Users/me/app/pages/\", \"https://example.org/\"), or NULL."
+        },
+        "Rsystem_web_view_reload": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rsystem_web_view_stop": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rsystem_web_view_go_back": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rsystem_web_view_go_forward": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rsystem_web_view_can_go_back": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rsystem_web_view_can_go_forward": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rsystem_web_view_get_url": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The address of the page shown (the one asked for, where unsupported). Valid until it changes."
+        },
+        "Rsystem_web_view_get_title": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The title of the page, \"\" when it has none. Valid until it changes."
+        },
+        "Rsystem_web_view_is_loading": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rsystem_web_view_get_error": {
+            "header": "raven_controls.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns Why the last page could not be shown, or \"\" when all is well."
+        },
+        "Rsystem_web_view_run_javascript": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "script",
+                    "type": "const char *"
+                },
+                {
+                    "name": "callback",
+                    "type": "RSystemWebViewResultCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Runs JavaScript in the page; the value of its last statement is\nthe result. If it is a promise, the result is what the promise\nresolves to. The callback (may be NULL) always comes later, never\nduring this call."
+        },
+        "Rsystem_web_view_set_message_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RSystemWebViewMessageCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rsystem_web_view_set_event_callback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RSystemWebViewEventCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Called when something happens in the page. The action of the\nwidget (Rwidget_set_action, OnChanged in XML) is fired as well each\ntime the address changes."
+        },
+        "Rsystem_web_view_get_native_handle": {
+            "header": "raven_controls.h",
+            "ret": "void *",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The view of the system, to go further than these functions:\na WKWebView* on macOS and iOS. NULL where unsupported."
+        },
         "Rpdf_document_create": {
             "header": "raven_controls.h",
             "ret": "Rid",
@@ -12740,7 +14771,7 @@
                     "type": "const char *"
                 }
             ],
-            "doc": "Types a text at the cursor, replacing the selection, as the user\nwould: it can be undone and the changed callback is called."
+            "doc": "Types a text at the cursor, replacing the selection, as the user\nwould (at every cursor when there are several): it can be undone and\nthe changed callback is called."
         },
         "Rtext_editor_set_cursor": {
             "header": "raven_text_editor.h",
@@ -12867,6 +14898,259 @@
                 }
             ],
             "doc": "Scrolls so that a line is visible."
+        },
+        "Rtext_editor_add_cursor": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                }
+            ],
+            "doc": "Adds a cursor (a caret) to the editor; the main cursor stays\nthe main one. A cursor over another one, or at the place of another\ncaret, becomes one with it. Rtext_editor_set_cursor,\nRtext_editor_select and Rtext_editor_set_text go back to one cursor."
+        },
+        "Rtext_editor_add_selection": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "from_line",
+                    "type": "int"
+                },
+                {
+                    "name": "from_column",
+                    "type": "int"
+                },
+                {
+                    "name": "to_line",
+                    "type": "int"
+                },
+                {
+                    "name": "to_column",
+                    "type": "int"
+                }
+            ],
+            "doc": "Adds a cursor that selects from one position to another (its caret on the second)."
+        },
+        "Rtext_editor_get_cursor_count": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The number of cursors, the main one included (1 at least)."
+        },
+        "Rtext_editor_get_cursor_at": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                },
+                {
+                    "name": "line",
+                    "type": "int *"
+                },
+                {
+                    "name": "column",
+                    "type": "int *"
+                },
+                {
+                    "name": "anchor_line",
+                    "type": "int *"
+                },
+                {
+                    "name": "anchor_column",
+                    "type": "int *"
+                }
+            ],
+            "doc": "A cursor by its index, in the order of the text (0 for the\nfirst): its caret and the anchor of its selection (the same position\nwhen nothing is selected). Returns R_FALSE when `index` is out of range."
+        },
+        "Rtext_editor_get_main_cursor": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The index of the main cursor, in the order of Rtext_editor_get_cursor_at."
+        },
+        "Rtext_editor_clear_cursors": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Back to the main cursor alone, as Escape does."
+        },
+        "Rtext_editor_add_next_occurrence": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "What Ctrl+D does: with nothing selected, selects the word at\neach caret; else adds a cursor on the next occurrence of the main\nselection (with its case, a whole word when it was selected so) that no\ncursor selects, going on from the start of the text. Returns R_FALSE\nwhen there is none."
+        },
+        "Rtext_editor_select_all_occurrences": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "What Ctrl+Shift+L does: a cursor on every occurrence of the main selection (or of the word at the caret). Returns their number."
+        },
+        "Rtext_editor_fold": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                }
+            ],
+            "doc": "Folds the region that starts at a line: the lines after it, up\nto the one before the bracket that closes it (or to the last one more\nindented), are hidden. When the line starts none, or it is folded\nalready, the nearest region around the line is folded. Cursors in it\ngo to the end of its first line. Returns R_FALSE when there is none.\nLine numbers stay those of the text. Folds follow the lines when text\nis added or removed elsewhere; editing a hidden line (or the line break\nof the first line) unfolds its region, and so does a match of the\nsearch or a cursor that goes into it."
+        },
+        "Rtext_editor_unfold": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                }
+            ],
+            "doc": "Unfolds the region that starts at a line, or what hides it. Returns R_FALSE when nothing was folded there."
+        },
+        "Rtext_editor_fold_all": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Folds every region, those inside others too."
+        },
+        "Rtext_editor_unfold_all": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtext_editor_is_folded": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                }
+            ],
+            "doc": "Returns R_TRUE when a folded region starts at this line."
+        },
+        "Rtext_editor_is_line_hidden": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                }
+            ],
+            "doc": "Returns R_TRUE when the line is hidden in a folded region."
+        },
+        "Rtext_editor_get_fold_end": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                }
+            ],
+            "doc": "Returns The last line of the region that starts at a line (folded or not), -1 when it starts none."
+        },
+        "Rtext_editor_set_folding": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_FALSE unfolds everything and stops folding: no markers, and\nCtrl+Shift+[ / ] go to the shortcuts of the window. On by default.\nXML: Folding=\"false\"."
+        },
+        "Rtext_editor_get_folding": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ]
         },
         "Rtext_editor_undo": {
             "header": "raven_text_editor.h",
@@ -13193,6 +15477,46 @@
                 }
             ]
         },
+        "Rtext_editor_set_spell_check": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "Underlines the misspelled words with a wavy line (R_COLOR_SPELLING);\na right click on one offers corrections (see SPELL CHECKING in\nraven_controls.h). Only the lines shown are checked, again when they\nchange. Off by default: it is meant for prose, not for code."
+        },
+        "Rtext_editor_get_spell_check": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtext_editor_set_spell_language": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "language",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Language of the spell checking (\"en_US\", \"fr\"...). NULL: the default (Rspell_set_language)."
+        },
         "Rtext_editor_get_token": {
             "header": "raven_text_editor.h",
             "ret": "RToken",
@@ -13406,6 +15730,214 @@
                     "type": "void *"
                 }
             ]
+        },
+        "Rtext_editor_set_search": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "query",
+                    "type": "const char *"
+                },
+                {
+                    "name": "flags",
+                    "type": "Ruint"
+                }
+            ],
+            "doc": "Sets what is searched for, with RSearchFlags, and shows every\nmatch of the visible text (theme colors R_COLOR_SEARCH_MATCH and\nR_COLOR_SEARCH_CURRENT). A match lies on one line: a query with a line\nbreak finds nothing. NULL or \"\" clears the search. The selection does\nnot move; Rtext_editor_find_next goes to a match."
+        },
+        "Rtext_editor_get_search": {
+            "header": "raven_text_editor.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The text searched for, \"\" when there is none."
+        },
+        "Rtext_editor_get_search_flags": {
+            "header": "raven_text_editor.h",
+            "ret": "Ruint",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The RSearchFlags of the search."
+        },
+        "Rtext_editor_find_next": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Selects the next match after the selection (or the cursor),\ngoing on from the start of the text after its end, and scrolls to it.\nReturns R_FALSE when the text has no match."
+        },
+        "Rtext_editor_find_previous": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The same, toward the start: the match before the selection, from the end of the text after its start."
+        },
+        "Rtext_editor_get_match_count": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The number of matches in the whole text. Counted once per change of the text or of the search."
+        },
+        "Rtext_editor_get_match_index": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns The index of the selected match (0 for the first in the text), -1 when the selection is not a match."
+        },
+        "Rtext_editor_get_match": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                },
+                {
+                    "name": "line",
+                    "type": "int *"
+                },
+                {
+                    "name": "from_column",
+                    "type": "int *"
+                },
+                {
+                    "name": "to_column",
+                    "type": "int *"
+                }
+            ],
+            "doc": "Where a match is: its line and the columns of its first byte and\nof the byte after it. Returns R_FALSE when `index` is out of range."
+        },
+        "Rtext_editor_select_match": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "index",
+                    "type": "int"
+                }
+            ],
+            "doc": "Selects a match by its index and scrolls to it. Returns R_FALSE when `index` is out of range."
+        },
+        "Rtext_editor_replace": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "replacement",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Replaces the selected match by `replacement`, as one step of\nthe history, then selects the next match. When the selection is not a\nmatch, only selects the next one (the user sees what will be replaced).\nReturns R_TRUE when something was replaced. As with\nRtext_editor_insert_text, the changed callback is called."
+        },
+        "Rtext_editor_replace_all": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "replacement",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Replaces every match by `replacement`, as a single step of the\nhistory (one undo puts them all back). Returns the number of matches\nreplaced."
+        },
+        "Rtext_editor_show_find": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "replace",
+                    "type": "int"
+                }
+            ],
+            "doc": "Opens the find bar of the editor (Ctrl+F), with the row to\nreplace when `replace` is R_TRUE (Ctrl+H), and gives it the keyboard.\nText selected on one line becomes the text searched for.\nIts texts are English unless the locale has the keys Raven.Find,\nRaven.Replace, Raven.ReplaceAll, Raven.FindNoResults, Raven.FindCount\n(\"{0} of {1}\"), Raven.FindMatchCase, Raven.FindWholeWord,\nRaven.FindPrevious, Raven.FindNext, Raven.FindClose and\nRaven.FindToggleReplace."
+        },
+        "Rtext_editor_hide_find": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Closes the find bar; the matches are no longer shown, F3 still goes to the next one."
+        },
+        "Rtext_editor_is_find_shown": {
+            "header": "raven_text_editor.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rtext_editor_set_find_bar": {
+            "header": "raven_text_editor.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "editor",
+                    "type": "Rid"
+                },
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_FALSE removes the find bar and its keys (Ctrl+F, Ctrl+H, F3,\nCmd+G), which then go to the shortcuts of the window: for an\napplication with its own search, built on Rtext_editor_set_search. On\nby default. XML: FindBar=\"false\"."
         },
         "Rtheme_set_token_color": {
             "header": "raven_text_editor.h",
@@ -17834,6 +20366,501 @@
                 }
             ]
         },
+        "Rdiff_unified": {
+            "header": "raven_tools.h",
+            "ret": "char *",
+            "params": [
+                {
+                    "name": "left",
+                    "type": "const char *"
+                },
+                {
+                    "name": "right",
+                    "type": "const char *"
+                },
+                {
+                    "name": "left_name",
+                    "type": "const char *"
+                },
+                {
+                    "name": "right_name",
+                    "type": "const char *"
+                },
+                {
+                    "name": "context",
+                    "type": "int"
+                },
+                {
+                    "name": "flags",
+                    "type": "uint32_t"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t *"
+                }
+            ],
+            "doc": "The differences between two texts as a unified diff (the format\nof `diff -u` and `git diff`), with `context` unchanged lines around each\nchange (3 is usual). `left_name` and `right_name` follow `---` and `+++`\n(NULL: \"a\" and \"b\"). `flags`: RDiffFlags. It touches nothing else of\nthe library: it may be called from any thread.\nReturns The patch followed by a '\\0' (an empty text when the texts are\nthe same), to release with Rmemory_free; NULL when a text is NULL.\n`size` receives its length in bytes, and may be NULL."
+        },
+        "Rdiff_count_changes": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "left",
+                    "type": "const char *"
+                },
+                {
+                    "name": "right",
+                    "type": "const char *"
+                },
+                {
+                    "name": "flags",
+                    "type": "uint32_t"
+                }
+            ],
+            "doc": "The number of changes (runs of lines removed and / or added) between two texts. Any thread."
+        },
+        "Rdiff_view_create": {
+            "header": "raven_tools.h",
+            "ret": "Rid",
+            "params": []
+        },
+        "Rdiff_view_set_texts": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "left",
+                    "type": "const char *"
+                },
+                {
+                    "name": "right",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "The two texts to compare (NULL: empty). Lines end with \"\\n\" or \"\\r\\n\"."
+        },
+        "Rdiff_view_set_names": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "left_name",
+                    "type": "const char *"
+                },
+                {
+                    "name": "right_name",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Names shown over the two sides (file names, \"Before\" / \"After\"); NULL: none. Their extension chooses the colors of the code."
+        },
+        "Rdiff_view_load_files": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "left_path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "right_path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Compares two files. Their paths become the names unless names\nwere given. return R_FALSE when a file cannot be read (it is compared\nas empty)."
+        },
+        "Rdiff_view_set_patch": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "patch",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Shows a patch (unified diff: the output of `git diff`, `diff -u`)\ninstead of two texts: each file with its name, each hunk with its header.\nReturns R_FALSE when the text holds no hunk (nothing is shown)."
+        },
+        "Rdiff_view_set_mode": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "mode",
+                    "type": "RDiffViewMode"
+                }
+            ]
+        },
+        "Rdiff_view_get_mode": {
+            "header": "raven_tools.h",
+            "ret": "RDiffViewMode",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rdiff_view_set_context": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "lines",
+                    "type": "int"
+                }
+            ],
+            "doc": "Unchanged lines shown around each change (3 by default); the\nothers are folded. A negative number shows every line."
+        },
+        "Rdiff_view_get_context": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rdiff_view_set_flags": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "flags",
+                    "type": "uint32_t"
+                }
+            ],
+            "doc": "How lines are compared: RDiffFlags (0 by default). Not used by a patch."
+        },
+        "Rdiff_view_get_flags": {
+            "header": "raven_tools.h",
+            "ret": "uint32_t",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rdiff_view_set_word_diff": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "Marks the words that changed inside a changed line (default R_TRUE)."
+        },
+        "Rdiff_view_set_line_numbers": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "visible",
+                    "type": "int"
+                }
+            ],
+            "doc": "Shows the numbers of the lines (default R_TRUE)."
+        },
+        "Rdiff_view_set_language": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "language",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Colors the code as the text editor does: a language name of\nRlanguage_register (\"C\", \"Python\", \"JSON\"...), \"None\" for plain text,\nNULL (default) to guess it from the extension of the names."
+        },
+        "Rdiff_view_get_change_count": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The number of changes: runs of lines removed and / or added."
+        },
+        "Rdiff_view_get_change": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "change",
+                    "type": "int"
+                },
+                {
+                    "name": "left_line",
+                    "type": "int *"
+                },
+                {
+                    "name": "left_count",
+                    "type": "int *"
+                },
+                {
+                    "name": "right_line",
+                    "type": "int *"
+                },
+                {
+                    "name": "right_count",
+                    "type": "int *"
+                }
+            ],
+            "doc": "Where a change is: its first line and its number of lines on\neach side (a count of 0: nothing on that side; the line is then the one\nafter which the other side's lines go). return R_FALSE when there is\nno such change."
+        },
+        "Rdiff_view_go_to_change": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "change",
+                    "type": "int"
+                }
+            ],
+            "doc": "Scrolls to a change (from 0) and marks it as the current one."
+        },
+        "Rdiff_view_get_current_change": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The current change, -1 before the first one is gone to."
+        },
+        "Rdiff_view_next_change": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Goes to the next / previous change. return Its index, -1 when there is none."
+        },
+        "Rdiff_view_prev_change": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rdiff_view_get_row_count": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The rows shown, folds, hunk headers and notes included."
+        },
+        "Rdiff_view_get_row": {
+            "header": "raven_tools.h",
+            "ret": "RDiffRowKind",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "left_line",
+                    "type": "int *"
+                },
+                {
+                    "name": "right_line",
+                    "type": "int *"
+                }
+            ],
+            "doc": "What a row shows, and the numbers of its lines (0 for a side it\nhas no line of). A fold gives the first line it hides on each side."
+        },
+        "Rdiff_view_get_row_text": {
+            "header": "raven_tools.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "side",
+                    "type": "RDiffSide"
+                }
+            ],
+            "doc": "The text of a row on one side (in unified mode the side does not\nmatter for a line); a fold, a hunk, a file or a note give their label.\nValid until the next call. \"\" when there is none."
+        },
+        "Rdiff_view_expand": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                }
+            ],
+            "doc": "Shows the lines of a fold. return R_FALSE when the row is not a fold."
+        },
+        "Rdiff_view_get_first_visible_row": {
+            "header": "raven_tools.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The first row at the top of the view; Rdiff_view_scroll_to_row brings one there."
+        },
+        "Rdiff_view_scroll_to_row": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                }
+            ]
+        },
+        "Rdiff_view_add_annotation": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "side",
+                    "type": "RDiffSide"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Attaches a short note to a line (a review comment, an error): a\nmark in the gutter and the text in a row under the line, which is never\nfolded away. Several notes may go to one line."
+        },
+        "Rdiff_view_clear_annotations": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ]
+        },
+        "Rdiff_view_get_selected_text": {
+            "header": "raven_tools.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The text selected by the user (\"\" when none), one line after another."
+        },
+        "Rdiff_view_set_line_clicked_callback": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDiffViewLineCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Called when a line or its number is clicked (the action of the widget is fired too)."
+        },
         "Rdialog_open": {
             "header": "raven_dialogs.h",
             "ret": "void",
@@ -18386,7 +21413,7 @@
             "header": "raven_dialogs.h",
             "ret": "int",
             "params": [],
-            "doc": "R_FALSE when the platform has no notifications (Rnotification_show then always uses the fallback)."
+            "doc": "R_FALSE when the system shows no notifications here (Rnotification_show then always uses\nthe fallback): the null platform, no notification server on Linux, an executable outside of a\nbundle on macOS."
         },
         "Rnotification_set_fallback": {
             "header": "raven_dialogs.h",
@@ -18416,7 +21443,297 @@
                     "type": "void *"
                 }
             ],
-            "doc": "Called when the user clicks a notification of Rnotification_show\n(on the UI thread; the application may then bring its window to the\nfront: the system lets it). It is the last one shown that was clicked:\nthe application remembers what it was about. NULL: none.\nWindows and macOS (elsewhere it is never called)."
+            "doc": "Called when the user clicks a notification of Rnotification_show\n(on the UI thread), as R_NOTIFICATION_ACTIVATED of\nRnotification_set_callback, which also tells which one. NULL: none."
+        },
+        "Rnotification_show_desc": {
+            "header": "raven_dialogs.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RNotificationDesc *"
+                }
+            ],
+            "doc": "Shows a notification described by `desc` (see RNotificationDesc).\nReturns R_TRUE when the system took it; R_FALSE when it went to the fallback (or nowhere)."
+        },
+        "Rnotification_close": {
+            "header": "raven_dialogs.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "tag",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Takes away the notification of that tag, shown by the system or by the fallback toast. The callback is not called."
+        },
+        "Rnotification_set_callback": {
+            "header": "raven_dialogs.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "callback",
+                    "type": "RNotificationCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "Rnotification_set_bring_to_front": {
+            "header": "raven_dialogs.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_TRUE (the default): a click on a notification (not on one of\nits buttons) brings its window back before the callback is called:\nshown again if it was hidden or minimized, in front, with the keyboard.\nR_FALSE: the application does what it wants in the callback."
+        },
+        "Rnotification_set_fallback_toast": {
+            "header": "raven_dialogs.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "toast",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "A Toast that shows the notifications the system could not show,\nwith their title, icon and buttons; a click on one, or on a button, is\nreported to Rnotification_set_callback as for the system's. Put it in\nan Overlay (Queue=\"Stack\" shows several at once). It takes the place\nof the fallback callback (Rnotification_set_fallback). R_INVALID_ID: none."
+        },
+        "Rnotification_supports": {
+            "header": "raven_dialogs.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "feature",
+                    "type": "RNotificationFeature"
+                }
+            ],
+            "doc": "Whether the notifications of the system have that feature here (R_FALSE where there are none)."
+        },
+        "Rpermission_get_status": {
+            "header": "raven_device.h",
+            "ret": "RPermissionStatus",
+            "params": [
+                {
+                    "name": "permission",
+                    "type": "RPermission"
+                }
+            ],
+            "doc": "What the user answered, without asking. Cheap: the platform\nremembers it. On iOS the status of notifications is known shortly after\nthe start (R_PERMISSION_NOT_ASKED until then)."
+        },
+        "Rpermission_request": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "permission",
+                    "type": "RPermission"
+                },
+                {
+                    "name": "callback",
+                    "type": "RPermissionCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Asks the user, with the question of the system, when the status\nis R_PERMISSION_NOT_ASKED or R_PERMISSION_DENIED; otherwise only answers\nwith the status. Several requests for the same permission share one\nquestion. `callback` may be NULL."
+        },
+        "Rpermission_open_settings": {
+            "header": "raven_device.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Opens the page of the application in the Settings of the system,\nwhere the user changes what was refused for good (R_PERMISSION_BLOCKED).\nReturns R_FALSE when the platform has no such page."
+        },
+        "Rpermission_to_string": {
+            "header": "raven_device.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "permission",
+                    "type": "RPermission"
+                }
+            ],
+            "doc": "Returns The name of a permission or a status (\"camera\", \"granted\"...), for logs."
+        },
+        "Rpermission_status_to_string": {
+            "header": "raven_device.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "status",
+                    "type": "RPermissionStatus"
+                }
+            ]
+        },
+        "Rfile_open_async": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RFileDialogDesc *"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDeviceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Asks for one file to read (several with R_FILE_DIALOG_MULTIPLE). `desc` may be NULL."
+        },
+        "Rfile_save_async": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RFileDialogDesc *"
+                },
+                {
+                    "name": "data",
+                    "type": "const void *"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDeviceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Saves `size` bytes (copied: `data` may be freed at once) as a\nfile where the user chooses, proposed under `desc->file_name`. The\ncallback gives the file as saved: its name, and its path on desktops."
+        },
+        "Rfile_export_async": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RFileDialogDesc *"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDeviceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Same as Rfile_save_async, for a file that already exists (a path Raven can read), copied where the user chooses."
+        },
+        "Rfile_select_folder_async": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RFileDialogDesc *"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDeviceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Asks for a folder: desktops only for now (R_DEVICE_UNSUPPORTED on iOS and Android)."
+        },
+        "Rcamera_is_available": {
+            "header": "raven_device.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns R_TRUE when Rcamera_take_photo can show a camera (none on desktops, nor in the iOS Simulator)."
+        },
+        "Rcamera_take_photo": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "callback",
+                    "type": "RDeviceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Shows the camera of the system to take one photo. It asks for\nR_PERMISSION_CAMERA first when needed (R_DEVICE_DENIED when refused).\nThe photo is a JPEG file in the cache of the application, with its\nsize in pixels, upright."
+        },
+        "Rphoto_pick": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "max_count",
+                    "type": "int"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDeviceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Shows the photo picker of the system (desktops: a file dialog for\nimages). No permission is needed: the application only sees what the\nuser picks. Each photo is a file Raven can load (iOS: converted to JPEG\nwhen it is HEIC).\nHow many photos may be picked; 0: no limit."
+        },
+        "Rhaptic_is_supported": {
+            "header": "raven_device.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns R_TRUE when the device can play haptics (a phone; never a desktop)."
+        },
+        "Rhaptic_play": {
+            "header": "raven_device.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "haptic",
+                    "type": "RHaptic"
+                }
+            ],
+            "doc": "A short vibration, as the controls of the system play when\ntouched. Nothing happens where there are none, or when the user turned\nthem off. return R_TRUE when it was handed to the system."
+        },
+        "Rshare_show": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "desc",
+                    "type": "const RShareDesc *"
+                },
+                {
+                    "name": "callback",
+                    "type": "RDeviceCallback"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ],
+            "doc": "Shows the share sheet of the system with a text and / or a file,\nto send them to another application (mail, chat, Files...). The\ncallback says R_DEVICE_DONE once something was chosen (Android: once the\nsheet was shown; it does not tell more), R_DEVICE_CANCELLED when it was\nclosed. R_DEVICE_UNSUPPORTED on desktops."
         },
         "Rviewport_set_texture": {
             "header": "raven_viewport.h",
@@ -19465,7 +22782,7 @@
                     "type": "int"
                 }
             ],
-            "doc": "Turns live reload on or off. It is on by default; the\nenvironment variable RAVEN_LIVE_RELOAD=0 turns it off without\nrebuilding. When off, files are never looked at again."
+            "doc": "Turns live reload on or off. It is on by default, except in\nthe browser (Emscripten), where watching files would keep the page\ndrawing; the environment variable RAVEN_LIVE_RELOAD=0 or 1 changes the\ndefault without rebuilding. When off, files are never looked at again."
         },
         "Rxml_get_live_reload": {
             "header": "raven_xml.h",
@@ -20313,217 +23630,6 @@
                 }
             ]
         },
-        "Rlocale_load_csv": {
-            "header": "raven_locale.h",
-            "ret": "int",
-            "params": [
-                {
-                    "name": "path",
-                    "type": "const char *"
-                }
-            ],
-            "doc": "Loads a CSV table of translations from a file. Returns the number of keys read, -1 on an error."
-        },
-        "Rlocale_load_csv_from_memory": {
-            "header": "raven_locale.h",
-            "ret": "int",
-            "params": [
-                {
-                    "name": "csv",
-                    "type": "const char *"
-                },
-                {
-                    "name": "size",
-                    "type": "size_t"
-                }
-            ],
-            "doc": "Same, from text in memory (UTF-8)."
-        },
-        "Rlocale_clear": {
-            "header": "raven_locale.h",
-            "ret": "void",
-            "params": [],
-            "doc": "Forgets every table."
-        },
-        "Rlocale_set_text": {
-            "header": "raven_locale.h",
-            "ret": "void",
-            "params": [
-                {
-                    "name": "language",
-                    "type": "const char *"
-                },
-                {
-                    "name": "key",
-                    "type": "const char *"
-                },
-                {
-                    "name": "text",
-                    "type": "const char *"
-                }
-            ],
-            "doc": "Adds or replaces one text of one language."
-        },
-        "Rlocale_get_language_count": {
-            "header": "raven_locale.h",
-            "ret": "int",
-            "params": [],
-            "doc": "Number of languages in the tables, and their codes, in the order of the columns."
-        },
-        "Rlocale_get_language_at": {
-            "header": "raven_locale.h",
-            "ret": "const char *",
-            "params": [
-                {
-                    "name": "index",
-                    "type": "int"
-                }
-            ]
-        },
-        "Rlocale_set_language": {
-            "header": "raven_locale.h",
-            "ret": "int",
-            "params": [
-                {
-                    "name": "code",
-                    "type": "const char *"
-                }
-            ],
-            "doc": "Chooses the language: an exact code (\"pt-BR\"), or its first part\n(\"pt\") when the tables have no such column. Every widget that shows a key\nis updated, and the layout of the windows follows its direction (an\nArabic, Hebrew, Persian or Urdu language is laid out from right to left,\nsee Rset_layout_direction). Returns R_FALSE when no column matches (the\nlanguage is set all the same: the texts fall back)."
-        },
-        "Rlocale_get_language": {
-            "header": "raven_locale.h",
-            "ret": "const char *",
-            "params": []
-        },
-        "Rlocale_get_system_language": {
-            "header": "raven_locale.h",
-            "ret": "const char *",
-            "params": [],
-            "doc": "The language of the user, from the system (\"fr-FR\", \"en-US\"...)."
-        },
-        "Rlocale_set_fallback_language": {
-            "header": "raven_locale.h",
-            "ret": "void",
-            "params": [
-                {
-                    "name": "code",
-                    "type": "const char *"
-                }
-            ],
-            "doc": "The language whose texts are shown when the current one has none (default: the first column)."
-        },
-        "Rlocale_is_rtl": {
-            "header": "raven_locale.h",
-            "ret": "int",
-            "params": [],
-            "doc": "R_TRUE when the language is written from right to left."
-        },
-        "Rlocale_set_changed_callback": {
-            "header": "raven_locale.h",
-            "ret": "void",
-            "params": [
-                {
-                    "name": "callback",
-                    "type": "RLocaleChangedCallback"
-                },
-                {
-                    "name": "user_data",
-                    "type": "void *"
-                }
-            ],
-            "doc": "Called after the language or the tables changed (the widgets are already updated)."
-        },
-        "Rtr": {
-            "header": "raven_locale.h",
-            "ret": "const char *",
-            "params": [
-                {
-                    "name": "key",
-                    "type": "const char *"
-                }
-            ],
-            "doc": "The text of a key in the current language (see the fallbacks above). Never NULL."
-        },
-        "Rtr_exists": {
-            "header": "raven_locale.h",
-            "ret": "int",
-            "params": [
-                {
-                    "name": "key",
-                    "type": "const char *"
-                }
-            ],
-            "doc": "R_TRUE when the key has a text in the current language or the fallback one."
-        },
-        "Rtr_format": {
-            "header": "raven_locale.h",
-            "ret": "const char *",
-            "params": [
-                {
-                    "name": "key",
-                    "type": "const char *"
-                },
-                {
-                    "name": "args",
-                    "type": "const char *const *"
-                },
-                {
-                    "name": "arg_count",
-                    "type": "int"
-                }
-            ],
-            "doc": "The text of a key with its {0} {1} ... replaced by the arguments\n(translators may put them in any order). \"{{\" is a brace."
-        },
-        "Rtr_plural": {
-            "header": "raven_locale.h",
-            "ret": "const char *",
-            "params": [
-                {
-                    "name": "key",
-                    "type": "const char *"
-                },
-                {
-                    "name": "count",
-                    "type": "int"
-                }
-            ],
-            "doc": "The plural form of a key for a count: the key followed by the CLDR\ncategory of the count in the current language (\".zero\", \".one\", \".two\",\n\".few\", \".many\", \".other\"), else \".other\", else the key itself. {n} is\nreplaced by the count, written in the conventions of the language."
-        },
-        "Rwidget_set_text_key": {
-            "header": "raven_locale.h",
-            "ret": "void",
-            "params": [
-                {
-                    "name": "widget",
-                    "type": "Rid"
-                },
-                {
-                    "name": "attribute",
-                    "type": "const char *"
-                },
-                {
-                    "name": "key",
-                    "type": "const char *"
-                }
-            ],
-            "doc": "Makes a widget show a key: an attribute (\"Text\", \"Tooltip\",\n\"Title\", \"Placeholder\"... any attribute that takes a text) is set to the\ntranslation now and every time the language changes. NULL or \"\" stops it.\nSame as Rwidget_set_attribute(widget, attribute, \"key\")."
-        },
-        "Rlocale_format_number": {
-            "header": "raven_locale.h",
-            "ret": "const char *",
-            "params": [
-                {
-                    "name": "value",
-                    "type": "double"
-                },
-                {
-                    "name": "decimals",
-                    "type": "int"
-                }
-            ],
-            "doc": "A number written in the conventions of the language: decimal separator and digit grouping (\"1 234,5\" in French)."
-        },
         "Raccessibility_set_text_scale": {
             "header": "raven_accessibility.h",
             "ret": "void",
@@ -21177,6 +24283,29 @@
             ],
             "doc": "One typed Unicode code point."
         },
+        "Rhost_inject_composition": {
+            "header": "raven_host.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "selection_start",
+                    "type": "int"
+                },
+                {
+                    "name": "selection_end",
+                    "type": "int"
+                }
+            ],
+            "doc": "The input method of the application's system composes `text`\n(preedit), with its selection in bytes (see Rwindow_inject_composition).\nNULL or \"\" cancels it; the committed text then comes through\nRhost_inject_text. Rwindow_get_text_input_rect tells where to put the\ncandidate window."
+        },
         "Rhost_inject_focus": {
             "header": "raven_host.h",
             "ret": "void",
@@ -21202,6 +24331,477 @@
                 }
             ],
             "doc": "The user asked to close the window (its close callback decides)."
+        },
+        "Rhost_permission_answer": {
+            "header": "raven_host.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "permission",
+                    "type": "RPermission"
+                },
+                {
+                    "name": "status",
+                    "type": "RPermissionStatus"
+                }
+            ],
+            "doc": "The user answered a permission_request (or the status changed\nby itself). The waiting Rpermission_request callbacks get it at the\nnext frame. Any thread."
+        },
+        "Rhost_service_complete": {
+            "header": "raven_host.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "request",
+                    "type": "Ruint"
+                },
+                {
+                    "name": "result",
+                    "type": "RDeviceResult"
+                },
+                {
+                    "name": "files",
+                    "type": "const RPickedFile *"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                }
+            ],
+            "doc": "The end of a service_request: the files it gave (copied; paths\nRaven can read; size 0 is read from the file), at the next frame. Once\nper request. Any thread."
+        },
+        "Rtest_set_deterministic": {
+            "header": "raven_testing.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "enabled",
+                    "type": "int"
+                }
+            ],
+            "doc": "R_TRUE makes what is drawn depend only on what the test does:\nevery frame advances the animations by 1/60 s (Rset_animation_time_step),\nand the carets of the text fields stay lit instead of blinking. R_FALSE\ngives the clock back (time step 0)."
+        },
+        "Rtest_is_deterministic": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": []
+        },
+        "Rtest_get_platform_tag": {
+            "header": "raven_testing.h",
+            "ret": "const char *",
+            "params": [],
+            "doc": "Returns What the goldens of this run are made with, \"OS-backend\":\n\"macos-metal\", \"linux-vulkan\", \"windows-vulkan\", \"web-webgl\"... and\n\"null\" with the null backend."
+        },
+        "Rtest_find": {
+            "header": "raven_testing.h",
+            "ret": "Rid",
+            "params": [
+                {
+                    "name": "scope",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Finds a widget by name (Rwidget_set_name, Name=\"\" in XML). The\npath may have several names separated by '/': \"settings/ok\" is the\nwidget named \"ok\" inside the one named \"settings\". In a window, the\nopen popups (menus, dialogs) are searched first, top first, then the\ncontent.\nA window or a widget.\nReturns R_INVALID_ID when nothing has that name (no error is reported)."
+        },
+        "Rtest_click": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Moves the mouse to the middle of the widget, presses and releases the left button."
+        },
+        "Rtest_double_click": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Two clicks in a row on the middle of the widget, seen as a double click."
+        },
+        "Rtest_right_click": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "A click of the right button on the middle of the widget (a context menu)."
+        },
+        "Rtest_click_at": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                },
+                {
+                    "name": "button",
+                    "type": "RMouseButton"
+                },
+                {
+                    "name": "clicks",
+                    "type": "int"
+                },
+                {
+                    "name": "modifiers",
+                    "type": "Ruint"
+                }
+            ],
+            "doc": "Clicks at a position of a widget or a window.\n1 for a click, 2 for a double click, 3 for a triple click.\nRModifier held during the clicks (R_MOD_SHIFT...)."
+        },
+        "Rtest_hover": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Moves the mouse over the middle of the widget, without clicking."
+        },
+        "Rtest_hover_at": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ],
+            "doc": "Moves the mouse to a position of a widget or a window."
+        },
+        "Rtest_drag": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "dx",
+                    "type": "float"
+                },
+                {
+                    "name": "dy",
+                    "type": "float"
+                }
+            ],
+            "doc": "Presses the left button on the middle of the widget, moves by\n(dx, dy) in several steps, and releases: a slider, a splitter, a\nwindow dragged by a widget."
+        },
+        "Rtest_drag_to": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "from",
+                    "type": "Rid"
+                },
+                {
+                    "name": "to",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Drags from the middle of one widget to the middle of another (drag and drop)."
+        },
+        "Rtest_scroll": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "wheel_x",
+                    "type": "float"
+                },
+                {
+                    "name": "wheel_y",
+                    "type": "float"
+                }
+            ],
+            "doc": "Turns the mouse wheel over the middle of the widget: `wheel_y`\nnotches (positive: toward the top, as a wheel turned away from the\nuser), `wheel_x` notches sideways."
+        },
+        "Rtest_key": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "key",
+                    "type": "RKey"
+                },
+                {
+                    "name": "modifiers",
+                    "type": "Ruint"
+                }
+            ],
+            "doc": "Presses and releases a key, with RModifier held. A widget\ntarget gets the keyboard focus first; a window sends the key to what\nhas the focus."
+        },
+        "Rtest_type_text": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Types UTF-8 text as a keyboard would. A widget target gets the\nkeyboard focus first. '\\n', '\\t' and '\\b' are sent as the keys Enter,\nTab and Backspace."
+        },
+        "Rtest_tap": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "A finger touches the middle of the widget and leaves at once."
+        },
+        "Rtest_swipe": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                },
+                {
+                    "name": "dx",
+                    "type": "float"
+                },
+                {
+                    "name": "dy",
+                    "type": "float"
+                },
+                {
+                    "name": "seconds",
+                    "type": "double"
+                }
+            ],
+            "doc": "A finger put on the middle of the widget moves by (dx, dy) in\n`seconds`, and leaves: a fast swipe flicks a list, which then coasts\n(Rtest_settle lets it stop)."
+        },
+        "Rtest_pump": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "frames",
+                    "type": "int"
+                }
+            ],
+            "doc": "Produces `frames` frames (Rdraw_frame). return R_FALSE once the application quits."
+        },
+        "Rtest_is_idle": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [],
+            "doc": "Returns R_TRUE when nothing waits for a frame: no posted task, no layout\nto do, nothing to paint, no animation, no layout spring, no inertia.\nWindows that redraw all the time (Rwindow_set_continuous_redraw, a\nrealtime viewport) and the timers are not counted."
+        },
+        "Rtest_settle": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "max_seconds",
+                    "type": "double"
+                }
+            ],
+            "doc": "Produces frames until Rtest_is_idle, each advancing the\nanimations by the time step (1/60 s unless Rset_animation_time_step\ngives another), for at most `max_seconds` of that time.\nReturns R_FALSE when it was still moving at the end."
+        },
+        "Rtest_get_text": {
+            "header": "raven_testing.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns What the user reads in the widget: the text of a field, else\nits label (as screen readers say it: the text of a Label, a Button, a\nCheckbox...). \"\" when it has none. Valid until the next call."
+        },
+        "Rtest_is_shown": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns R_TRUE when the widget can be seen: in a window, Visible with\nall that holds it, on the page a Switcher or a TabView shows, and laid\nout with a size."
+        },
+        "Rtest_is_checked": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "widget",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "Returns R_TRUE for a checked Checkbox, Switch, RadioButton, toggle Button or menu item."
+        },
+        "Rtest_expect_golden": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "golden_path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "options",
+                    "type": "const RGoldenOptions *"
+                },
+                {
+                    "name": "result",
+                    "type": "RGoldenResult *"
+                }
+            ],
+            "doc": "Captures a window, or the rectangle of one widget, and compares\nit with the PNG file `golden_path` (see the top of this file).\nA window or a widget.\nNULL for the defaults.\nReceives the details; may be NULL.\nReturns R_TRUE when the capture matches (or the golden was written\nbecause RAVEN_UPDATE_GOLDENS=1)."
+        },
+        "Rtest_compare_pixels": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "actual",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "expected",
+                    "type": "const uint8_t *"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                },
+                {
+                    "name": "channel_tolerance",
+                    "type": "int"
+                },
+                {
+                    "name": "max_channel_difference",
+                    "type": "int *"
+                },
+                {
+                    "name": "diff_rgba",
+                    "type": "uint8_t *"
+                }
+            ],
+            "doc": "Compares two RGBA8 images of the same size as Rtest_expect_golden\ndoes, without files.\nWhen not NULL, receives width * height * 4 bytes: the\nexpected image faded, with the different pixels in red.\nReturns The number of pixels farther apart than `channel_tolerance`;\n-1 when an image is missing."
+        },
+        "Rtest_dump_tree": {
+            "header": "raven_testing.h",
+            "ret": "const char *",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                }
+            ],
+            "doc": "The widgets as JSON, what a test, a script or an agent reads of\nthe interface. Each widget gives its \"type\" (its XML tag), \"name\" and\n\"path\" (for Rtest_find) when it has a name, its accessibility \"role\",\nits \"text\" (Rtest_get_text), \"label\" and \"value\" when they differ,\n\"bounds\" [x, y, width, height] in logical units of its window,\n\"shown\", \"enabled\", and when they apply \"focused\", \"checked\",\n\"selected\", \"expanded\", \"number\"/\"minimum\"/\"maximum\", the rows of a\nlist (\"items\") and its \"children\", in the order of the layout.\nA window or a widget; R_INVALID_ID for every window of\nthe application: {\"raven\": version, \"backend\": tag, \"windows\": [...]},\neach with its \"title\", \"size\", \"scale\", \"content\", \"popups\".\nReturns The JSON text, valid until the next call. \"\" on error."
+        },
+        "Rtest_save_tree": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Rtest_dump_tree written to a file (\"-\": the standard output)."
+        },
+        "Rtest_save_png": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "target",
+                    "type": "Rid"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Captures a window, or the rectangle of a widget, into a PNG\nfile. The null backend draws nothing: its picture is the clear color."
+        },
+        "Rtest_run_script": {
+            "header": "raven_testing.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "script",
+                    "type": "const char *"
+                },
+                {
+                    "name": "source_name",
+                    "type": "const char *"
+                }
+            ],
+            "doc": "Runs a script of steps, one per line, as RAVEN_SCRIPT does (see\n\"Driving any application headlessly\" in README.md):\n\nclick form/user\ntype \"ada\"\nkey Enter\nexpect status text \"Welcome, ada\"\nsnap after-login\n\nThe frames are produced by the function (Rdraw_frame) until the script\nends. A widget is named by its name or path, by \"text:Sign in\" (the\nfirst one shown that reads it), or a point of the window by \"x,y\".\nThe text of the script.\nThe name its messages give it (\"login.script\"); may be NULL.\nReturns R_TRUE when every step was done and every check was true;\nR_FALSE otherwise, with the reason in Rtest_get_script_error."
+        },
+        "Rtest_get_script_error": {
+            "header": "raven_testing.h",
+            "ret": "const char *",
+            "params": [],
+            "doc": "Returns Why the last Rtest_run_script failed (\"login.script:4: expect: ...\"), \"\" when it passed."
         }
     },
     "structs": {
@@ -21326,6 +24926,23 @@
                 {
                     "name": "frame_index",
                     "type": "uint64_t"
+                }
+            ]
+        },
+        "RDataItem": {
+            "header": "raven_core.h",
+            "fields": [
+                {
+                    "name": "mime",
+                    "type": "const char *"
+                },
+                {
+                    "name": "data",
+                    "type": "const void *"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t"
                 }
             ]
         },
@@ -21963,6 +25580,60 @@
                 }
             ]
         },
+        "RNotificationAction": {
+            "header": "raven_dialogs.h",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "const char *"
+                },
+                {
+                    "name": "label",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "RNotificationDesc": {
+            "header": "raven_dialogs.h",
+            "fields": [
+                {
+                    "name": "size",
+                    "type": "Ruint"
+                },
+                {
+                    "name": "tag",
+                    "type": "const char *"
+                },
+                {
+                    "name": "title",
+                    "type": "const char *"
+                },
+                {
+                    "name": "body",
+                    "type": "const char *"
+                },
+                {
+                    "name": "urgency",
+                    "type": "RNotificationUrgency"
+                },
+                {
+                    "name": "icon",
+                    "type": "const char *"
+                },
+                {
+                    "name": "actions",
+                    "type": "const RNotificationAction *"
+                },
+                {
+                    "name": "action_count",
+                    "type": "int"
+                },
+                {
+                    "name": "window",
+                    "type": "Rid"
+                }
+            ]
+        },
         "RFileFilter": {
             "header": "raven_dialogs.h",
             "fields": [
@@ -22010,6 +25681,60 @@
                 {
                     "name": "flags",
                     "type": "Ruint"
+                }
+            ]
+        },
+        "RPickedFile": {
+            "header": "raven_device.h",
+            "fields": [
+                {
+                    "name": "path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "name",
+                    "type": "const char *"
+                },
+                {
+                    "name": "mime_type",
+                    "type": "const char *"
+                },
+                {
+                    "name": "size",
+                    "type": "uint64_t"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                }
+            ]
+        },
+        "RShareDesc": {
+            "header": "raven_device.h",
+            "fields": [
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "mime_type",
+                    "type": "const char *"
+                },
+                {
+                    "name": "title",
+                    "type": "const char *"
+                },
+                {
+                    "name": "anchor",
+                    "type": "Rid"
                 }
             ]
         },
@@ -22495,6 +26220,91 @@
                 }
             ]
         },
+        "RHostServiceRequest": {
+            "header": "raven_host.h",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "Ruint"
+                },
+                {
+                    "name": "service",
+                    "type": "RHostService"
+                },
+                {
+                    "name": "window",
+                    "type": "Rid"
+                },
+                {
+                    "name": "anchor_x",
+                    "type": "float"
+                },
+                {
+                    "name": "anchor_y",
+                    "type": "float"
+                },
+                {
+                    "name": "anchor_width",
+                    "type": "float"
+                },
+                {
+                    "name": "anchor_height",
+                    "type": "float"
+                },
+                {
+                    "name": "title",
+                    "type": "const char *"
+                },
+                {
+                    "name": "filters",
+                    "type": "const RFileFilter *"
+                },
+                {
+                    "name": "filter_count",
+                    "type": "int"
+                },
+                {
+                    "name": "flags",
+                    "type": "Ruint"
+                },
+                {
+                    "name": "file_name",
+                    "type": "const char *"
+                },
+                {
+                    "name": "default_extension",
+                    "type": "const char *"
+                },
+                {
+                    "name": "data",
+                    "type": "const void *"
+                },
+                {
+                    "name": "size",
+                    "type": "size_t"
+                },
+                {
+                    "name": "path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "max_count",
+                    "type": "int"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "mime_type",
+                    "type": "const char *"
+                },
+                {
+                    "name": "share_title",
+                    "type": "const char *"
+                }
+            ]
+        },
         "RHostPlatformDesc": {
             "header": "raven_host.h",
             "fields": [
@@ -22517,6 +26327,88 @@
                 {
                     "name": "user_data",
                     "type": "void *"
+                },
+                {
+                    "name": "permission_status",
+                    "type": "RPermissionStatus (*)(RPermission, void *)"
+                },
+                {
+                    "name": "permission_request",
+                    "type": "void (*)(RPermission, void *)"
+                },
+                {
+                    "name": "service_request",
+                    "type": "void (*)(const RHostServiceRequest *, void *)"
+                },
+                {
+                    "name": "has_camera",
+                    "type": "int"
+                },
+                {
+                    "name": "open_url",
+                    "type": "int (*)(const char *, void *)"
+                },
+                {
+                    "name": "haptic",
+                    "type": "int (*)(RHaptic, void *)"
+                },
+                {
+                    "name": "download",
+                    "type": "void *(*)(const char *, size_t *, void *)"
+                }
+            ]
+        },
+        "RGoldenOptions": {
+            "header": "raven_testing.h",
+            "fields": [
+                {
+                    "name": "channel_tolerance",
+                    "type": "int"
+                },
+                {
+                    "name": "max_diff_ratio",
+                    "type": "float"
+                },
+                {
+                    "name": "per_platform",
+                    "type": "int"
+                },
+                {
+                    "name": "output_directory",
+                    "type": "const char *"
+                }
+            ]
+        },
+        "RGoldenResult": {
+            "header": "raven_testing.h",
+            "fields": [
+                {
+                    "name": "status",
+                    "type": "RGoldenStatus"
+                },
+                {
+                    "name": "width",
+                    "type": "int"
+                },
+                {
+                    "name": "height",
+                    "type": "int"
+                },
+                {
+                    "name": "differing_pixels",
+                    "type": "int"
+                },
+                {
+                    "name": "max_channel_difference",
+                    "type": "int"
+                },
+                {
+                    "name": "golden_path",
+                    "type": "const char *"
+                },
+                {
+                    "name": "message",
+                    "type": "const char *"
                 }
             ]
         }
@@ -22822,6 +26714,15 @@
                 "R_DROP_DROPPED"
             ]
         },
+        "RDragOperation": {
+            "header": "raven_window.h",
+            "constants": [
+                "R_DRAG_OPERATION_NONE",
+                "R_DRAG_OPERATION_COPY",
+                "R_DRAG_OPERATION_MOVE",
+                "R_DRAG_OPERATION_LINK"
+            ]
+        },
         "RTouchMode": {
             "header": "raven_touch.h",
             "constants": [
@@ -22960,6 +26861,13 @@
                 "R_COLOR_DANGER",
                 "R_COLOR_LINK",
                 "R_COLOR_CODE",
+                "R_COLOR_SEARCH_MATCH",
+                "R_COLOR_SEARCH_CURRENT",
+                "R_COLOR_SPELLING",
+                "R_COLOR_DIFF_ADDED",
+                "R_COLOR_DIFF_REMOVED",
+                "R_COLOR_DIFF_ADDED_WORD",
+                "R_COLOR_DIFF_REMOVED_WORD",
                 "R_COLOR_LAST_"
             ]
         },
@@ -23064,6 +26972,8 @@
                 "R_WIDGET_CHART",
                 "R_WIDGET_MAP_VIEW",
                 "R_WIDGET_CAROUSEL",
+                "R_WIDGET_SYSTEM_WEB_VIEW",
+                "R_WIDGET_DIFF_VIEW",
                 "R_WIDGET_LAST_"
             ]
         },
@@ -23132,6 +27042,14 @@
                 "R_DIRECTION_LTR",
                 "R_DIRECTION_RTL",
                 "R_DIRECTION_AUTO"
+            ]
+        },
+        "RClock": {
+            "header": "raven_locale.h",
+            "constants": [
+                "R_CLOCK_AUTO",
+                "R_CLOCK_12_HOUR",
+                "R_CLOCK_24_HOUR"
             ]
         },
         "RTextAlign": {
@@ -23305,6 +27223,32 @@
                 "R_CHART_SPARKLINE"
             ]
         },
+        "RSystemWebViewEvent": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_SYSTEM_WEB_VIEW_NAVIGATED",
+                "R_SYSTEM_WEB_VIEW_TITLE",
+                "R_SYSTEM_WEB_VIEW_LOADING",
+                "R_SYSTEM_WEB_VIEW_LOADED",
+                "R_SYSTEM_WEB_VIEW_FAILED"
+            ]
+        },
+        "RTableSelectionMode": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_TABLE_SELECTION_SINGLE",
+                "R_TABLE_SELECTION_MULTIPLE",
+                "R_TABLE_SELECTION_NONE"
+            ]
+        },
+        "RTableColumnKind": {
+            "header": "raven_controls.h",
+            "constants": [
+                "R_TABLE_COLUMN_TEXT",
+                "R_TABLE_COLUMN_CHECK",
+                "R_TABLE_COLUMN_PROGRESS"
+            ]
+        },
         "RSyntax": {
             "header": "raven_text_editor.h",
             "constants": [
@@ -23344,6 +27288,13 @@
                 "R_TOKEN_STRONG",
                 "R_TOKEN_EMPHASIS",
                 "R_TOKEN_LINK"
+            ]
+        },
+        "RSearchFlags": {
+            "header": "raven_text_editor.h",
+            "constants": [
+                "R_SEARCH_MATCH_CASE",
+                "R_SEARCH_WHOLE_WORD"
             ]
         },
         "RMarkerKind": {
@@ -23429,12 +27380,66 @@
                 "R_BLOCK_INPUT"
             ]
         },
+        "RDiffViewMode": {
+            "header": "raven_tools.h",
+            "constants": [
+                "R_DIFF_VIEW_UNIFIED",
+                "R_DIFF_VIEW_SPLIT"
+            ]
+        },
+        "RDiffSide": {
+            "header": "raven_tools.h",
+            "constants": [
+                "R_DIFF_LEFT",
+                "R_DIFF_RIGHT"
+            ]
+        },
+        "RDiffRowKind": {
+            "header": "raven_tools.h",
+            "constants": [
+                "R_DIFF_ROW_SAME",
+                "R_DIFF_ROW_REMOVED",
+                "R_DIFF_ROW_ADDED",
+                "R_DIFF_ROW_CHANGED",
+                "R_DIFF_ROW_FOLD",
+                "R_DIFF_ROW_HUNK",
+                "R_DIFF_ROW_FILE",
+                "R_DIFF_ROW_NOTE"
+            ]
+        },
+        "RDiffFlags": {
+            "header": "raven_tools.h",
+            "constants": [
+                "R_DIFF_IGNORE_TRAILING_SPACE",
+                "R_DIFF_IGNORE_SPACE",
+                "R_DIFF_IGNORE_CASE"
+            ]
+        },
         "RNotificationUrgency": {
             "header": "raven_dialogs.h",
             "constants": [
                 "R_NOTIFICATION_LOW",
                 "R_NOTIFICATION_NORMAL",
                 "R_NOTIFICATION_CRITICAL"
+            ]
+        },
+        "RNotificationEvent": {
+            "header": "raven_dialogs.h",
+            "constants": [
+                "R_NOTIFICATION_ACTIVATED",
+                "R_NOTIFICATION_ACTION_INVOKED",
+                "R_NOTIFICATION_DISMISSED"
+            ]
+        },
+        "RNotificationFeature": {
+            "header": "raven_dialogs.h",
+            "constants": [
+                "R_NOTIFICATION_FEATURE_ACTIONS",
+                "R_NOTIFICATION_FEATURE_REPLACE",
+                "R_NOTIFICATION_FEATURE_CLOSE",
+                "R_NOTIFICATION_FEATURE_ICON",
+                "R_NOTIFICATION_FEATURE_ACTIVATED",
+                "R_NOTIFICATION_FEATURE_DISMISSED"
             ]
         },
         "RFileDialogFlags": {
@@ -23469,6 +27474,50 @@
                 "R_MESSAGE_RESULT_OK",
                 "R_MESSAGE_RESULT_YES",
                 "R_MESSAGE_RESULT_NO"
+            ]
+        },
+        "RPermission": {
+            "header": "raven_device.h",
+            "constants": [
+                "R_PERMISSION_CAMERA",
+                "R_PERMISSION_NOTIFICATIONS",
+                "R_PERMISSION_PHOTOS",
+                "R_PERMISSION_MICROPHONE",
+                "R_PERMISSION_LOCATION"
+            ]
+        },
+        "RPermissionStatus": {
+            "header": "raven_device.h",
+            "constants": [
+                "R_PERMISSION_UNSUPPORTED",
+                "R_PERMISSION_NOT_ASKED",
+                "R_PERMISSION_GRANTED",
+                "R_PERMISSION_LIMITED",
+                "R_PERMISSION_DENIED",
+                "R_PERMISSION_BLOCKED"
+            ]
+        },
+        "RDeviceResult": {
+            "header": "raven_device.h",
+            "constants": [
+                "R_DEVICE_DONE",
+                "R_DEVICE_CANCELLED",
+                "R_DEVICE_DENIED",
+                "R_DEVICE_UNSUPPORTED",
+                "R_DEVICE_BUSY",
+                "R_DEVICE_FAILED"
+            ]
+        },
+        "RHaptic": {
+            "header": "raven_device.h",
+            "constants": [
+                "R_HAPTIC_LIGHT",
+                "R_HAPTIC_MEDIUM",
+                "R_HAPTIC_HEAVY",
+                "R_HAPTIC_SELECTION",
+                "R_HAPTIC_SUCCESS",
+                "R_HAPTIC_WARNING",
+                "R_HAPTIC_ERROR"
             ]
         },
         "RMotion": {
@@ -23587,6 +27636,28 @@
             "constants": [
                 "R_TEXTURE_RGBA8",
                 "R_TEXTURE_ALPHA8"
+            ]
+        },
+        "RHostService": {
+            "header": "raven_host.h",
+            "constants": [
+                "R_HOST_SERVICE_OPEN_FILES",
+                "R_HOST_SERVICE_SAVE_FILE",
+                "R_HOST_SERVICE_SELECT_FOLDER",
+                "R_HOST_SERVICE_TAKE_PHOTO",
+                "R_HOST_SERVICE_PICK_PHOTOS",
+                "R_HOST_SERVICE_SHARE"
+            ]
+        },
+        "RGoldenStatus": {
+            "header": "raven_testing.h",
+            "constants": [
+                "R_GOLDEN_MATCH",
+                "R_GOLDEN_UPDATED",
+                "R_GOLDEN_MISMATCH",
+                "R_GOLDEN_SIZE_MISMATCH",
+                "R_GOLDEN_MISSING",
+                "R_GOLDEN_FAILED"
             ]
         }
     },
@@ -23754,6 +27825,24 @@
                 {
                     "name": "event",
                     "type": "const RDropEvent *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RDragFinishedCallback": {
+            "header": "raven_window.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "source",
+                    "type": "Rid"
+                },
+                {
+                    "name": "operation",
+                    "type": "RDragOperation"
                 },
                 {
                     "name": "user_data",
@@ -24041,6 +28130,20 @@
                 }
             ]
         },
+        "RImageFinishedCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "image",
+                    "type": "Rid"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
         "RTextChangedCallback": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -24088,6 +28191,24 @@
                 {
                     "name": "index",
                     "type": "int"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RComboBoxTextCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "combo_box",
+                    "type": "Rid"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
                 },
                 {
                     "name": "user_data",
@@ -24425,6 +28546,32 @@
                 }
             ]
         },
+        "RTableCellEditedCallback": {
+            "header": "raven_controls.h",
+            "ret": "int",
+            "params": [
+                {
+                    "name": "table",
+                    "type": "Rid"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "text",
+                    "type": "const char *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
         "RDateChangedCallback": {
             "header": "raven_controls.h",
             "ret": "void",
@@ -24750,6 +28897,64 @@
                 {
                     "name": "zoom",
                     "type": "double"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RSystemWebViewResultCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "result",
+                    "type": "const char *"
+                },
+                {
+                    "name": "error",
+                    "type": "const char *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RSystemWebViewMessageCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "message",
+                    "type": "const char *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RSystemWebViewEventCallback": {
+            "header": "raven_controls.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "event",
+                    "type": "RSystemWebViewEvent"
                 },
                 {
                     "name": "user_data",
@@ -25125,6 +29330,32 @@
                 }
             ]
         },
+        "RDiffViewLineCallback": {
+            "header": "raven_tools.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "diff_view",
+                    "type": "Rid"
+                },
+                {
+                    "name": "side",
+                    "type": "RDiffSide"
+                },
+                {
+                    "name": "line",
+                    "type": "int"
+                },
+                {
+                    "name": "in_gutter",
+                    "type": "int"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
         "RDialogClosedCallback": {
             "header": "raven_dialogs.h",
             "ret": "void",
@@ -25187,6 +29418,68 @@
             "header": "raven_dialogs.h",
             "ret": "void",
             "params": [
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RNotificationCallback": {
+            "header": "raven_dialogs.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "tag",
+                    "type": "const char *"
+                },
+                {
+                    "name": "event",
+                    "type": "RNotificationEvent"
+                },
+                {
+                    "name": "action",
+                    "type": "const char *"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RPermissionCallback": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "permission",
+                    "type": "RPermission"
+                },
+                {
+                    "name": "status",
+                    "type": "RPermissionStatus"
+                },
+                {
+                    "name": "user_data",
+                    "type": "void *"
+                }
+            ]
+        },
+        "RDeviceCallback": {
+            "header": "raven_device.h",
+            "ret": "void",
+            "params": [
+                {
+                    "name": "result",
+                    "type": "RDeviceResult"
+                },
+                {
+                    "name": "files",
+                    "type": "const RPickedFile *"
+                },
+                {
+                    "name": "count",
+                    "type": "int"
+                },
                 {
                     "name": "user_data",
                     "type": "void *"

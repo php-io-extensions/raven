@@ -34,6 +34,21 @@ it('checks number arrays against their count', function (): void {
     expect(fn () => Rchart_set_grid($heat, 2, 2, [1.0]))->toThrow(ValueError::class);
 });
 
+it('checks encode-png buffers against width × height × 4', function (): void {
+    expect(function (): void {
+        $size = null;
+        Rimage_encode_png(str_repeat("\0", 15), 2, 2, $size);
+    })->toThrow(ValueError::class);
+    expect(fn () => Rimage_save_png('/tmp/x.png', str_repeat("\0", 15), 2, 2))->toThrow(ValueError::class);
+    expect(fn () => Rclipboard_set_image(str_repeat("\0", 15), 2, 2, 0))->toThrow(ValueError::class);
+    expect(fn () => Rclipboard_set_data([new RDataItem(data: 'ab', size: 3)], 1))->toThrow(ValueError::class);
+    expect(function (): void {
+        $max = null;
+        $diff = null;
+        Rtest_compare_pixels(str_repeat("\0", 15), str_repeat("\0", 16), 2, 2, 0, $max, $diff);
+    })->toThrow(ValueError::class);
+});
+
 it('round-trips pixels through Rimage_decode', function (): void {
     if (! function_exists('imagecreatetruecolor')) {
         $this->markTestSkipped('gd is not loaded');

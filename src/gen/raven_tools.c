@@ -7,6 +7,7 @@
 #include "php.h"
 #include "zend_exceptions.h"
 #include "Raven.h"
+#include <string.h>
 #include "../runtime.h"
 #include "structs.h"
 #include "callbacks.h"
@@ -5602,6 +5603,802 @@ ZEND_FUNCTION(Rblock_editor_set_view)
 		RETURN_THROWS();
 	}
 	Rblock_editor_set_view(c_editor, (float)x, (float)y, (float)zoom);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_count_changes)
+{
+	zend_string *left = NULL;
+	zend_string *right = NULL;
+	zend_long flags;
+	uint32_t c_flags;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_STR_OR_NULL(left)
+		Z_PARAM_STR_OR_NULL(right)
+		Z_PARAM_LONG(flags)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(flags, 3, &c_flags)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_count_changes(left ? ZSTR_VAL(left) : NULL, right ? ZSTR_VAL(right) : NULL, c_flags);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_create)
+{
+	Rid ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_create();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_set_texts)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_string *left = NULL;
+	zend_string *right = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_STR_OR_NULL(left)
+		Z_PARAM_STR_OR_NULL(right)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_texts(c_diff_view, left ? ZSTR_VAL(left) : NULL, right ? ZSTR_VAL(right) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_set_names)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_string *left_name = NULL;
+	zend_string *right_name = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_STR_OR_NULL(left_name)
+		Z_PARAM_STR_OR_NULL(right_name)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_names(c_diff_view, left_name ? ZSTR_VAL(left_name) : NULL, right_name ? ZSTR_VAL(right_name) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_load_files)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_string *left_path = NULL;
+	zend_string *right_path = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_STR_OR_NULL(left_path)
+		Z_PARAM_STR_OR_NULL(right_path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_load_files(c_diff_view, left_path ? ZSTR_VAL(left_path) : NULL, right_path ? ZSTR_VAL(right_path) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_set_patch)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_string *patch = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_STR_OR_NULL(patch)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_set_patch(c_diff_view, patch ? ZSTR_VAL(patch) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_set_mode)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long mode;
+	int c_mode;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(mode)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(mode, 2, &c_mode)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_mode(c_diff_view, (RDiffViewMode)c_mode);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_get_mode)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	RDiffViewMode ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_mode(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_set_context)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long lines;
+	int c_lines;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(lines)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(lines, 2, &c_lines)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_context(c_diff_view, c_lines);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_get_context)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_context(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_set_flags)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long flags;
+	uint32_t c_flags;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(flags)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_u32(flags, 2, &c_flags)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_flags(c_diff_view, c_flags);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_get_flags)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	uint32_t ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_flags(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_set_word_diff)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long enabled;
+	int c_enabled;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(enabled)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(enabled, 2, &c_enabled)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_word_diff(c_diff_view, c_enabled);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_set_line_numbers)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long visible;
+	int c_visible;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(visible)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(visible, 2, &c_visible)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_line_numbers(c_diff_view, c_visible);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_set_language)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_string *language = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_STR_OR_NULL(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_language(c_diff_view, language ? ZSTR_VAL(language) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_get_change_count)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_change_count(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_get_change)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long change;
+	int c_change;
+	zval *left_line;
+	int c_left_line = 0;
+	zval *left_count;
+	int c_left_count = 0;
+	zval *right_line;
+	int c_right_line = 0;
+	zval *right_count;
+	int c_right_count = 0;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(6, 6)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(change)
+		Z_PARAM_ZVAL(left_line)
+		Z_PARAM_ZVAL(left_count)
+		Z_PARAM_ZVAL(right_line)
+		Z_PARAM_ZVAL(right_count)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(change, 2, &c_change)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_change(c_diff_view, c_change, &c_left_line, &c_left_count, &c_right_line, &c_right_count);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(left_line, (zend_long)c_left_line);
+	ZEND_TRY_ASSIGN_REF_LONG(left_count, (zend_long)c_left_count);
+	ZEND_TRY_ASSIGN_REF_LONG(right_line, (zend_long)c_right_line);
+	ZEND_TRY_ASSIGN_REF_LONG(right_count, (zend_long)c_right_count);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_go_to_change)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long change;
+	int c_change;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(change)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(change, 2, &c_change)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_go_to_change(c_diff_view, c_change);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_get_current_change)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_current_change(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_next_change)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_next_change(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_prev_change)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_prev_change(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_get_row_count)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_row_count(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_get_row)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long row;
+	int c_row;
+	zval *left_line;
+	int c_left_line = 0;
+	zval *right_line;
+	int c_right_line = 0;
+	RDiffRowKind ret;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(row)
+		Z_PARAM_ZVAL(left_line)
+		Z_PARAM_ZVAL(right_line)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(row, 2, &c_row)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_row(c_diff_view, c_row, &c_left_line, &c_right_line);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(left_line, (zend_long)c_left_line);
+	ZEND_TRY_ASSIGN_REF_LONG(right_line, (zend_long)c_right_line);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_get_row_text)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long row;
+	int c_row;
+	zend_long side;
+	int c_side;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(row)
+		Z_PARAM_LONG(side)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(row, 2, &c_row)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(side, 3, &c_side)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_row_text(c_diff_view, c_row, (RDiffSide)c_side);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_expand)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long row;
+	int c_row;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(row)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(row, 2, &c_row)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_expand(c_diff_view, c_row);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_get_first_visible_row)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_first_visible_row(c_diff_view);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_scroll_to_row)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long row;
+	int c_row;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(row)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(row, 2, &c_row)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_scroll_to_row(c_diff_view, c_row);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_add_annotation)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_long side;
+	int c_side;
+	zend_long line;
+	int c_line;
+	zend_string *text = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_LONG(side)
+		Z_PARAM_LONG(line)
+		Z_PARAM_STR_OR_NULL(text)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(side, 2, &c_side)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(line, 3, &c_line)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_add_annotation(c_diff_view, (RDiffSide)c_side, c_line, text ? ZSTR_VAL(text) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_clear_annotations)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_clear_annotations(c_diff_view);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rdiff_view_get_selected_text)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(diff_view)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rdiff_view_get_selected_text(c_diff_view);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rdiff_view_set_line_clicked_callback)
+{
+	zend_long diff_view;
+	uint32_t c_diff_view;
+	zend_fcall_info fci_callback = empty_fcall_info;
+	zend_fcall_info_cache fcc_callback = empty_fcall_info_cache;
+	zval *user_data;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(diff_view)
+		Z_PARAM_FUNC_OR_NULL(fci_callback, fcc_callback)
+		Z_PARAM_ZVAL(user_data)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_u32(diff_view, 1, &c_diff_view)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_owner_check()) {
+		RETURN_THROWS();
+	}
+	raven_slot *slot = raven_slot_new(ZEND_FCI_INITIALIZED(fci_callback) ? &fci_callback.function_name : NULL, NULL, user_data, c_diff_view);
+	zend_string *key = raven_slot_key("Rdiff_view_set_line_clicked_callback", 1, (unsigned long)c_diff_view);
+	raven_slot_register(key, slot);
+	zend_string_release(key);
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rdiff_view_set_line_clicked_callback(c_diff_view, ZEND_FCI_INITIALIZED(fci_callback) ? raven_cb_RDiffViewLineCallback_0 : NULL, slot);
 	raven_leave();
 }
 

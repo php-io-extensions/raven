@@ -27,9 +27,19 @@ function Rfile_read(?string $path, ?int &$size): ?string {}
 
 function Rpdf_document_save_memory(int $document, ?int &$size): ?string {}
 
+function Rclipboard_get_data(?string $mime, ?int &$size): ?string {}
+
+function Rdiff_unified(?string $left, ?string $right, ?string $left_name, ?string $right_name, int $context, int $flags, ?int &$size): ?string {}
+
 function Rwindow_capture(int $window, ?int &$width, ?int &$height): ?string {}
 
 function Rimage_decode(string $data, int $data_size, ?int &$width, ?int &$height): ?string {}
+
+function Rimage_decode_frame(string $data, int $data_size, int $frame, ?int &$width, ?int &$height, ?float &$delay): ?string {}
+
+function Rclipboard_get_image(?int &$width, ?int &$height): ?string {}
+
+function Rimage_encode_png(string $rgba, int $width, int $height, ?int &$size): ?string {}
 
 /** fn(mixed $user_data): void, both */
 function Rvulkan_set_queue_lock_callbacks(?callable $lock, ?callable $unlock, mixed $user_data): void {}
@@ -125,6 +135,19 @@ final class RHostPlatformDesc
     /** fn(mixed $user_data): void */
     public ?Closure $wake = null;
     public mixed $user_data = null;
+    /** fn(int $permission, mixed $user_data): int */
+    public ?Closure $permission_status = null;
+    /** fn(int $permission, mixed $user_data): void */
+    public ?Closure $permission_request = null;
+    /** fn(?RHostServiceRequest $request, mixed $user_data): void */
+    public ?Closure $service_request = null;
+    public int $has_camera = 0;
+    /** fn(?string $url, mixed $user_data): int */
+    public ?Closure $open_url = null;
+    /** fn(int $haptic, mixed $user_data): int */
+    public ?Closure $haptic = null;
+    /** fn(?string $url, mixed $user_data): ?string. Called on a worker; runs on the PHP owner thread. */
+    public ?Closure $download = null;
 
-    public function __construct(?Closure $set_cursor = null, ?Closure $clipboard_set = null, ?Closure $clipboard_get = null, ?Closure $wake = null, mixed $user_data = null) {}
+    public function __construct(?Closure $set_cursor = null, ?Closure $clipboard_set = null, ?Closure $clipboard_get = null, ?Closure $wake = null, mixed $user_data = null, ?Closure $permission_status = null, ?Closure $permission_request = null, ?Closure $service_request = null, int $has_camera = 0, ?Closure $open_url = null, ?Closure $haptic = null, ?Closure $download = null) {}
 }

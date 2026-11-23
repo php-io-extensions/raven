@@ -22,6 +22,25 @@ it('builds struct classes with every C field, zero by default', function (): voi
         ->and($info->metal_command_buffer)->toBe(0)
         ->and($info->metal_device)->toBe(0);
     expect(fn () => new RActionContext())->toThrow(Error::class);
+    $golden = new RGoldenOptions();
+    expect($golden->channel_tolerance)->toBe(0)
+        ->and($golden->max_diff_ratio)->toBe(0.0)
+        ->and($golden->per_platform)->toBe(0)
+        ->and($golden->output_directory)->toBeNull();
+    $result = new RGoldenResult();
+    expect($result->status)->toBe(0)
+        ->and($result->golden_path)->toBeNull()
+        ->and($result->message)->toBeNull();
+    $item = new RDataItem();
+    expect($item->mime)->toBeNull()->and($item->data)->toBeNull()->and($item->size)->toBe(0);
+    $picked = new RPickedFile();
+    expect($picked->path)->toBeNull()->and($picked->width)->toBe(0);
+    $share = new RShareDesc();
+    expect($share->text)->toBeNull()->and($share->anchor)->toBe(0);
+    $req = new RHostServiceRequest();
+    expect($req->id)->toBe(0)->and($req->data)->toBeNull()->and($req->size)->toBe(0);
+    $action = new RNotificationAction();
+    expect($action->id)->toBeNull()->and($action->label)->toBeNull();
 });
 
 it('type-checks constructor arguments into the typed properties', function (): void {

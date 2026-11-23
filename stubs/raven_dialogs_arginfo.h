@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 58c7ea2bd00c59a154ff8b4aaee128d3fa3eda12 */
+ * Stub hash: 501b14611501c10f0e3fe0cfe0eecb216cb3db4f */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rdialog_open, 0, 4, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, window, IS_LONG, 0)
@@ -169,6 +169,45 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_Rnotification_set_clicked_callback arginfo_Rnotification_set_fallback
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnotification_show_desc, 0, 1, IS_LONG, 0)
+	ZEND_ARG_OBJ_INFO(0, desc, RNotificationDesc, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnotification_close, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, tag, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+#define arginfo_Rnotification_set_callback arginfo_Rnotification_set_fallback
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnotification_set_bring_to_front, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, enabled, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnotification_set_fallback_toast, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, toast, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Rnotification_supports, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, feature, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RNotificationAction___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, id, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, label, IS_STRING, 1, "null")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RNotificationDesc___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, size, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, tag, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, title, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, body, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, urgency, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, icon, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, actions, IS_ARRAY, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, action_count, IS_LONG, 0, "0")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, window, IS_LONG, 0, "0")
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RFileFilter___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, name, IS_STRING, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, patterns, IS_STRING, 1, "null")
@@ -224,6 +263,14 @@ ZEND_FUNCTION(Rnotification_show);
 ZEND_FUNCTION(Rnotification_is_supported);
 ZEND_FUNCTION(Rnotification_set_fallback);
 ZEND_FUNCTION(Rnotification_set_clicked_callback);
+ZEND_FUNCTION(Rnotification_show_desc);
+ZEND_FUNCTION(Rnotification_close);
+ZEND_FUNCTION(Rnotification_set_callback);
+ZEND_FUNCTION(Rnotification_set_bring_to_front);
+ZEND_FUNCTION(Rnotification_set_fallback_toast);
+ZEND_FUNCTION(Rnotification_supports);
+ZEND_METHOD(RNotificationAction, __construct);
+ZEND_METHOD(RNotificationDesc, __construct);
 ZEND_METHOD(RFileFilter, __construct);
 ZEND_METHOD(RFileDialogDesc, __construct);
 
@@ -267,6 +314,22 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(Rnotification_is_supported, arginfo_Rnotification_is_supported)
 	ZEND_FE(Rnotification_set_fallback, arginfo_Rnotification_set_fallback)
 	ZEND_FE(Rnotification_set_clicked_callback, arginfo_Rnotification_set_clicked_callback)
+	ZEND_FE(Rnotification_show_desc, arginfo_Rnotification_show_desc)
+	ZEND_FE(Rnotification_close, arginfo_Rnotification_close)
+	ZEND_FE(Rnotification_set_callback, arginfo_Rnotification_set_callback)
+	ZEND_FE(Rnotification_set_bring_to_front, arginfo_Rnotification_set_bring_to_front)
+	ZEND_FE(Rnotification_set_fallback_toast, arginfo_Rnotification_set_fallback_toast)
+	ZEND_FE(Rnotification_supports, arginfo_Rnotification_supports)
+	ZEND_FE_END
+};
+
+static const zend_function_entry class_RNotificationAction_methods[] = {
+	ZEND_ME(RNotificationAction, __construct, arginfo_class_RNotificationAction___construct, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+static const zend_function_entry class_RNotificationDesc_methods[] = {
+	ZEND_ME(RNotificationDesc, __construct, arginfo_class_RNotificationDesc___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -285,6 +348,15 @@ static void register_raven_dialogs_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_NOTIFICATION_LOW", R_NOTIFICATION_LOW, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_NOTIFICATION_NORMAL", R_NOTIFICATION_NORMAL, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_NOTIFICATION_CRITICAL", R_NOTIFICATION_CRITICAL, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_ACTIVATED", R_NOTIFICATION_ACTIVATED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_ACTION_INVOKED", R_NOTIFICATION_ACTION_INVOKED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_DISMISSED", R_NOTIFICATION_DISMISSED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_FEATURE_ACTIONS", R_NOTIFICATION_FEATURE_ACTIONS, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_FEATURE_REPLACE", R_NOTIFICATION_FEATURE_REPLACE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_FEATURE_CLOSE", R_NOTIFICATION_FEATURE_CLOSE, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_FEATURE_ICON", R_NOTIFICATION_FEATURE_ICON, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_FEATURE_ACTIVATED", R_NOTIFICATION_FEATURE_ACTIVATED, CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("R_NOTIFICATION_FEATURE_DISMISSED", R_NOTIFICATION_FEATURE_DISMISSED, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_FILE_DIALOG_MULTIPLE", R_FILE_DIALOG_MULTIPLE, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_FILE_DIALOG_RAVEN", R_FILE_DIALOG_RAVEN, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_FILE_DIALOG_SHOW_HIDDEN", R_FILE_DIALOG_SHOW_HIDDEN, CONST_PERSISTENT);
@@ -299,6 +371,92 @@ static void register_raven_dialogs_symbols(int module_number)
 	REGISTER_LONG_CONSTANT("R_MESSAGE_RESULT_OK", R_MESSAGE_RESULT_OK, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_MESSAGE_RESULT_YES", R_MESSAGE_RESULT_YES, CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("R_MESSAGE_RESULT_NO", R_MESSAGE_RESULT_NO, CONST_PERSISTENT);
+}
+
+static zend_class_entry *register_class_RNotificationAction(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RNotificationAction", class_RNotificationAction_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+
+	zval property_id_default_value;
+	ZVAL_NULL(&property_id_default_value);
+	zend_string *property_id_name = zend_string_init("id", sizeof("id") - 1, 1);
+	zend_declare_typed_property(class_entry, property_id_name, &property_id_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_id_name);
+
+	zval property_label_default_value;
+	ZVAL_NULL(&property_label_default_value);
+	zend_string *property_label_name = zend_string_init("label", sizeof("label") - 1, 1);
+	zend_declare_typed_property(class_entry, property_label_name, &property_label_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_label_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_RNotificationDesc(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "RNotificationDesc", class_RNotificationDesc_methods);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+
+	zval property_size_default_value;
+	ZVAL_LONG(&property_size_default_value, 0);
+	zend_string *property_size_name = zend_string_init("size", sizeof("size") - 1, 1);
+	zend_declare_typed_property(class_entry, property_size_name, &property_size_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_size_name);
+
+	zval property_tag_default_value;
+	ZVAL_NULL(&property_tag_default_value);
+	zend_string *property_tag_name = zend_string_init("tag", sizeof("tag") - 1, 1);
+	zend_declare_typed_property(class_entry, property_tag_name, &property_tag_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_tag_name);
+
+	zval property_title_default_value;
+	ZVAL_NULL(&property_title_default_value);
+	zend_string *property_title_name = zend_string_init("title", sizeof("title") - 1, 1);
+	zend_declare_typed_property(class_entry, property_title_name, &property_title_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_title_name);
+
+	zval property_body_default_value;
+	ZVAL_NULL(&property_body_default_value);
+	zend_string *property_body_name = zend_string_init("body", sizeof("body") - 1, 1);
+	zend_declare_typed_property(class_entry, property_body_name, &property_body_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_body_name);
+
+	zval property_urgency_default_value;
+	ZVAL_LONG(&property_urgency_default_value, 0);
+	zend_string *property_urgency_name = zend_string_init("urgency", sizeof("urgency") - 1, 1);
+	zend_declare_typed_property(class_entry, property_urgency_name, &property_urgency_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_urgency_name);
+
+	zval property_icon_default_value;
+	ZVAL_NULL(&property_icon_default_value);
+	zend_string *property_icon_name = zend_string_init("icon", sizeof("icon") - 1, 1);
+	zend_declare_typed_property(class_entry, property_icon_name, &property_icon_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_NULL));
+	zend_string_release(property_icon_name);
+
+	zval property_actions_default_value;
+	ZVAL_NULL(&property_actions_default_value);
+	zend_string *property_actions_name = zend_string_init("actions", sizeof("actions") - 1, 1);
+	zend_declare_typed_property(class_entry, property_actions_name, &property_actions_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY|MAY_BE_NULL));
+	zend_string_release(property_actions_name);
+
+	zval property_action_count_default_value;
+	ZVAL_LONG(&property_action_count_default_value, 0);
+	zend_string *property_action_count_name = zend_string_init("action_count", sizeof("action_count") - 1, 1);
+	zend_declare_typed_property(class_entry, property_action_count_name, &property_action_count_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_action_count_name);
+
+	zval property_window_default_value;
+	ZVAL_LONG(&property_window_default_value, 0);
+	zend_string *property_window_name = zend_string_init("window", sizeof("window") - 1, 1);
+	zend_declare_typed_property(class_entry, property_window_name, &property_window_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_window_name);
+
+	return class_entry;
 }
 
 static zend_class_entry *register_class_RFileFilter(void)

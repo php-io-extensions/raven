@@ -357,6 +357,28 @@ bool raven_struct_from_object(const raven_struct *s, zend_object *obj, void *out
 				}
 				break;
 			}
+			case RAVEN_F_BYTES: {
+				zval *sz = OBJ_PROP_NUM(obj, f->count - 1);
+				ZVAL_DEREF(sz);
+				if (Z_TYPE_P(v) == IS_NULL) {
+					*(const void **)dst = NULL;
+					break;
+				}
+				if (Z_TYPE_P(v) != IS_STRING) {
+					return raven_field_error(s, f, arg_num, "must be a string or null");
+				}
+				zend_long need = 0;
+				if (Z_TYPE_P(sz) == IS_LONG) {
+					need = Z_LVAL_P(sz);
+				} else if (!raven_field_number(sz, &d, &need)) {
+					return raven_field_error(s, &s->fields[f->count - 1], arg_num, "must be an int greater than or equal to 0");
+				}
+				if (need < 0 || (size_t)need > Z_STRLEN_P(v)) {
+					return raven_field_error(s, f, arg_num, "must hold at least size bytes");
+				}
+				*(const void **)dst = Z_STRVAL_P(v);
+				break;
+			}
 		}
 	}
 	return true;
@@ -419,6 +441,16 @@ static void raven_field_to_zval(const raven_struct *s, const raven_field *f, con
 					raven_struct_new(f->sub, (const char *)items + f->sub->size * (size_t)k, &e);
 				}
 				add_next_index_zval(z, &e);
+			}
+			break;
+		}
+		case RAVEN_F_BYTES: {
+			const void *p = *(const void *const *)src;
+			size_t n = *(const size_t *)(base + s->fields[f->count - 1].offset);
+			if (!p) {
+				ZVAL_NULL(z);
+			} else {
+				ZVAL_STRINGL(z, (const char *)p, n);
 			}
 			break;
 		}

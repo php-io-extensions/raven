@@ -7,6 +7,7 @@
 #include "php.h"
 #include "zend_exceptions.h"
 #include "Raven.h"
+#include <string.h>
 #include "../runtime.h"
 #include "structs.h"
 #include "callbacks.h"
@@ -386,8 +387,406 @@ ZEND_FUNCTION(Rlocale_format_number)
 	RETURN_STRING(ret);
 }
 
+ZEND_FUNCTION(Rlocale_set_clock)
+{
+	zend_long clock;
+	int c_clock;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(clock)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(clock, 1, &c_clock)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rlocale_set_clock((RClock)c_clock);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rlocale_get_clock)
+{
+	RClock ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rlocale_get_clock();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rlocale_uses_12_hour_clock)
+{
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rlocale_uses_12_hour_clock();
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rlocale_get_day_period)
+{
+	zend_long pm;
+	int c_pm;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(pm)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(pm, 1, &c_pm)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rlocale_get_day_period(c_pm);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rlocale_format_time)
+{
+	zend_long hour;
+	int c_hour;
+	zend_long minute;
+	int c_minute;
+	zend_long second;
+	int c_second;
+	zend_long show_seconds;
+	int c_show_seconds;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_LONG(hour)
+		Z_PARAM_LONG(minute)
+		Z_PARAM_LONG(second)
+		Z_PARAM_LONG(show_seconds)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(hour, 1, &c_hour)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(minute, 2, &c_minute)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(second, 3, &c_second)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(show_seconds, 4, &c_show_seconds)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rlocale_format_time(c_hour, c_minute, c_second, c_show_seconds);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rtimezone_get_system)
+{
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_get_system();
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rtimezone_set_directory)
+{
+	zend_string *path = NULL;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	Rtimezone_set_directory(path ? ZSTR_VAL(path) : NULL);
+	raven_leave();
+}
+
+ZEND_FUNCTION(Rtimezone_is_valid)
+{
+	zend_string *zone = NULL;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR_OR_NULL(zone)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_is_valid(zone ? ZSTR_VAL(zone) : NULL);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtimezone_to_local)
+{
+	zend_string *zone = NULL;
+	double utc;
+	zval *year;
+	int c_year = 0;
+	zval *month;
+	int c_month = 0;
+	zval *day;
+	int c_day = 0;
+	zval *hour;
+	int c_hour = 0;
+	zval *minute;
+	int c_minute = 0;
+	zval *second;
+	int c_second = 0;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(8, 8)
+		Z_PARAM_STR_OR_NULL(zone)
+		Z_PARAM_DOUBLE(utc)
+		Z_PARAM_ZVAL(year)
+		Z_PARAM_ZVAL(month)
+		Z_PARAM_ZVAL(day)
+		Z_PARAM_ZVAL(hour)
+		Z_PARAM_ZVAL(minute)
+		Z_PARAM_ZVAL(second)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_to_local(zone ? ZSTR_VAL(zone) : NULL, utc, &c_year, &c_month, &c_day, &c_hour, &c_minute, &c_second);
+	raven_leave();
+	ZEND_TRY_ASSIGN_REF_LONG(year, (zend_long)c_year);
+	ZEND_TRY_ASSIGN_REF_LONG(month, (zend_long)c_month);
+	ZEND_TRY_ASSIGN_REF_LONG(day, (zend_long)c_day);
+	ZEND_TRY_ASSIGN_REF_LONG(hour, (zend_long)c_hour);
+	ZEND_TRY_ASSIGN_REF_LONG(minute, (zend_long)c_minute);
+	ZEND_TRY_ASSIGN_REF_LONG(second, (zend_long)c_second);
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtimezone_from_local)
+{
+	zend_string *zone = NULL;
+	zend_long year;
+	int c_year;
+	zend_long month;
+	int c_month;
+	zend_long day;
+	int c_day;
+	zend_long hour;
+	int c_hour;
+	zend_long minute;
+	int c_minute;
+	zend_long second;
+	int c_second;
+	double ret;
+
+	ZEND_PARSE_PARAMETERS_START(7, 7)
+		Z_PARAM_STR_OR_NULL(zone)
+		Z_PARAM_LONG(year)
+		Z_PARAM_LONG(month)
+		Z_PARAM_LONG(day)
+		Z_PARAM_LONG(hour)
+		Z_PARAM_LONG(minute)
+		Z_PARAM_LONG(second)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(year, 2, &c_year)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(month, 3, &c_month)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(day, 4, &c_day)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(hour, 5, &c_hour)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(minute, 6, &c_minute)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(second, 7, &c_second)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_from_local(zone ? ZSTR_VAL(zone) : NULL, c_year, c_month, c_day, c_hour, c_minute, c_second);
+	raven_leave();
+	RETURN_DOUBLE((double)ret);
+}
+
+ZEND_FUNCTION(Rtimezone_count_local)
+{
+	zend_string *zone = NULL;
+	zend_long year;
+	int c_year;
+	zend_long month;
+	int c_month;
+	zend_long day;
+	int c_day;
+	zend_long hour;
+	int c_hour;
+	zend_long minute;
+	int c_minute;
+	zend_long second;
+	int c_second;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(7, 7)
+		Z_PARAM_STR_OR_NULL(zone)
+		Z_PARAM_LONG(year)
+		Z_PARAM_LONG(month)
+		Z_PARAM_LONG(day)
+		Z_PARAM_LONG(hour)
+		Z_PARAM_LONG(minute)
+		Z_PARAM_LONG(second)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_arg_int(year, 2, &c_year)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(month, 3, &c_month)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(day, 4, &c_day)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(hour, 5, &c_hour)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(minute, 6, &c_minute)) {
+		RETURN_THROWS();
+	}
+	if (!raven_arg_int(second, 7, &c_second)) {
+		RETURN_THROWS();
+	}
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_count_local(zone ? ZSTR_VAL(zone) : NULL, c_year, c_month, c_day, c_hour, c_minute, c_second);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtimezone_get_offset)
+{
+	zend_string *zone = NULL;
+	double utc;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(zone)
+		Z_PARAM_DOUBLE(utc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_get_offset(zone ? ZSTR_VAL(zone) : NULL, utc);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtimezone_is_daylight_saving)
+{
+	zend_string *zone = NULL;
+	double utc;
+	int ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(zone)
+		Z_PARAM_DOUBLE(utc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_is_daylight_saving(zone ? ZSTR_VAL(zone) : NULL, utc);
+	raven_leave();
+	RETURN_LONG((zend_long)ret);
+}
+
+ZEND_FUNCTION(Rtimezone_get_abbreviation)
+{
+	zend_string *zone = NULL;
+	double utc;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(zone)
+		Z_PARAM_DOUBLE(utc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_get_abbreviation(zone ? ZSTR_VAL(zone) : NULL, utc);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
+ZEND_FUNCTION(Rtimezone_get_label)
+{
+	zend_string *zone = NULL;
+	double utc;
+	const char *ret;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR_OR_NULL(zone)
+		Z_PARAM_DOUBLE(utc)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!raven_enter()) {
+		RETURN_THROWS();
+	}
+	ret = Rtimezone_get_label(zone ? ZSTR_VAL(zone) : NULL, utc);
+	raven_leave();
+	if (!ret) {
+		RETURN_NULL();
+	}
+	RETURN_STRING(ret);
+}
+
 void raven_gen_raven_locale_minit(int module_number)
 {
-	(void)module_number;
+	register_raven_locale_symbols(module_number);
 	zend_register_functions(NULL, ext_functions, NULL, MODULE_PERSISTENT);
 }

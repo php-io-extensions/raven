@@ -24,6 +24,60 @@ const R_NOTIFICATION_CRITICAL = UNKNOWN;
 
 /**
  * @var int
+ * @cvalue R_NOTIFICATION_ACTIVATED
+ */
+const R_NOTIFICATION_ACTIVATED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_ACTION_INVOKED
+ */
+const R_NOTIFICATION_ACTION_INVOKED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_DISMISSED
+ */
+const R_NOTIFICATION_DISMISSED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_FEATURE_ACTIONS
+ */
+const R_NOTIFICATION_FEATURE_ACTIONS = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_FEATURE_REPLACE
+ */
+const R_NOTIFICATION_FEATURE_REPLACE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_FEATURE_CLOSE
+ */
+const R_NOTIFICATION_FEATURE_CLOSE = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_FEATURE_ICON
+ */
+const R_NOTIFICATION_FEATURE_ICON = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_FEATURE_ACTIVATED
+ */
+const R_NOTIFICATION_FEATURE_ACTIVATED = UNKNOWN;
+
+/**
+ * @var int
+ * @cvalue R_NOTIFICATION_FEATURE_DISMISSED
+ */
+const R_NOTIFICATION_FEATURE_DISMISSED = UNKNOWN;
+
+/**
+ * @var int
  * @cvalue R_FILE_DIALOG_MULTIPLE
  */
 const R_FILE_DIALOG_MULTIPLE = UNKNOWN;
@@ -105,6 +159,29 @@ const R_MESSAGE_RESULT_YES = UNKNOWN;
  * @cvalue R_MESSAGE_RESULT_NO
  */
 const R_MESSAGE_RESULT_NO = UNKNOWN;
+
+final class RNotificationAction
+{
+    public ?string $id = null;
+    public ?string $label = null;
+
+    public function __construct(?string $id = null, ?string $label = null) {}
+}
+
+final class RNotificationDesc
+{
+    public int $size = 0;
+    public ?string $tag = null;
+    public ?string $title = null;
+    public ?string $body = null;
+    public int $urgency = 0;
+    public ?string $icon = null;
+    public ?array $actions = null;
+    public int $action_count = 0;
+    public int $window = 0;
+
+    public function __construct(int $size = 0, ?string $tag = null, ?string $title = null, ?string $body = null, int $urgency = 0, ?string $icon = null, ?array $actions = null, int $action_count = 0, int $window = 0) {}
+}
 
 final class RFileFilter
 {
@@ -307,7 +384,9 @@ function Rfile_browser_set_selection_changed_callback(int $browser, ?callable $c
 function Rnotification_show(?string $title, ?string $body, int $urgency): int {}
 
 /**
- * R_FALSE when the platform has no notifications (Rnotification_show then always uses the fallback).
+ * R_FALSE when the system shows no notifications here (Rnotification_show then always uses
+ * the fallback): the null platform, no notification server on Linux, an executable outside of a
+ * bundle on macOS.
  */
 function Rnotification_is_supported(): int {}
 
@@ -318,9 +397,42 @@ function Rnotification_set_fallback(?callable $callback, mixed $user_data): void
 
 /**
  * Called when the user clicks a notification of Rnotification_show
- * (on the UI thread; the application may then bring its window to the
- * front: the system lets it). It is the last one shown that was clicked:
- * the application remembers what it was about. NULL: none.
- * Windows and macOS (elsewhere it is never called).
+ * (on the UI thread), as R_NOTIFICATION_ACTIVATED of
+ * Rnotification_set_callback, which also tells which one. NULL: none.
  */
 function Rnotification_set_clicked_callback(?callable $callback, mixed $user_data): void {}
+
+/**
+ * Shows a notification described by `desc` (see RNotificationDesc).
+ * Returns R_TRUE when the system took it; R_FALSE when it went to the fallback (or nowhere).
+ */
+function Rnotification_show_desc(?RNotificationDesc $desc): int {}
+
+/**
+ * Takes away the notification of that tag, shown by the system or by the fallback toast. The callback is not called.
+ */
+function Rnotification_close(?string $tag): void {}
+
+function Rnotification_set_callback(?callable $callback, mixed $user_data): void {}
+
+/**
+ * R_TRUE (the default): a click on a notification (not on one of
+ * its buttons) brings its window back before the callback is called:
+ * shown again if it was hidden or minimized, in front, with the keyboard.
+ * R_FALSE: the application does what it wants in the callback.
+ */
+function Rnotification_set_bring_to_front(int $enabled): void {}
+
+/**
+ * A Toast that shows the notifications the system could not show,
+ * with their title, icon and buttons; a click on one, or on a button, is
+ * reported to Rnotification_set_callback as for the system's. Put it in
+ * an Overlay (Queue="Stack" shows several at once). It takes the place
+ * of the fallback callback (Rnotification_set_fallback). R_INVALID_ID: none.
+ */
+function Rnotification_set_fallback_toast(int $toast): void {}
+
+/**
+ * Whether the notifications of the system have that feature here (R_FALSE where there are none).
+ */
+function Rnotification_supports(int $feature): int {}
