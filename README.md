@@ -18,7 +18,7 @@ An editor, a tool or a control panel needs windows, buttons, lists, trees, text 
 
 <b>Raven</b> is that toolkit. Oscar Soirey's library is a retained-mode GUI in C: windows hold widget trees, panels place their children, controls report changes through callbacks, interfaces can be written in XML, and a Vulkan renderer draws them on native Cocoa, X11 or Wayland windows. Its layout and painting run on worker and render threads while the application stays on one UI thread.
 
-<b>The only problem?</b> PHP can't reach it. This extension binds every function of `Raven.h` one to one under the C names, with Raven compiled into the module from an unchanged copy of upstream main (`fc37a06`, library 0.3.0), so there is nothing to install from the system but libX11 on Linux. Structs are typed classes, callbacks are PHP callables that always run on the PHP thread, sizes and ranges are checked before Raven sees them, and Raven's errors come back through its own `RError` codes and error callback. No defaults, no composites, no opinions: what Raven documents is what you call.
+<b>The only problem?</b> PHP can't reach it. This extension binds every function of `Raven.h` one to one under the C names, with Raven compiled into the module from an unchanged copy of upstream main (`5f08bd5`, library 0.3.0), so there is nothing to install from the system but libX11 on Linux. Structs are typed classes, callbacks are PHP callables that always run on the PHP thread, sizes and ranges are checked before Raven sees them, and Raven's errors come back through its own `RError` codes and error callback. No defaults, no composites, no opinions: what Raven documents is what you call.
 
 ## Basic usage
 
@@ -108,13 +108,13 @@ raven
 raven support => enabled
 Version => 0.11.x
 Raven version => 0.3.0
-Raven commit => fc37a06763395c9557c1723b41f1bd7b89e2caef
+Raven commit => 5f08bd50167920e9c3c6eb0c9977d7eaac2b303d
 Vulkan-Headers commit => b379292b2ab6df5771ba9870d53cf8b2c9295daf
 ```
 
 ## API
 
-All 1,623 functions of `Raven.h` but five raw-memory ones (`Rmemory_alloc`, `Rmemory_realloc`, `Rmemory_free`, `Rpixels_alloc`, `Rpixels_free`): 1,618 functions, 45 classes, every enumerator and public `#define` as a constant. The stubs in [`stubs/`](stubs) are the reference, one file per Raven header, with that header's comments on the functions; Raven's own headers in [`lib/raven/include/raven/`](lib/raven/include/raven) document what each call does. Main `fc37a06` (PR #276) restores the implementations those APIs need on main. Device services (`raven_device.h`), DiffView, SystemWebView, table checkbox/progress columns, ComboBox editable/searchable, TextEditor search/replace, spell check, animated GIF/APNG, clipboard images, notification actions and time zones sit on top of UI test automation, IME composition, PNG encode/save, Carousel, MapView, and Raven Script.
+All 1,623 functions of `Raven.h` but five raw-memory ones (`Rmemory_alloc`, `Rmemory_realloc`, `Rmemory_free`, `Rpixels_alloc`, `Rpixels_free`): 1,618 functions, 45 classes, every enumerator and public `#define` as a constant. The stubs in [`stubs/`](stubs) are the reference, one file per Raven header, with that header's comments on the functions; Raven's own headers in [`lib/raven/include/raven/`](lib/raven/include/raven) document what each call does. Main `5f08bd5` keeps those APIs: device services (`raven_device.h`), DiffView, SystemWebView (WebView2 on Windows at run time), table checkbox/progress columns, ComboBox editable/searchable, TextEditor search/replace, spell check, animated GIF/APNG, clipboard images, notification actions and time zones, on top of UI test automation, IME composition, PNG encode/save, Carousel, MapView, and Raven Script.
 
 ### Translations
 
