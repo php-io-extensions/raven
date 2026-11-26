@@ -1,5 +1,9 @@
 # Log
 
+## 2026-11-26
+
+* **Synced**: Raven main `5f08bd50167920e9c3c6eb0c9977d7eaac2b303d` vendored unchanged (library still 0.3.0, tag still v0.3.0). Public API unchanged: 1,623 `RAVEN_API` functions, 1,618 bound. PR #283 Windows SystemWebView via WebView2 (`win32_web_view.c`/`.h`, `webview2_com.h`) vendored; `config.m4` does not compile the win32 tree (linux/darwin only; no `config.w32`). PR #277: text fields hide focus ring/caret in a background window. Stub doc for `Rsystem_web_view_get_native_handle` mentions ICoreWebView2*. Suite 75 passed (703 assertions). Crash sweep 1,618 functions: no crash; three headless file dialogs and four device pickers timed out; ten `RActionContext` getters fail the sweep's `new`.
+
 ## 2026-11-22
 
 * **Synced**: Raven main `fc37a06763395c9557c1723b41f1bd7b89e2caef` vendored unchanged (library still reports 0.3.0). PR #276 (`214378a`) restored the code `c00b3f2` dropped; local restoration patches from the `c00b3f2` nightly are gone. Public API unchanged: 1,623 `RAVEN_API` functions, 1,618 bound (1,597 generated, 21 manual), 45 classes, 24 headers. `config.m4` matches CMake including `system_web_view.c`, `spelling.c`, `spell.c`, `spell_unix.c` / `cocoa_spell.m`, `webkit_web_view.m`. No local vendor patches kept. Suite 75 passed (703 assertions). Crash sweep 1,618 functions: no crash; the three headless file dialogs timed out as before; four device pickers (`Rfile_open_async`, `Rfile_save_async`, `Rfile_select_folder_async`, `Rphoto_pick`) timed out waiting for a host result; ten `RActionContext` getters fail the sweep's `new` (private constructor).

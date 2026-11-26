@@ -2556,7 +2556,9 @@ function Rsystem_web_view_set_event_callback(int $view, ?callable $callback, mix
 
 /**
  * The view of the system, to go further than these functions:
- * a WKWebView* on macOS and iOS. NULL where unsupported.
+ * a WKWebView* on macOS and iOS, an ICoreWebView2* on Windows (NULL
+ * until WebView2 has made the view, a moment after it is created). NULL
+ * where unsupported.
  */
 function Rsystem_web_view_get_native_handle(int $view): int {}
 

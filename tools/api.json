@@ -14152,7 +14152,7 @@
                     "type": "Rid"
                 }
             ],
-            "doc": "The view of the system, to go further than these functions:\na WKWebView* on macOS and iOS. NULL where unsupported."
+            "doc": "The view of the system, to go further than these functions:\na WKWebView* on macOS and iOS, an ICoreWebView2* on Windows (NULL\nuntil WebView2 has made the view, a moment after it is created). NULL\nwhere unsupported."
         },
         "Rpdf_document_create": {
             "header": "raven_controls.h",
