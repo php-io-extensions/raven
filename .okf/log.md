@@ -1,5 +1,9 @@
 # Log
 
+## 2026-11-28
+
+* **Synced**: Raven main `e9553718ac19d99b8a5d82b347b83c33acd7e2fc` vendored unchanged (library still 0.3.0, tag still v0.3.0). Public headers unchanged vs `5f08bd5`: 1,623 `RAVEN_API` functions, 1,618 bound. PRs #287/#296: sanitizer/fuzz hardening in image/font/XML/script/SVG/stb/nanosvg, UIKit redraw, `spell_unix` dlopen keep. `config.m4` unchanged (no new library sources; fuzz/sanitizer CMake options are not compiled into the extension). Suite 75 passed (703 assertions).
+
 ## 2026-11-26
 
 * **Synced**: Raven main `5f08bd50167920e9c3c6eb0c9977d7eaac2b303d` vendored unchanged (library still 0.3.0, tag still v0.3.0). Public API unchanged: 1,623 `RAVEN_API` functions, 1,618 bound. PR #283 Windows SystemWebView via WebView2 (`win32_web_view.c`/`.h`, `webview2_com.h`) vendored; `config.m4` does not compile the win32 tree (linux/darwin only; no `config.w32`). PR #277: text fields hide focus ring/caret in a background window. Stub doc for `Rsystem_web_view_get_native_handle` mentions ICoreWebView2*. Suite 75 passed (703 assertions). Crash sweep 1,618 functions: no crash; three headless file dialogs and four device pickers timed out; ten `RActionContext` getters fail the sweep's `new`.
